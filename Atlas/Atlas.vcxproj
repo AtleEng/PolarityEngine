@@ -15,9 +15,11 @@
     <ClInclude Include="scr\engine\Application.h" />
     <ClInclude Include="scr\engine\Core.h" />
     <ClInclude Include="scr\engine\EntryPoint.h" />
+    <ClInclude Include="scr\engine\Log.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\engine\Application.cpp" />
+    <ClCompile Include="scr\engine\Log.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
