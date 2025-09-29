@@ -24,13 +24,24 @@ enum TextColor
 
 extern const char* TextColorTable[textColorCount];
 
-enum class LogPrefix
-{
-    Trace,
-    Debug,
-    Info,
-    Warn,
-    Error
-};
 
-ATLAS_API void Log(LogPrefix prefix, const char* msg, ...);
+
+ATLAS_API void _log(const char* prefix,TextColor textColor, const char* msg, ...);
+
+#define LOG(msg, ...)        _log("LOG:", textColorWhite, msg, ##__VA_ARGS__);
+#define LOG_TRACE(msg, ...)  _log("TRACE:", textColorGreen, msg, ##__VA_ARGS__);
+#define LOG_DEBUG(msg, ...)  _log("DEBUG:", textColorYellow, msg, ##__VA_ARGS__);
+#define LOG_INFO(msg, ...)   _log("INFO:", textColorAqua, msg, ##__VA_ARGS__);
+#define LOG_WARN(msg, ...)   _log("WARN:", textColorOrange, msg, ##__VA_ARGS__);
+#define LOG_ERROR(msg, ...)  _log("ERROR:", textColorRed, msg, ##__VA_ARGS__);
+#define LOG_CUSTOM(prefix, textColor, msg, ...) _log(prefix, textColor, msg, ##__VA_ARGS__);
+
+#define LOG_ASSERT(x, msg, ...)         \
+  {                                     \
+    if (!(x))                           \
+    {                                   \
+      LOG_ERROR(msg, ##__VA_ARGS__);    \
+      DEBUG_BREAK();                    \
+      LOG_ERROR("ASSERTION HIT");       \
+    }                                   \
+  }

@@ -6,7 +6,7 @@ extern Atlas::Application* Atlas::CreateApplication();
 
 int main(int argc, char** argv)
 {
-	Log(LogPrefix::Info, "Atlas initializing...");
+	LOG_INFO("Atlas initializing...");
 
 	auto app = Atlas::CreateApplication();
 	app->Run();

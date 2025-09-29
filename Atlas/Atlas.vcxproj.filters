@@ -1,31 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="engine">
-      <UniqueIdentifier>{FBDB78FB-E77D-A3D1-D038-B725BC792A22}</UniqueIdentifier>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{80521D27-6C4B-3C79-957D-21FE81D51B85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\engine">
+      <UniqueIdentifier>{258122B1-91B8-6A48-9AC2-CE6B06799141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src">
+      <UniqueIdentifier>{B8516F6F-A44A-8EC1-CD7C-7346B9D46DCD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine">
+      <UniqueIdentifier>{5D31C695-C968-0E2D-D272-72503E293526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\Events">
+      <UniqueIdentifier>{A11225D4-8D38-EF3A-767E-740662431407}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Atlas.h" />
+    <ClInclude Include="src\Atlas.h">
+      <Filter>Header Files\src</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\Application.h">
-      <Filter>engine</Filter>
+      <Filter>Header Files\src\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\Core.h">
-      <Filter>engine</Filter>
+      <Filter>Header Files\src\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\EntryPoint.h">
-      <Filter>engine</Filter>
+      <Filter>Header Files\src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Events\ApplicationEvent.h">
+      <Filter>Header Files\src\engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Events\Event.h">
+      <Filter>Header Files\src\engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Events\KeyEvent.h">
+      <Filter>Header Files\src\engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Events\MouseEvent.h">
+      <Filter>Header Files\src\engine\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\Log.h">
-      <Filter>engine</Filter>
+      <Filter>Header Files\src\engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\Application.cpp">
-      <Filter>engine</Filter>
+      <Filter>Source Files\src\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\Log.cpp">
-      <Filter>engine</Filter>
+      <Filter>Source Files\src\engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,50 +15,26 @@ const char* TextColorTable[textColorCount] =
     "\x1b[38;5;51m",  // AQUA
 };
 
-static const char* PrefixText[] =
+
+void _log(const char* prefix, TextColor textColor, const char* msg, ...)
 {
-    "TRACE:",
-    "DEBUG:",
-    "INFO:",
-    "WARN:",
-    "ERROR:"
-};
-static TextColor PrefixColor[] =
-{
-    textColorGreen,   // Trace
-    textColorPink,    // Debug
-    textColorAqua,    // Info
-    textColorOrange,  // Warn
-    textColorRed      // Error
-};
+    char textBuffer[8192] = {};
 
-void Log(LogPrefix prefix, const char* msg, ...)
-{
-    char buffer[8192] = {};
-
-    // Prefix with color + label
-    int written = snprintf(buffer, sizeof(buffer), "%s %s ",
-        TextColorTable[PrefixColor[(int)prefix]],
-        PrefixText[(int)prefix]);
-
-    if (written < 0 || written >= (int)sizeof(buffer))
-        return; // failed or truncated badly
-
-    // Append formatted message
     va_list args;
-    va_start(args, msg);
-    int appended = vsnprintf(buffer + written,
-        sizeof(buffer) - written,
-        msg, args);
+    va_start(args, msg); // last named parameter before: ...
+
+    // Combine prefix and color with the user format string
+    snprintf(textBuffer, sizeof(textBuffer), "%s %s ", TextColorTable[textColor], prefix);
+
+    // Append the user-provided formatted string
+    size_t len = strlen(textBuffer);
+    vsnprintf(textBuffer + len, sizeof(textBuffer) - len, msg, args);
+
     va_end(args);
 
-    if (appended < 0 || written + appended >= (int)sizeof(buffer))
-        return; // failed or truncated badly
+    // Reset color
+    strcat(textBuffer, "\033[0m");
 
-    // Append reset color
-    snprintf(buffer + written + appended,
-        sizeof(buffer) - (written + appended),
-        "\033[0m");
-
-    puts(buffer);
+    puts(textBuffer);
 }
+

@@ -1,5 +1,8 @@
 #include "Application.h"
 
+#include "engine/Events/ApplicationEvent.h"
+#include "engine/Log.h"
+
 namespace Atlas {
 
 	Application::Application() {
@@ -12,6 +15,9 @@ namespace Atlas {
 
 	void Application::Run() 
 	{
+		WindowResizeEvent e(1280, 720);
+		LOG_DEBUG(e.ToString().c_str());
+
 		while (true);
 	}
 }

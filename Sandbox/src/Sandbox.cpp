@@ -6,7 +6,7 @@ class Sandbox : public Atlas::Application
 public:
 	Sandbox()
 	{
-		Log(LogPrefix::Info, "App initializing...");
+		LOG_INFO("App initializing...");
 	}
 	~Sandbox()
 	{

@@ -28,6 +28,12 @@ project "Atlas"
         "Atlas/src/**.h",
         "Atlas/src/**.cpp"
     }
+         -- Virtual paths (solution explorer filters in VS)
+    vpaths
+    {
+        ["Header Files/*"] = { "Atlas/**.h"},
+        ["Source Files/*"] = { "Atlas/**.cpp" }
+    }
 
     includedirs
     {
@@ -76,6 +82,12 @@ project "Sandbox"
     {
         "Sandbox/src/**.h",
         "Sandbox/src/**.cpp"
+    }
+        
+    vpaths
+    {
+        ["Header Files"] = { "**.h" },
+        ["Source Files"] = { "**.cpp" }
     }
 
     includedirs
