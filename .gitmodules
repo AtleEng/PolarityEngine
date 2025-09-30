@@ -1,0 +1,3 @@
+[submodule "Atlas/thirdparty/GLFW"]
+	path = Atlas/thirdparty/GLFW
+	url = https://github.com/TheCherno/GLFW

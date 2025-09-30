@@ -21,11 +21,11 @@ namespace Atlas {
 	enum EventCategory
 	{
 		None = 0,
-		EventCategoryApplication	= BIT(0),
-		EventCategoryInput			= BIT(1),
-		EventCategoryKeyboard		= BIT(2),
-		EventCategoryMouse			= BIT(3),
-		EventCategoryMouseButton	= BIT(4)
+		EventCategoryApplication = BIT(0),
+		EventCategoryInput = BIT(1),
+		EventCategoryKeyboard = BIT(2),
+		EventCategoryMouse = BIT(3),
+		EventCategoryMouseButton = BIT(4)
 	};
 
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
@@ -56,21 +56,21 @@ namespace Atlas {
 	{
 	public:
 		EventDispatcher(Event& event)
-			: _event(event){}
+			: m_event(event) {}
 
 		// T -> Event, F -> function (deduced by the compiler)
 		template<typename T, typename F>
 		bool Dispatch(const F& func)
 		{
-			if (_event.GetEventType() == T::GetStaticType())
+			if (m_event.GetEventType() == T::GetStaticType())
 			{
-				_event.Handled |= func(static_cast<T&>(_event));
+				m_event.Handled |= func(static_cast<T&>(m_event));
 				return true;
 			}
 			return false;
 		}
 	private:
-		Event& _event;
+		Event& m_event;
 	};
 
 	inline std::ostream& operator<<(std::ostream& os, const Event& e)

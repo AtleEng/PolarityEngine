@@ -1,23 +1,36 @@
+#include "atlaspch.h"
 #include "Application.h"
+#include "Window.h"
 
-#include "engine/Events/ApplicationEvent.h"
+#include "engine/Events/Event.h"
 #include "engine/Log.h"
 
 namespace Atlas {
 
-	Application::Application() {
-		// constructor code
-	}
+    // Private implementation struct
+    struct Application::Impl
+    {
+        std::unique_ptr<Window> m_window;
 
-	Application::~Application() {
-		// destructor code (can be empty if nothing special is needed)
-	}
+        Impl()
+        {
+            m_window = std::unique_ptr<Window>(Window::Create());
+        }
+    };
 
-	void Application::Run() 
-	{
-		WindowResizeEvent e(1280, 720);
-		LOG_DEBUG(e.ToString().c_str());
+    Application::Application()
+        : m_impl(std::make_unique<Impl>())
+    {
+    }
 
-		while (true);
-	}
+    Application::~Application() = default;
+
+    void Application::Run()
+    {
+        while (true) // simple run loop
+        {
+            m_impl->m_window->OnUpdate();
+            // handle events here...
+        }
+    }
 }

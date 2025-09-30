@@ -10,6 +10,12 @@
     <Filter Include="Source Files\src\engine">
       <UniqueIdentifier>{258122B1-91B8-6A48-9AC2-CE6B06799141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\plattform">
+      <UniqueIdentifier>{68B5C271-54C5-6E42-BD7E-D360A9AD5DDB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\plattform\windows">
+      <UniqueIdentifier>{C2DF8A87-AE1B-8EF1-172E-A6E80389360C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
     </Filter>
@@ -22,9 +28,18 @@
     <Filter Include="Header Files\src\engine\Events">
       <UniqueIdentifier>{A11225D4-8D38-EF3A-767E-740662431407}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\src\plattform">
+      <UniqueIdentifier>{A01A2798-8C2A-D368-F5E3-3787E112C201}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\plattform\windows">
+      <UniqueIdentifier>{FAFCBC65-E638-C0CF-4F4B-D8C63BA668EA}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Atlas.h">
+      <Filter>Header Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\atlaspch.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\Application.h">
@@ -51,13 +66,25 @@
     <ClInclude Include="src\engine\Log.h">
       <Filter>Header Files\src\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Window.h">
+      <Filter>Header Files\src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\plattform\windows\WindowsWindow.h">
+      <Filter>Header Files\src\plattform\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\atlaspch.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\Application.cpp">
       <Filter>Source Files\src\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\Log.cpp">
       <Filter>Source Files\src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\plattform\windows\WindowsWindow.cpp">
+      <Filter>Source Files\src\plattform\windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

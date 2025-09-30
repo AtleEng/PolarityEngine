@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Event.h"
 
 #include <sstream>
@@ -9,36 +8,36 @@ namespace Atlas {
 	class ATLAS_API KeyEvent : public Event
 	{
 	public:
-		inline int GetKeyCode() const { return _keycode; }
+		inline int GetKeyCode() const { return m_keycode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	protected:
 		KeyEvent(int keycode)
-			: _keycode(keycode) {}
-		int _keycode;
+			: m_keycode(keycode) {}
+		int m_keycode;
 	};
 
 	class ATLAS_API KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(int keycode, int repeatCount)
-			: KeyEvent(keycode), _repeatCount(repeatCount){}
+			: KeyEvent(keycode), m_repeatCount(repeatCount) {}
 
 		inline int GetRepeatCount() const
 		{
-			return _repeatCount;
+			return m_repeatCount;
 		}
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyPressedEvent: " << _keycode << " (" << _repeatCount << "x)";
+			ss << "KeyPressedEvent: " << m_keycode << " (" << m_repeatCount << "x)";
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(KeyPressed)
 	private:
-		int _repeatCount;
+		int m_repeatCount;
 	};
 
 	class ATLAS_API KeyReleasedEvent : public KeyEvent
@@ -50,7 +49,7 @@ namespace Atlas {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "KeyReleasedEvent: " << _keycode;
+			ss << "KeyReleasedEvent: " << m_keycode;
 			return ss.str();
 		}
 

@@ -12,6 +12,11 @@ workspace "Atlas"
 -- Output directory format
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-x64"
 
+includedir = {}
+includedir["GLFW"] = "Atlas/thirdparty/GLFW/include"
+
+include "Atlas/thirdparty/GLFW"
+
 -- Atlas Project (DLL)
 project "Atlas"
     location "Atlas"
@@ -23,12 +28,15 @@ project "Atlas"
     targetdir (path.getabsolute("bin/" .. outputdir .. "/%{prj.name}"))
     objdir (path.getabsolute("bin-int/" .. outputdir .. "/%{prj.name}"))
 
+    pchheader "atlaspch.h"
+    pchsource "Atlas/src/atlaspch.cpp"
+
     files
     {
         "Atlas/src/**.h",
         "Atlas/src/**.cpp"
     }
-         -- Virtual paths (solution explorer filters in VS)
+ 
     vpaths
     {
         ["Header Files/*"] = { "Atlas/**.h"},
@@ -38,7 +46,14 @@ project "Atlas"
     includedirs
     {
         "Atlas/src",
-        "Atlas/thirdparty"
+        "Atlas/thirdparty",
+        "%{includedir.GLFW}"
+    }
+
+    links
+    {
+        "GLFW",
+        "opengl32.lib"
     }
 
     filter "system:windows"
@@ -47,7 +62,7 @@ project "Atlas"
             "ATLAS_PLATFORM_WINDOWS",
             "ATLAS_BUILD_DLL"
         }
-        staticruntime "Off"
+        staticruntime "On"
 
         -- Copy DLL to Sandbox folder after build
         postbuildcommands
@@ -106,7 +121,7 @@ project "Sandbox"
         {
             "ATLAS_PLATFORM_WINDOWS"
         }
-        staticruntime "Off"
+        staticruntime "On"
 
     filter "configurations:Debug"
         defines "ATLAS_DEBUG"

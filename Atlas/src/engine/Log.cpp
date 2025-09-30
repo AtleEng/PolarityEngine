@@ -1,3 +1,4 @@
+#include "atlaspch.h"
 #include "Log.h"
 
 const char* TextColorTable[textColorCount] =
@@ -33,7 +34,7 @@ void _log(const char* prefix, TextColor textColor, const char* msg, ...)
     va_end(args);
 
     // Reset color
-    strcat(textBuffer, "\033[0m");
+    strcat_s(textBuffer, "\033[0m");
 
     puts(textBuffer);
 }

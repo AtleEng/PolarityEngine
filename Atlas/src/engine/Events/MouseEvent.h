@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Event.h"
 
 #include <sstream>
@@ -10,69 +9,69 @@ namespace Atlas {
 	{
 	public:
 		MouseMovedEvent(float x, float y)
-			: _mouseX(x), _mouseY(y){}
+			: m_mouseX(x), m_mouseY(y) {}
 
-		inline float GetX() const { return _mouseX; }
-		inline float GetY() const { return _mouseY; }
+		inline float GetX() const { return m_mouseX; }
+		inline float GetY() const { return m_mouseY; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseMovedEvent: " << _mouseX << ", " << _mouseY;
+			ss << "MouseMovedEvent: " << m_mouseX << ", " << m_mouseY;
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
-		float _mouseX, _mouseY;
+		float m_mouseX, m_mouseY;
 	};
 
 	class ATLAS_API MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)
-			: _xOffset(xOffset), _yOffset(yOffset) {}
+			: m_xOffset(xOffset), m_yOffset(yOffset) {}
 
-		inline float GetXOffset() const { return _xOffset; }
-		inline float GetYOffset() const { return _yOffset; }
+		inline float GetXOffset() const { return m_xOffset; }
+		inline float GetYOffset() const { return m_yOffset; }
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseScrolledEvent: " << _xOffset << ", " << _yOffset;
+			ss << "MouseScrolledEvent: " << m_xOffset << ", " << m_yOffset;
 			return ss.str();
 		}
 
 		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+			EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	private:
-		float _xOffset, _yOffset;
+		float m_xOffset, m_yOffset;
 	};
 
 	class ATLAS_API MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() const { return _button; }
+		inline int GetMouseButton() const { return m_button; }
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
 		MouseButtonEvent(int button)
-			: _button(button) {}
+			: m_button(button) {}
 
-		float _button;
+		float m_button;
 	};
 
 	class ATLAS_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button)
-			: MouseButtonEvent(button){}
+			: MouseButtonEvent(button) {}
 
 
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonPressedEvent: " << _button;
+			ss << "MouseButtonPressedEvent: " << m_button;
 			return ss.str();
 		}
 
@@ -89,7 +88,7 @@ namespace Atlas {
 		std::string ToString() const override
 		{
 			std::stringstream ss;
-			ss << "MouseButtonReleasedEvent: " << _button;
+			ss << "MouseButtonReleasedEvent: " << m_button;
 			return ss.str();
 		}
 

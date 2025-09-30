@@ -2,7 +2,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
-#include "core.h"
+#include "Core.h"
 
 // ################################     Logging    ################################
 #pragma region
@@ -36,12 +36,3 @@ ATLAS_API void _log(const char* prefix,TextColor textColor, const char* msg, ...
 #define LOG_ERROR(msg, ...)  _log("ERROR:", textColorRed, msg, ##__VA_ARGS__);
 #define LOG_CUSTOM(prefix, textColor, msg, ...) _log(prefix, textColor, msg, ##__VA_ARGS__);
 
-#define LOG_ASSERT(x, msg, ...)         \
-  {                                     \
-    if (!(x))                           \
-    {                                   \
-      LOG_ERROR(msg, ##__VA_ARGS__);    \
-      DEBUG_BREAK();                    \
-      LOG_ERROR("ASSERTION HIT");       \
-    }                                   \
-  }
