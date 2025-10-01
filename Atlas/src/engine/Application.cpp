@@ -2,10 +2,13 @@
 #include "Application.h"
 #include "Window.h"
 
-#include "engine/Events/Event.h"
 #include "engine/Log.h"
 
+#include <GLFW/glfw3.h>
+
 namespace Atlas {
+
+#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
     // Private implementation struct
     struct Application::Impl
@@ -21,16 +24,37 @@ namespace Atlas {
     Application::Application()
         : m_impl(std::make_unique<Impl>())
     {
+        m_impl->m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
     }
 
     Application::~Application() = default;
 
+
+    void Application::OnEvent(Event& e)
+    {
+        LOG_TRACE("%s", e.ToString().c_str());
+
+        EventDispatcher dispacher(e);
+        dispacher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+    }
+
+
     void Application::Run()
     {
-        while (true) // simple run loop
+        while (m_running)
         {
+            glClearColor(1, 1, 1, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+
             m_impl->m_window->OnUpdate();
-            // handle events here...
         }
+    }
+
+    bool Application::OnWindowClose(WindowCloseEvent& e)
+    {
+        LOG_INFO("Shutdown....");
+        m_running = false;
+
+        return true;
     }
 }
