@@ -32,12 +32,30 @@ namespace Atlas {
 
     void Application::OnEvent(Event& e)
     {
-        LOG_TRACE("%s", e.ToString().c_str());
+        //LOG_TRACE("%s", e.ToString().c_str());
 
         EventDispatcher dispacher(e);
         dispacher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+
+        for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
+        {
+            (*--i)->OnEvent(e);
+            if (e.handled)
+            {
+                break;
+            }
+        }
     }
 
+    void Application::PushLayer(Layer* layer)
+    {
+        m_layerStack.PushLayer(layer);
+    }
+
+    void Application::PushOverlay(Layer* layer)
+    {
+        m_layerStack.PushOverlay(layer);
+    }
 
     void Application::Run()
     {
@@ -46,6 +64,10 @@ namespace Atlas {
             glClearColor(1, 1, 1, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            for (Layer* layer : m_layerStack)
+            {
+                layer->OnUpdate();
+            }
             m_impl->m_window->OnUpdate();
         }
     }

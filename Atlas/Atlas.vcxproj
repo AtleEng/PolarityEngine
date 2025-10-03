@@ -161,17 +161,21 @@
     <ClInclude Include="src\engine\Events\Event.h" />
     <ClInclude Include="src\engine\Events\KeyEvent.h" />
     <ClInclude Include="src\engine\Events\MouseEvent.h" />
+    <ClInclude Include="src\engine\Layer.h" />
+    <ClInclude Include="src\engine\LayerStack.h" />
     <ClInclude Include="src\engine\Log.h" />
     <ClInclude Include="src\engine\Window.h" />
-    <ClInclude Include="src\plattform\windows\WindowsWindow.h" />
+    <ClInclude Include="src\platform\windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\atlaspch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\engine\Application.cpp" />
+    <ClCompile Include="src\engine\Layer.cpp" />
+    <ClCompile Include="src\engine\LayerStack.cpp" />
     <ClCompile Include="src\engine\Log.cpp" />
-    <ClCompile Include="src\plattform\windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="thirdparty\GLFW\GLFW.vcxproj">

@@ -10,11 +10,11 @@
     <Filter Include="Source Files\src\engine">
       <UniqueIdentifier>{258122B1-91B8-6A48-9AC2-CE6B06799141}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\src\plattform">
-      <UniqueIdentifier>{68B5C271-54C5-6E42-BD7E-D360A9AD5DDB}</UniqueIdentifier>
+    <Filter Include="Source Files\src\platform">
+      <UniqueIdentifier>{F4FA6A03-60BD-9E8D-A96D-2D1A156F776B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\src\plattform\windows">
-      <UniqueIdentifier>{C2DF8A87-AE1B-8EF1-172E-A6E80389360C}</UniqueIdentifier>
+    <Filter Include="Source Files\src\platform\windows">
+      <UniqueIdentifier>{4EF1B57F-BA5F-0BFF-0349-C6FE6FF6009B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
@@ -28,11 +28,11 @@
     <Filter Include="Header Files\src\engine\Events">
       <UniqueIdentifier>{A11225D4-8D38-EF3A-767E-740662431407}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\src\plattform">
-      <UniqueIdentifier>{A01A2798-8C2A-D368-F5E3-3787E112C201}</UniqueIdentifier>
+    <Filter Include="Header Files\src\platform">
+      <UniqueIdentifier>{2C99BB9F-985B-EF29-E10B-7EB64D0DC807}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\src\plattform\windows">
-      <UniqueIdentifier>{FAFCBC65-E638-C0CF-4F4B-D8C63BA668EA}</UniqueIdentifier>
+    <Filter Include="Header Files\src\platform\windows">
+      <UniqueIdentifier>{8647FDB4-F2B5-5234-3B9F-0D34A74C48D0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -63,14 +63,20 @@
     <ClInclude Include="src\engine\Events\MouseEvent.h">
       <Filter>Header Files\src\engine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Layer.h">
+      <Filter>Header Files\src\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\LayerStack.h">
+      <Filter>Header Files\src\engine</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\Log.h">
       <Filter>Header Files\src\engine</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\Window.h">
       <Filter>Header Files\src\engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\plattform\windows\WindowsWindow.h">
-      <Filter>Header Files\src\plattform\windows</Filter>
+    <ClInclude Include="src\platform\windows\WindowsWindow.h">
+      <Filter>Header Files\src\platform\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,11 +86,17 @@
     <ClCompile Include="src\engine\Application.cpp">
       <Filter>Source Files\src\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Layer.cpp">
+      <Filter>Source Files\src\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\LayerStack.cpp">
+      <Filter>Source Files\src\engine</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\Log.cpp">
       <Filter>Source Files\src\engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\plattform\windows\WindowsWindow.cpp">
-      <Filter>Source Files\src\plattform\windows</Filter>
+    <ClCompile Include="src\platform\windows\WindowsWindow.cpp">
+      <Filter>Source Files\src\platform\windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
