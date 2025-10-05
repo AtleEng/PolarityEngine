@@ -23,7 +23,7 @@ Atlas/
 |  |  |- imGui/
 |  | 
 |  |- platform/        # Cross-platform (currently only Windows)
-|  |  |- windows/  
+|     |- windows/  
 |
 |- thirdparty/         # Engine specific thirdparty
 ```

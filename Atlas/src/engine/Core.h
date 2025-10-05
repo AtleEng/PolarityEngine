@@ -17,12 +17,4 @@
 
 #define BIT(x) (1 << x)
 
-/*
-Github add
-
-git add *
-git status
-git commit -m "text"
-git push origin master
-
-*/
+#define ATLAS_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
