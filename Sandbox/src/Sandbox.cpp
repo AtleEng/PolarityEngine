@@ -11,11 +11,11 @@ public:
 
 	void OnUpdate() override
 	{
-		LOG_DEBUG("TestLayer: Update");
+		//LOG_DEBUG("TestLayer: Update");
 	}
 	void OnEvent(Atlas::Event& event) override
 	{
-		LOG_DEBUG("%s", event.GetName());
+		//LOG_DEBUG("%s", event.GetName());
 	}
 };
 
@@ -25,7 +25,9 @@ public:
 	Sandbox()
 	{
 		LOG_INFO("App initializing...");
+
 		PushLayer(new TestLayer());
+		PushOverlay(new Atlas::ImGuiLayer());
 	}
 	~Sandbox()
 	{

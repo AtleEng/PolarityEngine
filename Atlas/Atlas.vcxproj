@@ -79,11 +79,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>atlaspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>ATLAS_PLATFORM_WINDOWS;ATLAS_BUILD_DLL;ATLAS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ATLAS_PLATFORM_WINDOWS;ATLAS_BUILD_DLL;ATLAS_ENABLE_ASSERTS;GLFW_INCLUDE_NONE;ATLAS_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/MDd %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -102,14 +103,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>atlaspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>ATLAS_PLATFORM_WINDOWS;ATLAS_BUILD_DLL;ATLAS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ATLAS_PLATFORM_WINDOWS;ATLAS_BUILD_DLL;ATLAS_ENABLE_ASSERTS;GLFW_INCLUDE_NONE;ATLAS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -129,14 +131,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>atlaspch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>ATLAS_PLATFORM_WINDOWS;ATLAS_BUILD_DLL;ATLAS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ATLAS_PLATFORM_WINDOWS;ATLAS_BUILD_DLL;ATLAS_ENABLE_ASSERTS;GLFW_INCLUDE_NONE;ATLAS_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/MD %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -156,15 +159,18 @@
     <ClInclude Include="src\atlaspch.h" />
     <ClInclude Include="src\engine\Application.h" />
     <ClInclude Include="src\engine\Core.h" />
+    <ClInclude Include="src\engine\core\Keycodes.h" />
     <ClInclude Include="src\engine\EntryPoint.h" />
-    <ClInclude Include="src\engine\Events\ApplicationEvent.h" />
-    <ClInclude Include="src\engine\Events\Event.h" />
-    <ClInclude Include="src\engine\Events\KeyEvent.h" />
-    <ClInclude Include="src\engine\Events\MouseEvent.h" />
     <ClInclude Include="src\engine\Layer.h" />
     <ClInclude Include="src\engine\LayerStack.h" />
     <ClInclude Include="src\engine\Log.h" />
     <ClInclude Include="src\engine\Window.h" />
+    <ClInclude Include="src\engine\events\ApplicationEvent.h" />
+    <ClInclude Include="src\engine\events\Event.h" />
+    <ClInclude Include="src\engine\events\KeyEvent.h" />
+    <ClInclude Include="src\engine\events\MouseEvent.h" />
+    <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
+    <ClInclude Include="src\platform\openGL\ImGuiOpenGLRenderer.h" />
     <ClInclude Include="src\platform\windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
@@ -175,11 +181,19 @@
     <ClCompile Include="src\engine\Layer.cpp" />
     <ClCompile Include="src\engine\LayerStack.cpp" />
     <ClCompile Include="src\engine\Log.cpp" />
+    <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\platform\openGL\ImGuiOpenGLRenderer.cpp" />
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="thirdparty\GLFW\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="thirdparty\Glad\Glad.vcxproj">
+      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="thirdparty\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

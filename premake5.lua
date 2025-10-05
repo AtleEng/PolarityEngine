@@ -14,8 +14,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-x64"
 
 includedir = {}
 includedir["GLFW"] = "Atlas/thirdparty/GLFW/include"
+includedir["Glad"] = "Atlas/thirdparty/Glad/include"
+includedir["ImGui"] = "Atlas/thirdparty/imgui"
 
 include "Atlas/thirdparty/GLFW"
+include "Atlas/thirdparty/Glad"
+include "Atlas/thirdparty/imgui"
 
 -- Atlas Project (DLL)
 project "Atlas"
@@ -47,12 +51,16 @@ project "Atlas"
     {
         "Atlas/src",
         "Atlas/thirdparty",
-        "%{includedir.GLFW}"
+        "%{includedir.GLFW}",
+        "%{includedir.Glad}",
+        "%{includedir.ImGui}"
     }
 
     links
     {
         "GLFW",
+        "Glad",
+        "ImGui",
         "opengl32.lib"
     }
 
@@ -60,7 +68,9 @@ project "Atlas"
         defines
         {
             "ATLAS_PLATFORM_WINDOWS",
-            "ATLAS_BUILD_DLL"
+            "ATLAS_BUILD_DLL",
+            "ATLAS_ENABLE_ASSERTS",
+            "GLFW_INCLUDE_NONE"
         }
         staticruntime "On"
 
@@ -122,7 +132,8 @@ project "Sandbox"
     filter "system:windows"
         defines
         {
-            "ATLAS_PLATFORM_WINDOWS"
+            "ATLAS_PLATFORM_WINDOWS",
+            "ATLAS_ENABLE_ASSERTS",
         }
         staticruntime "On"
 

@@ -4,27 +4,22 @@
 
 #include "engine/Log.h"
 
-#include <GLFW/glfw3.h>
+#include "glad/glad.h"
 
 namespace Atlas {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
-    // Private implementation struct
-    struct Application::Impl
-    {
-        std::unique_ptr<Window> m_window;
+    Application* Application::s_instance = nullptr;
 
-        Impl()
-        {
-            m_window = std::unique_ptr<Window>(Window::Create());
-        }
-    };
 
     Application::Application()
-        : m_impl(std::make_unique<Impl>())
     {
-        m_impl->m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+        LOG_ASSERT(!s_instance, "Application already exist !!!");
+        s_instance = this;
+
+        m_window = std::unique_ptr<Window>(Window::Create());
+        m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
     }
 
     Application::~Application() = default;
@@ -50,11 +45,13 @@ namespace Atlas {
     void Application::PushLayer(Layer* layer)
     {
         m_layerStack.PushLayer(layer);
+        layer->OnAttach();
     }
 
     void Application::PushOverlay(Layer* layer)
     {
         m_layerStack.PushOverlay(layer);
+        layer->OnAttach();
     }
 
     void Application::Run()
@@ -68,7 +65,7 @@ namespace Atlas {
             {
                 layer->OnUpdate();
             }
-            m_impl->m_window->OnUpdate();
+            m_window->OnUpdate();
         }
     }
 

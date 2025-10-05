@@ -1,7 +1,7 @@
 #pragma once
 
 #include "engine/Core.h"
-#include "engine/Events/Event.h"
+#include "engine/events/Event.h"
 
 namespace Atlas
 {

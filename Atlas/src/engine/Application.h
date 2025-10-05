@@ -2,8 +2,8 @@
 #include "Core.h"
 #include "Window.h"
 #include "engine/LayerStack.h"
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
+#include "events/Event.h"
+#include "events/ApplicationEvent.h"
 
 #include <memory>
 
@@ -22,13 +22,17 @@ namespace Atlas {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+
+		inline static Application& Get() { return *s_instance; }
+		inline Window& GetWindow() { return *m_window; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
-
-		struct Impl;                  
-		std::unique_ptr<Impl> m_impl; // safe
+                 
+		std::unique_ptr<Window> m_window;
 		bool m_running = true;
 		LayerStack m_layerStack;
+
+		static Application* s_instance;
 	};
 
 	//defined in client

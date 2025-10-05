@@ -16,12 +16,14 @@ Brief explanation of key folders/files:
 ```text
 Atlas/
 |- src/
-|  |- engine/          # Main engine logic
-|  |  |- Events/            
-|  |  |- Core/         # Core logic
-|  |  |- Render/
+|  |- engine/          # Main engine
+|  |  |- events/            
+|  |  |- core/         # Core logic
+|  |  |- render/
+|  |  |- imGui/
 |  | 
-|  |- platform/        # Cross-platform logic (currently Windows)
+|  |- platform/        # Cross-platform (currently only Windows)
+|  |  |- windows/  
 |
 |- thirdparty/         # Engine specific thirdparty
 ```
@@ -61,8 +63,14 @@ Atlas::Application* Atlas::CreateApplication()
 
 <details>
   <summary>Dependencies</summary>
- - OpenGL
+OpenGL - GLFW - ImGui
 </details>
+
+---
+
+## Roadmap
+
+Base functionality -> Rendering -> shaders and materials -> 2D rendering -> filesystems
 
 ---
 

@@ -14,20 +14,6 @@
 	#error We only support Windows!!!
 #endif // ATLAS_PLATFORM_WINDOWS
 
-#ifdef ATLAS_ENABLE_ASSERTS
-	#define LOG_ASSERT(x, msg, ...)         \
-	{										\
-		if (!(x))                           \
-		{                                   \
-		LOG_ERROR(msg, ##__VA_ARGS__);		\
-		DEBUG_BREAK();						\
-		}                                   \
-	}
-#else
-#define LOG_ASSERT(x, msg, ...)
-
-#endif // ATLAS_ENABLE_ASSERTS
-
 
 #define BIT(x) (1 << x)
 

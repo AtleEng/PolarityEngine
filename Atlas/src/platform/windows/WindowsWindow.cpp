@@ -1,9 +1,11 @@
 #include "atlaspch.h"
 #include "WindowsWindow.h"
 
-#include "engine/Events/ApplicationEvent.h"
-#include "engine/Events/KeyEvent.h"
-#include "engine/Events/MouseEvent.h"
+#include "engine/events/ApplicationEvent.h"
+#include "engine/events/KeyEvent.h"
+#include "engine/events/MouseEvent.h"
+
+#include <glad/glad.h>
 
 namespace Atlas
 {
@@ -41,7 +43,7 @@ namespace Atlas
 		{
 			//TODO glfwTerminate
 			int success = glfwInit();
-			LOG_ASSERT(success, "Couldn't initialize GLFW!");
+			LOG_ASSERT(success, "Couldn't initialize GLFW !!!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 
 			s_GLFWInitialized = true;
@@ -49,6 +51,10 @@ namespace Atlas
 
 		m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 		glfwMakeContextCurrent(m_window);
+
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		LOG_ASSERT(status, "Failed to initialize Glad !!!");
+
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
 
