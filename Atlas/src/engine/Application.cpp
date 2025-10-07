@@ -2,7 +2,8 @@
 #include "Application.h"
 #include "Window.h"
 
-#include "engine/Log.h"
+#include "Log.h"
+#include "core/Input.h"
 
 #include "glad/glad.h"
 
@@ -65,6 +66,7 @@ namespace Atlas {
             {
                 layer->OnUpdate();
             }
+
             m_window->OnUpdate();
         }
     }

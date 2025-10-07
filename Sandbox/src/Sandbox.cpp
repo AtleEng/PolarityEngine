@@ -1,4 +1,5 @@
 #include <Atlas.h>
+using namespace Atlas;
 
 class TestLayer : public Atlas::Layer
 {
@@ -11,7 +12,16 @@ public:
 
 	void OnUpdate() override
 	{
-		//LOG_DEBUG("TestLayer: Update");
+		
+		if (Input::IsKeyPressed(Key::Space))
+			LOG_DEBUG("Jump!");
+
+		if (Input::IsMouseButtonPressed(Mouse::Button0))
+		{
+			auto [x, y] = Input::GetMousePosition();
+			LOG_DEBUG("Klicked at: [%f %f]", x, y);
+		}
+		
 	}
 	void OnEvent(Atlas::Event& event) override
 	{

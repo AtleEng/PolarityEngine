@@ -17,9 +17,13 @@ includedir["GLFW"] = "Atlas/thirdparty/GLFW/include"
 includedir["Glad"] = "Atlas/thirdparty/Glad/include"
 includedir["ImGui"] = "Atlas/thirdparty/imgui"
 
-include "Atlas/thirdparty/GLFW"
-include "Atlas/thirdparty/Glad"
-include "Atlas/thirdparty/imgui"
+
+
+group "Dependencies"
+    include "Atlas/thirdparty/GLFW"
+    include "Atlas/thirdparty/Glad"
+    include "Atlas/thirdparty/imgui"
+group ""
 
 -- Atlas Project (DLL)
 project "Atlas"
@@ -28,6 +32,7 @@ project "Atlas"
     language "C++"
     cppdialect "C++17"
     systemversion "latest"
+    staticruntime "Off"
 
     targetdir (path.getabsolute("bin/" .. outputdir .. "/%{prj.name}"))
     objdir (path.getabsolute("bin-int/" .. outputdir .. "/%{prj.name}"))
@@ -69,30 +74,29 @@ project "Atlas"
         {
             "ATLAS_PLATFORM_WINDOWS",
             "ATLAS_BUILD_DLL",
-            "ATLAS_ENABLE_ASSERTS",
+            "ATLAS_ENABLE_ASSERTS", -- Temp
             "GLFW_INCLUDE_NONE"
         }
-        staticruntime "On"
 
         -- Copy DLL to Sandbox folder after build
         postbuildcommands
         {
-            ("{COPY} %{cfg.targetdir}/%{cfg.buildtarget.name} ../bin/" .. outputdir .. "/Sandbox")
+            ("{COPY} %{cfg.targetdir}/%{cfg.buildtarget.name} \"../bin/" .. outputdir .. "/Sandbox/\"")
         }
 
     filter "configurations:Debug"
         defines "ATLAS_DEBUG"
-        buildoptions "/MDd"
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines "ATLAS_RELEASE"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"
 
     filter "configurations:Dist"
         defines "ATLAS_DIST"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"
 
 -- Sandbox Project (App)
@@ -102,6 +106,7 @@ project "Sandbox"
     language "C++"
     cppdialect "C++17"
     systemversion "latest"
+    staticruntime "Off"
 
     targetdir (path.getabsolute("bin/" .. outputdir .. "/%{prj.name}"))
     objdir (path.getabsolute("bin-int/" .. outputdir .. "/%{prj.name}"))
@@ -139,15 +144,15 @@ project "Sandbox"
 
     filter "configurations:Debug"
         defines "ATLAS_DEBUG"
-        buildoptions "/MDd"
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines "ATLAS_RELEASE"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"
 
     filter "configurations:Dist"
         defines "ATLAS_DIST"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"

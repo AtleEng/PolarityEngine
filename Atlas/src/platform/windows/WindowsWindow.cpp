@@ -16,11 +16,6 @@ namespace Atlas
 		LOG_ERROR("GLFW (%d): %s", error, msg);
 	}
 
-	Window* Window::Create(const WindowProps& props)
-	{
-		return new WindowsWindow(props);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		Init(props);

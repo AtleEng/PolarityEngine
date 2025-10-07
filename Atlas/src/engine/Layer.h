@@ -16,7 +16,7 @@ namespace Atlas
 		virtual void OnUpdate() {}
 		virtual void OnEvent(Event& event) {}
 
-		inline const const char* GetName() const { return m_debugName; }
+		inline const char* GetName() const { return m_debugName; }
 
 	protected:
 		const char* m_debugName;

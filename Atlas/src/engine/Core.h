@@ -10,11 +10,16 @@
 	#else
 		#define ATLAS_API __declspec(dllimport)
 	#endif
-#else
-	#error We only support Windows!!!
+#elif ATLAS_PLATFORM_LINUX
+	#error We only support Windows not Linux!!!
+#elif ATLAS_PLATFORM_MAC
+	#error We only support Windows not Mac!!!
 #endif // ATLAS_PLATFORM_WINDOWS
 
 
 #define BIT(x) (1 << x)
+#define KB(x) ((unsigned long long)1024 * x)
+#define MB(x) ((unsigned long long)1024 * KB(x))
+#define GB(x) ((unsigned long long)1024 * MB(x))
 
 #define ATLAS_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)

@@ -31,6 +31,9 @@
     <Filter Include="Header Files\src\engine">
       <UniqueIdentifier>{5D31C695-C968-0E2D-D272-72503E293526}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\src\engine\core">
+      <UniqueIdentifier>{F543C74A-E1FE-B6F6-8AB6-2F4176500187}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\src\engine\events">
       <UniqueIdentifier>{C126CA1E-AD4C-9485-9692-19518257B951}</UniqueIdentifier>
     </Filter>
@@ -75,6 +78,12 @@
     <ClInclude Include="src\engine\Window.h">
       <Filter>Header Files\src\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\core\Input.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\core\Keycodes.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\events\ApplicationEvent.h">
       <Filter>Header Files\src\engine\events</Filter>
     </ClInclude>
@@ -96,7 +105,6 @@
     <ClInclude Include="src\platform\windows\WindowsWindow.h">
       <Filter>Header Files\src\platform\windows</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\core\Keycodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\atlaspch.cpp">
@@ -114,11 +122,17 @@
     <ClCompile Include="src\engine\Log.cpp">
       <Filter>Source Files\src\engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Window.cpp">
+      <Filter>Source Files\src\engine</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp">
       <Filter>Source Files\src\engine\imGui</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\openGL\ImGuiOpenGLRenderer.cpp">
       <Filter>Source Files\src\platform\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\windows\WindowsInput.cpp">
+      <Filter>Source Files\src\platform\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp">
       <Filter>Source Files\src\platform\windows</Filter>
