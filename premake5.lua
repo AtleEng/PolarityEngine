@@ -16,7 +16,7 @@ includedir = {}
 includedir["GLFW"] = "Atlas/thirdparty/GLFW/include"
 includedir["Glad"] = "Atlas/thirdparty/Glad/include"
 includedir["ImGui"] = "Atlas/thirdparty/imgui"
-
+includedir["glm"] = "Atlas/thirdparty/glm"
 
 
 group "Dependencies"
@@ -58,7 +58,8 @@ project "Atlas"
         "Atlas/thirdparty",
         "%{includedir.GLFW}",
         "%{includedir.Glad}",
-        "%{includedir.ImGui}"
+        "%{includedir.ImGui}",
+        "%{includedir.glm}"
     }
 
     links
@@ -126,7 +127,8 @@ project "Sandbox"
     includedirs
     {
         "Atlas/src",
-        "Atlas/thirdparty"
+        "Atlas/thirdparty",
+        "%{includedir.glm}"
     }
 
     links

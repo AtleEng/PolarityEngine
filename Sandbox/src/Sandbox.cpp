@@ -1,4 +1,6 @@
 #include <Atlas.h>
+#include <glm/glm.hpp>
+
 using namespace Atlas;
 
 class TestLayer : public Atlas::Layer
