@@ -63,7 +63,7 @@ Atlas::Application* Atlas::CreateApplication()
 
 <details>
   <summary>Dependencies</summary>
-OpenGL - GLFW - ImGui
+OpenGL - GLFW - ImGui - GLM
 </details>
 
 ---

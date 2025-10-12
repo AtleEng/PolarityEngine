@@ -99,9 +99,6 @@
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h">
       <Filter>Header Files\src\engine\imGui</Filter>
     </ClInclude>
-    <ClInclude Include="src\platform\openGL\ImGuiOpenGLRenderer.h">
-      <Filter>Header Files\src\platform\openGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\platform\windows\WindowsWindow.h">
       <Filter>Header Files\src\platform\windows</Filter>
     </ClInclude>
@@ -128,14 +125,12 @@
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp">
       <Filter>Source Files\src\engine\imGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\platform\openGL\ImGuiOpenGLRenderer.cpp">
-      <Filter>Source Files\src\platform\openGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\platform\windows\WindowsInput.cpp">
       <Filter>Source Files\src\platform\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp">
       <Filter>Source Files\src\platform\windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
   </ItemGroup>
 </Project>

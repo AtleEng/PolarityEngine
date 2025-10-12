@@ -5,6 +5,8 @@
 #include "events/Event.h"
 #include "events/ApplicationEvent.h"
 
+#include "imGui/ImGuiLayer.h"
+
 #include <memory>
 
 namespace Atlas {
@@ -23,12 +25,17 @@ namespace Atlas {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		inline static Application& Get() { return *s_instance; }
 		inline Window& GetWindow() { return *m_window; }
+
+		inline static Application& Get() { return *s_instance; }
+		inline ImGuiLayer& GetImGuiLayer() { return *m_imGuiLayer; }
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
                  
+		
 		std::unique_ptr<Window> m_window;
+		std::unique_ptr<ImGuiLayer> m_imGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;
 

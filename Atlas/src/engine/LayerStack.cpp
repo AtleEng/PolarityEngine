@@ -6,7 +6,7 @@ namespace Atlas
 
 	LayerStack::LayerStack()
 	{
-		m_layerInsert = m_layers.begin();
+	
 	}
 
 	LayerStack::~LayerStack()
@@ -19,7 +19,8 @@ namespace Atlas
 
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		m_layerInsert = m_layers.emplace(m_layerInsert, layer);
+		m_layers.emplace(m_layers.begin() + m_insertIndex, layer);
+		m_insertIndex++;
 	}
 
 	void LayerStack::PushOverlay(Layer* overlay) 
@@ -33,7 +34,7 @@ namespace Atlas
 		if (i != m_layers.end())
 		{
 			m_layers.erase(i);
-			m_layerInsert--;
+			m_insertIndex--;
 		}
 	}
 
