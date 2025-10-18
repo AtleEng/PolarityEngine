@@ -1,5 +1,6 @@
 #pragma once
 #include "Event.h"
+#include "engine/core/Keycodes.h"
 
 #include <sstream>
 
@@ -8,22 +9,22 @@ namespace Atlas {
 	class ATLAS_API KeyEvent : public Event
 	{
 	public:
-		inline int GetKeyCode() const { return m_keycode; }
+		KeyCode GetKeyCode() const { return m_keycode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
 	protected:
-		KeyEvent(int keycode)
+		KeyEvent(const KeyCode keycode)
 			: m_keycode(keycode) {}
-		int m_keycode;
+		KeyCode m_keycode;
 	};
 
 	class ATLAS_API KeyPressedEvent : public KeyEvent
 	{
 	public:
-		KeyPressedEvent(int keycode, int repeatCount)
+		KeyPressedEvent(KeyCode keycode, int repeatCount)
 			: KeyEvent(keycode), m_repeatCount(repeatCount) {}
 
-		inline int GetRepeatCount() const
+		KeyCode GetRepeatCount() const
 		{
 			return m_repeatCount;
 		}
@@ -43,7 +44,7 @@ namespace Atlas {
 	class ATLAS_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
-		KeyReleasedEvent(int keycode)
+		KeyReleasedEvent(const KeyCode keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override
@@ -59,7 +60,7 @@ namespace Atlas {
 	class ATLAS_API KeyTypedEvent : public KeyEvent
 	{
 	public:
-		KeyTypedEvent(int keycode)
+		KeyTypedEvent(const KeyCode keycode)
 			: KeyEvent(keycode) {}
 
 		std::string ToString() const override

@@ -1,5 +1,6 @@
 #include <Atlas.h>
-#include <glm/glm.hpp>
+
+#include "imgui/imgui.h"
 
 using namespace Atlas;
 
@@ -28,6 +29,13 @@ public:
 	void OnEvent(Atlas::Event& event) override
 	{
 		//LOG_DEBUG("%s", event.GetName());
+	}
+
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World");
+		ImGui::End();
 	}
 };
 

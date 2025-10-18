@@ -10,14 +10,14 @@
     <Filter Include="Source Files\src\engine">
       <UniqueIdentifier>{258122B1-91B8-6A48-9AC2-CE6B06799141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\core">
+      <UniqueIdentifier>{BDB0B4F9-A96B-A4A5-5223-1DF03EBDEE35}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\imGui">
       <UniqueIdentifier>{2F8EB530-9BA6-9C5A-6453-2CF4D02A31F4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\platform">
       <UniqueIdentifier>{F4FA6A03-60BD-9E8D-A96D-2D1A156F776B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\platform\openGL">
-      <UniqueIdentifier>{C85DCE6D-B4AE-B9AF-DD12-A871C9C24C19}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\platform\windows">
       <UniqueIdentifier>{4EF1B57F-BA5F-0BFF-0349-C6FE6FF6009B}</UniqueIdentifier>
@@ -43,9 +43,6 @@
     <Filter Include="Header Files\src\platform">
       <UniqueIdentifier>{2C99BB9F-985B-EF29-E10B-7EB64D0DC807}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\src\platform\openGL">
-      <UniqueIdentifier>{00CDE75F-EC1D-D3A1-1582-C1630132660B}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\src\platform\windows">
       <UniqueIdentifier>{8647FDB4-F2B5-5234-3B9F-0D34A74C48D0}</UniqueIdentifier>
     </Filter>
@@ -57,31 +54,31 @@
     <ClInclude Include="src\atlaspch.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Application.h">
-      <Filter>Header Files\src\engine</Filter>
+    <ClInclude Include="src\engine\core\Application.h">
+      <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Core.h">
-      <Filter>Header Files\src\engine</Filter>
+    <ClInclude Include="src\engine\core\Core.h">
+      <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\EntryPoint.h">
-      <Filter>Header Files\src\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\Layer.h">
-      <Filter>Header Files\src\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\LayerStack.h">
-      <Filter>Header Files\src\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\Log.h">
-      <Filter>Header Files\src\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\Window.h">
-      <Filter>Header Files\src\engine</Filter>
+    <ClInclude Include="src\engine\core\EntryPoint.h">
+      <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\core\Input.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\core\Keycodes.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\core\Layer.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\core\LayerStack.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\core\Log.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\core\Window.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\events\ApplicationEvent.h">
@@ -107,20 +104,23 @@
     <ClCompile Include="src\atlaspch.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Application.cpp">
-      <Filter>Source Files\src\engine</Filter>
+    <ClCompile Include="src\engine\core\Application.cpp">
+      <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Layer.cpp">
-      <Filter>Source Files\src\engine</Filter>
+    <ClCompile Include="src\engine\core\Layer.cpp">
+      <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\LayerStack.cpp">
-      <Filter>Source Files\src\engine</Filter>
+    <ClCompile Include="src\engine\core\LayerStack.cpp">
+      <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Log.cpp">
-      <Filter>Source Files\src\engine</Filter>
+    <ClCompile Include="src\engine\core\Log.cpp">
+      <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Window.cpp">
-      <Filter>Source Files\src\engine</Filter>
+    <ClCompile Include="src\engine\core\Window.cpp">
+      <Filter>Source Files\src\engine\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp">
+      <Filter>Source Files\src\engine\imGui</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp">
       <Filter>Source Files\src\engine\imGui</Filter>
@@ -131,6 +131,5 @@
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp">
       <Filter>Source Files\src\platform\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
   </ItemGroup>
 </Project>

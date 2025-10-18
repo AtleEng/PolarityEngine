@@ -7,7 +7,7 @@
 
 #include "engine/core/Keycodes.h"
 
-#include "engine/Application.h"
+#include "engine/core/Application.h"
 
 //temp
 #include <GLFW/glfw3.h>

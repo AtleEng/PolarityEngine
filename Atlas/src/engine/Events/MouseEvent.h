@@ -1,5 +1,6 @@
 #pragma once
 #include "Event.h"
+#include "engine/core/Keycodes.h"
 
 #include <sstream>
 
@@ -52,19 +53,19 @@ namespace Atlas {
 	class ATLAS_API MouseButtonEvent : public Event
 	{
 	public:
-		inline int GetMouseButton() const { return m_button; }
+		MouseCode GetMouseButton() const { return m_button; }
 		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
 	protected:
-		MouseButtonEvent(int button)
+		MouseButtonEvent(const MouseCode button)
 			: m_button(button) {}
 
-		float m_button;
+		MouseCode m_button;
 	};
 
 	class ATLAS_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonPressedEvent(int button)
+		MouseButtonPressedEvent(const MouseCode button)
 			: MouseButtonEvent(button) {}
 
 
@@ -81,7 +82,7 @@ namespace Atlas {
 	class ATLAS_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
-		MouseButtonReleasedEvent(int button)
+		MouseButtonReleasedEvent(const MouseCode button)
 			: MouseButtonEvent(button) {}
 
 

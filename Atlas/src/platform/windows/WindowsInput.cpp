@@ -1,7 +1,7 @@
 #include "atlaspch.h"
 #include "engine/core/Input.h"
 
-#include "engine/Application.h"
+#include "engine/core/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Atlas {

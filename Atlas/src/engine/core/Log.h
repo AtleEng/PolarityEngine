@@ -28,15 +28,15 @@ extern const char* TextColorTable[textColorCount];
 
 ATLAS_API void _log(const char* prefix,TextColor textColor, const char* msg, ...);
 
-#define LOG(msg, ...)        _log("LOG:", textColorWhite, msg, ##__VA_ARGS__);
+#define LOG(msg, ...)                       _log("LOG:", textColorWhite, msg, ##__VA_ARGS__);
 #define LOG_EX(prefix, textColor, msg, ...) _log(prefix, textColor, msg, ##__VA_ARGS__);
 
-#define LOG_TRACE(msg, ...)  _log("TRACE:", textColorGreen, msg, ##__VA_ARGS__);
-#define LOG_DEBUG(msg, ...)  _log("DEBUG:", textColorYellow, msg, ##__VA_ARGS__);
-#define LOG_INFO(msg, ...)   _log("INFO:", textColorAqua, msg, ##__VA_ARGS__);
+#define LOG_TRACE(msg, ...)                 _log("TRACE:", textColorGreen, msg, ##__VA_ARGS__);
+#define LOG_DEBUG(msg, ...)                 _log("DEBUG:", textColorYellow, msg, ##__VA_ARGS__);
+#define LOG_INFO(msg, ...)                  _log("INFO:", textColorAqua, msg, ##__VA_ARGS__);
 
-#define LOG_WARN(msg, ...)   _log("WARN:", textColorOrange, msg, ##__VA_ARGS__);
-#define LOG_ERROR(msg, ...)  _log("ERROR:", textColorRed, msg, ##__VA_ARGS__);
+#define LOG_WARN(msg, ...)                  _log("WARN:", textColorOrange, msg, ##__VA_ARGS__);
+#define LOG_ERROR(msg, ...)                 _log("ERROR:", textColorRed, msg, ##__VA_ARGS__);
 
 #ifdef ATLAS_ENABLE_ASSERTS
 #define LOG_ASSERT(x, msg, ...)             \
@@ -49,5 +49,5 @@ ATLAS_API void _log(const char* prefix,TextColor textColor, const char* msg, ...
 	}
 #else
 #define LOG_ASSERT(x, msg, ...)
-#endif // ATLAS_ENABLE_ASSERTS
+#endif
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "engine/core/KeyCodes.h"
+#include "KeyCodes.h"
 
 
 namespace Atlas {
@@ -8,6 +8,7 @@ namespace Atlas {
 	{
 	public:
 		static bool IsKeyPressed(KeyCode key);
+
 		static bool IsMouseButtonPressed(MouseCode button);
 
 		static std::pair<float, float> GetMousePosition();

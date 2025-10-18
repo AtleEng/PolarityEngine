@@ -25,17 +25,16 @@ group "Dependencies"
     include "Atlas/thirdparty/imgui"
 group ""
 
--- Atlas Project (DLL)
+-- Atlas Project (static lib)
 project "Atlas"
     location "Atlas"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
     cppdialect "C++17"
-    systemversion "latest"
-    staticruntime "Off"
+    staticruntime "off"
 
-    targetdir (path.getabsolute("bin/" .. outputdir .. "/%{prj.name}"))
-    objdir (path.getabsolute("bin-int/" .. outputdir .. "/%{prj.name}"))
+    targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
     pchheader "atlaspch.h"
     pchsource "Atlas/src/atlaspch.cpp"
@@ -71,34 +70,30 @@ project "Atlas"
     }
 
     filter "system:windows"
+        systemversion "latest"
         defines
         {
             "ATLAS_PLATFORM_WINDOWS",
             "ATLAS_BUILD_DLL",
-            "ATLAS_ENABLE_ASSERTS", -- Temp
             "GLFW_INCLUDE_NONE"
-        }
-
-        -- Copy DLL to Sandbox folder after build
-        postbuildcommands
-        {
-            ("{COPY} %{cfg.targetdir}/%{cfg.buildtarget.name} \"../bin/" .. outputdir .. "/Sandbox/\"")
         }
 
     filter "configurations:Debug"
         defines "ATLAS_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "ATLAS_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "ATLAS_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"
+
+
 
 -- Sandbox Project (App)
 project "Sandbox"
@@ -106,11 +101,10 @@ project "Sandbox"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
-    systemversion "latest"
-    staticruntime "Off"
+    staticruntime "off"
 
-    targetdir (path.getabsolute("bin/" .. outputdir .. "/%{prj.name}"))
-    objdir (path.getabsolute("bin-int/" .. outputdir .. "/%{prj.name}"))
+    targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
     files
     {
@@ -137,24 +131,24 @@ project "Sandbox"
     }
 
     filter "system:windows"
+    systemversion "latest"
         defines
         {
             "ATLAS_PLATFORM_WINDOWS",
             "ATLAS_ENABLE_ASSERTS",
         }
-        staticruntime "On"
 
     filter "configurations:Debug"
         defines "ATLAS_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "ATLAS_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "ATLAS_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"

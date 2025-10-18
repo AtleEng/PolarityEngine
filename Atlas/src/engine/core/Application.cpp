@@ -1,9 +1,8 @@
 #include "atlaspch.h"
 #include "Application.h"
-#include "Window.h"
 
 #include "Log.h"
-#include "core/Input.h"
+#include "Input.h"
 
 #include "glad/glad.h"
 
