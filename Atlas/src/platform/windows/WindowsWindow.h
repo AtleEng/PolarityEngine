@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/core/Window.h"
+#include "engine/renderer/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -28,6 +29,7 @@ namespace Atlas
 		virtual void Shutdown();
 
 		GLFWwindow* m_window;
+		GraphicsContext* m_context;
 
 		struct WindowData
 		{

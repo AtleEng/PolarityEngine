@@ -5,7 +5,7 @@
 #include "engine/events/KeyEvent.h"
 #include "engine/events/MouseEvent.h"
 
-#include <glad/glad.h>
+#include "platform/openGL/OpenGLContext.h"
 
 namespace Atlas
 {
@@ -45,10 +45,9 @@ namespace Atlas
 		}
 
 		m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_window);
 
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		LOG_ASSERT(status, "Failed to initialize Glad !!!");
+		m_context = new OpenGLContext(m_window);
+		m_context->Init();
 
 		glfwSetWindowUserPointer(m_window, &m_data);
 		SetVSync(true);
@@ -148,7 +147,7 @@ namespace Atlas
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_window);
+		m_context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

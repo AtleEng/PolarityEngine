@@ -99,6 +99,8 @@
     <ClInclude Include="src\platform\windows\WindowsWindow.h">
       <Filter>Header Files\src\platform\windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\GraphicsContext.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\atlaspch.cpp">
@@ -131,5 +133,7 @@
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp">
       <Filter>Source Files\src\platform\windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\GraphicsContext.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
   </ItemGroup>
 </Project>
