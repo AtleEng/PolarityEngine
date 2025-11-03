@@ -1,7 +1,7 @@
-# Atlas Engine
+# Polarity Engine
 
 ### A lightweight 2D engine with OpenGL-based rendering and core system abstractions for custom, low-level game development.
-The Atlas Engine is a lightweight, cross-platform 2D game engine built on OpenGL. It provides core abstractions for rendering, input handling, and platform management (not right now), allowing developers to focus on creating unique, low-level game systems without wasting time reinventing the common foundations. Atlas is made to be intentionally slim, giving game designers maximum control over how their games feel and behave.
+The Polarity Engine is a lightweight, cross-platform 2D game engine built on OpenGL. It provides core abstractions for rendering, input handling, and platform management (not right now), allowing developers to focus on creating unique, low-level game systems without wasting time reinventing the common foundations. Atlas is made to be intentionally slim, giving game designers maximum control over how their games feel and behave.
 
 ---
 
@@ -9,12 +9,12 @@ The Atlas Engine is a lightweight, cross-platform 2D game engine built on OpenGL
 
 Brief explanation of key folders/files:
 
-- `Atlas` - Engine files
-- `build.bat` - build solution for VS
+- `Polarity` - Engine files
+- `generateProj.bat` - build solution for VS
 - `README.md` - Project overview
 
 ```text
-Atlas/
+Polarity/
 |- src/
 |  |- engine/          # Main engine
 |  |  |- events/            
@@ -33,18 +33,18 @@ Atlas/
 ## Development Info
 
 ### How to Build
-- Run build.bat
+- Run generateProj.bat
 - Build via Visual Studio C/C++
 
 ### How to use
-- Add a new project to the Atlas solution
+- Add a new project to the Polarity solution
 - Add a cpp file in the new project
 
 Inside file:
 ```text
-#include <Atlas.h>
+#include <Polarity.h>
 
-class Sandbox : public Atlas::Application
+class Sandbox : public Polarity::Application
 {
 public:
 	Sandbox()
@@ -54,7 +54,7 @@ public:
 	~Sandbox(){}
 };
 
-Atlas::Application* Atlas::CreateApplication()
+Polarity::Application* Polarity::CreateApplication()
 {
 	return new Sandbox();
 }

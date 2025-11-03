@@ -1,4 +1,4 @@
-workspace "Atlas"
+workspace "Polarity"
     architecture "x64"
     startproject "Sandbox"
 
@@ -13,21 +13,21 @@ workspace "Atlas"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-x64"
 
 includedir = {}
-includedir["GLFW"] = "Atlas/thirdparty/GLFW/include"
-includedir["Glad"] = "Atlas/thirdparty/Glad/include"
-includedir["ImGui"] = "Atlas/thirdparty/imgui"
-includedir["glm"] = "Atlas/thirdparty/glm"
+includedir["GLFW"] = "Polarity/thirdparty/GLFW/include"
+includedir["Glad"] = "Polarity/thirdparty/Glad/include"
+includedir["ImGui"] = "Polarity/thirdparty/imgui"
+includedir["glm"] = "Polarity/thirdparty/glm"
 
 
 group "Dependencies"
-    include "Atlas/thirdparty/GLFW"
-    include "Atlas/thirdparty/Glad"
-    include "Atlas/thirdparty/imgui"
+    include "Polarity/thirdparty/GLFW"
+    include "Polarity/thirdparty/Glad"
+    include "Polarity/thirdparty/imgui"
 group ""
 
 -- Atlas Project (static lib)
-project "Atlas"
-    location "Atlas"
+project "Polarity"
+    location "Polarity"
     kind "StaticLib"
     language "C++"
     cppdialect "C++17"
@@ -36,25 +36,25 @@ project "Atlas"
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
-    pchheader "atlaspch.h"
-    pchsource "Atlas/src/atlaspch.cpp"
+    pchheader "polpch.h"
+    pchsource "Polarity/src/polpch.cpp"
 
     files
     {
-        "Atlas/src/**.h",
-        "Atlas/src/**.cpp"
+        "Polarity/src/**.h",
+        "Polarity/src/**.cpp"
     }
  
     vpaths
     {
-        ["Header Files/*"] = { "Atlas/**.h"},
-        ["Source Files/*"] = { "Atlas/**.cpp" }
+        ["Header Files/*"] = { "Polarity/**.h"},
+        ["Source Files/*"] = { "Polarity/**.cpp" }
     }
 
     includedirs
     {
-        "Atlas/src",
-        "Atlas/thirdparty",
+        "Polarity/src",
+        "Polarity/thirdparty",
         "%{includedir.GLFW}",
         "%{includedir.Glad}",
         "%{includedir.ImGui}",
@@ -73,23 +73,23 @@ project "Atlas"
         systemversion "latest"
         defines
         {
-            "ATLAS_PLATFORM_WINDOWS",
-            "ATLAS_BUILD_DLL",
+            "POLARITY_PLATFORM_WINDOWS",
+            "POLARITY_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
         }
 
     filter "configurations:Debug"
-        defines "ATLAS_DEBUG"
+        defines "POLARITY_DEBUG"
         runtime "Debug"
         symbols "on"
 
     filter "configurations:Release"
-        defines "ATLAS_RELEASE"
+        defines "POLARITY_RELEASE"
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "ATLAS_DIST"
+        defines "POLARITY_DIST"
         runtime "Release"
         optimize "on"
 
@@ -120,35 +120,35 @@ project "Sandbox"
 
     includedirs
     {
-        "Atlas/src",
-        "Atlas/thirdparty",
+        "Polarity/src",
+        "Polarity/thirdparty",
         "%{includedir.glm}"
     }
 
     links
     {
-        "Atlas"
+        "Polarity"
     }
 
     filter "system:windows"
     systemversion "latest"
         defines
         {
-            "ATLAS_PLATFORM_WINDOWS",
-            "ATLAS_ENABLE_ASSERTS",
+            "POLARITY_PLATFORM_WINDOWS",
+            "POLARITY_ENABLE_ASSERTS",
         }
 
     filter "configurations:Debug"
-        defines "ATLAS_DEBUG"
+        defines "POLARITY_DEBUG"
         runtime "Debug"
         symbols "on"
 
     filter "configurations:Release"
-        defines "ATLAS_RELEASE"
+        defines "POLARITY_RELEASE"
         runtime "Release"
         optimize "on"
 
     filter "configurations:Dist"
-        defines "ATLAS_DIST"
+        defines "POLARITY_DIST"
         runtime "Release"
         optimize "on"

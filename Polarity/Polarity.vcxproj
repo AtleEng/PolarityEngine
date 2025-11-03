@@ -15,27 +15,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F4C124E3-60A1-A37E-69B9-2E55D5170AE0}</ProjectGuid>
+    <ProjectGuid>{19E6CEB3-05B3-29BF-2ECC-17671AF85E4D}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Sandbox</RootNamespace>
+    <RootNamespace>Polarity</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
@@ -54,32 +54,30 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug-windows-x64\Sandbox\</OutDir>
-    <IntDir>..\bin-int\Debug-windows-x64\Sandbox\</IntDir>
-    <TargetName>Sandbox</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\bin\Debug-windows-x64\Polarity\</OutDir>
+    <IntDir>..\bin-int\Debug-windows-x64\Polarity\</IntDir>
+    <TargetName>Polarity</TargetName>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release-windows-x64\Sandbox\</OutDir>
-    <IntDir>..\bin-int\Release-windows-x64\Sandbox\</IntDir>
-    <TargetName>Sandbox</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\bin\Release-windows-x64\Polarity\</OutDir>
+    <IntDir>..\bin-int\Release-windows-x64\Polarity\</IntDir>
+    <TargetName>Polarity</TargetName>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Dist-windows-x64\Sandbox\</OutDir>
-    <IntDir>..\bin-int\Dist-windows-x64\Sandbox\</IntDir>
-    <TargetName>Sandbox</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <OutDir>..\bin\Dist-windows-x64\Polarity\</OutDir>
+    <IntDir>..\bin-int\Dist-windows-x64\Polarity\</IntDir>
+    <TargetName>Polarity</TargetName>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_ENABLE_ASSERTS;POLARITY_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Polarity\src;..\Polarity\thirdparty;..\Polarity\thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -87,16 +85,20 @@
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_ENABLE_ASSERTS;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Polarity\src;..\Polarity\thirdparty;..\Polarity\thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -107,17 +109,21 @@
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_ENABLE_ASSERTS;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Polarity\src;..\Polarity\thirdparty;..\Polarity\thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -128,17 +134,60 @@
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Sandbox.cpp" />
+    <ClInclude Include="src\Polarity.h" />
+    <ClInclude Include="src\engine\core\Application.h" />
+    <ClInclude Include="src\engine\core\Core.h" />
+    <ClInclude Include="src\engine\core\EntryPoint.h" />
+    <ClInclude Include="src\engine\core\Input.h" />
+    <ClInclude Include="src\engine\core\Keycodes.h" />
+    <ClInclude Include="src\engine\core\Layer.h" />
+    <ClInclude Include="src\engine\core\LayerStack.h" />
+    <ClInclude Include="src\engine\core\Log.h" />
+    <ClInclude Include="src\engine\core\Window.h" />
+    <ClInclude Include="src\engine\events\ApplicationEvent.h" />
+    <ClInclude Include="src\engine\events\Event.h" />
+    <ClInclude Include="src\engine\events\KeyEvent.h" />
+    <ClInclude Include="src\engine\events\MouseEvent.h" />
+    <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
+    <ClInclude Include="src\engine\renderer\GraphicsContext.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLContext.h" />
+    <ClInclude Include="src\platform\windows\WindowsWindow.h" />
+    <ClInclude Include="src\polpch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Polarity\Polarity.vcxproj">
-      <Project>{19E6CEB3-05B3-29BF-2ECC-17671AF85E4D}</Project>
+    <ClCompile Include="src\engine\core\Application.cpp" />
+    <ClCompile Include="src\engine\core\Layer.cpp" />
+    <ClCompile Include="src\engine\core\LayerStack.cpp" />
+    <ClCompile Include="src\engine\core\Log.cpp" />
+    <ClCompile Include="src\engine\core\Window.cpp" />
+    <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
+    <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\engine\renderer\GraphicsContext.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsInput.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\polpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="thirdparty\GLFW\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="thirdparty\Glad\Glad.vcxproj">
+      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="thirdparty\imgui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

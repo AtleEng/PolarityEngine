@@ -1,10 +1,10 @@
-#include <Atlas.h>
+#include <Polarity.h>
 
 #include "imgui/imgui.h"
 
-using namespace Atlas;
+using namespace Polarity;
 
-class TestLayer : public Atlas::Layer
+class TestLayer : public Polarity::Layer
 {
 public:
 	TestLayer()
@@ -26,7 +26,7 @@ public:
 		}
 		
 	}
-	void OnEvent(Atlas::Event& event) override
+	void OnEvent(Polarity::Event& event) override
 	{
 		//LOG_DEBUG("%s", event.GetName());
 	}
@@ -39,7 +39,7 @@ public:
 	}
 };
 
-class Sandbox : public Atlas::Application
+class Sandbox : public Polarity::Application
 {
 public:
 	Sandbox()
@@ -47,7 +47,7 @@ public:
 		LOG_INFO("App initializing...");
 
 		PushLayer(new TestLayer());
-		PushOverlay(new Atlas::ImGuiLayer());
+		PushOverlay(new Polarity::ImGuiLayer());
 	}
 	~Sandbox()
 	{
@@ -56,7 +56,7 @@ public:
 
 };
 
-Atlas::Application* Atlas::CreateApplication()
+Polarity::Application* Polarity::CreateApplication()
 {
 	return new Sandbox();
 }
