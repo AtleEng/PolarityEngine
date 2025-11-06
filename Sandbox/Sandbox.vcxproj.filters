@@ -10,4 +10,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\polarity.rc" />
+  </ItemGroup>
 </Project>

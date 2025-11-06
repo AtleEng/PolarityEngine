@@ -42,7 +42,7 @@ project "Polarity"
     files
     {
         "Polarity/src/**.h",
-        "Polarity/src/**.cpp"
+        "Polarity/src/**.cpp",
     }
  
     vpaths
@@ -109,7 +109,8 @@ project "Sandbox"
     files
     {
         "Sandbox/src/**.h",
-        "Sandbox/src/**.cpp"
+        "Sandbox/src/**.cpp",
+        "polarity.rc"
     }
         
     vpaths

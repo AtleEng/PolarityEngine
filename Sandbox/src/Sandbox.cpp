@@ -47,7 +47,6 @@ public:
 		LOG_INFO("App initializing...");
 
 		PushLayer(new TestLayer());
-		PushOverlay(new Polarity::ImGuiLayer());
 	}
 	~Sandbox()
 	{
