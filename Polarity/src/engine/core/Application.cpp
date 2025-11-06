@@ -47,6 +47,29 @@ namespace Polarity {
         unsigned int indices[3] = { 0,1,2 };
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+
+        std::string vertexSrc = R"(
+            #version 330 core
+
+            layout (location = 0) in vec3 a_Position;
+
+            void main()
+            {
+                gl_Position = vec4(a_Position, 1.0);
+            }
+        )";
+        std::string fragSrc = R"(
+            #version 330 core
+
+            layout (location = 0) out vec4 color;
+
+            void main()
+            {
+                color = vec4(0.8, 0.1, 0.2, 1.0);
+            }
+        )";
+
+        m_shader.reset(new Shader(vertexSrc, fragSrc));
     }
 
     Application::~Application() = default;
@@ -88,6 +111,7 @@ namespace Polarity {
             glClearColor(0.1f, 0.1f, 0.1f, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            m_shader->Bind();
             glBindVertexArray(m_vertexArray);
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
@@ -109,7 +133,7 @@ namespace Polarity {
 
     bool Application::OnWindowClose(WindowCloseEvent& e)
     {
-        LOG_INFO("PolarityEngine Shutdown....");
+        LOG_INFO("PolarityEngine Shutdown...");
         m_running = false;
 
         return true;

@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_ENABLE_ASSERTS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_ENABLE_ASSERTS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -122,7 +122,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_ENABLE_ASSERTS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -159,6 +159,7 @@
     <ClInclude Include="src\engine\events\MouseEvent.h" />
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
     <ClInclude Include="src\engine\renderer\GraphicsContext.h" />
+    <ClInclude Include="src\engine\renderer\Shader.h" />
     <ClInclude Include="src\platform\openGL\OpenGLContext.h" />
     <ClInclude Include="src\platform\windows\WindowsWindow.h" />
     <ClInclude Include="src\polpch.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\engine\renderer\GraphicsContext.cpp" />
+    <ClCompile Include="src\engine\renderer\Shader.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
     <ClCompile Include="src\platform\windows\WindowsInput.cpp" />
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />

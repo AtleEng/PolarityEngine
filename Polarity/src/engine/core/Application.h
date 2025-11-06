@@ -7,7 +7,7 @@
 
 #include "../imGui/ImGuiLayer.h"
 
-#include <memory>
+#include "engine/renderer/Shader.h"
 
 namespace Polarity {
 
@@ -33,13 +33,13 @@ namespace Polarity {
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
                  
-		
 		std::unique_ptr<Window> m_window;
 		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;
 
 		unsigned int m_vertexArray, m_vertexBuffer, m_indexBuffer;
+		std::unique_ptr<Shader> m_shader;
 
 		static Application* s_instance;
 	};

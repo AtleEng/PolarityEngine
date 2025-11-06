@@ -108,6 +108,9 @@
     <ClInclude Include="src\engine\renderer\GraphicsContext.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\Shader.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\platform\openGL\OpenGLContext.h">
       <Filter>Header Files\src\platform\openGL</Filter>
     </ClInclude>
@@ -141,6 +144,9 @@
       <Filter>Source Files\src\engine\imGui</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\GraphicsContext.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\Shader.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp">

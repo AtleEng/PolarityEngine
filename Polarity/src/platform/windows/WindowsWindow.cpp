@@ -32,7 +32,7 @@ namespace Polarity
 		m_data.Width = props.Width;
 		m_data.Height = props.Height;
 
-		LOG_INFO("Creating window: %s, (%d, %d)", props.Title.c_str(), props.Width, props.Height);
+		LOG_INFO("Creating window: %s, (%d, %d)\n", props.Title.c_str(), props.Width, props.Height);
 
 		if (!s_GLFWInitialized)
 		{

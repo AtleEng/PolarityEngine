@@ -74,6 +74,7 @@ project "Polarity"
         defines
         {
             "POLARITY_PLATFORM_WINDOWS",
+            "POLARITY_ENABLE_ASSERTS",
             "POLARITY_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
         }
@@ -136,7 +137,7 @@ project "Sandbox"
         defines
         {
             "POLARITY_PLATFORM_WINDOWS",
-            "POLARITY_ENABLE_ASSERTS",
+            "POLARITY_ENABLE_ASSERTS"
         }
 
     filter "configurations:Debug"

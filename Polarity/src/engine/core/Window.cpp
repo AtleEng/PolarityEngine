@@ -13,7 +13,7 @@ namespace Polarity
 		#ifdef POLARITY_PLATFORM_WINDOWS
 			return new WindowsWindow(props);
 		#else
-			LOG_ASSERT(false, "Unknown platform!");
+			LOG_MAJOR_ERROR("Unknown platform!");
 			return nullptr;
 		#endif
 	}

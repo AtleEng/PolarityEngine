@@ -14,15 +14,16 @@ namespace Polarity
 	}
 	void OpenGLContext::Init()
 	{
+		LOG_INFO("OpenGL initializing...");
 		glfwMakeContextCurrent(m_windowHandle);
 
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		LOG_ASSERT(status, "Failed to initialize Glad !!!");
 
-		LOG_INFO("OpenGL initializing...");
 		LOG_INFO("  Vendor: %s", glGetString(GL_VENDOR));
 		LOG_INFO("  Renderer: %s", glGetString(GL_RENDERER));
 		LOG_INFO("  Version: %s", glGetString(GL_VERSION));
+		LOG_INFO("OpenGL done\n");
 	}
 	void OpenGLContext::SwapBuffers()
 	{

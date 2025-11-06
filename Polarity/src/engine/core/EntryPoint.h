@@ -6,11 +6,12 @@ extern Polarity::Application* Polarity::CreateApplication();
 
 int main(int argc, char** argv)
 {
-	LOG_INFO("PolarityEngine initializing...");
+	LOG_EX("", textColorGreen, "PolarityEngine v1.0.0\n  Dev build\n");
+	LOG_INFO("Engine initializing...");
 
 	auto app = Polarity::CreateApplication();
 	app->Run();
 	delete app;
 }
 
-#endif // ATLAS_PLATFORM_WINDOWS
+#endif
