@@ -117,6 +117,7 @@
     <ClInclude Include="src\polpch.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -155,5 +156,6 @@
     <ClCompile Include="src\polpch.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\Shader.cpp" />
   </ItemGroup>
 </Project>

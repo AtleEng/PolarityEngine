@@ -6,6 +6,7 @@
 #include "../events/ApplicationEvent.h"
 
 #include "../imGui/ImGuiLayer.h"
+#include "engine/renderer/Shader.h"
 
 #include <memory>
 
@@ -40,6 +41,7 @@ namespace Polarity {
 		LayerStack m_layerStack;
 
 		unsigned int m_vertexArray, m_vertexBuffer, m_indexBuffer;
+		std::unique_ptr<Shader> m_shader;
 
 		static Application* s_instance;
 	};
