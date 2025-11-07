@@ -135,7 +135,6 @@ namespace Polarity {
 
     bool Application::OnWindowClose(WindowCloseEvent& e)
     {
-        LOG_INFO("PolarityEngine Shutdown....");
         m_running = false;
 
         return true;

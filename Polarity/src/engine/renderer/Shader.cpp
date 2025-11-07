@@ -5,6 +5,7 @@
 
 Polarity::Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource)
 {
+	LOG_INFO("Creating shaders...");
 	// Create an empty vertex shader handle
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -29,7 +30,7 @@ Polarity::Shader::Shader(const std::string& vertexSource, const std::string& fra
 		// We don't need the shader anymore.
 		glDeleteShader(vertexShader);
 
-		LOG_ERROR("Vertex shader compilation failure !!!");
+		LOG_MAJOR_ERROR("Vertex shader compilation failure !!!");
 		
 		return;
 	}
@@ -59,7 +60,7 @@ Polarity::Shader::Shader(const std::string& vertexSource, const std::string& fra
 		// Either of them. Don't leak shaders.
 		glDeleteShader(vertexShader);
 
-		LOG_ERROR("Fragment shader compilation failure !!!");
+		LOG_MAJOR_ERROR("Fragment shader compilation failure !!!");
 
 		return;
 	}
@@ -91,7 +92,7 @@ Polarity::Shader::Shader(const std::string& vertexSource, const std::string& fra
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
 
-		LOG_ERROR("Shader link failure !!!");
+		LOG_MAJOR_ERROR("Shader link failure !!!");
 
 		return;
 	}

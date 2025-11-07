@@ -44,7 +44,7 @@ class Sandbox : public Polarity::Application
 public:
 	Sandbox()
 	{
-		LOG_INFO("App initializing...");
+		LOG_INFO("Starting application...\n");
 
 		PushLayer(new TestLayer());
 	}
