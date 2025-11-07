@@ -6,7 +6,7 @@ extern Polarity::Application* Polarity::CreateApplication();
 
 int main(int argc, char** argv)
 {
-	LOG_INFO("PolarityEngine initializing...");
+	LOG_EX("[PolarityEngine]", textColorOrange, "Dev build\n");
 
 	auto app = Polarity::CreateApplication();
 	app->Run();

@@ -22,7 +22,7 @@ void _log(const char* prefix, TextColor textColor, const char* msg, ...)
     char textBuffer[8192] = {};
 
     va_list args;
-    va_start(args, msg); // last named parameter before: ...
+    va_start(args, msg);
 
     // Combine prefix and color with the user format string
     snprintf(textBuffer, sizeof(textBuffer), "%s %s ", TextColorTable[textColor], prefix);

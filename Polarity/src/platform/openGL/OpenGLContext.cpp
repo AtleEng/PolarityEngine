@@ -20,9 +20,9 @@ namespace Polarity
 		LOG_ASSERT(status, "Failed to initialize Glad !!!");
 
 		LOG_INFO("OpenGL initializing...");
-		LOG_INFO("  Vendor: %s", glGetString(GL_VENDOR));
-		LOG_INFO("  Renderer: %s", glGetString(GL_RENDERER));
-		LOG_INFO("  Version: %s", glGetString(GL_VERSION));
+		LOG_INFO(" - Vendor:   %s", glGetString(GL_VENDOR));
+		LOG_INFO(" - Renderer: %s", glGetString(GL_RENDERER));
+		LOG_INFO(" - Version:  %s", glGetString(GL_VERSION));
 	}
 	void OpenGLContext::SwapBuffers()
 	{
