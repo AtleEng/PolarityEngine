@@ -13,4 +13,4 @@ int main(int argc, char** argv)
 	delete app;
 }
 
-#endif // ATLAS_PLATFORM_WINDOWS
+#endif
