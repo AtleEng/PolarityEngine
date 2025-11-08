@@ -1,5 +1,5 @@
 // icon
-IDI_APP_ICON ICON "PolarityIcon.ico"
+IDI_APP_ICON ICON "Polarity/assets/PolarityIcon.ico"
 
 // info
 1 VERSIONINFO
