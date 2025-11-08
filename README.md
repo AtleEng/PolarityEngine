@@ -1,31 +1,26 @@
 # Polarity Engine
 
-### A lightweight 2D engine with OpenGL-based rendering and core system abstractions for custom, low-level game development.
-The Polarity Engine is a lightweight, cross-platform 2D game engine built on OpenGL. It provides core abstractions for rendering, input handling, and platform management (not right now), allowing developers to focus on creating unique, low-level game systems without wasting time reinventing the common foundations. Atlas is made to be intentionally slim, giving game designers maximum control over how their games feel and behave.
+### A lightweight 2D engine
+The Polarity Engine is a lightweight, cross-platform 2D game engine built to give game designers maximum control over how their games feel and behave. It provides core abstractions for rendering, input handling, and platform management, allowing developers to focus on creating unique, low-level game systems without wasting time reinventing the common foundations.
 
 ---
 
 ## Project Structure
 
-Brief explanation of key folders/files:
-
-- `Polarity` - Engine files
-- `generateProj.bat` - build solution for VS
-- `README.md` - Project overview
-
 ```text
-Polarity/
-|- src/
-|  |- engine/          # Main engine
-|  |  |- events/            
-|  |  |- core/         # Core logic
-|  |  |- render/
-|  |  |- imGui/
-|  | 
-|  |- platform/        # Cross-platform (currently only Windows)
-|     |- windows/  
-|
-|- thirdparty/         # Engine specific thirdparty
+Polarity
+├───src
+│   ├───engine
+│   │   ├───core
+│   │   ├───events
+│   │   ├───imGui
+│   │   ├───math
+│   │   ├───renderer
+│   │   └───utils
+│   └───platform
+│       ├───openGL
+│       └───windows
+└───thirdparty
 ```
 
 ---
@@ -43,21 +38,6 @@ Polarity/
 Inside file:
 ```text
 #include <Polarity.h>
-
-class Sandbox : public Polarity::Application
-{
-public:
-	Sandbox()
-	{
-		  //Entry point
-	}
-	~Sandbox(){}
-};
-
-Polarity::Application* Polarity::CreateApplication()
-{
-	return new Sandbox();
-}
 ```
 
 
@@ -70,7 +50,7 @@ OpenGL - GLFW - ImGui - GLM
 
 ## Roadmap
 
-Base functionality -> Rendering -> shaders and materials -> 2D rendering -> filesystems
+Basic Rendering and abstractions -> shaders and materials -> full 2D rendering
 
 ---
 
@@ -81,6 +61,5 @@ License type: Apache (see LICENSE file)
 ---
 
 ## Credits
-...
 ### Made by:
 - Atle Engelbrektsson
