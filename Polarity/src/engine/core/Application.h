@@ -6,7 +6,9 @@
 #include "../events/ApplicationEvent.h"
 
 #include "../imGui/ImGuiLayer.h"
+
 #include "engine/renderer/Shader.h"
+#include "engine/renderer/Buffer.h"
 
 #include <memory>
 
@@ -40,8 +42,11 @@ namespace Polarity {
 		bool m_running = true;
 		LayerStack m_layerStack;
 
-		unsigned int m_vertexArray, m_vertexBuffer, m_indexBuffer;
+		unsigned int m_vertexArray;
+
 		std::unique_ptr<Shader> m_shader;
+		std::unique_ptr<VertexBuffer> m_vertexBuffer;
+		std::unique_ptr<IndexBuffer> m_indexBuffer;
 
 		static Application* s_instance;
 	};

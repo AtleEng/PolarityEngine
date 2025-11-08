@@ -118,6 +118,9 @@
       <Filter>Header Files\src</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\renderer\Shader.h" />
+    <ClInclude Include="src\engine\renderer\Buffer.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLBuffer.h" />
+    <ClInclude Include="src\engine\renderer\Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -157,5 +160,8 @@
       <Filter>Source Files\src</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
+    <ClCompile Include="src\engine\renderer\Buffer.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
+    <ClCompile Include="src\engine\renderer\Renderer.cpp" />
   </ItemGroup>
 </Project>
