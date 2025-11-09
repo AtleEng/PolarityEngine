@@ -135,6 +135,9 @@
     <ClInclude Include="src\polpch.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\RendererAPI.h" />
+    <ClInclude Include="src\engine\renderer\RenderCommand.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -191,5 +194,8 @@
     <ClCompile Include="src\polpch.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\engine\renderer\RenderCommand.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp" />
   </ItemGroup>
 </Project>

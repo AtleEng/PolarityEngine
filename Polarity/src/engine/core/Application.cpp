@@ -1,38 +1,14 @@
 #include "polpch.h"
 #include "Application.h"
 
-#include "Log.h"
+#include "engine/renderer/Renderer.h"
 #include "Input.h"
-
-#include "glad/glad.h"
 
 namespace Polarity {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
     Application* Application::s_instance = nullptr;
-
-
-    static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-    {
-        switch (type)
-        {
-        case Polarity::ShaderDataType::Float:	return GL_FLOAT;
-        case Polarity::ShaderDataType::Float2:	return GL_FLOAT;
-        case Polarity::ShaderDataType::Float3:	return GL_FLOAT;
-        case Polarity::ShaderDataType::Float4:	return GL_FLOAT;
-        case Polarity::ShaderDataType::Mat3:	return GL_FLOAT;
-        case Polarity::ShaderDataType::Mat4:	return GL_FLOAT;
-        case Polarity::ShaderDataType::Int:		return GL_INT;
-        case Polarity::ShaderDataType::Int2:	return GL_INT;
-        case Polarity::ShaderDataType::Int3:	return GL_INT;
-        case Polarity::ShaderDataType::Int4:	return GL_INT;
-        case Polarity::ShaderDataType::Bool:	return GL_BOOL;
-        }
-
-        LOG_MAJOR_ERROR("Unknown ShaderDataType !!!");
-        return 0;
-    }
 
     Application::Application()
     {
@@ -141,12 +117,17 @@ namespace Polarity {
     {
         while (m_running)
         {
-            glClearColor(0.1f, 0.1f, 0.1f, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+            RenderCommand::Clear();
 
-            m_shader->Bind();
-            m_vertexArray->Bind();
-            glDrawElements(GL_TRIANGLES, m_vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+            Renderer::BeginScene();
+            {
+                m_shader->Bind();
+                Renderer::Submit(m_vertexArray);
+
+                Renderer::EndScene();
+            }
+
 
             for (Layer* layer : m_layerStack)
             {

@@ -10,8 +10,8 @@ namespace Polarity {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::None:		LOG_MAJOR_ERROR("RendererAPI: None is currently not supported !!!"); return nullptr;
-			case RendererAPI::OpenGL:	return new OpenGLVertexBuffer(vertices, size);
+		case RendererAPI::API::None:		LOG_MAJOR_ERROR("RendererAPI: None is currently not supported !!!"); return nullptr;
+		case RendererAPI::API::OpenGL:	return new OpenGLVertexBuffer(vertices, size);
 		}
 
 		LOG_MAJOR_ERROR("Unknown RendererAPI !!!");
@@ -22,8 +22,8 @@ namespace Polarity {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::None:		LOG_MAJOR_ERROR("RendererAPI: None is currently not supported !!!"); return nullptr;
-		case RendererAPI::OpenGL:	return new OpenGLIndexBuffer(indices, size);
+		case RendererAPI::API::None:		LOG_MAJOR_ERROR("RendererAPI: None is currently not supported !!!"); return nullptr;
+		case RendererAPI::API::OpenGL:	return new OpenGLIndexBuffer(indices, size);
 		}
 
 		LOG_MAJOR_ERROR("Unknown RendererAPI !!!");
