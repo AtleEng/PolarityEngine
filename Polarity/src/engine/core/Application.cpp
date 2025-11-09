@@ -45,44 +45,30 @@ namespace Polarity {
         m_imGuiLayer = new ImGuiLayer();
         PushOverlay(m_imGuiLayer);
 
-        glGenVertexArrays(1, &m_vertexArray);
-        glBindVertexArray(m_vertexArray);
+
+
+        m_vertexArray.reset(VertexArray::Create());
 
         float vert[3 * 7] = {
             -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 1.0f, 1.0f,
             0.5f,  -0.5f, 0.0f,     0.0f, 1.0f, 1.0f, 1.0f,
             0.0f,  0.5f,  0.0f,     0.0f, 0.0f, 1.0f, 1.0f
         };
+        uint32_t indices[3] = {
+            0,1,2 
+        };
 
-        m_vertexBuffer.reset(VertexBuffer::Create(vert, sizeof(vert)));
+        std::shared_ptr<VertexBuffer> vertexBuffer;
+        vertexBuffer.reset(VertexBuffer::Create(vert, sizeof(vert)));
+        vertexBuffer->SetLayout({
+            { ShaderDataType::Float3, "a_Position" },
+            { ShaderDataType::Float4, "a_Color"    }
+            });
+        m_vertexArray->AddVertexBuffer(vertexBuffer);
 
-        {
-            BufferLayout layout = {
-               { ShaderDataType::Float3, "a_Position" },
-               { ShaderDataType::Float4, "a_Color"    }
-            };
-
-            m_vertexBuffer->SetLayout(layout);
-        }
-
-        uint32_t index = 0;
-        const auto& layout = m_vertexBuffer->GetLayout();
-        for (const auto& element : layout)
-        {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index,                        
-                element.GetComponentCount(), 
-                ShaderDataTypeToOpenGLBaseType(element.Type),   
-                element.Normalized ? GL_TRUE : GL_FALSE, 
-                layout.GetStride(),
-                (const void*)element.Offset);
-            
-            index++;
-        }
-
-     
-        uint32_t indices[3] = { 0,1,2 };
-        m_indexBuffer.reset(IndexBuffer::Create(indices, 3));
+        std::shared_ptr<IndexBuffer> indexBuffer;
+        indexBuffer.reset(IndexBuffer::Create(indices, 3));
+        m_vertexArray->SetIndexBuffer(indexBuffer);
 
 
         std::string vertexSource = R"(
@@ -159,8 +145,8 @@ namespace Polarity {
             glClear(GL_COLOR_BUFFER_BIT);
 
             m_shader->Bind();
-            glBindVertexArray(m_vertexArray);
-            glDrawElements(GL_TRIANGLES, m_indexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+            m_vertexArray->Bind();
+            glDrawElements(GL_TRIANGLES, m_vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
             for (Layer* layer : m_layerStack)
             {

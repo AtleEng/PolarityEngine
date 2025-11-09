@@ -9,6 +9,7 @@
 
 #include "engine/renderer/Shader.h"
 #include "engine/renderer/Buffer.h"
+#include "engine/renderer/VertexArray.h"
 
 #include <memory>
 
@@ -42,11 +43,8 @@ namespace Polarity {
 		bool m_running = true;
 		LayerStack m_layerStack;
 
-		unsigned int m_vertexArray;
-
-		std::unique_ptr<Shader> m_shader;
-		std::unique_ptr<VertexBuffer> m_vertexBuffer;
-		std::unique_ptr<IndexBuffer> m_indexBuffer;
+		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<VertexArray> m_vertexArray;
 
 		static Application* s_instance;
 	};
