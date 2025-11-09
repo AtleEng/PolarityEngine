@@ -129,6 +129,10 @@ namespace Polarity {
             }
 
 
+            m_shader->Bind();
+            glBindVertexArray(m_vertexArray);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+
             for (Layer* layer : m_layerStack)
             {
                 layer->OnUpdate();

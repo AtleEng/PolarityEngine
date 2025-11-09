@@ -6,6 +6,7 @@
 #include "../events/ApplicationEvent.h"
 
 #include "../imGui/ImGuiLayer.h"
+#include "engine/renderer/Shader.h"
 
 #include "engine/renderer/Shader.h"
 #include "engine/renderer/Buffer.h"
