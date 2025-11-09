@@ -1,17 +1,14 @@
 #include "polpch.h"
 #include "Application.h"
 
-#include "Log.h"
+#include "engine/renderer/Renderer.h"
 #include "Input.h"
-
-#include "glad/glad.h"
 
 namespace Polarity {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
     Application* Application::s_instance = nullptr;
-
 
     Application::Application()
     {
@@ -24,38 +21,45 @@ namespace Polarity {
         m_imGuiLayer = new ImGuiLayer();
         PushOverlay(m_imGuiLayer);
 
-        glGenVertexArrays(1, &m_vertexArray);
-        glBindVertexArray(m_vertexArray);
 
-        glGenBuffers(1, &m_vertexBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
 
-        float vert[3 * 3] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5, 0.0f,
-            0.0f, 0.5f, 0.0f
+        m_vertexArray.reset(VertexArray::Create());
+
+        float vert[3 * 7] = {
+            -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 1.0f, 1.0f,
+            0.5f,  -0.5f, 0.0f,     0.0f, 1.0f, 1.0f, 1.0f,
+            0.0f,  0.5f,  0.0f,     0.0f, 0.0f, 1.0f, 1.0f
+        };
+        uint32_t indices[3] = {
+            0,1,2 
         };
 
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
+        std::shared_ptr<VertexBuffer> vertexBuffer;
+        vertexBuffer.reset(VertexBuffer::Create(vert, sizeof(vert)));
+        vertexBuffer->SetLayout({
+            { ShaderDataType::Float3, "a_Position" },
+            { ShaderDataType::Float4, "a_Color"    }
+            });
+        m_vertexArray->AddVertexBuffer(vertexBuffer);
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+        std::shared_ptr<IndexBuffer> indexBuffer;
+        indexBuffer.reset(IndexBuffer::Create(indices, 3));
+        m_vertexArray->SetIndexBuffer(indexBuffer);
 
-        glGenBuffers(1, &m_indexBuffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-
-        unsigned int indices[3] = { 0,1,2 };
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
         std::string vertexSource = R"(
         #version 330 core
 
         layout(location = 0) in vec3 a_Position;
+        layout(location = 1) in vec4 a_Color;
+
         out vec3 v_Position;
+        out vec4 v_Color;
 
         void main()
         {
             v_Position = a_Position;
+            v_Color = a_Color;
 	        gl_Position = vec4(a_Position, 1.0);
         }
         )";
@@ -63,11 +67,14 @@ namespace Polarity {
         #version 330 core
 
         layout(location = 0) out vec4 color;
+
         in vec3 v_Position;
+        in vec4 v_Color;
 
         void main()
         {
 	        color = vec4(v_Position * 0.5 + 0.5, 1.0);
+            color = v_Color;
         }
         )";
 
@@ -110,8 +117,17 @@ namespace Polarity {
     {
         while (m_running)
         {
-            glClearColor(0.1f, 0.1f, 0.1f, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+            RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+            RenderCommand::Clear();
+
+            Renderer::BeginScene();
+            {
+                m_shader->Bind();
+                Renderer::Submit(m_vertexArray);
+
+                Renderer::EndScene();
+            }
+
 
             m_shader->Bind();
             glBindVertexArray(m_vertexArray);

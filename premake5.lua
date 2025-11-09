@@ -82,6 +82,10 @@ project "Polarity"
         defines "POLARITY_DEBUG"
         runtime "Debug"
         symbols "on"
+        defines
+        {
+            "POLARITY_ENABLE_ASSERTS"
+        }
 
     filter "configurations:Release"
         defines "POLARITY_RELEASE"

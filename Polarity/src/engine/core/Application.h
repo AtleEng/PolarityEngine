@@ -8,6 +8,10 @@
 #include "../imGui/ImGuiLayer.h"
 #include "engine/renderer/Shader.h"
 
+#include "engine/renderer/Shader.h"
+#include "engine/renderer/Buffer.h"
+#include "engine/renderer/VertexArray.h"
+
 #include <memory>
 
 namespace Polarity {
@@ -40,8 +44,8 @@ namespace Polarity {
 		bool m_running = true;
 		LayerStack m_layerStack;
 
-		unsigned int m_vertexArray, m_vertexBuffer, m_indexBuffer;
-		std::unique_ptr<Shader> m_shader;
+		std::shared_ptr<Shader> m_shader;
+		std::shared_ptr<VertexArray> m_vertexArray;
 
 		static Application* s_instance;
 	};

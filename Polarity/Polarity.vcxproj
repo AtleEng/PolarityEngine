@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DEBUG;POLARITY_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -143,7 +143,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\renderer\Shader.h" />
+    <ClInclude Include="src\engine\renderer\RenderCommand.h" />
+    <ClInclude Include="src\engine\renderer\RendererAPI.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -159,8 +161,14 @@
     <ClInclude Include="src\engine\events\KeyEvent.h" />
     <ClInclude Include="src\engine\events\MouseEvent.h" />
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
+    <ClInclude Include="src\engine\renderer\Buffer.h" />
     <ClInclude Include="src\engine\renderer\GraphicsContext.h" />
+    <ClInclude Include="src\engine\renderer\Renderer.h" />
+    <ClInclude Include="src\engine\renderer\Shader.h" />
+    <ClInclude Include="src\engine\renderer\VertexArray.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLBuffer.h" />
     <ClInclude Include="src\platform\openGL\OpenGLContext.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\platform\windows\WindowsWindow.h" />
     <ClInclude Include="src\polpch.h" />
   </ItemGroup>
@@ -172,9 +180,17 @@
     <ClCompile Include="src\engine\core\Window.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\engine\renderer\Buffer.cpp" />
     <ClCompile Include="src\engine\renderer\GraphicsContext.cpp" />
+    <ClCompile Include="src\engine\renderer\RenderCommand.cpp" />
+    <ClCompile Include="src\engine\renderer\Renderer.cpp" />
+    <ClCompile Include="src\engine\renderer\RendererAPI.cpp" />
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
+    <ClCompile Include="src\engine\renderer\VertexArray.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\platform\windows\WindowsInput.cpp" />
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
     <ClCompile Include="src\polpch.cpp">

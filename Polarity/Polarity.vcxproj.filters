@@ -105,10 +105,28 @@
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h">
       <Filter>Header Files\src\engine\imGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\Buffer.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\renderer\GraphicsContext.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\Renderer.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\renderer\Shader.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\renderer\VertexArray.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\openGL\OpenGLBuffer.h">
+      <Filter>Header Files\src\platform\openGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\platform\openGL\OpenGLContext.h">
+      <Filter>Header Files\src\platform\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\openGL\OpenGLVertexArray.h">
       <Filter>Header Files\src\platform\openGL</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\windows\WindowsWindow.h">
@@ -117,7 +135,9 @@
     <ClInclude Include="src\polpch.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\renderer\Shader.h" />
+    <ClInclude Include="src\engine\renderer\RendererAPI.h" />
+    <ClInclude Include="src\engine\renderer\RenderCommand.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -141,10 +161,28 @@
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp">
       <Filter>Source Files\src\engine\imGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\Buffer.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\renderer\GraphicsContext.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\Renderer.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\Shader.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\VertexArray.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp">
+      <Filter>Source Files\src\platform\openGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp">
+      <Filter>Source Files\src\platform\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\openGL\OpenGLVertexArray.cpp">
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\windows\WindowsInput.cpp">
@@ -156,6 +194,8 @@
     <ClCompile Include="src\polpch.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\renderer\Shader.cpp" />
+    <ClCompile Include="src\engine\renderer\RendererAPI.cpp" />
+    <ClCompile Include="src\engine\renderer\RenderCommand.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp" />
   </ItemGroup>
 </Project>
