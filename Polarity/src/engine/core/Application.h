@@ -11,7 +11,7 @@
 #include "engine/renderer/Buffer.h"
 #include "engine/renderer/VertexArray.h"
 
-#include <memory>
+#include "engine/renderer/OrthographicCamera.h"
 
 namespace Polarity {
 
@@ -45,7 +45,9 @@ namespace Polarity {
 
 		std::shared_ptr<Shader> m_shader;
 		std::shared_ptr<VertexArray> m_vertexArray;
-
+		
+		OrthographicCamera m_camera;
+	private:
 		static Application* s_instance;
 	};
 

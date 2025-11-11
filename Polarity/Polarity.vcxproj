@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\renderer\OrthographicCamera.h" />
     <ClInclude Include="src\engine\renderer\RenderCommand.h" />
     <ClInclude Include="src\engine\renderer\RendererAPI.h" />
     <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\engine\renderer\Buffer.cpp" />
     <ClCompile Include="src\engine\renderer\GraphicsContext.cpp" />
+    <ClCompile Include="src\engine\renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\engine\renderer\RenderCommand.cpp" />
     <ClCompile Include="src\engine\renderer\Renderer.cpp" />
     <ClCompile Include="src\engine\renderer\RendererAPI.cpp" />

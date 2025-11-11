@@ -138,6 +138,7 @@
     <ClInclude Include="src\engine\renderer\RendererAPI.h" />
     <ClInclude Include="src\engine\renderer\RenderCommand.h" />
     <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\engine\renderer\OrthographicCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -197,5 +198,6 @@
     <ClCompile Include="src\engine\renderer\RendererAPI.cpp" />
     <ClCompile Include="src\engine\renderer\RenderCommand.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\engine\renderer\OrthographicCamera.cpp" />
   </ItemGroup>
 </Project>

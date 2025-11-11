@@ -11,6 +11,7 @@ namespace Polarity {
     Application* Application::s_instance = nullptr;
 
     Application::Application()
+        : m_camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         LOG_ASSERT(!s_instance, "Application already exist !!!");
         s_instance = this;
@@ -53,6 +54,8 @@ namespace Polarity {
         layout(location = 0) in vec3 a_Position;
         layout(location = 1) in vec4 a_Color;
 
+        uniform mat4 u_ViewProjection;
+
         out vec3 v_Position;
         out vec4 v_Color;
 
@@ -60,7 +63,7 @@ namespace Polarity {
         {
             v_Position = a_Position;
             v_Color = a_Color;
-	        gl_Position = vec4(a_Position, 1.0);
+	        gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
         }
         )";
         std::string fragmentSource = R"(
@@ -120,10 +123,12 @@ namespace Polarity {
             RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
             RenderCommand::Clear();
 
-            Renderer::BeginScene();
+            m_camera.SetPosition({ 0.3f, 0.1f, 0.0f});
+            m_camera.SetRotation(30);
+
+            Renderer::BeginScene(m_camera);
             {
-                m_shader->Bind();
-                Renderer::Submit(m_vertexArray);
+                Renderer::Submit(m_shader, m_vertexArray);
 
                 Renderer::EndScene();
             }
