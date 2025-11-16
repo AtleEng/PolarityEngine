@@ -6,7 +6,7 @@
 
 namespace Polarity {
 
-	class POLARITY_API MouseMovedEvent : public Event
+	class MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y)
@@ -28,7 +28,7 @@ namespace Polarity {
 		float m_mouseX, m_mouseY;
 	};
 
-	class POLARITY_API MouseScrolledEvent : public Event
+	class MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)
@@ -50,7 +50,7 @@ namespace Polarity {
 		float m_xOffset, m_yOffset;
 	};
 
-	class POLARITY_API MouseButtonEvent : public Event
+	class MouseButtonEvent : public Event
 	{
 	public:
 		MouseCode GetMouseButton() const { return m_button; }
@@ -62,7 +62,7 @@ namespace Polarity {
 		MouseCode m_button;
 	};
 
-	class POLARITY_API MouseButtonPressedEvent : public MouseButtonEvent
+	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(const MouseCode button)
@@ -79,7 +79,7 @@ namespace Polarity {
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class POLARITY_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(const MouseCode button)

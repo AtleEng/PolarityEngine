@@ -6,7 +6,7 @@
 
 namespace Polarity {
 
-	class POLARITY_API KeyEvent : public Event
+	class KeyEvent : public Event
 	{
 	public:
 		KeyCode GetKeyCode() const { return m_keycode; }
@@ -18,7 +18,7 @@ namespace Polarity {
 		KeyCode m_keycode;
 	};
 
-	class POLARITY_API KeyPressedEvent : public KeyEvent
+	class KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(KeyCode keycode, int repeatCount)
@@ -41,7 +41,7 @@ namespace Polarity {
 		int m_repeatCount;
 	};
 
-	class POLARITY_API KeyReleasedEvent : public KeyEvent
+	class KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(const KeyCode keycode)
@@ -57,7 +57,7 @@ namespace Polarity {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
-	class POLARITY_API KeyTypedEvent : public KeyEvent
+	class KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(const KeyCode keycode)

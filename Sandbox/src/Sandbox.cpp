@@ -12,58 +12,37 @@ class TestLayer : public Polarity::Layer
 {
 public:
 	TestLayer()
-		: Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_camPos(0.0f), m_trianglePos(0.0f)
+		: Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_camPos(0.0f)
 	{
-		//triangle
-		m_vertexArray.reset(VertexArray::Create());
-
-		float vert[3 * 7] = {
-			-0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 1.0f, 1.0f,
-			0.5f,  -0.5f, 0.0f,     0.0f, 1.0f, 1.0f, 1.0f,
-			0.0f,  0.5f,  0.0f,     0.0f, 0.0f, 1.0f, 1.0f
-		};
-		uint32_t indices[3] = {
-			0,1,2
-		};
-
-		std::shared_ptr<VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vert, sizeof(vert)));
-		vertexBuffer->SetLayout({
-			{ ShaderDataType::Float3, "a_Position" },
-			{ ShaderDataType::Float4, "a_Color"    }
-			});
-		m_vertexArray->AddVertexBuffer(vertexBuffer);
-
-		std::shared_ptr<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, 3));
-		m_vertexArray->SetIndexBuffer(indexBuffer);
-
 		//square
-		float squareV[4 * 7] = {
-		-0.5f, -0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f,
-		 0.5f, -0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f,
-		 0.5f,  0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f,
-		-0.5f,  0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f
+		float squareV[5 * 4] = {
+		//	vertex		  		 // UV
+		-0.5f, -0.5f, 0.0f, 	 0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f, 	 1.0f, 0.0f,
+		 0.5f,  0.5f, 0.0f, 	 1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 	 0.0f, 1.0f
 		};
 		uint32_t squareI[6] = { 0, 1, 2, 2, 3, 0 };
 
 
 		m_squareVA.reset(VertexArray::Create());
 
-		std::shared_ptr<VertexBuffer> squareVB;
+		Ref<VertexBuffer> squareVB;
 		squareVB.reset(VertexBuffer::Create(squareV, sizeof(squareV)));
 		squareVB->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
-			{ ShaderDataType::Float4, "a_Color"    }
+			{ ShaderDataType::Float2, "a_TexCoord"    }
 			});
 		m_squareVA->AddVertexBuffer(squareVB);
 
-		std::shared_ptr<IndexBuffer> squareIB;
+		Ref<IndexBuffer> squareIB;
 		squareIB.reset(IndexBuffer::Create(squareI, sizeof(squareI)));
 		m_squareVA->SetIndexBuffer(squareIB);
 
+		//Shader things [temporary]
+		{
 
-		std::string vertexSource = R"(
+		std::string flatColorVertSrc = R"(
         #version 330 core
 
         layout(location = 0) in vec3 a_Position;
@@ -77,7 +56,7 @@ public:
 	        gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
         }
         )";
-		std::string fragmentSource = R"(
+		std::string flatColorFragSrc = R"(
         #version 330 core
 
         layout(location = 0) out vec3 color;
@@ -90,34 +69,49 @@ public:
         }
         )";
 
-		m_shader.reset(Shader::Create(vertexSource, fragmentSource));
+		m_flatColorShader.reset(Shader::Create(flatColorVertSrc, flatColorFragSrc));
+
+		std::string textureVertSrc = R"(
+        #version 330 core
+
+        layout(location = 0) in vec3 a_Position;
+        layout(location = 1) in vec2 a_TexCoord;
+
+        uniform mat4 u_ViewProjection;
+        uniform mat4 u_Transform;
+		
+		out vec2 v_TexCoord;
+
+        void main()
+        {
+			v_TexCoord = a_TexCoord;
+	        gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+        }
+        )";
+
+		std::string textureFragSrc = R"(
+        #version 330 core
+
+        layout(location = 0) out vec3 color;
+
+		in vec2 v_TexCoord;
+
+        uniform vec3 u_Color;
+
+        void main()
+        {
+            color = vec3(v_TexCoord, 0.0);
+        }
+        )";
+
+		m_textureShader.reset(Shader::Create(textureVertSrc, textureFragSrc));
+		}
 	}
 
 	void OnUpdate(Timestep dT) override
 	{
-		if (Input::IsKeyPressed(Key::W))
-		{
-			m_trianglePos.y += m_camSpeed * dT;
-		}
-		if (Input::IsKeyPressed(Key::A))
-		{
-			m_trianglePos.x -= m_camSpeed * dT;
-		}
-		if (Input::IsKeyPressed(Key::S))
-		{
-			m_trianglePos.y -= m_camSpeed * dT;
-		}
-		if (Input::IsKeyPressed(Key::D))
-		{
-			m_trianglePos.x += m_camSpeed * dT;
-		}
-
 		//cam
-		if (Input::IsMouseButtonPressed(Mouse::Button0))
-		{
-			glm::vec2 mP = m_camera.ScreenToWorld(Input::GetMousePosition());
-			LOG_DEBUG("Klicked at: [%f %f]", mP.x, mP.y);
-		}
+		
 		if (Input::IsKeyPressed(Key::R))
 		{
 			m_camPos = glm::vec3(0.0f);
@@ -128,26 +122,24 @@ public:
 			glm::vec2 mP = m_camera.ScreenToWorld(Input::GetMousePosition());
 
 			difference = (glm::vec3(mP.x, mP.y, 0.0f) - m_camPos);
-			if (drag == false)
+			if (isPaning == false)
 			{
-				drag = true;
+				isPaning = true;
 				origin = glm::vec3(mP.x, mP.y, 0.0f);
 			}
 		}
 		else
 		{
-			drag = false;
+			isPaning = false;
 		}
-		if (drag)
+		if (isPaning)
 		{
 			m_camPos = origin - difference;
 		}
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f),m_trianglePos);
 		//------------ Render --------------------------------------
 
 		m_camera.SetPosition({ m_camPos });
-		m_camera.SetRotation(m_camRot);
 
 		Renderer::BeginScene(m_camera);
 
@@ -164,37 +156,41 @@ public:
 		squareMesh->SetMaterial(floorMaterial);
 		*/
 
-		Renderer::Submit(m_shader, m_vertexArray, transform);
 
-		std::dynamic_pointer_cast<OpenGLShader>(m_shader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_shader)->UploadUniformFloat3("u_Color", m_color);
+		std::dynamic_pointer_cast<OpenGLShader>(m_flatColorShader)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(m_flatColorShader)->UploadUniformFloat3("u_Color", m_color);
 
-		for (int y = 5; y < 10; y++)
+		for (int y = -5; y < 5; y++)
 		{
-			for (int x = 5; x < 10; x++)
+			for (int x = 7; x < 17; x++)
 			{
 				glm::mat4 scale =  glm::scale(glm::mat4(1.0f), glm::vec3(0.08f));
-				glm::mat4 trans = glm::translate(glm::mat4(1.0f), {((float)x) / 10, ((float)y) / 10, 0}) * scale;
+				glm::mat4 trans = glm::translate(glm::mat4(1.0f), {((float)x + 0.52f) / 10, ((float)y + 0.52f) / 10, 0}) * scale;
 
-				Renderer::Submit(m_shader, m_squareVA, trans);
+				Renderer::Submit(m_flatColorShader, m_squareVA, trans);
 			}
 		}
+		Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
 
 		Renderer::EndScene();
 	}
 	
 	void OnImGuiRender() override
 	{
-		ImGui::Begin("Settings");
+		if (isDebugging)
+		{
 
-		ImGui::Text("Renderer2D Stats:");
-		ImGui::Text("Draw Calls: ");
-		ImGui::Text("Quads: ");
-		ImGui::Text("Vertices: ");
-		ImGui::Text("Indices: ");
-		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_color));
+			ImGui::Begin("Settings");
 
-		ImGui::End();
+			ImGui::Text("Renderer2D Stats:");
+			ImGui::Text("Draw Calls: ");
+			ImGui::Text("Quads: ");
+			ImGui::Text("Vertices: ");
+			ImGui::Text("Indices: ");
+			ImGui::ColorEdit3("Square Color", glm::value_ptr(m_color));
+
+			ImGui::End();
+		}
 	}
 	
 	void OnEvent(Polarity::Event& event) override
@@ -207,34 +203,28 @@ public:
 	{
 		if (event.GetKeyCode() == Key::F5)
 		{
-			LOG_DEBUG("Debug mode?");
+			isDebugging = !isDebugging;
 		}
-
 		return false;
 	}
 	
 private:
-	std::shared_ptr<Shader> m_shader;
-	std::shared_ptr<VertexArray> m_vertexArray;
+	Ref<Shader> m_flatColorShader, m_textureShader;
 
-	std::shared_ptr<VertexArray> m_squareVA;
+	Ref<VertexArray> m_squareVA;
 	glm::vec3 m_color = glm::vec3(0.8f, 0.2f, 0.3f);
 
 	OrthographicCamera m_camera;
 	glm::vec3 m_camPos;
-	float m_camSpeed = 1;
 
-	float m_camRot = 0.0f;
-	float m_camRotSpeed = 2;
-
-	glm::vec3 m_trianglePos;
 
 	glm::vec3 origin = glm::vec3(0.0f);
 	glm::vec3 difference = glm::vec3(0.0f);
 	glm::vec3 resetCameraPos = glm::vec3(0.0f);
 
-	bool drag = false;
+	bool isPaning = false;
 
+	bool isDebugging = false;
 };
 
 class Sandbox : public Polarity::Application
@@ -242,7 +232,7 @@ class Sandbox : public Polarity::Application
 public:
 	Sandbox()
 	{
-		LOG_INFO("\nStarting application...");
+		LOG_INFO("Starting application...");
 
 		PushLayer(new TestLayer());
 	}

@@ -8,7 +8,6 @@
 
 namespace Polarity {
 
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
     Application* Application::s_instance = nullptr;
 
@@ -18,7 +17,7 @@ namespace Polarity {
         s_instance = this;
 
         m_window = std::unique_ptr<Window>(Window::Create());
-        m_window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+        m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(OnEvent));
 
         m_imGuiLayer = new ImGuiLayer();
         PushOverlay(m_imGuiLayer);
@@ -30,8 +29,8 @@ namespace Polarity {
     void Application::OnEvent(Event& e)
     {
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
+        dispatcher.Dispatch<WindowCloseEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowResize));
 
         for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
         {

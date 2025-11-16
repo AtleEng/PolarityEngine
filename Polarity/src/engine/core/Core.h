@@ -1,19 +1,11 @@
 #pragma once
 
+#include <memory>
+
 #ifdef POLARITY_PLATFORM_WINDOWS
 	#define DEBUG_BREAK() __debugbreak()
 	#define WIN32_LEAN_AND_MEAN
 	#define NOMINMAX
-
-#if POLARITY_DYNAMIC_LINK
-	#ifdef POLARITY_BUILD_DLL
-		#define POLARITY_API __declspec(dllexport)
-	#else
-		#define POLARITY_API __declspec(dllimport)
-	#endif
-#else
-	#define POLARITY_API
-#endif
 
 #elif POLARITY_PLATFORM_LINUX
 	#error We only support Windows not Linux!!!
@@ -30,4 +22,16 @@
 #define MB(x) ((unsigned long long)1024 * KB(x))
 #define GB(x) ((unsigned long long)1024 * MB(x))
 
-#define POLARITY_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+#define POLARITY_BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
+
+namespace Polarity
+{
+	// Works like a unique_ptr but for Polarity resources
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	// Works like a shared_ptr but for Polarity resources
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+}
