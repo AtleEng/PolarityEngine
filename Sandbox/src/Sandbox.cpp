@@ -2,6 +2,9 @@
 
 #include "imgui/imgui.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "platform/openGL/OpenGLShader.h" //temp
 
 using namespace Polarity;
 
@@ -11,6 +14,7 @@ public:
 	TestLayer()
 		: Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_camPos(0.0f), m_trianglePos(0.0f)
 	{
+		//triangle
 		m_vertexArray.reset(VertexArray::Create());
 
 		float vert[3 * 7] = {
@@ -34,42 +38,59 @@ public:
 		indexBuffer.reset(IndexBuffer::Create(indices, 3));
 		m_vertexArray->SetIndexBuffer(indexBuffer);
 
+		//square
+		float squareV[4 * 7] = {
+		-0.5f, -0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f,
+		 0.5f, -0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f,
+		 0.5f,  0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f,
+		-0.5f,  0.5f, 0.0f, 	 1.0f,1.0f,1.0f,1.0f
+		};
+		uint32_t squareI[6] = { 0, 1, 2, 2, 3, 0 };
+
+
+		m_squareVA.reset(VertexArray::Create());
+
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(squareV, sizeof(squareV)));
+		squareVB->SetLayout({
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float4, "a_Color"    }
+			});
+		m_squareVA->AddVertexBuffer(squareVB);
+
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(squareI, sizeof(squareI)));
+		m_squareVA->SetIndexBuffer(squareIB);
+
 
 		std::string vertexSource = R"(
         #version 330 core
 
         layout(location = 0) in vec3 a_Position;
-        layout(location = 1) in vec4 a_Color;
 
         uniform mat4 u_ViewProjection;
         uniform mat4 u_Transform;
 
-        out vec3 v_Position;
-        out vec4 v_Color;
 
         void main()
         {
-            v_Position = a_Position;
-            v_Color = a_Color;
 	        gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
         }
         )";
 		std::string fragmentSource = R"(
         #version 330 core
 
-        layout(location = 0) out vec4 color;
+        layout(location = 0) out vec3 color;
 
-        in vec3 v_Position;
-        in vec4 v_Color;
+        uniform vec3 u_Color;
 
         void main()
         {
-	        color = vec4(v_Position * 0.5 + 0.5, 1.0);
-            color = v_Color;
+            color = u_Color;
         }
         )";
 
-		m_shader.reset(new Shader(vertexSource, fragmentSource));
+		m_shader.reset(Shader::Create(vertexSource, fragmentSource));
 	}
 
 	void OnUpdate(Timestep dT) override
@@ -102,10 +123,9 @@ public:
 			m_camPos = glm::vec3(0.0f);
 		}
 
-		if (Input::IsMouseButtonPressed(Mouse::Button1))
+		if (Input::IsMouseButtonPressed(Mouse::Button2))
 		{
 			glm::vec2 mP = m_camera.ScreenToWorld(Input::GetMousePosition());
-			LOG_DEBUG("Klicked at: [%f %f]", mP.x, mP.y);
 
 			difference = (glm::vec3(mP.x, mP.y, 0.0f) - m_camPos);
 			if (drag == false)
@@ -130,16 +150,51 @@ public:
 		m_camera.SetRotation(m_camRot);
 
 		Renderer::BeginScene(m_camera);
+
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
+		/* TODO
+		MaterialRef concreteMaterial = new Material(m_shader);
+		MaterialInstance floorMaterial = new MaterialInstance(concreteMaterial);
+
+		floorMaterial->SetValue("u_Color", m_color);
+		floorMaterial->SetTexture("u_textureMap", texture);
+
+		squareMesh->SetMaterial(floorMaterial);
+		*/
+
 		Renderer::Submit(m_shader, m_vertexArray, transform);
+
+		std::dynamic_pointer_cast<OpenGLShader>(m_shader)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(m_shader)->UploadUniformFloat3("u_Color", m_color);
+
+		for (int y = 5; y < 10; y++)
+		{
+			for (int x = 5; x < 10; x++)
+			{
+				glm::mat4 scale =  glm::scale(glm::mat4(1.0f), glm::vec3(0.08f));
+				glm::mat4 trans = glm::translate(glm::mat4(1.0f), {((float)x) / 10, ((float)y) / 10, 0}) * scale;
+
+				Renderer::Submit(m_shader, m_squareVA, trans);
+			}
+		}
 
 		Renderer::EndScene();
 	}
 	
 	void OnImGuiRender() override
 	{
+		ImGui::Begin("Settings");
+
+		ImGui::Text("Renderer2D Stats:");
+		ImGui::Text("Draw Calls: ");
+		ImGui::Text("Quads: ");
+		ImGui::Text("Vertices: ");
+		ImGui::Text("Indices: ");
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_color));
+
+		ImGui::End();
 	}
 	
 	void OnEvent(Polarity::Event& event) override
@@ -161,6 +216,9 @@ public:
 private:
 	std::shared_ptr<Shader> m_shader;
 	std::shared_ptr<VertexArray> m_vertexArray;
+
+	std::shared_ptr<VertexArray> m_squareVA;
+	glm::vec3 m_color = glm::vec3(0.8f, 0.2f, 0.3f);
 
 	OrthographicCamera m_camera;
 	glm::vec3 m_camPos;

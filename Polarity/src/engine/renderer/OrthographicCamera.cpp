@@ -16,14 +16,11 @@ namespace Polarity {
 		float screenHeight	 = Application::Get().GetWindow().GetHeight();
 		float screenWidth	 = Application::Get().GetWindow().GetWidth();
 
-		// Convert from screen space (0..width, 0..height) to NDC (-1..1, -1..1)
 		float x = (2.0f * position.x) / screenWidth - 1.0f;
-		float y = 1.0f - (2.0f * position.y) / screenHeight;
-		// Notice the flip in Y: screen space (0 = top) vs NDC (0 = center)
+		float y = 1.0f - (2.0f * position.y) / screenHeight; // Flip Y
 
 		glm::vec4 ndc = glm::vec4(x, y, 0.0f, 1.0f);
 
-		// Transform NDC ? World
 		glm::mat4 invVP = glm::inverse(m_viewProjectionMatrix);
 		glm::vec4 world = invVP * ndc;
 

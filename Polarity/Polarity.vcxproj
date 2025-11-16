@@ -148,6 +148,7 @@
     <ClInclude Include="src\engine\renderer\RenderCommand.h" />
     <ClInclude Include="src\engine\renderer\RendererAPI.h" />
     <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLShader.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLShader.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\platform\windows\WindowsInput.cpp" />
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
