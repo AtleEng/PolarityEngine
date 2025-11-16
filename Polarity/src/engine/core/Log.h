@@ -26,7 +26,7 @@ extern const char* TextColorTable[textColorCount];
 
 
 
-POLARITY_API void _log(const char* prefix,TextColor textColor, const char* msg, ...);
+void _log(const char* prefix,TextColor textColor, const char* msg, ...);
 
 #define LOG(msg, ...)                       _log("[LOG]   ", textColorWhite, msg, ##__VA_ARGS__);
 #define LOG_EX(prefix, textColor, msg, ...) _log(prefix, textColor, msg, ##__VA_ARGS__);

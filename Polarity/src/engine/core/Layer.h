@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Core.h"
+#include "Timestep.h"
 #include "../events/Event.h"
 
 namespace Polarity
 {
-	class POLARITY_API Layer
+	class Layer
 	{
 	public:
 		Layer(const char* name = "Layer");
@@ -13,7 +14,7 @@ namespace Polarity
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep tS) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 

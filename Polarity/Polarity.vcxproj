@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\core\Timestep.h" />
     <ClInclude Include="src\engine\renderer\OrthographicCamera.h" />
     <ClInclude Include="src\engine\renderer\RenderCommand.h" />
     <ClInclude Include="src\engine\renderer\RendererAPI.h" />

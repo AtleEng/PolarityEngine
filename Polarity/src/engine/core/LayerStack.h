@@ -7,7 +7,7 @@
 
 namespace Polarity
 {
-	class POLARITY_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();

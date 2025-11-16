@@ -4,6 +4,8 @@
 #include "engine/renderer/Renderer.h"
 #include "Input.h"
 
+#include <GLFW/glfw3.h>  //temp
+
 namespace Polarity {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -11,7 +13,6 @@ namespace Polarity {
     Application* Application::s_instance = nullptr;
 
     Application::Application()
-        : m_camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         LOG_ASSERT(!s_instance, "Application already exist !!!");
         s_instance = this;
@@ -21,78 +22,16 @@ namespace Polarity {
 
         m_imGuiLayer = new ImGuiLayer();
         PushOverlay(m_imGuiLayer);
-
-
-
-        m_vertexArray.reset(VertexArray::Create());
-
-        float vert[3 * 7] = {
-            -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 1.0f, 1.0f,
-            0.5f,  -0.5f, 0.0f,     0.0f, 1.0f, 1.0f, 1.0f,
-            0.0f,  0.5f,  0.0f,     0.0f, 0.0f, 1.0f, 1.0f
-        };
-        uint32_t indices[3] = {
-            0,1,2 
-        };
-
-        std::shared_ptr<VertexBuffer> vertexBuffer;
-        vertexBuffer.reset(VertexBuffer::Create(vert, sizeof(vert)));
-        vertexBuffer->SetLayout({
-            { ShaderDataType::Float3, "a_Position" },
-            { ShaderDataType::Float4, "a_Color"    }
-            });
-        m_vertexArray->AddVertexBuffer(vertexBuffer);
-
-        std::shared_ptr<IndexBuffer> indexBuffer;
-        indexBuffer.reset(IndexBuffer::Create(indices, 3));
-        m_vertexArray->SetIndexBuffer(indexBuffer);
-
-
-        std::string vertexSource = R"(
-        #version 330 core
-
-        layout(location = 0) in vec3 a_Position;
-        layout(location = 1) in vec4 a_Color;
-
-        uniform mat4 u_ViewProjection;
-
-        out vec3 v_Position;
-        out vec4 v_Color;
-
-        void main()
-        {
-            v_Position = a_Position;
-            v_Color = a_Color;
-	        gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-        }
-        )";
-        std::string fragmentSource = R"(
-        #version 330 core
-
-        layout(location = 0) out vec4 color;
-
-        in vec3 v_Position;
-        in vec4 v_Color;
-
-        void main()
-        {
-	        color = vec4(v_Position * 0.5 + 0.5, 1.0);
-            color = v_Color;
-        }
-        )";
-
-        m_shader.reset(new Shader(vertexSource, fragmentSource));
     }
-    //0.8, 0.2, 0.1, 1.0
+
     Application::~Application() = default;
 
 
     void Application::OnEvent(Event& e)
     {
-        //LOG_TRACE("%s", e.ToString().c_str());
-
-        EventDispatcher dispacher(e);
-        dispacher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::OnWindowResize));
 
         for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
         {
@@ -120,23 +59,13 @@ namespace Polarity {
     {
         while (m_running)
         {
-            RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            RenderCommand::Clear();
-
-            m_camera.SetPosition({ 0.3f, 0.1f, 0.0f});
-            m_camera.SetRotation(30);
-
-            Renderer::BeginScene(m_camera);
-            {
-                Renderer::Submit(m_shader, m_vertexArray);
-
-                Renderer::EndScene();
-            }
-
+            float time = (float) glfwGetTime();  //TODO temporary (abstract function to plattform.h)
+            Timestep timeStep = time - m_lastFrameTime;
+            m_lastFrameTime = time;
 
             for (Layer* layer : m_layerStack)
             {
-                layer->OnUpdate();
+                layer->OnUpdate(timeStep);
             }
 
             m_imGuiLayer->Begin();
@@ -155,5 +84,12 @@ namespace Polarity {
         m_running = false;
 
         return true;
+    }
+    bool Application::OnWindowResize(WindowResizeEvent& e)
+    {
+        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+        LOG_DEBUG("Window resized: (%f, %f)", e.GetWidth(), e.GetHeight())
+        return false;
     }
 }

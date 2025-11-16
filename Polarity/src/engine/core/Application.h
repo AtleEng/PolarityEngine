@@ -2,21 +2,17 @@
 #include "Core.h"
 #include "Window.h"
 #include "LayerStack.h"
+#include "Timestep.h"
+
 #include "../events/Event.h"
 #include "../events/ApplicationEvent.h"
 
 #include "../imGui/ImGuiLayer.h"
 
-#include "engine/renderer/Shader.h"
-#include "engine/renderer/Buffer.h"
-#include "engine/renderer/VertexArray.h"
-
-#include "engine/renderer/OrthographicCamera.h"
-
 namespace Polarity {
 
 
-	class POLARITY_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -36,17 +32,16 @@ namespace Polarity {
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
-                 
-		
+		bool OnWindowResize(WindowResizeEvent& e);
+
+	private:           
 		std::unique_ptr<Window> m_window;
 		ImGuiLayer* m_imGuiLayer;
 		bool m_running = true;
 		LayerStack m_layerStack;
 
-		std::shared_ptr<Shader> m_shader;
-		std::shared_ptr<VertexArray> m_vertexArray;
-		
-		OrthographicCamera m_camera;
+		float m_lastFrameTime = 0.0f;
+
 	private:
 		static Application* s_instance;
 	};
