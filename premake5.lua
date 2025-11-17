@@ -13,10 +13,11 @@ workspace "Polarity"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-x64"
 
 includedir = {}
-includedir["GLFW"] = "Polarity/thirdparty/GLFW/include"
-includedir["Glad"] = "Polarity/thirdparty/Glad/include"
-includedir["ImGui"] = "Polarity/thirdparty/imgui"
-includedir["glm"] = "Polarity/thirdparty/glm"
+includedir["GLFW"]      = "Polarity/thirdparty/GLFW/include"
+includedir["Glad"]      = "Polarity/thirdparty/Glad/include"
+includedir["ImGui"]     = "Polarity/thirdparty/imgui"
+includedir["glm"]       = "Polarity/thirdparty/glm"
+includedir["stb_image"] = "Polarity/thirdparty/stb_image"
 
 
 group "Dependencies"
@@ -43,6 +44,8 @@ project "Polarity"
     {
         "Polarity/src/**.h",
         "Polarity/src/**.cpp",
+        "Polarity/thirdparty/stb_image/**.cpp",
+        "Polarity/thirdparty/stb_image/**.h"
     }
  
     vpaths
@@ -58,7 +61,8 @@ project "Polarity"
         "%{includedir.GLFW}",
         "%{includedir.Glad}",
         "%{includedir.ImGui}",
-        "%{includedir.glm}"
+        "%{includedir.glm}",
+        "%{includedir.stb_image}"
     }
 
     links
@@ -74,7 +78,6 @@ project "Polarity"
         defines
         {
             "POLARITY_PLATFORM_WINDOWS",
-            "POLARITY_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
         }
 

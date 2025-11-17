@@ -8,10 +8,12 @@
 	#define NOMINMAX
 
 #elif POLARITY_PLATFORM_LINUX
-	#error We only support Windows not Linux!!!
+	#define DEBUG_BREAK() __builtin_debugtrap()
+	#error We only support Windows not Linux !!!
 
 #elif POLARITY_PLATFORM_MAC
-	#error We only support Windows not Mac!!!
+	#define DEBUG_BREAK() __builtin_trap()
+	#error We only support Windows not Mac !!!
 #else
 	#error Unknown platform!!!
 #endif
@@ -30,8 +32,20 @@ namespace Polarity
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
 
+	template<typename T, typename ... Args>
+	constexpr Scope<T> CreateScope(Args&& ... args)
+	{
+		return std::make_unique<T>(std::forward<Args>(args)...);
+	}
+
 	// Works like a shared_ptr but for Polarity resources
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
+
+	template<typename T, typename ... Args>
+	constexpr Ref<T> CreateRef(Args&& ... args)
+	{
+		return std::make_shared<T>(std::forward<Args>(args)...);
+	}
 
 }

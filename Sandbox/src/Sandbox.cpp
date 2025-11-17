@@ -25,10 +25,10 @@ public:
 		uint32_t squareI[6] = { 0, 1, 2, 2, 3, 0 };
 
 
-		m_squareVA.reset(VertexArray::Create());
+		m_squareVA = VertexArray::Create();
 
 		Ref<VertexBuffer> squareVB;
-		squareVB.reset(VertexBuffer::Create(squareV, sizeof(squareV)));
+		squareVB = VertexBuffer::Create(squareV, sizeof(squareV));
 		squareVB->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float2, "a_TexCoord"    }
@@ -36,7 +36,7 @@ public:
 		m_squareVA->AddVertexBuffer(squareVB);
 
 		Ref<IndexBuffer> squareIB;
-		squareIB.reset(IndexBuffer::Create(squareI, sizeof(squareI)));
+		squareIB = IndexBuffer::Create(squareI, sizeof(squareI));
 		m_squareVA->SetIndexBuffer(squareIB);
 
 		//Shader things [temporary]
@@ -69,7 +69,8 @@ public:
         }
         )";
 
-		m_flatColorShader.reset(Shader::Create(flatColorVertSrc, flatColorFragSrc));
+		m_flatColorShader = Shader::Create(flatColorVertSrc, flatColorFragSrc);
+
 
 		std::string textureVertSrc = R"(
         #version 330 core
@@ -92,20 +93,25 @@ public:
 		std::string textureFragSrc = R"(
         #version 330 core
 
-        layout(location = 0) out vec3 color;
+        layout(location = 0) out vec4 color;
 
 		in vec2 v_TexCoord;
 
-        uniform vec3 u_Color;
+        uniform sampler2D u_Texture;
 
         void main()
         {
-            color = vec3(v_TexCoord, 0.0);
+            color = texture(u_Texture, v_TexCoord);
         }
         )";
 
-		m_textureShader.reset(Shader::Create(textureVertSrc, textureFragSrc));
+		m_textureShader = Shader::Create(textureVertSrc, textureFragSrc);
 		}
+		
+		m_groundTex = Texture2D::Create("assets/textures/Ground.png");
+
+		std::dynamic_pointer_cast<OpenGLShader>(m_textureShader)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(m_textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Timestep dT) override
@@ -170,6 +176,7 @@ public:
 				Renderer::Submit(m_flatColorShader, m_squareVA, trans);
 			}
 		}
+		m_groundTex->Bind();
 		Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
 
 		Renderer::EndScene();
@@ -214,9 +221,10 @@ private:
 	Ref<VertexArray> m_squareVA;
 	glm::vec3 m_color = glm::vec3(0.8f, 0.2f, 0.3f);
 
+	Ref<Texture2D> m_groundTex;
+
 	OrthographicCamera m_camera;
 	glm::vec3 m_camPos;
-
 
 	glm::vec3 origin = glm::vec3(0.0f);
 	glm::vec3 difference = glm::vec3(0.0f);

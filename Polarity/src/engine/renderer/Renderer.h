@@ -26,6 +26,6 @@ namespace Polarity
 			glm::mat4 ViewProjectionMatrix;
 		};
 
-		static SceneData* m_sceneData;
+		static Scope<SceneData> m_sceneData;
 	};
 }

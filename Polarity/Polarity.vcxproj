@@ -76,8 +76,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DEBUG;POLARITY_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_DEBUG;POLARITY_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -97,8 +97,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -122,8 +122,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;POLARITY_BUILD_DLL;GLFW_INCLUDE_NONE;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -143,12 +143,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\core\Timestep.h" />
-    <ClInclude Include="src\engine\renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\engine\renderer\RenderCommand.h" />
-    <ClInclude Include="src\engine\renderer\RendererAPI.h" />
-    <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\platform\openGL\OpenGLShader.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -158,6 +152,7 @@
     <ClInclude Include="src\engine\core\Layer.h" />
     <ClInclude Include="src\engine\core\LayerStack.h" />
     <ClInclude Include="src\engine\core\Log.h" />
+    <ClInclude Include="src\engine\core\Timestep.h" />
     <ClInclude Include="src\engine\core\Window.h" />
     <ClInclude Include="src\engine\events\ApplicationEvent.h" />
     <ClInclude Include="src\engine\events\Event.h" />
@@ -166,14 +161,22 @@
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
     <ClInclude Include="src\engine\renderer\Buffer.h" />
     <ClInclude Include="src\engine\renderer\GraphicsContext.h" />
+    <ClInclude Include="src\engine\renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\engine\renderer\RenderCommand.h" />
     <ClInclude Include="src\engine\renderer\Renderer.h" />
+    <ClInclude Include="src\engine\renderer\RendererAPI.h" />
     <ClInclude Include="src\engine\renderer\Shader.h" />
+    <ClInclude Include="src\engine\renderer\Texture.h" />
     <ClInclude Include="src\engine\renderer\VertexArray.h" />
     <ClInclude Include="src\platform\openGL\OpenGLBuffer.h" />
     <ClInclude Include="src\platform\openGL\OpenGLContext.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLShader.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLTexture.h" />
     <ClInclude Include="src\platform\openGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\platform\windows\WindowsWindow.h" />
     <ClInclude Include="src\polpch.h" />
+    <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp" />
@@ -190,17 +193,20 @@
     <ClCompile Include="src\engine\renderer\Renderer.cpp" />
     <ClCompile Include="src\engine\renderer\RendererAPI.cpp" />
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
+    <ClCompile Include="src\engine\renderer\Texture.cpp" />
     <ClCompile Include="src\engine\renderer\VertexArray.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\platform\windows\WindowsInput.cpp" />
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
     <ClCompile Include="src\polpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="thirdparty\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="thirdparty\GLFW\GLFW.vcxproj">
