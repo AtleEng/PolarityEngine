@@ -142,14 +142,17 @@ project "Sandbox"
     systemversion "latest"
         defines
         {
-            "POLARITY_PLATFORM_WINDOWS",
-            "POLARITY_ENABLE_ASSERTS",
+            "POLARITY_PLATFORM_WINDOWS"
         }
 
     filter "configurations:Debug"
         defines "POLARITY_DEBUG"
         runtime "Debug"
         symbols "on"
+        defines
+        {
+            "POLARITY_ENABLE_ASSERTS"
+        }
 
     filter "configurations:Release"
         defines "POLARITY_RELEASE"

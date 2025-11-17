@@ -143,6 +143,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\renderer\RenderCommand.h" />
+    <ClInclude Include="src\engine\renderer\RendererAPI.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />

@@ -23,6 +23,21 @@ namespace Polarity {
         PushOverlay(m_imGuiLayer);
     }
 
+        layout(location = 0) out vec4 color;
+
+        in vec3 v_Position;
+        in vec4 v_Color;
+
+        void main()
+        {
+	        color = vec4(v_Position * 0.5 + 0.5, 1.0);
+            color = v_Color;
+        }
+        )";
+
+        m_shader.reset(new Shader(vertexSource, fragmentSource));
+    }
+    //0.8, 0.2, 0.1, 1.0
     Application::~Application() = default;
 
 
