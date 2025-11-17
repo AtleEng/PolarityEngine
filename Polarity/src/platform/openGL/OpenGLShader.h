@@ -3,11 +3,14 @@
 #include "engine/renderer/Shader.h"
 #include <glm/glm.hpp>
 
+typedef unsigned int GLenum; //temp
+
 namespace Polarity
 {
 	class OpenGLShader: public Shader
 	{
 	public:
+		OpenGLShader(const std::string& shaderPath);
 		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
 		virtual ~OpenGLShader();
 
@@ -24,6 +27,10 @@ namespace Polarity
 
 		void UploadUniformMat4		(const std::string& name, const glm::mat4& matrix);
 
+	private:
+		std::string ReadFile(const std::string& filepath);
+		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+		void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
 		uint32_t m_rendererID;
 	};

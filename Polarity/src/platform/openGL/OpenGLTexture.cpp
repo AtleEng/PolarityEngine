@@ -18,13 +18,28 @@ namespace Polarity
 		m_width = width;
 		m_height = height;
 
+		GLenum glFormat = 0, dataFormat = 0;
+		if (channels == 4)
+		{
+			glFormat = GL_RGBA8;
+			dataFormat = GL_RGBA;
+		}
+		else if (channels == 3)
+		{
+			glFormat = GL_RGB8;
+			dataFormat = GL_RGB;
+		}
+
+		LOG_ASSERT(glFormat && dataFormat, "Format not supported !!!");
+
+
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);
-		glTextureStorage2D(m_rendererID, 1, GL_RGB8, m_width, m_height);
+		glTextureStorage2D(m_rendererID, 1, glFormat, m_width, m_height);
 
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, dataFormat, GL_UNSIGNED_BYTE, data);
 
 
 		stbi_image_free(data);

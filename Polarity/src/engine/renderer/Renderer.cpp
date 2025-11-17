@@ -6,10 +6,17 @@
 namespace Polarity
 {
 	Scope<Renderer::SceneData> Renderer::m_sceneData = CreateScope<Renderer::SceneData>();
+
+	void Renderer::Init()
+	{
+		RenderCommand::Init();
+	}
+
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		m_sceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
+
 	void Renderer::EndScene()
 	{
 	}

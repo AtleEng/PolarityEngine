@@ -19,6 +19,10 @@ namespace Polarity {
         m_window = std::unique_ptr<Window>(Window::Create());
         m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(OnEvent));
 
+
+        Renderer::Init();
+
+        // ImGui
         m_imGuiLayer = new ImGuiLayer();
         PushOverlay(m_imGuiLayer);
     }

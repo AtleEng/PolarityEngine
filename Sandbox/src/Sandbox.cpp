@@ -8,7 +8,7 @@
 
 using namespace Polarity;
 
-class TestLayer : public Polarity::Layer
+class TestLayer : public Layer
 {
 public:
 	TestLayer()
@@ -59,9 +59,9 @@ public:
 		std::string flatColorFragSrc = R"(
         #version 330 core
 
-        layout(location = 0) out vec3 color;
+        layout(location = 0) out vec4 color;
 
-        uniform vec3 u_Color;
+        uniform vec4 u_Color;
 
         void main()
         {
@@ -72,43 +72,11 @@ public:
 		m_flatColorShader = Shader::Create(flatColorVertSrc, flatColorFragSrc);
 
 
-		std::string textureVertSrc = R"(
-        #version 330 core
-
-        layout(location = 0) in vec3 a_Position;
-        layout(location = 1) in vec2 a_TexCoord;
-
-        uniform mat4 u_ViewProjection;
-        uniform mat4 u_Transform;
-		
-		out vec2 v_TexCoord;
-
-        void main()
-        {
-			v_TexCoord = a_TexCoord;
-	        gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-        }
-        )";
-
-		std::string textureFragSrc = R"(
-        #version 330 core
-
-        layout(location = 0) out vec4 color;
-
-		in vec2 v_TexCoord;
-
-        uniform sampler2D u_Texture;
-
-        void main()
-        {
-            color = texture(u_Texture, v_TexCoord);
-        }
-        )";
-
-		m_textureShader = Shader::Create(textureVertSrc, textureFragSrc);
+		m_textureShader = Shader::Create("assets/shaders/BasicTextureShader.glsl");
 		}
 		
 		m_groundTex = Texture2D::Create("assets/textures/Ground.png");
+		m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
 
 		std::dynamic_pointer_cast<OpenGLShader>(m_textureShader)->Bind();
 		std::dynamic_pointer_cast<OpenGLShader>(m_textureShader)->UploadUniformInt("u_Texture", 0);
@@ -164,7 +132,7 @@ public:
 
 
 		std::dynamic_pointer_cast<OpenGLShader>(m_flatColorShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_flatColorShader)->UploadUniformFloat3("u_Color", m_color);
+		std::dynamic_pointer_cast<OpenGLShader>(m_flatColorShader)->UploadUniformFloat4("u_Color", m_color);
 
 		for (int y = -5; y < 5; y++)
 		{
@@ -177,6 +145,9 @@ public:
 			}
 		}
 		m_groundTex->Bind();
+		Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+		
+		m_logoTex->Bind();
 		Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
 
 		Renderer::EndScene();
@@ -194,7 +165,7 @@ public:
 			ImGui::Text("Quads: ");
 			ImGui::Text("Vertices: ");
 			ImGui::Text("Indices: ");
-			ImGui::ColorEdit3("Square Color", glm::value_ptr(m_color));
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(m_color));
 
 			ImGui::End();
 		}
@@ -219,9 +190,9 @@ private:
 	Ref<Shader> m_flatColorShader, m_textureShader;
 
 	Ref<VertexArray> m_squareVA;
-	glm::vec3 m_color = glm::vec3(0.8f, 0.2f, 0.3f);
+	glm::vec4 m_color = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);
 
-	Ref<Texture2D> m_groundTex;
+	Ref<Texture2D> m_groundTex, m_logoTex;
 
 	OrthographicCamera m_camera;
 	glm::vec3 m_camPos;
@@ -240,7 +211,7 @@ class Sandbox : public Polarity::Application
 public:
 	Sandbox()
 	{
-		LOG_INFO("Starting application...");
+		LOG_INFO("Starting application...\n");
 
 		PushLayer(new TestLayer());
 	}
