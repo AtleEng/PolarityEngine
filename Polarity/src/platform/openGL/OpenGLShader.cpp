@@ -20,15 +20,33 @@ namespace Polarity {
 		}
 		return 0;
 	}
+	static std::string StringFromShaderType(GLenum stage)
+	{
+		switch (stage)
+		{
+		case GL_VERTEX_SHADER:   return "vertex";
+		case GL_FRAGMENT_SHADER: return "fragment";
+		}
+		return "?";
+	}
 
 	OpenGLShader::OpenGLShader(const std::string& shaderPath)
 	{
+		// Extract name from filepath
+		auto lastSlash = shaderPath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = shaderPath.rfind('.');
+		auto count = lastDot == std::string::npos ? shaderPath.size() - lastSlash : lastDot - lastSlash;
+		m_name = shaderPath.substr(lastSlash, count);
+
+
 		std::string shaderSource = ReadFile(shaderPath);
 		auto shaderSources = PreProcess(shaderSource);
 		Compile(shaderSources);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+		: m_name(name)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSource;
@@ -91,7 +109,7 @@ namespace Polarity {
 	std::string OpenGLShader::ReadFile(const std::string& shaderPath)
 	{
 		std::string result;
-		std::ifstream in(shaderPath, std::ios::in, std::ios::binary);
+		std::ifstream in(shaderPath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -137,10 +155,13 @@ namespace Polarity {
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
 	{
-		LOG_INFO("Compiling shader...");
+		LOG_INFO("Compiling %s shader ...", m_name.c_str());
 
 		GLuint program = glCreateProgram();
-		std::vector<GLuint> glShaderIDs(shaderSources.size());
+
+		LOG_ASSERT(shaderSources.size() <= 2, "  More than 2 shaders, which is unsupported !!!");
+		std::array<GLuint, 2> glShaderIDs;
+		int shaderIndex = 0;
 
 		for (auto& kv : shaderSources)
 		{
@@ -172,10 +193,10 @@ namespace Polarity {
 			}
 
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			
+			glShaderIDs[shaderIndex++] = shader;
 
-
-			LOG_INFO("  Shader #%i", shader);
+			LOG_INFO(" - %s", StringFromShaderType(shaderType).c_str());
 		}
 
 		glLinkProgram(program);

@@ -1,3 +1,4 @@
+
 workspace "Polarity"
     architecture "x64"
     startproject "Sandbox"
@@ -10,14 +11,14 @@ workspace "Polarity"
     }
 
 -- Output directory format
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-x64"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 includedir = {}
-includedir["GLFW"]      = "Polarity/thirdparty/GLFW/include"
-includedir["Glad"]      = "Polarity/thirdparty/Glad/include"
-includedir["ImGui"]     = "Polarity/thirdparty/imgui"
-includedir["glm"]       = "Polarity/thirdparty/glm"
-includedir["stb_image"] = "Polarity/thirdparty/stb_image"
+includedir["GLFW"]      = "%{wks.location}/Polarity/thirdparty/GLFW/include"
+includedir["Glad"]      = "%{wks.location}/Polarity/thirdparty/Glad/include"
+includedir["ImGui"]     = "%{wks.location}/Polarity/thirdparty/imgui"
+includedir["glm"]       = "%{wks.location}/Polarity/thirdparty/glm"
+includedir["stb_image"] = "%{wks.location}/Polarity/thirdparty/stb_image"
 
 
 group "Dependencies"
@@ -26,137 +27,11 @@ group "Dependencies"
     include "Polarity/thirdparty/imgui"
 group ""
 
--- Atlas Project (static lib)
-project "Polarity"
-    location "Polarity"
-    kind "StaticLib"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "off"
 
-    targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
+group "Core"
+	include "Polarity"
+group ""
 
-    pchheader "polpch.h"
-    pchsource "Polarity/src/polpch.cpp"
-
-    files
-    {
-        "Polarity/src/**.h",
-        "Polarity/src/**.cpp",
-        "Polarity/thirdparty/stb_image/**.cpp",
-        "Polarity/thirdparty/stb_image/**.h"
-    }
- 
-    vpaths
-    {
-        ["Header Files/*"] = { "Polarity/**.h"},
-        ["Source Files/*"] = { "Polarity/**.cpp" }
-    }
-
-    includedirs
-    {
-        "Polarity/src",
-        "Polarity/thirdparty",
-        "%{includedir.GLFW}",
-        "%{includedir.Glad}",
-        "%{includedir.ImGui}",
-        "%{includedir.glm}",
-        "%{includedir.stb_image}"
-    }
-
-    links
-    {
-        "GLFW",
-        "Glad",
-        "ImGui",
-        "opengl32.lib"
-    }
-
-    filter "system:windows"
-        systemversion "latest"
-        defines
-        {
-            "POLARITY_PLATFORM_WINDOWS",
-            "GLFW_INCLUDE_NONE"
-        }
-
-    filter "configurations:Debug"
-        defines "POLARITY_DEBUG"
-        runtime "Debug"
-        symbols "on"
-        defines
-        {
-            "POLARITY_ENABLE_ASSERTS"
-        }
-
-    filter "configurations:Release"
-        defines "POLARITY_RELEASE"
-        runtime "Release"
-        optimize "on"
-
-    filter "configurations:Dist"
-        defines "POLARITY_DIST"
-        runtime "Release"
-        optimize "on"
-
-
-
--- Sandbox Project (App)
-project "Sandbox"
-    location "Sandbox"
-    kind "ConsoleApp"
-    language "C++"
-    cppdialect "C++17"
-    staticruntime "off"
-
-    targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-    objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
-
-    files
-    {
-        "Sandbox/src/**.h",
-        "Sandbox/src/**.cpp",
-        "polarity.rc"
-    }
-        
-    vpaths
-    {
-        ["Header Files"] = { "**.h" },
-        ["Source Files"] = { "**.cpp" }
-    }
-
-    includedirs
-    {
-        "Polarity/src",
-        "Polarity/thirdparty",
-        "%{includedir.glm}"
-    }
-
-    links
-    {
-        "Polarity"
-    }
-
-    filter "system:windows"
-    systemversion "latest"
-        defines
-        {
-            "POLARITY_PLATFORM_WINDOWS",
-            "POLARITY_ENABLE_ASSERTS",
-        }
-
-    filter "configurations:Debug"
-        defines "POLARITY_DEBUG"
-        runtime "Debug"
-        symbols "on"
-
-    filter "configurations:Release"
-        defines "POLARITY_RELEASE"
-        runtime "Release"
-        optimize "on"
-
-    filter "configurations:Dist"
-        defines "POLARITY_DIST"
-        runtime "Release"
-        optimize "on"
+group "Misc"
+	include "Sandbox"
+group ""

@@ -11,11 +11,13 @@ namespace Polarity
 	{
 	public:
 		OpenGLShader(const std::string& shaderPath);
-		OpenGLShader(const std::string& vertexSource, const std::string& fragmentSource);
+		OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
 		virtual ~OpenGLShader();
 
 		virtual void Bind()		const override;
 		virtual void UnBind()	const override;
+
+		virtual const std::string& GetName() const override { return m_name; }
 
 		// ----- Upload Uniforms -----
 		void UploadUniformInt		(const std::string& name, const float value);
@@ -33,5 +35,6 @@ namespace Polarity
 		void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
 		uint32_t m_rendererID;
+		std::string m_name;
 	};
 }

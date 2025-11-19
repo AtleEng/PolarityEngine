@@ -12,15 +12,17 @@ class TestLayer : public Layer
 {
 public:
 	TestLayer()
-		: Layer("Test"), m_camera(-1.6f, 1.6f, -0.9f, 0.9f), m_camPos(0.0f)
+		: Layer("Test"), m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio* m_zoomLevel, -m_zoomLevel, m_zoomLevel), m_camPos(0.0f)
 	{
+		m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+
 		//square
 		float squareV[5 * 4] = {
-		//	vertex		  		 // UV
-		-0.5f, -0.5f, 0.0f, 	 0.0f, 0.0f,
-		 0.5f, -0.5f, 0.0f, 	 1.0f, 0.0f,
-		 0.5f,  0.5f, 0.0f, 	 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 	 0.0f, 1.0f
+			//	vertex		  		 // UV
+			-0.5f, -0.5f, 0.0f, 	 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 	 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 	 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 	 0.0f, 1.0f
 		};
 		uint32_t squareI[6] = { 0, 1, 2, 2, 3, 0 };
 
@@ -39,56 +41,27 @@ public:
 		squareIB = IndexBuffer::Create(squareI, sizeof(squareI));
 		m_squareVA->SetIndexBuffer(squareIB);
 
-		//Shader things [temporary]
-		{
-
-		std::string flatColorVertSrc = R"(
-        #version 330 core
-
-        layout(location = 0) in vec3 a_Position;
-
-        uniform mat4 u_ViewProjection;
-        uniform mat4 u_Transform;
 
 
-        void main()
-        {
-	        gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-        }
-        )";
-		std::string flatColorFragSrc = R"(
-        #version 330 core
+		auto textureShader = m_shaderLibrary.Load("assets/shaders/Texture.glsl");
+		m_shaderLibrary.Load("assets/shaders/FlatColor.glsl");
 
-        layout(location = 0) out vec4 color;
-
-        uniform vec4 u_Color;
-
-        void main()
-        {
-            color = u_Color;
-        }
-        )";
-
-		m_flatColorShader = Shader::Create(flatColorVertSrc, flatColorFragSrc);
-
-
-		m_textureShader = Shader::Create("assets/shaders/BasicTextureShader.glsl");
-		}
-		
 		m_groundTex = Texture2D::Create("assets/textures/Ground.png");
 		m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
 
-		std::dynamic_pointer_cast<OpenGLShader>(m_textureShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Timestep dT) override
 	{
 		//cam
-		
+
 		if (Input::IsKeyPressed(Key::R))
 		{
 			m_camPos = glm::vec3(0.0f);
+			m_zoomLevel = 1;
+			m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
 		}
 
 		if (Input::IsMouseButtonPressed(Mouse::Button2))
@@ -120,39 +93,33 @@ public:
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
 
-		/* TODO
-		MaterialRef concreteMaterial = new Material(m_shader);
-		MaterialInstance floorMaterial = new MaterialInstance(concreteMaterial);
+		
+		auto flatColorShader = m_shaderLibrary.Get("FlatColor");
 
-		floorMaterial->SetValue("u_Color", m_color);
-		floorMaterial->SetTexture("u_textureMap", texture);
-
-		squareMesh->SetMaterial(floorMaterial);
-		*/
-
-
-		std::dynamic_pointer_cast<OpenGLShader>(m_flatColorShader)->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(m_flatColorShader)->UploadUniformFloat4("u_Color", m_color);
+		std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->Bind();
+		std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat4("u_Color", m_color);
 
 		for (int y = -5; y < 5; y++)
 		{
 			for (int x = 7; x < 17; x++)
 			{
-				glm::mat4 scale =  glm::scale(glm::mat4(1.0f), glm::vec3(0.08f));
-				glm::mat4 trans = glm::translate(glm::mat4(1.0f), {((float)x + 0.52f) / 10, ((float)y + 0.52f) / 10, 0}) * scale;
+				glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.08f));
+				glm::mat4 trans = glm::translate(glm::mat4(1.0f), { ((float)x + 0.52f) / 10, ((float)y + 0.52f) / 10, 0 }) * scale;
 
-				Renderer::Submit(m_flatColorShader, m_squareVA, trans);
+				Renderer::Submit(flatColorShader, m_squareVA, trans);
 			}
 		}
+
+		auto textureShader = m_shaderLibrary.Get("Texture");
 		m_groundTex->Bind();
-		Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
-		
+		Renderer::Submit(textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+
 		m_logoTex->Bind();
-		Renderer::Submit(m_textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+		Renderer::Submit(textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
 
 		Renderer::EndScene();
 	}
-	
+
 	void OnImGuiRender() override
 	{
 		if (isDebugging)
@@ -170,11 +137,13 @@ public:
 			ImGui::End();
 		}
 	}
-	
+
 	void OnEvent(Polarity::Event& event) override
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<KeyPressedEvent>(POLARITY_BIND_EVENT_FN(TestLayer::OnKeyPressedEvent));
+		dispatcher.Dispatch<KeyPressedEvent>	(POLARITY_BIND_EVENT_FN(OnKeyPressedEvent));
+		dispatcher.Dispatch<MouseScrolledEvent>	(POLARITY_BIND_EVENT_FN(OnMouseScrolled));
+		dispatcher.Dispatch<WindowResizeEvent>	(POLARITY_BIND_EVENT_FN(OnWindowResized));
 	}
 
 	bool OnKeyPressedEvent(KeyPressedEvent& event)
@@ -185,9 +154,26 @@ public:
 		}
 		return false;
 	}
-	
+	bool OnMouseScrolled(MouseScrolledEvent& e)
+	{
+		m_zoomLevel -= e.GetYOffset() * 0.25f;
+		m_zoomLevel = std::max(m_zoomLevel, 0.25f);
+		m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+		return false;
+	}
+	void OnResize(float width, float height)
+	{
+		m_aspectRatio = width / height;
+		m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+	}
+	bool OnWindowResized(WindowResizeEvent& e)
+	{
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
+		return false;
+	}
+
 private:
-	Ref<Shader> m_flatColorShader, m_textureShader;
+	ShaderLibrary m_shaderLibrary;
 
 	Ref<VertexArray> m_squareVA;
 	glm::vec4 m_color = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);
@@ -196,6 +182,9 @@ private:
 
 	OrthographicCamera m_camera;
 	glm::vec3 m_camPos;
+
+	float m_aspectRatio = 1280.0f/720.0f;
+	float m_zoomLevel = 1.0f;
 
 	glm::vec3 origin = glm::vec3(0.0f);
 	glm::vec3 difference = glm::vec3(0.0f);
@@ -211,7 +200,7 @@ class Sandbox : public Polarity::Application
 public:
 	Sandbox()
 	{
-		LOG_INFO("Starting application...\n");
+		LOG_INFO("Starting application ...\n");
 
 		PushLayer(new TestLayer());
 	}

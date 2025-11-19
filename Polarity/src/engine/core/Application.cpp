@@ -9,90 +9,98 @@
 namespace Polarity {
 
 
-    Application* Application::s_instance = nullptr;
+	Application* Application::s_instance = nullptr;
 
-    Application::Application()
-    {
-        LOG_ASSERT(!s_instance, "Application already exist !!!");
-        s_instance = this;
+	Application::Application()
+	{
+		LOG_ASSERT(!s_instance, "Application already exist !!!");
+		s_instance = this;
 
-        m_window = std::unique_ptr<Window>(Window::Create());
-        m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(OnEvent));
-
-
-        Renderer::Init();
-
-        // ImGui
-        m_imGuiLayer = new ImGuiLayer();
-        PushOverlay(m_imGuiLayer);
-    }
-
-    Application::~Application() = default;
+		m_window = std::unique_ptr<Window>(Window::Create());
+		m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(OnEvent));
 
 
-    void Application::OnEvent(Event& e)
-    {
-        EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowResize));
+		Renderer::Init();
 
-        for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
-        {
-            (*--i)->OnEvent(e);
-            if (e.handled)
-            {
-                break;
-            }
-        }
-    }
+		// ImGui
+		m_imGuiLayer = new ImGuiLayer();
+		PushOverlay(m_imGuiLayer);
+	}
 
-    void Application::PushLayer(Layer* layer)
-    {
-        m_layerStack.PushLayer(layer);
-        layer->OnAttach();
-    }
+	Application::~Application() = default;
 
-    void Application::PushOverlay(Layer* layer)
-    {
-        m_layerStack.PushOverlay(layer);
-        layer->OnAttach();
-    }
 
-    void Application::Run()
-    {
-        while (m_running)
-        {
-            float time = (float) glfwGetTime();  //TODO temporary (abstract function to plattform.h)
-            Timestep timeStep = time - m_lastFrameTime;
-            m_lastFrameTime = time;
+	void Application::OnEvent(Event& e)
+	{
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<WindowResizeEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowResize));
 
-            for (Layer* layer : m_layerStack)
-            {
-                layer->OnUpdate(timeStep);
-            }
+		for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
+		{
+			(*--i)->OnEvent(e);
+			if (e.handled)
+			{
+				break;
+			}
+		}
+	}
 
-            m_imGuiLayer->Begin();
-            for (Layer* layer : m_layerStack)
-            {
-                layer->OnImGuiRender();
-            }
-            m_imGuiLayer->End();
+	void Application::PushLayer(Layer* layer)
+	{
+		m_layerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
 
-            m_window->OnUpdate();
-        }
-    }
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_layerStack.PushOverlay(layer);
+		layer->OnAttach();
+	}
 
-    bool Application::OnWindowClose(WindowCloseEvent& e)
-    {
-        m_running = false;
+	void Application::Run()
+	{
+		while (m_running)
+		{
+			float time = (float)glfwGetTime();  //TODO temporary (abstract function to plattform.h)
+			Timestep timeStep = time - m_lastFrameTime;
+			m_lastFrameTime = time;
 
-        return true;
-    }
-    bool Application::OnWindowResize(WindowResizeEvent& e)
-    {
-        Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+			if (!m_minimized)
+			{
+				for (Layer* layer : m_layerStack)
+				{
+					layer->OnUpdate(timeStep);
+				}
 
-        LOG_DEBUG("Window resized: (%f, %f)", e.GetWidth(), e.GetHeight())
-        return false;
-    }
+				m_imGuiLayer->Begin();
+				for (Layer* layer : m_layerStack)
+				{
+					layer->OnImGuiRender();
+				}
+				m_imGuiLayer->End();
+			}
+			m_window->OnUpdate();
+		}
+	}
+
+	bool Application::OnWindowClose(WindowCloseEvent& e)
+	{
+		m_running = false;
+
+		return true;
+	}
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_minimized = true;
+			return false;
+		}
+
+		m_minimized = false;
+		LOG_DEBUG("Window resized: (%f, %f)", e.GetWidth(), e.GetHeight())
+			return false;
+	}
 }

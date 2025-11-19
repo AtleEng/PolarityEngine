@@ -13,7 +13,4 @@
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="assets\shaders\BasicTextureShader.glsl" />
-  </ItemGroup>
 </Project>
