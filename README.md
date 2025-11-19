@@ -1,7 +1,24 @@
 # Polarity Engine
 
-### A lightweight 2D engine with OpenGL-based rendering and core system abstractions for custom, low-level game development.
-The Polarity Engine is a lightweight, cross-platform 2D game engine built on OpenGL. It provides core abstractions for rendering, input handling, and platform management (not right now), allowing developers to focus on creating unique, low-level game systems without wasting time reinventing the common foundations. Atlas is made to be intentionally slim, giving game designers maximum control over how their games feel and behave.
+![C++](https://img.shields.io/badge/C%2B%2B-20-orange)
+![Platform](https://img.shields.io/badge/platform-Windows-blue)
+[![License: MIT](https://img.shields.io/badge/License-Apache-yellow.svg)](./LICENSE)
+
+Polarity Engine is a lightweight, cross-platform 2D game engine for low-level gamedev
+
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Dev Information](#dev-information)
+- [Roadmap](#roadmap)
+- [Additional Resources](#additional-resources)
+- [Credits](#credits)
+  
+---
+
+## Features
+
+Right now the engine provides abstractions for input, and 2d texture rendering on only windows
 
 ---
 
@@ -10,37 +27,41 @@ The Polarity Engine is a lightweight, cross-platform 2D game engine built on Ope
 Brief explanation of key folders/files:
 
 - `Polarity` - Engine files
+- `Sandbox` - Example project
 - `generateProj.bat` - build solution for VS
-- `README.md` - Project overview
 
+<details>
+	 <summary><strong>Engine File Tree</strong></summary>
+	
 ```text
-Polarity/
-|- src/
-|  |- engine/          # Main engine
-|  |  |- events/            
-|  |  |- core/         # Core logic
-|  |  |- render/
-|  |  |- imGui/
-|  | 
-|  |- platform/        # Cross-platform (currently only Windows)
-|     |- windows/  
-|
-|- thirdparty/         # Engine specific thirdparty
+Polarity
+├───assets
+├───src
+│   ├───engine
+│   │   ├───core
+│   │   ├───events
+│   │   ├───imGui
+│   │   ├───math
+│   │   ├───renderer
+│   │   └───utils
+│   └───platform
+│       ├───openGL
+│       └───windows
+└───thirdparty
 ```
+
+</details>
 
 ---
 
-## Development Info
+## Getting Started
 
-### How to Build
-- Run generateProj.bat
-- Build via Visual Studio C/C++
-
-### How to use
+### Setup
 - Add a new project to the Polarity solution
 - Add a cpp file in the new project
+	
+## Inside cpp file
 
-Inside file:
 ```text
 #include <Polarity.h>
 
@@ -60,10 +81,27 @@ Polarity::Application* Polarity::CreateApplication()
 }
 ```
 
+How to Build
 
-<details>
-  <summary>Dependencies</summary>
-OpenGL - GLFW - ImGui - GLM
+- Run generateProj.bat
+- Build via Visual Studio C/C++
+
+---
+
+## Dev information
+
+
+ <details>
+  <summary><strong>Dependencies</strong></summary>
+
+  | Library     | Purpose              |
+  |-------------|----------------------|
+  | **OpenGL**  | Rendering backend    |
+  | **GLFW**    | Windowing & input    |
+  | **ImGui**   | Debug/Editor UI      |
+  | **GLM**     | Math library         |
+  | **stb_image** | Image loading     |
+
 </details>
 
 ---
@@ -74,13 +112,12 @@ Base functionality -> Rendering -> shaders and materials -> 2D rendering -> file
 
 ---
 
-## License
+## Additional Resources
 
-License type: Apache (see LICENSE file)
+- very empty right now...
 
 ---
 
 ## Credits
-...
-### Made by:
+Made by:
 - Atle Engelbrektsson
