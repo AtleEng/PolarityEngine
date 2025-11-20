@@ -18,7 +18,7 @@ namespace Polarity {
 		m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;
 	}
 
-	const glm::vec2& OrthographicCamera::ScreenToWorld(glm::vec2 position)
+	const glm::vec2 OrthographicCamera::ScreenToWorld(glm::vec2 position)
 	{
 		float screenHeight	 = Application::Get().GetWindow().GetHeight();
 		float screenWidth	 = Application::Get().GetWindow().GetWidth();

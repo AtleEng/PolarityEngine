@@ -21,7 +21,7 @@ namespace Polarity {
 		const glm::mat4& GetViewMatrix() const					{ return m_viewMatrix; }
 		const glm::mat4& GetViewProjectionMatrix() const		{ return m_viewProjectionMatrix; }
 
-		const glm::vec2& ScreenToWorld(glm::vec2 position);
+		const glm::vec2 ScreenToWorld(glm::vec2 position);
 	private:
 		void			 RecalculateViewMatrix();
 	private:

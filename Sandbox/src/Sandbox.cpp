@@ -63,7 +63,7 @@ public:
 			m_zoomLevel = 1;
 			m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
 		}
-
+		
 		if (Input::IsMouseButtonPressed(Mouse::Button2))
 		{
 			glm::vec2 mP = m_camera.ScreenToWorld(Input::GetMousePosition());
