@@ -55,36 +55,139 @@ Polarity
 ---
 
 ## Getting Started
-
-### Setup
-- Add a new project to the Polarity solution
-- Add a cpp file in the new project
-	
-## Inside cpp file
+The engine should be implemented as a submodule
 
 ```text
-#include <Polarity.h>
-
-class Sandbox : public Polarity::Application
-{
-public:
-	Sandbox()
-	{
-		  //Entry point
-	}
-	~Sandbox(){}
-};
-
-Polarity::Application* Polarity::CreateApplication()
-{
-	return new Sandbox();
-}
+Project folder
+├── PolarityEngine/   <-- Engine + Sandbox + Tools
+└── TestGame/         <-- Your game (Copied version of Sandbox)
 ```
 
-How to Build
+### Setup
+- Clone the repository as a submodule
+- Add a .lua file in your Project folder for generating solution
+- Copy Sandbox to your Project folder as a starting point
+- Remove premake5.lua in PolarityEngine
+- In your Project folder use `call PolarityEngine\thirdparty\premake\premake5.exe vs2022`
+- Now a clean vs solution should have been generated
 
-- Run generateProj.bat
-- Build via Visual Studio C/C++
+ <details>
+	 <summary><strong>Inside project folder .lua file</strong></summary>
+	 
+```text
+-- This should be in your project folder
+
+workspace "TestGame"--          <-- name of your game
+    architecture "x64"
+    startproject "TestGame"--   <-- name of your game
+
+    configurations
+    {
+        "Debug",
+        "Release",
+        "Dist"
+    }
+
+-- Output directory format
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+includedir = {}
+includedir["GLFW"]      = "%{wks.location}/PolarityEngine/Polarity/thirdparty/GLFW/include"
+includedir["Glad"]      = "%{wks.location}/PolarityEngine/Polarity/thirdparty/Glad/include"
+includedir["ImGui"]     = "%{wks.location}/PolarityEngine/Polarity/thirdparty/imgui"
+includedir["glm"]       = "%{wks.location}/PolarityEngine/Polarity/thirdparty/glm"
+includedir["stb_image"] = "%{wks.location}/PolarityEngine/Polarity/thirdparty/stb_image"
+
+
+group "Dependencies"
+    include "PolarityEngine/Polarity/thirdparty/GLFW"
+    include "PolarityEngine/Polarity/thirdparty/Glad"
+    include "PolarityEngine/Polarity/thirdparty/imgui"
+group ""
+
+
+group "Core"
+	include "PolarityEngine/Polarity"
+group ""
+
+group "Games"
+    include "TestGame"      <-- name of your game
+group ""
+```
+</details>
+
+ <details>
+	 <summary><strong>Inside your game .lua file</strong></summary>
+	 
+```text
+-- This should be in your game folder
+project "TestGame"--          <-- name of your game
+    location "%{wks.location}/%{prj.name}"
+    kind "ConsoleApp"
+    language "C++"
+    cppdialect "C++17"
+    staticruntime "off"
+
+    targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files
+    {
+        "src/**.h",
+        "src/**.cpp"
+    }
+        
+    vpaths
+    {
+        ["Header Files"] = { "**.h" },
+        ["Source Files"] = { "**.cpp" }
+    }
+
+    includedirs
+    {
+        "%{wks.location}/PolarityEngine/Polarity/src",
+        "%{wks.location}/PolarityEngine/Polarity/thirdparty",
+        "%{includedir.glm}"
+    }
+
+    links
+    {
+        "Polarity"
+    }
+
+    filter "system:windows"
+    systemversion "latest"
+        defines
+        {
+            "POLARITY_PLATFORM_WINDOWS",
+            "POLARITY_ENABLE_ASSERTS",
+        }
+
+    filter "configurations:Debug"
+        defines "POLARITY_DEBUG"
+        runtime "Debug"
+        symbols "on"
+
+    filter "configurations:Release"
+        defines "POLARITY_RELEASE"
+        runtime "Release"
+        optimize "on"
+
+    filter "configurations:Dist"
+        defines "POLARITY_DIST"
+        runtime "Release"
+        optimize "on"
+
+```
+
+</details>
+
+### Update
+To update Polarity in Project folder simply run:
+- `cd PolarityEngine`
+- `git pull origin main`
+
+Then remove the premake5.lua in `PolarityEngine`
 
 ---
 
@@ -108,7 +211,23 @@ How to Build
 
 ## Roadmap
 
-Base functionality -> Rendering -> shaders and materials -> 2D rendering -> filesystems
+### Core Systems
+
+- Platform abstraction — *In Progress*
+- Audio system — *Not started*
+- ECS system — *Not started*
+
+### Rendering
+- OpenGL 2D renderer — *Basic prototype done*
+- Batch rendering — *Not started*
+- Texture atlas — *Not started*
+
+### Tools
+- Editor — *Not started*
+
+### Platforms
+- Linux — *Planned*
+- macOS — *Planned*
 
 ---
 
