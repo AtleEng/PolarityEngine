@@ -10,7 +10,7 @@ namespace Polarity
 	{
 	public:
 		Layer(const char* name = "Layer");
-		virtual ~Layer();
+		virtual ~Layer() = default;
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}

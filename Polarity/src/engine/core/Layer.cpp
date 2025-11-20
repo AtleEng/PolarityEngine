@@ -6,8 +6,4 @@ namespace Polarity {
 		: m_debugName(debugName)
 	{
 	}
-
-	Layer::~Layer()
-	{
-	}
 }

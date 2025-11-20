@@ -26,9 +26,3 @@
 
 // ----- ImGUI ----------------------------------
 #include "engine/imGui/ImGuiLayer.h"
-
-
-
-
-// ----- Entry Point ----------------------------
-#include "engine/core/EntryPoint.h"

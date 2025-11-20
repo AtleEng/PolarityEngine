@@ -146,7 +146,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\DemoLayer.h" />
+    <ClInclude Include="src\CamController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DemoLayer.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />
+    <ClCompile Include="src\CamController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />
