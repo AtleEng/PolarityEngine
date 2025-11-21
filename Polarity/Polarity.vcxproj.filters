@@ -174,6 +174,7 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -254,5 +255,6 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

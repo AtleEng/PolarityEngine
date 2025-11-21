@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\renderer\Renderer2D.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\renderer\Renderer2D.cpp" />
     <ClCompile Include="src\engine\core\Application.cpp" />
     <ClCompile Include="src\engine\core\Layer.cpp" />
     <ClCompile Include="src\engine\core\LayerStack.cpp" />

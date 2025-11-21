@@ -1,6 +1,8 @@
 #include "polpch.h"
 #include "Renderer.h"
 
+#include "Renderer2D.h"
+
 #include "platform/openGL/OpenGLShader.h"
 
 namespace Polarity
@@ -10,6 +12,7 @@ namespace Polarity
 	void Renderer::Init()
 	{
 		RenderCommand::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::BeginScene(OrthographicCamera& camera)

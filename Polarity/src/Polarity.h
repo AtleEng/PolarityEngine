@@ -15,6 +15,7 @@
 
 // ----- Renderer -------------------------------
 #include "engine/renderer/Renderer.h"
+#include "engine/renderer/Renderer2D.h"
 #include "engine/renderer/RenderCommand.h"
 
 #include "engine/renderer/VertexArray.h"

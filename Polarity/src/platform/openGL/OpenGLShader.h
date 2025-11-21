@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/renderer/Shader.h"
-#include <glm/glm.hpp>
 
 typedef unsigned int GLenum; //temp
 
@@ -19,14 +18,20 @@ namespace Polarity
 
 		virtual const std::string& GetName() const override { return m_name; }
 
+		// ----- Set Uniforms -----
+		virtual void SetInt		(const std::string& name, int				value) override;
+		virtual void SetFloat	(const std::string& name, float				value) override;
+		virtual void SetFloat2	(const std::string& name, const glm::vec2&	value) override;
+		virtual void SetFloat3	(const std::string& name, const glm::vec3&	value) override;
+		virtual void SetFloat4	(const std::string& name, const glm::vec4&	value) override;
+		virtual void SetMat4	(const std::string& name, const glm::mat4&	value) override;
+
 		// ----- Upload Uniforms -----
 		void UploadUniformInt		(const std::string& name, const float value);
-
 		void UploadUniformFloat		(const std::string& name, const float value);
 		void UploadUniformFloat2	(const std::string& name, const glm::vec2& value);
 		void UploadUniformFloat3	(const std::string& name, const glm::vec3& value);
 		void UploadUniformFloat4	(const std::string& name, const glm::vec4& value);
-
 		void UploadUniformMat4		(const std::string& name, const glm::mat4& matrix);
 
 	private:
