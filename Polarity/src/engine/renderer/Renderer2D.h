@@ -1,6 +1,7 @@
 #pragma once
 
 #include "OrthographicCamera.h"
+#include "Texture.h"
 
 namespace Polarity
 {
@@ -17,6 +18,9 @@ namespace Polarity
 
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+	
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec2& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 	};
 }
 

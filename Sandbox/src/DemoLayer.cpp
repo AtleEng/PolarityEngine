@@ -12,10 +12,10 @@ DemoLayer::DemoLayer()
 
 void DemoLayer::OnAttach()
 {
-	//m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
-
+	/*
 	auto textureShader = m_shaderLibrary.Load("assets/shaders/Texture.glsl");
 	m_shaderLibrary.Load("assets/shaders/FlatColor.glsl");
+	*/
 
 	m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
 
@@ -38,32 +38,17 @@ void DemoLayer::OnUpdate(Timestep tS)
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	RenderCommand::Clear();
 
-	Renderer2D::DrawQuad(m_pos, m_size, m_rotation, m_color);
+	Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_rotation, m_color);
 
 
 	Renderer2D::EndScene();
-	/*
-	auto flatColorShader = m_shaderLibrary.Get("FlatColor");
-
-	std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->Bind();
-	std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat4("u_Color", m_color);
-
-	glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
-	glm::mat4 trans = glm::translate(glm::mat4(1.0f), { 2, 0, 0 }) * scale;
-
-			Renderer::Submit(flatColorShader, m_squareVA, trans);
-
-	auto textureShader = m_shaderLibrary.Get("Texture");
-	m_logoTex->Bind();
-	Renderer::Submit(textureShader, m_squareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
-	*/
+	
 }
 
 void DemoLayer::OnImGuiRender()
 {
 	if (isDebugging)
 	{
-
 		ImGui::Begin("Settings");
 
 		ImGui::Text("Renderer2D Stats:");
@@ -96,7 +81,7 @@ void DemoLayer::OnEvent(Event& event)
 
 bool DemoLayer::OnKeyPressedEvent(KeyPressedEvent& event)
 {
-	if (event.GetKeyCode() == Key::F5)
+	if (event.GetKeyCode() == Key::F3)
 	{
 		isDebugging = !isDebugging;
 	}
