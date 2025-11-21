@@ -38,7 +38,39 @@ void DemoLayer::OnUpdate(Timestep tS)
 	RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 	RenderCommand::Clear();
 
-	Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_rotation, m_color);
+	
+
+	for (int x = 0; x < 5; x++)
+	{
+		for (int y = 0; y < 5; y++)
+		{
+			float fx = (float)x;
+			float fy = (float)y;
+
+			// --- Position (spread out)
+			glm::vec2 pos = { fx * 3.0f, fy * 3.0f };
+
+			// --- Wavy size pattern
+			glm::vec2 size = {
+				1.0f + 0.5f * sin(fx + fy * 0.3f),
+				1.0f + 0.5f * cos(fx * 0.2f + fy)
+			};
+
+			// --- Smooth rotation spiral
+			float rotation = (fx * 15.0f) + (fy * 8.0f);
+
+			// --- Beautiful rainbow gradient
+			glm::vec4 color = {
+				(sin(fx * 0.5f) * 0.5f) + 0.5f,
+				(sin(fy * 0.5f) * 0.5f) + 0.5f,
+				(sin((fx + fy) * 0.3f) * 0.5f) + 0.5f,
+				1.0f
+			};
+
+			Renderer2D::DrawQuad(pos, size, rotation, color);
+		}
+		Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_rotation, m_color);
+	}
 
 
 	Renderer2D::EndScene();

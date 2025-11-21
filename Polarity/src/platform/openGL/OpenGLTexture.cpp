@@ -1,11 +1,22 @@
 #include "polpch.h"
 #include "OpenGLTexture.h"
 
-#include <glad/glad.h>
 #include "stb_image.h"
 
 namespace Polarity
 {
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
+		: m_width(width), m_height(height)
+	{
+		m_internalFormat = GL_RGBA8;
+		m_dataFormat = GL_RGBA;
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);
+		glTextureStorage2D(m_rendererID, 1, m_internalFormat, m_width, m_height);
+
+		glTextureParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	}
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
 		: m_path(path)
 	{
@@ -18,28 +29,27 @@ namespace Polarity
 		m_width = width;
 		m_height = height;
 
-		GLenum glFormat = 0, dataFormat = 0;
 		if (channels == 4)
 		{
-			glFormat = GL_RGBA8;
-			dataFormat = GL_RGBA;
+			m_internalFormat = GL_RGBA8;
+			m_dataFormat = GL_RGBA;
 		}
 		else if (channels == 3)
 		{
-			glFormat = GL_RGB8;
-			dataFormat = GL_RGB;
+			m_internalFormat = GL_RGB8;
+			m_dataFormat = GL_RGB;
 		}
 
-		LOG_ASSERT(glFormat && dataFormat, "Format not supported !!!");
+		LOG_ASSERT(m_internalFormat && m_dataFormat, "Format not supported !!!");
 
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);
-		glTextureStorage2D(m_rendererID, 1, glFormat, m_width, m_height);
+		glTextureStorage2D(m_rendererID, 1, m_internalFormat, m_width, m_height);
 
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, dataFormat, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
 
 
 		stbi_image_free(data);
@@ -50,6 +60,13 @@ namespace Polarity
 		glDeleteTextures(1, &m_rendererID);
 	}
 
+
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
+		uint32_t bpp = m_dataFormat == GL_RGBA ? 4 : 3;
+		LOG_ASSERT(size == m_width * m_height * bpp, "Size of data is not matching texture !!!");
+		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
+	}
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{

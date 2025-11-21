@@ -14,8 +14,8 @@ namespace Polarity
 	struct Renderer2DStorage
 	{
 		Ref<VertexArray> QuadVertexArray;
-		Ref<Shader> FlatColorShader;
 		Ref<Shader> TextureShader;
+		Ref<Texture2D> whiteTexture;
 	};
 
 	static Renderer2DStorage* s_Data;
@@ -46,8 +46,10 @@ namespace Polarity
 		Ref<IndexBuffer> squareIB = IndexBuffer::Create(quadIndices, sizeof(quadIndices));
 		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
 
+		s_Data->whiteTexture = Texture2D::Create(1, 1);
+		uint32_t textureData = 0xffffffff;
+		s_Data->whiteTexture->SetData(&textureData, sizeof(uint32_t));
 
-		s_Data->FlatColorShader = Shader::Create("assets/shaders/FlatColor.glsl");
 		s_Data->TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 
 		s_Data->TextureShader->Bind();
@@ -61,9 +63,6 @@ namespace Polarity
 
 	void Renderer2D::BeginScene(OrthographicCamera& camera)
 	{
-		s_Data->FlatColorShader->Bind();
-		s_Data->FlatColorShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
@@ -78,23 +77,23 @@ namespace Polarity
 
 	}
 
+
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, size,rotation, color);
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
 	{
-		float radians = glm::radians(rotation);
+		s_Data->whiteTexture->Bind();
 
+		float radians = glm::radians(rotation);
 		glm::mat4 transform =
 			glm::translate(glm::mat4(1.0f), position) * 
 			glm::rotate(glm::mat4(1.0f), radians, glm::vec3(0, 0, 1)) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 
-		s_Data->FlatColorShader->Bind();
-
-		s_Data->FlatColorShader->SetMat4("u_Transform", transform);
-		s_Data->FlatColorShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
+		s_Data->TextureShader->SetFloat4("u_Color", color);	
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
@@ -111,8 +110,6 @@ namespace Polarity
 			glm::translate(glm::mat4(1.0f), position) *
 			glm::rotate(glm::mat4(1.0f), radians, glm::vec3(0, 0, 1)) *
 			glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
-
-		s_Data->TextureShader->Bind();
 
 		s_Data->TextureShader->SetMat4("u_Transform", transform);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
