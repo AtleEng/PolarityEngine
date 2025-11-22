@@ -9,21 +9,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\DemoLayer.h">
+    <ClInclude Include="src\CamController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\CamController.h">
+    <ClInclude Include="src\DemoLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CamController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="src\DemoLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Sandbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CamController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

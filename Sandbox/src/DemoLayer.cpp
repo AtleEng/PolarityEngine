@@ -59,7 +59,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 			// --- Smooth rotation spiral
 			float rotation = (fx * 15.0f) + (fy * 8.0f);
 
-			// --- Beautiful rainbow gradient
+			// --- "Beautiful" rainbow gradient
 			glm::vec4 color = {
 				(sin(fx * 0.5f) * 0.5f) + 0.5f,
 				(sin(fy * 0.5f) * 0.5f) + 0.5f,
@@ -69,8 +69,8 @@ void DemoLayer::OnUpdate(Timestep tS)
 
 			Renderer2D::DrawQuad(pos, size, rotation, color);
 		}
-		Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_rotation, m_color);
 	}
+	Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_rotation, m_color);
 
 
 	Renderer2D::EndScene();

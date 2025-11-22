@@ -12,6 +12,12 @@ project "Polarity"
     pchheader "polpch.h"
     pchsource "src/polpch.cpp"
 
+    defines {
+        'POLARITY_ARCH="%{cfg.architecture}"',
+        'POLARITY_PLATFORM="%{cfg.system}"',
+        'POLARITY_CONFIG="%{cfg.buildcfg}"'
+    }
+
     files
     {
         "src/**.h",
@@ -54,11 +60,11 @@ project "Polarity"
         }
 
     filter "configurations:Debug"
-        defines "POLARITY_DEBUG"
         runtime "Debug"
         symbols "on"
         defines
         {
+            "POLARITY_DEBUG",
             "POLARITY_ENABLE_ASSERTS"
         }
 

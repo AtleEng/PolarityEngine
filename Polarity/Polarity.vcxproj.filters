@@ -135,6 +135,9 @@
     <ClInclude Include="src\engine\renderer\Renderer.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\Renderer2D.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\renderer\RendererAPI.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
@@ -174,7 +177,6 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\renderer\Renderer2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -211,6 +213,9 @@
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\Renderer.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\Renderer2D.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\RendererAPI.cpp">
@@ -255,6 +260,5 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\renderer\Renderer2D.cpp" />
   </ItemGroup>
 </Project>

@@ -16,6 +16,26 @@ namespace Polarity {
 		LOG_ASSERT(!s_instance, "Application already exist !!!");
 		s_instance = this;
 
+
+		std::string info = "v0.01 ";
+
+		info += "- ";
+		info += POLARITY_CONFIG;
+		info += " - ";
+		info += POLARITY_PLATFORM;
+		info += " ";
+		info += POLARITY_ARCH;
+
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:		info += " - None"; break;
+		case RendererAPI::API::OpenGL:		info += " - OpenGL"; break;
+		default:							info += " - Unknown"; break;
+		}
+		info += "\n";
+		LOG_EX("PolarityEngine", TextColor::Orange, info.c_str());
+
+
 		m_window = std::unique_ptr<Window>(Window::Create());
 		m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(OnEvent));
 
