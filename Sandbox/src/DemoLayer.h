@@ -23,6 +23,14 @@ private:
 	CamController m_cameraController;
 	ShaderLibrary m_shaderLibrary;
 
+	struct ProfileResult
+	{
+		const char* Name;
+		float Time;
+	};
+
+	std::vector<ProfileResult> m_profileResults;
+
 	glm::vec3 m_pos		 = glm::vec3(0.0f);
 	glm::vec2 m_size	 = glm::vec2(1.0f);
 	glm::vec4 m_color	 = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);

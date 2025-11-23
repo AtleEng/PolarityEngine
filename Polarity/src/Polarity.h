@@ -7,6 +7,9 @@
 #include "engine/core/Input.h"
 #include "engine/core/Timestep.h"
 
+// ----- Debug -----------------------------------
+#include "engine/debug/Instrumentor.h"
+
 // ----- Event ----------------------------------
 #include "engine/events/Event.h"
 #include "engine/events/KeyEvent.h"
