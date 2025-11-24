@@ -32,6 +32,8 @@ namespace Polarity {
 
 	OpenGLShader::OpenGLShader(const std::string& shaderPath)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		// Extract name from filepath
 		auto lastSlash = shaderPath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
@@ -48,6 +50,8 @@ namespace Polarity {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
 		: m_name(name)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSource;
 		shaderSources[GL_FRAGMENT_SHADER] = fragmentSource;
@@ -57,46 +61,58 @@ namespace Polarity {
 
 	OpenGLShader::~OpenGLShader()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_rendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		glUseProgram(m_rendererID);
 	}
 
 	void OpenGLShader::UnBind() const
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, int value)
 	{
+		POLARITY_PROFILE_FUNCTION();
 		UploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::SetFloat(const std::string& name, float value)
 	{
+		POLARITY_PROFILE_FUNCTION();
 		UploadUniformFloat(name, value);
 	}
 
 	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value)
 	{
+		POLARITY_PROFILE_FUNCTION();
 		UploadUniformFloat2(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
+		POLARITY_PROFILE_FUNCTION();
 		UploadUniformFloat3(name, value);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
+		POLARITY_PROFILE_FUNCTION();
 		UploadUniformFloat4(name, value);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		POLARITY_PROFILE_FUNCTION();
 		UploadUniformMat4(name, value);
 	}
 
@@ -138,6 +154,8 @@ namespace Polarity {
 
 	std::string OpenGLShader::ReadFile(const std::string& shaderPath)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		std::string result;
 		std::ifstream in(shaderPath, std::ios::in | std::ios::binary);
 		if (in)
@@ -157,6 +175,8 @@ namespace Polarity {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -185,6 +205,8 @@ namespace Polarity {
 
 	void OpenGLShader::Compile(std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		LOG_INFO("Compiling %s shader ...", m_name.c_str());
 
 		GLuint program = glCreateProgram();

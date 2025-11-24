@@ -4,12 +4,13 @@
 #include "engine/events/ApplicationEvent.h"
 #include "engine/events/KeyEvent.h"
 #include "engine/events/MouseEvent.h"
+#include "engine/Renderer/Renderer.h"
 
 #include "platform/openGL/OpenGLContext.h"
 
 namespace Polarity
 {
-	static bool s_GLFWInitialized = false;
+	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* msg)
 	{
@@ -28,25 +29,36 @@ namespace Polarity
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		m_data.Title = props.Title;
 		m_data.Width = props.Width;
 		m_data.Height = props.Height;
 
-		LOG_INFO("Creating window: %s, (%d, %d)", props.Title.c_str(), props.Width, props.Height);
+		LOG_INFO("Creating window: %s (%d, %d)", props.Title.c_str(), props.Width, props.Height);
 
-		if (!s_GLFWInitialized)
+		if (s_GLFWWindowCount == 0)
 		{
-			//TODO glfwTerminate
+			POLARITY_PROFILE_SCOPE("glfwInnit");
+
 			int success = glfwInit();
 			LOG_ASSERT(success, "Couldn't initialize GLFW !!!");
-			glfwSetErrorCallback(GLFWErrorCallback);
 
-			s_GLFWInitialized = true;
+			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
-		m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
+		{
+			POLARITY_PROFILE_SCOPE("glfwCreateWindow");
 
-		m_context = new OpenGLContext(m_window);
+		#if defined(POLARITY_DEBUG)
+			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
+				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+		#endif
+			m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
+			++s_GLFWWindowCount;
+		}
+
+		m_context = GraphicsContext::Create(m_window);
 		m_context->Init();
 
 		glfwSetWindowUserPointer(m_window, &m_data);
@@ -141,11 +153,20 @@ namespace Polarity
 
 	void WindowsWindow::Shutdown()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		glfwDestroyWindow(m_window);
+		--s_GLFWWindowCount;
+
+		if (s_GLFWWindowCount == 0)
+		{
+			glfwTerminate();
+		}
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
+		POLARITY_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_context->SwapBuffers();
 	}

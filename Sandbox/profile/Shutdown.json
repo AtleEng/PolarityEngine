@@ -1,0 +1,1 @@
+{"otherData": {},"traceEvents":[{},{"cat":"function","dur":2,"name":"Polarity::OpenGLTexture2D::~OpenGLTexture2D(void)","ph":"X","pid":0,"tid":18728,"ts":48919683236.800},{"cat":"function","dur":23566,"name":"void Polarity::WindowsWindow::Shutdown(void)","ph":"X","pid":0,"tid":18728,"ts":48919683307.200}]}

@@ -9,6 +9,8 @@ class Sandbox : public Polarity::Application
 public:
 	Sandbox()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		LOG_INFO("Starting application ...\n");
 
 		PushLayer(new DemoLayer());

@@ -24,6 +24,8 @@ const char* TextColorTable[TextColor::Count] =
 
 void _log(const char* prefix, TextColor textColor, const char* msg, ...)
 {
+    POLARITY_PROFILE_FUNCTION();
+
     char textBuffer[8192] = {};
 
     va_list args;

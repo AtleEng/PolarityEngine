@@ -22,6 +22,8 @@ namespace Polarity
 
 	void Renderer2D::Init()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DStorage();
 
 		s_Data->QuadVertexArray = VertexArray::Create();
@@ -58,11 +60,15 @@ namespace Polarity
 
 	void Renderer2D::Shutdown()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		delete s_Data;
 	}
 
 	void Renderer2D::BeginScene(OrthographicCamera& camera)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		s_Data->TextureShader->Bind();
 		s_Data->TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
@@ -84,6 +90,8 @@ namespace Polarity
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		s_Data->whiteTexture->Bind();
 
 		float radians = glm::radians(rotation);
@@ -104,6 +112,8 @@ namespace Polarity
 	}
 	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		float radians = glm::radians(rotation);
 
 		glm::mat4 transform =

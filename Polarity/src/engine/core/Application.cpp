@@ -13,6 +13,8 @@ namespace Polarity {
 
 	Application::Application()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		LOG_ASSERT(!s_instance, "Application already exist !!!");
 		s_instance = this;
 
@@ -82,6 +84,8 @@ namespace Polarity {
 	{
 		while (m_running)
 		{
+			POLARITY_PROFILE_SCOPE("Full Cycle");
+
 			float time = (float)glfwGetTime();  //TODO temporary (abstract function to plattform.h)
 			Timestep timeStep = time - m_lastFrameTime;
 			m_lastFrameTime = time;
@@ -90,12 +94,14 @@ namespace Polarity {
 			{
 				for (Layer* layer : m_layerStack)
 				{
+					POLARITY_PROFILE_SCOPE("OnUpdate");
 					layer->OnUpdate(timeStep);
 				}
 
 				m_imGuiLayer->Begin();
 				for (Layer* layer : m_layerStack)
 				{
+					POLARITY_PROFILE_SCOPE("OnImGUIRender");
 					layer->OnImGuiRender();
 				}
 				m_imGuiLayer->End();

@@ -8,6 +8,8 @@ Polarity::CamController::CamController(float aspectRatio)
 
 void Polarity::CamController::OnUpdate(Timestep ts)
 {
+	POLARITY_PROFILE_FUNCTION();
+
 	if (Input::IsKeyPressed(Key::R))
 	{
 		m_camPos = glm::vec3(0.0f);

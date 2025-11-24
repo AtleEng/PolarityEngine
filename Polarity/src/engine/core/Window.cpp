@@ -8,10 +8,10 @@
 
 namespace Polarity
 {
-	Window* Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowProps& props)
 	{
 		#ifdef POLARITY_PLATFORM_WINDOWS
-			return new WindowsWindow(props);
+			return CreateScope<WindowsWindow>(props);
 		#else
 			LOG_MAJOR_ERROR("Unknown platform !!!");
 			return nullptr;

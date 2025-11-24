@@ -15,6 +15,7 @@
 #include<unordered_set>
 
 #include "engine/core/Log.h"
+#include "engine/debug/Instrumentor.h"
 
 
 #ifdef POLARITY_PLATFORM_WINDOWS

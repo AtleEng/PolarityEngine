@@ -3,9 +3,6 @@
 #include "imgui/imgui.h"
 #include <glm/gtc/type_ptr.hpp>
 
-
-#define PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__(name, [&](ProfileResult profileResult) { m_profileResults.push_back(profileResult); })
-
 DemoLayer::DemoLayer()
 	: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f)
 {
@@ -13,6 +10,7 @@ DemoLayer::DemoLayer()
 
 void DemoLayer::OnAttach()
 {
+	
 	/*
 	auto textureShader = m_shaderLibrary.Load("assets/shaders/Texture.glsl");
 	m_shaderLibrary.Load("assets/shaders/FlatColor.glsl");
@@ -29,31 +27,34 @@ void DemoLayer::OnDetach()
 
 void DemoLayer::OnUpdate(Timestep tS)
 {
-	PROFILE_SCOPE("Update");
+	POLARITY_PROFILE_FUNCTION();
 
 	m_cameraController.OnUpdate(tS);
 
 
 	//------------ Render --------------------------------------
 	{
-		PROFILE_SCOPE("Render");
+		POLARITY_PROFILE_SCOPE("Render Draw");
+		
 		Renderer2D::BeginScene(m_cameraController.GetCamera());
 
 
-		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		RenderCommand::Clear();
-
-
-
-		for (int x = 0; x < 5; x++)
 		{
-			for (int y = 0; y < 5; y++)
+			POLARITY_PROFILE_SCOPE("RenderPrep");
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+			RenderCommand::Clear();
+		}
+		int n = 0;
+
+		for (int x = 0; x < n; x++)
+		{
+			for (int y = 0; y < n; y++)
 			{
 				float fx = (float)x;
 				float fy = (float)y;
 
 				// --- Position (spread out)
-				glm::vec2 pos = { fx * 3.0f, fy * 3.0f };
+				glm::vec2 pos = { fx * 1.0f, fy * 1.0f };
 
 				// --- Wavy size pattern
 				glm::vec2 size = {
@@ -84,6 +85,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 
 void DemoLayer::OnImGuiRender()
 {
+	POLARITY_PROFILE_FUNCTION();
 	if (isDebugging)
 	{
 		ImGui::Begin("Settings");
@@ -103,15 +105,6 @@ void DemoLayer::OnImGuiRender()
 		ImGui::DragFloat("##rotation", &m_rotation, 1.0f);
 		ImGui::Text("Color");
 		ImGui::ColorEdit4("##color", glm::value_ptr(m_color));
-
-		for (auto& result : m_profileResults)
-		{
-			char lable[50];
-			strcpy(lable, " %.3fms ");
-			strcat(lable, result.Name);
-			ImGui::Text(lable, result.Time);
-		}
-		m_profileResults.clear();
 
 		ImGui::End();
 	}

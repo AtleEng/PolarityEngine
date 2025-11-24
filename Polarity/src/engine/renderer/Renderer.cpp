@@ -11,6 +11,8 @@ namespace Polarity
 
 	void Renderer::Init()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}

@@ -29,7 +29,7 @@ namespace Polarity
 		virtual void Shutdown();
 
 		GLFWwindow* m_window;
-		GraphicsContext* m_context;
+		Scope<GraphicsContext> m_context;
 
 		struct WindowData
 		{
