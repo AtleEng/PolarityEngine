@@ -187,9 +187,8 @@ namespace Polarity {
 	}
 }
 
-#if POLARITY_DEBUG
-	#define POLARITY_PROFILE 1
-#endif
+
+#define POLARITY_PROFILE 1
 
 #if POLARITY_PROFILE
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)

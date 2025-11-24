@@ -44,7 +44,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 		}
-		int n = 0;
+		int n = 3;
 
 		for (int x = 0; x < n; x++)
 		{

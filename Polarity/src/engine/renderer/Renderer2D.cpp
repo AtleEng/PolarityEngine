@@ -86,43 +86,40 @@ namespace Polarity
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size,rotation, color);
+		DrawQuad(s_Data->whiteTexture, { position.x, position.y, 0.0f }, size,rotation, color);
 	}
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
 	{
-		POLARITY_PROFILE_FUNCTION();
-
-		s_Data->whiteTexture->Bind();
-
-		float radians = glm::radians(rotation);
-		glm::mat4 transform =
-			glm::translate(glm::mat4(1.0f), position) * 
-			glm::rotate(glm::mat4(1.0f), radians, glm::vec3(0, 0, 1)) *
-			glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
-
-		s_Data->TextureShader->SetMat4("u_Transform", transform);
-		s_Data->TextureShader->SetFloat4("u_Color", color);	
-
-		s_Data->QuadVertexArray->Bind();
-		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+		DrawQuad(s_Data->whiteTexture, { position.x, position.y, 0.0f }, size, rotation, color);
 	}
-	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec2& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec2& position, const glm::vec2& size, const float rotation, const glm::vec4& color, const float textureScale)
 	{
-		DrawQuad(texture, { position.x, position.y, 0.0f }, size, rotation, color);
+		DrawQuad(texture, { position.x, position.y, 0.0f }, size, rotation, color, textureScale);
 	}
-	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& color, const float textureScale)
 	{
 		POLARITY_PROFILE_FUNCTION();
+		
+		glm::mat4 transform(1.0f);
+		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
+		{
+			POLARITY_PROFILE_SCOPE("Transform calc (pos, size, rot)");
 
-		float radians = glm::radians(rotation);
+			transform = glm::translate(transform, position);
+			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
+			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+		}
+		else
+		{
+			POLARITY_PROFILE_SCOPE("Transform calc (pos, size)");
 
-		glm::mat4 transform =
-			glm::translate(glm::mat4(1.0f), position) *
-			glm::rotate(glm::mat4(1.0f), radians, glm::vec3(0, 0, 1)) *
-			glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
+			transform = glm::translate(transform, position);
+			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+		}
 
 		s_Data->TextureShader->SetMat4("u_Transform", transform);
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TexScale", textureScale);
 
 		texture->Bind();
 
