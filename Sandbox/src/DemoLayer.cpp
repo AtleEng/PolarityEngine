@@ -44,7 +44,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 		}
-		int n = 3;
+		int n = 10;
 
 		for (int x = 0; x < n; x++)
 		{
@@ -73,10 +73,10 @@ void DemoLayer::OnUpdate(Timestep tS)
 					1.0f
 				};
 
-				Renderer2D::DrawQuad(pos, size, rotation, color);
+				Renderer2D::DrawQuad(pos, size, color);
 			}
 		}
-		Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_rotation, m_color);
+		//Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_color);
 
 
 		Renderer2D::EndScene();
