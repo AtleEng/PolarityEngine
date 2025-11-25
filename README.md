@@ -28,7 +28,6 @@ Brief explanation of key folders/files:
 
 - `Polarity` - Engine files
 - `Sandbox` - Example project
-- `generateProj.bat` - build solution for VS
 
 <details>
 	 <summary><strong>Engine File Tree</strong></summary>
@@ -55,24 +54,30 @@ Polarity
 ---
 
 ## Getting Started
-The engine should be implemented as a submodule
-
+The engine should be implemented as a submodule:  
 ```text
-Project folder
-├── PolarityEngine/   <-- Engine + Sandbox + Tools
-└── TestGame/         <-- Your game (Copied version of Sandbox)
+Project folder        <-- Have the same name as your game  
+├── PolarityEngine/   <-- Engine as submodule (+Sandbox, Tools, Thirdparty)  
+└── TestGame/         <-- Your game (Copied version of Sandbox)  
 ```
 
 ### Setup
-- Clone the repository as a submodule
-- Add a .lua file in your Project folder for generating solution
-- Copy Sandbox to your Project folder as a starting point
-- Remove premake5.lua in PolarityEngine
-- In your Project folder use `call PolarityEngine\thirdparty\premake\premake5.exe vs2022`
+- Clone the repository as a submodule:
+```text
+git submodule add https://github.com/AtleEng/PolarityEngine
+git submodule update --init --recursive
+```
+- Add a `premake5.lua` file in your Project folder for generating solution
+- Copy `Sandbox` to your Project folder as a starting point
+- Remove `premake5.lua` in PolarityEngine
+- In your Project folder use:
+ ```text
+PolarityEngine\thirdparty\premake\premake5.exe vs2022
+ ```
 - Now a clean vs solution should have been generated
 
  <details>
-	 <summary><strong>Inside project folder .lua file</strong></summary>
+	 <summary><strong>Inside project folder premake5.lua file</strong></summary>
 	 
 ```text
 -- This should be in your project folder
@@ -111,13 +116,13 @@ group "Core"
 group ""
 
 group "Games"
-    include "TestGame"      <-- name of your game
+    include "TestGame"--      <-- name of your game
 group ""
 ```
 </details>
 
  <details>
-	 <summary><strong>Inside your game .lua file</strong></summary>
+	 <summary><strong>Inside your game premake5.lua file</strong></summary>
 	 
 ```text
 -- This should be in your game folder
