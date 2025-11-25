@@ -17,6 +17,7 @@ void DemoLayer::OnAttach()
 	*/
 
 	m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
+	m_gridTex = Texture2D::Create("assets/textures/grid.png");
 
 }
 
@@ -44,7 +45,10 @@ void DemoLayer::OnUpdate(Timestep tS)
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 		}
-		int n = 10;
+		
+		Renderer2D::DrawTexturedQuad(m_gridTex, { -25.0f, -25.0f , -0.1f }, { 50.0f, 50.0f }, { 0.1f, 0.1f, 0.1f, 1.0f }, 25);
+
+		int n = 50;
 
 		for (int x = 0; x < n; x++)
 		{
@@ -54,7 +58,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 				float fy = (float)y;
 
 				// --- Position (spread out)
-				glm::vec2 pos = { fx * 1.0f, fy * 1.0f };
+				glm::vec3 pos = { fx * 1.1f, fy * 1.1f, fx/n};
 
 				// --- Wavy size pattern
 				glm::vec2 size = {
@@ -73,10 +77,11 @@ void DemoLayer::OnUpdate(Timestep tS)
 					1.0f
 				};
 
-				Renderer2D::DrawQuad(pos, size, color);
+				Renderer2D::DrawTexturedQuad(m_logoTex, pos, size, color);
 			}
 		}
-		//Renderer2D::DrawQuad(m_logoTex, m_pos, m_size, m_color);
+		
+		Renderer2D::DrawQuad(m_pos, m_size, m_color);
 
 
 		Renderer2D::EndScene();

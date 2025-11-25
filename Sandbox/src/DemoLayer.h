@@ -29,6 +29,7 @@ private:
 	float	  m_rotation = 0;
 
 	Ref<Texture2D> m_logoTex;
+	Ref<Texture2D> m_gridTex;
 
 	bool isDebugging = false;
 };
