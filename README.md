@@ -190,7 +190,7 @@ project "TestGame"--          <-- name of your game
 ### Update
 To update Polarity in Project folder simply run:
 - `cd PolarityEngine`
-- `git pull origin main`
+- `git pull`
 
 Then remove the premake5.lua in `PolarityEngine`
 
