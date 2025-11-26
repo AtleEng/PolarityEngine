@@ -46,9 +46,9 @@ void DemoLayer::OnUpdate(Timestep tS)
 			RenderCommand::Clear();
 		}
 		
-		Renderer2D::DrawTexturedQuad(m_gridTex, { -25.0f, -25.0f , -0.1f }, { 50.0f, 50.0f }, { 0.1f, 0.1f, 0.1f, 1.0f }, 25);
+		Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
 
-		int n = 50;
+		int n = 100;
 
 		for (int x = 0; x < n; x++)
 		{
@@ -77,11 +77,11 @@ void DemoLayer::OnUpdate(Timestep tS)
 					1.0f
 				};
 
-				Renderer2D::DrawTexturedQuad(m_logoTex, pos, size, color);
+				Renderer2D::DrawQuad(m_logoTex, pos, size, rotation, color);
 			}
 		}
 		
-		Renderer2D::DrawQuad(m_pos, m_size, m_color);
+		Renderer2D::DrawQuad(m_pos, m_size, m_rotation, m_color);
 
 
 		Renderer2D::EndScene();

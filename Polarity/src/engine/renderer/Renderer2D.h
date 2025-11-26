@@ -19,17 +19,16 @@ namespace Polarity
 
 		//Draw quads
 
-		static void DrawTexturedQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size = { 1.0f, 1.0f },  const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, const float textureScale = 1.0f);
-		static void DrawTexturedQuad(const Ref<Texture2D>& texture, const glm::vec2& position, const glm::vec2& size = { 1.0f, 1.0f },  const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, const float textureScale = 1.0f);
-		
-		static void DrawQuad(const glm::vec2& position, const glm::vec2& size = { 1.0f, 1.0f }, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size = { 1.0f, 1.0f },  const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+		static void DrawQuad(const glm::mat4& transform,	const Ref<Texture2D>& texture,	const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec2& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
 
-		static void DrawRotatedQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, const float textureScale = 1.0f);
-		static void DrawRotatedQuad(const Ref<Texture2D>& texture, const glm::vec2& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, const float textureScale = 1.0f);
-
-		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
-		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size = { 1.0f, 1.0f }, const float rotation = 0, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+		static void DrawQuad(const glm::mat4& transform,	const glm::vec4& tint = glm::vec4(1.0f));
+		static void DrawQuad(const glm::vec3& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
+		static void DrawQuad(const glm::vec2& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
+	private:
+		static void StartBatch();
+		static void NextBatch();
 	};
 }
 
