@@ -1,6 +1,8 @@
 #pragma once
 #include <Polarity.h>
+
 #include "CamController.h"
+#include "ParticleSystem.h"
 
 using namespace Polarity;
 
@@ -20,8 +22,11 @@ public:
 	bool OnKeyPressedEvent(KeyPressedEvent& event);
 
 private:
-	CamController m_cameraController;
-	ShaderLibrary m_shaderLibrary;
+	CamController  m_cameraController;
+	ShaderLibrary  m_shaderLibrary;
+
+	ParticleSystem m_particleSystem;
+	ParticleProps m_particle;
 
 	glm::vec3 m_pos		 = glm::vec3(0.0f);
 	glm::vec2 m_size	 = glm::vec2(1.0f);

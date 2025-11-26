@@ -146,10 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\CamController.h" />
     <ClInclude Include="src\DemoLayer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ParticleSystem.cpp" />
     <ClCompile Include="src\CamController.cpp" />
     <ClCompile Include="src\DemoLayer.cpp" />
     <ClCompile Include="src\Sandbox.cpp" />

@@ -4,13 +4,21 @@
 #include <glm/gtc/type_ptr.hpp>
 
 DemoLayer::DemoLayer()
-	: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f)
+	: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_particleSystem()
 {
 }
 
 void DemoLayer::OnAttach()
 {
-	
+	Random::Init();
+	m_particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
+	m_particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
+	m_particle.SizeBegin = 0.5f, m_particle.SizeVariation = 0.3f, m_particle.SizeEnd = 0.0f;
+	m_particle.LifeTime = 1.0f;
+	m_particle.Velocity = { 0.0f, 0.0f };
+	m_particle.VelocityVariation = { 3.0f, 1.0f };
+	m_particle.Position = { 0.0f, 0.0f };
+
 	/*
 	auto textureShader = m_shaderLibrary.Load("assets/shaders/Texture.glsl");
 	m_shaderLibrary.Load("assets/shaders/FlatColor.glsl");
@@ -31,14 +39,16 @@ void DemoLayer::OnUpdate(Timestep tS)
 	POLARITY_PROFILE_FUNCTION();
 
 	m_cameraController.OnUpdate(tS);
-
+	m_particleSystem.OnUpdate(tS);
+	
+	for (int i = 0; i < 5; i++)
+		m_particleSystem.Emit(m_particle);
 
 	//------------ Render --------------------------------------
 	{
 		POLARITY_PROFILE_SCOPE("Render Draw");
 		
 		Renderer2D::BeginScene(m_cameraController.GetCamera());
-
 
 		{
 			POLARITY_PROFILE_SCOPE("RenderPrep");
@@ -48,7 +58,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 		
 		Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
 
-		int n = 100;
+		int n = 0;
 
 		for (int x = 0; x < n; x++)
 		{
@@ -81,8 +91,9 @@ void DemoLayer::OnUpdate(Timestep tS)
 			}
 		}
 		
-		Renderer2D::DrawQuad(m_pos, m_size, m_rotation, m_color);
+		//Renderer2D::DrawQuad(m_pos, m_size, m_rotation, m_color);
 
+		m_particleSystem.OnRender();
 
 		Renderer2D::EndScene();
 	}
@@ -101,15 +112,21 @@ void DemoLayer::OnImGuiRender()
 		ImGui::Text("Vertices: ");
 		ImGui::Text("Indices: ");
 
-		ImGui::Text("\nQuad:");
-		ImGui::Text("Position");
-		ImGui::DragFloat3("##pos", glm::value_ptr(m_pos), 0.1f);
-		ImGui::Text("Size");
-		ImGui::DragFloat2("##size", glm::value_ptr(m_size), 0.1f);
-		ImGui::Text("Rotation");
-		ImGui::DragFloat("##rotation", &m_rotation, 1.0f);
+		ImGui::Text("\nParticle System:");
+		ImGui::DragFloat("LifeTime", &m_particle.LifeTime, 0.01f);
+		
+		ImGui::Text("Size:");
+		ImGui::DragFloat("Start size", &m_particle.SizeBegin, 0.01f);
+		ImGui::DragFloat("Variation", &m_particle.SizeVariation, 0.01f);
+		ImGui::DragFloat("End size", &m_particle.SizeEnd, 0.01f);
+
+		ImGui::Text("Velocity");
+		ImGui::DragFloat2("Start velocity", glm::value_ptr(m_particle.Velocity), 0.01f);
+		ImGui::DragFloat2("Varitation", glm::value_ptr(m_particle.VelocityVariation), 0.01f);
+
 		ImGui::Text("Color");
-		ImGui::ColorEdit4("##color", glm::value_ptr(m_color));
+		ImGui::ColorEdit4("Start color", glm::value_ptr(m_particle.ColorBegin));
+		ImGui::ColorEdit4("End color", glm::value_ptr(m_particle.ColorEnd));
 
 		ImGui::End();
 	}
