@@ -46,6 +46,9 @@ namespace Polarity
 		uint32_t TextureSlotIndex = 1;
 
 		glm::vec4 QuadVertexPositions[4];
+
+
+		Renderer2D::Statistics Stats;
 	};
 
 	static Renderer2DStorage s_Data;
@@ -162,6 +165,8 @@ namespace Polarity
 
 		//Draw quadbatch
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+		s_Data.Stats.DrawCalls++;
 	}
 
 	void Renderer2D::StartBatch()
@@ -217,6 +222,8 @@ namespace Polarity
 			s_Data.QuadVertexBufferPtr++;
 		}
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& tint, const float textureScale)
@@ -273,6 +280,8 @@ namespace Polarity
 			s_Data.QuadVertexBufferPtr++;
 		}
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& color)
@@ -306,5 +315,16 @@ namespace Polarity
 			transform = glm::scale(transform, glm::vec3(size, 1.0f));
 		}
 		DrawQuad(transform, tint);
+	}
+
+
+	void Renderer2D::ResetStats()
+	{
+		memset(&s_Data.Stats, 0, sizeof(Statistics));
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStats()
+	{
+		return s_Data.Stats;
 	}
 }

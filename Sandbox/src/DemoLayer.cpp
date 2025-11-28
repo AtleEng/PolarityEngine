@@ -31,23 +31,25 @@ void DemoLayer::OnAttach()
 
 void DemoLayer::OnDetach()
 {
-	
+
 }
 
 void DemoLayer::OnUpdate(Timestep tS)
 {
 	POLARITY_PROFILE_FUNCTION();
 
+	Renderer2D::ResetStats();
+
 	m_cameraController.OnUpdate(tS);
 	m_particleSystem.OnUpdate(tS);
-	
+
 	for (int i = 0; i < 5; i++)
 		m_particleSystem.Emit(m_particle);
 
 	//------------ Render --------------------------------------
 	{
 		POLARITY_PROFILE_SCOPE("Render Draw");
-		
+
 		Renderer2D::BeginScene(m_cameraController.GetCamera());
 
 		{
@@ -55,7 +57,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 		}
-		
+
 		Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
 
 		int n = 0;
@@ -68,7 +70,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 				float fy = (float)y;
 
 				// --- Position (spread out)
-				glm::vec3 pos = { fx * 1.1f, fy * 1.1f, fx/n};
+				glm::vec3 pos = { fx * 1.1f, fy * 1.1f, fx / n };
 
 				// --- Wavy size pattern
 				glm::vec2 size = {
@@ -90,7 +92,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 				Renderer2D::DrawQuad(m_logoTex, pos, size, rotation, color);
 			}
 		}
-		
+
 		//Renderer2D::DrawQuad(m_pos, m_size, m_rotation, m_color);
 
 		m_particleSystem.OnRender();
@@ -102,31 +104,87 @@ void DemoLayer::OnUpdate(Timestep tS)
 void DemoLayer::OnImGuiRender()
 {
 	POLARITY_PROFILE_FUNCTION();
+
+
+	ImGui::Begin("Settings");
+
+	ImGui::Text("Particle System:");
+	ImGui::DragFloat("LifeTime", &m_particle.LifeTime, 0.01f);
+	ImGui::Separator();
+
+	ImGui::Text("Size:");
+	ImGui::DragFloat("Start size", &m_particle.SizeBegin, 0.01f);
+	ImGui::DragFloat("Variation", &m_particle.SizeVariation, 0.01f);
+	ImGui::DragFloat("End size", &m_particle.SizeEnd, 0.01f);
+	ImGui::Separator();
+
+	ImGui::Text("Velocity");
+	ImGui::DragFloat2("Start velocity", glm::value_ptr(m_particle.Velocity), 0.01f);
+	ImGui::DragFloat2("Varitation", glm::value_ptr(m_particle.VelocityVariation), 0.01f);
+	ImGui::Separator();
+
+	ImGui::Text("Color");
+	ImGui::ColorEdit4("Start color", glm::value_ptr(m_particle.ColorBegin));
+	ImGui::ColorEdit4("End color", glm::value_ptr(m_particle.ColorEnd));
+
+
+	ImGui::End();
+
 	if (isDebugging)
 	{
-		ImGui::Begin("Settings");
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuiWindowFlags window_flags =
+			ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoDocking |
+			ImGuiWindowFlags_AlwaysAutoResize |
+			ImGuiWindowFlags_NoSavedSettings |
+			ImGuiWindowFlags_NoFocusOnAppearing |
+			ImGuiWindowFlags_NoNav |
+			ImGuiWindowFlags_NoMove;
 
-		ImGui::Text("Renderer2D Stats:");
-		ImGui::Text("Draw Calls: ");
-		ImGui::Text("Quads: ");
-		ImGui::Text("Vertices: ");
-		ImGui::Text("Indices: ");
+		const float PAD = 10.0f;
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 
-		ImGui::Text("\nParticle System:");
-		ImGui::DragFloat("LifeTime", &m_particle.LifeTime, 0.01f);
+		ImVec2 window_pos = ImVec2(
+			viewport->WorkPos.x + viewport->WorkSize.x - PAD,
+			viewport->WorkPos.y + PAD
+		);
+
+		ImVec2 window_pos_pivot = ImVec2(1.0f, 0.0f);
+
+		ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+		ImGui::SetNextWindowViewport(viewport->ID);
+		ImGui::SetNextWindowBgAlpha(0.45f);
+
+		ImGui::SetNextWindowSize(ImVec2(160.0f, 0.0f));
+
+		ImGui::Begin("Performance", nullptr, window_flags);
+
+		// Title
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0.85f, 0.4f, 1));
+		ImGui::Text("PERFORMANCE");
+		ImGui::PopStyleColor();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		// CPU
+		ImGui::Text("CPU");
+		ImGui::Spacing();
+
+		ImGui::Text("FPS        %.1f", io.Framerate);
+		ImGui::Text("Delta Time %.4f", io.DeltaTime);
+
+		// Renderer
+		Renderer2D::Statistics stats = Renderer2D::GetStats();
+
+		ImGui::Separator();
+		ImGui::Text("Renderer");
+		ImGui::Spacing();
 		
-		ImGui::Text("Size:");
-		ImGui::DragFloat("Start size", &m_particle.SizeBegin, 0.01f);
-		ImGui::DragFloat("Variation", &m_particle.SizeVariation, 0.01f);
-		ImGui::DragFloat("End size", &m_particle.SizeEnd, 0.01f);
-
-		ImGui::Text("Velocity");
-		ImGui::DragFloat2("Start velocity", glm::value_ptr(m_particle.Velocity), 0.01f);
-		ImGui::DragFloat2("Varitation", glm::value_ptr(m_particle.VelocityVariation), 0.01f);
-
-		ImGui::Text("Color");
-		ImGui::ColorEdit4("Start color", glm::value_ptr(m_particle.ColorBegin));
-		ImGui::ColorEdit4("End color", glm::value_ptr(m_particle.ColorEnd));
+		ImGui::Text("Draw Calls %d", stats.DrawCalls);
+		ImGui::Text("Quads %d", stats.QuadCount);
+		ImGui::Text("Vertices %d", stats.GetTotalVertexCount());
+		ImGui::Text("Indices %d", stats.GetTotalIndexCount());
 
 		ImGui::End();
 	}
