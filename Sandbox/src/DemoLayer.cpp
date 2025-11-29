@@ -27,6 +27,7 @@ void DemoLayer::OnAttach()
 	m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
 	m_gridTex = Texture2D::Create("assets/textures/grid.png");
 
+	m_clickSound = Audio::Create("assets/audio/click.wav");
 }
 
 void DemoLayer::OnDetach()
@@ -203,6 +204,13 @@ bool DemoLayer::OnKeyPressedEvent(KeyPressedEvent& event)
 	if (event.GetKeyCode() == Key::F3)
 	{
 		isDebugging = !isDebugging;
+
+		
+		//Audio::Stop(m_clickSound);
+		Audio::Play(m_clickSound);
+		
+
+		
 	}
 	return false;
 }

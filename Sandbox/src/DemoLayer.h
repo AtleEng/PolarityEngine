@@ -36,6 +36,8 @@ private:
 	Ref<Texture2D> m_logoTex;
 	Ref<Texture2D> m_gridTex;
 
+	Ref<AudioSource> m_clickSound;
+
 	bool isDebugging = false;
 };
 

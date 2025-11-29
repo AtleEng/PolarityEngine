@@ -2,6 +2,7 @@
 #include "Application.h"
 
 #include "engine/renderer/Renderer.h"
+#include "engine/audio/Audio.h"
 #include "Input.h"
 
 #include <GLFW/glfw3.h>  //temp
@@ -43,6 +44,8 @@ namespace Polarity {
 
 
 		Renderer::Init();
+
+		Audio::Init();
 
 		// ImGui
 		m_imGuiLayer = new ImGuiLayer();

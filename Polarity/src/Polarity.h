@@ -6,6 +6,7 @@
 #include "engine/core/Log.h"
 #include "engine/core/Input.h"
 #include "engine/core/Timestep.h"
+#include "engine/audio/Audio.h"
 
 // ----- Debug -----------------------------------
 #include "engine/debug/Instrumentor.h"

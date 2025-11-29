@@ -178,6 +178,8 @@
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\debug\Instrumentor.h" />
+    <ClInclude Include="src\engine\audio\Audio.h" />
+    <ClInclude Include="thirdparty\mini_audio\mini_audio.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -261,5 +263,6 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\audio\Audio.cpp" />
   </ItemGroup>
 </Project>

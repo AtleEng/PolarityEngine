@@ -48,7 +48,7 @@ namespace Polarity
 			m_dataFormat = GL_RGB;
 		}
 
-		LOG_ASSERT(m_internalFormat && m_dataFormat, "Format not supported !!!");
+		LOG_ASSERT(m_internalFormat && m_dataFormat, "Format not supported!");
 
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);

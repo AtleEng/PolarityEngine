@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\audio\Audio.h" />
     <ClInclude Include="src\engine\debug\Instrumentor.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\core\Application.h" />
@@ -178,10 +179,12 @@
     <ClInclude Include="src\platform\openGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\platform\windows\WindowsWindow.h" />
     <ClInclude Include="src\polpch.h" />
+    <ClInclude Include="thirdparty\mini_audio\mini_audio.h" />
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp" />
+    <ClCompile Include="src\engine\audio\Audio.cpp" />
     <ClCompile Include="src\engine\core\Layer.cpp" />
     <ClCompile Include="src\engine\core\LayerStack.cpp" />
     <ClCompile Include="src\engine\core\Log.cpp" />

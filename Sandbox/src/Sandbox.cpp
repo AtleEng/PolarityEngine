@@ -11,8 +11,6 @@ public:
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		LOG_INFO("Starting application ...\n");
-
 		PushLayer(new DemoLayer());
 	}
 	~Sandbox()
