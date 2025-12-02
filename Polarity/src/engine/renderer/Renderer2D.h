@@ -18,14 +18,21 @@ namespace Polarity
 		static void OnWindowResize(uint32_t width, uint32_t height);
 
 		//Draw quads
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint, const float textureScale, const glm::vec2* texCoords);
+		// texture
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::mat4& transform,	const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position,	const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
+		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec2& position,	const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
 
-		static void DrawQuad(const glm::mat4& transform,	const Ref<Texture2D>& texture,	const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
-		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
-		static void DrawQuad(const Ref<Texture2D>& texture, const glm::vec2& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
-
-		static void DrawQuad(const glm::mat4& transform,	const glm::vec4& tint = glm::vec4(1.0f));
-		static void DrawQuad(const glm::vec3& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
-		static void DrawQuad(const glm::vec2& position,		const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
+		// sub texture
+		static void DrawQuad(const Ref<SubTexture2D>& texture, const glm::mat4& transform, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
+		static void DrawQuad(const Ref<SubTexture2D>& texture, const glm::vec3& position,  const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
+		static void DrawQuad(const Ref<SubTexture2D>& texture, const glm::vec2& position,  const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f);
+		
+		// no texture
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& tint = glm::vec4(1.0f));
+		static void DrawQuad(const glm::vec3& position,	 const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
+		static void DrawQuad(const glm::vec2& position,	 const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
 	
 		// Stats
 		struct Statistics

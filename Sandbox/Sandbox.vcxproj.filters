@@ -16,6 +16,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ParticleSystem.h" />
+    <ClInclude Include="src\Grid.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CamController.cpp">

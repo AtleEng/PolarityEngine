@@ -188,14 +188,13 @@ namespace Polarity
 
 	}
 
-	// Texture
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& tint, const float textureScale)
+	//Render Quads
+	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint, const float textureScale, const glm::vec2* texCoords)
 	{
 		if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
 			NextBatch();
 
 		float textureIndex = 0.0f;
-		constexpr glm::vec2 texCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 		{
@@ -226,6 +225,14 @@ namespace Polarity
 		s_Data.Stats.QuadCount++;
 	}
 
+	// Texture
+	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint, const float textureScale)
+	{
+		constexpr glm::vec2 texCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+		DrawQuad(texture, transform, tint, textureScale, texCoords);
+	}
+
 	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& tint, const float textureScale)
 	{
 		glm::mat4 transform(1.0f);
@@ -240,7 +247,7 @@ namespace Polarity
 			transform = glm::translate(transform, position);
 			transform = glm::scale(transform, glm::vec3(size, 1.0f));
 		}
-		DrawQuad(transform, texture, tint, textureScale);
+		DrawQuad(texture, transform, tint, textureScale);
 	}
 
 	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::vec2& position, const glm::vec2& size, const float rotation, const glm::vec4& tint, const float textureScale)
@@ -257,7 +264,47 @@ namespace Polarity
 			transform = glm::translate(transform, { position.x, position.y, 0.0f });
 			transform = glm::scale(transform, glm::vec3(size, 1.0f));
 		}
-		DrawQuad(transform, texture, tint, textureScale);
+		DrawQuad(texture, transform, tint, textureScale);
+	}
+
+	// SubTexture
+	void Renderer2D::DrawQuad(const Ref<SubTexture2D>& subTexture, const glm::mat4& transform, const glm::vec4& tint, const float textureScale)
+	{
+		DrawQuad(subTexture->GetTexture(), transform, tint, textureScale, subTexture->GetTexCoords());
+	}
+
+	void Renderer2D::DrawQuad(const Ref<SubTexture2D>& subTexture, const glm::vec3& position, const glm::vec2& size, const float rotation, const glm::vec4& tint, const float textureScale)
+	{
+		glm::mat4 transform(1.0f);
+		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
+		{
+			transform = glm::translate(transform, position);
+			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
+			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+		}
+		else
+		{
+			transform = glm::translate(transform, position);
+			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+		}
+		DrawQuad(subTexture, transform, tint, textureScale);
+	}
+	
+	void Renderer2D::DrawQuad(const Ref<SubTexture2D>& subTexture, const glm::vec2& position, const glm::vec2& size, const float rotation, const glm::vec4& tint, const float textureScale)
+	{
+		glm::mat4 transform(1.0f);
+		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
+		{
+			transform = glm::translate(transform, { position.x, position.y, 0.0f });
+			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
+			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+		}
+		else
+		{
+			transform = glm::translate(transform, { position.x, position.y, 0.0f });
+			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+		}
+		DrawQuad(subTexture, transform, tint, textureScale);
 	}
 
 	// Flat Color
@@ -300,6 +347,7 @@ namespace Polarity
 		}
 		DrawQuad(transform, color);
 	}
+	
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const float rotation, const glm::vec4& tint)
 	{
 		glm::mat4 transform(1.0f);

@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Grid.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\CamController.h" />
     <ClInclude Include="src\DemoLayer.h" />

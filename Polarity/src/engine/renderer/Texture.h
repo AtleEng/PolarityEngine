@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 
 #include "engine/core/Core.h"
 
@@ -28,4 +29,18 @@ namespace Polarity
 		static Ref<Texture2D> Create(const std::string& path);
 	};
 
+	class SubTexture2D
+	{
+	public:
+		SubTexture2D(const Ref<Texture2D> texture, const glm::vec2 coords, const glm::vec2 size);
+
+		const Ref<Texture2D>& GetTexture()	const { return m_texture; }
+		const glm::vec2*	 GetTexCoords()	const { return m_textureBounds; }
+
+		static Ref<SubTexture2D> Create(const Ref<Texture2D> texture, const glm::vec2 coords, const glm::vec2 size);
+		static Ref<SubTexture2D> CreateFromUniformGrid(const Ref<Texture2D> texture, const glm::vec2 indexCoords, float gridSize);
+	private:
+		const Ref<Texture2D> m_texture;
+		glm::vec2			 m_textureBounds[4];
+	};
 }

@@ -1,8 +1,10 @@
 #pragma once
 #include <Polarity.h>
+#include <array>
 
 #include "CamController.h"
 #include "ParticleSystem.h"
+#include "Grid.h"
 
 using namespace Polarity;
 
@@ -33,10 +35,17 @@ private:
 	glm::vec4 m_color	 = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);
 	float	  m_rotation = 0;
 
-	Ref<Texture2D> m_logoTex;
+	std::array<Ref<SubTexture2D>, 5> m_spritemap;
+	Ref<Texture2D> m_atlasTex;
 	Ref<Texture2D> m_gridTex;
 
 	Ref<AudioSource> m_clickSound;
+
+	struct Tile
+	{
+		Ref<SubTexture2D> sprite;
+	};
+	Grid<Tile, 16> m_worldGrid;
 
 	bool isDebugging = false;
 };

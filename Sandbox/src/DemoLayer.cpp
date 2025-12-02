@@ -1,6 +1,8 @@
 #include "DemoLayer.h"
+#include "Grid.h"
 
 #include "imgui/imgui.h"
+
 #include <glm/gtc/type_ptr.hpp>
 
 DemoLayer::DemoLayer()
@@ -16,15 +18,23 @@ void DemoLayer::OnAttach()
 	m_particle.SizeBegin = 0.5f, m_particle.SizeVariation = 0.3f, m_particle.SizeEnd = 0.0f;
 	m_particle.LifeTime = 1.0f;
 	m_particle.Velocity = { 0.0f, 0.0f };
-	m_particle.VelocityVariation = { 3.0f, 1.0f };
-	m_particle.Position = { 0.0f, 0.0f };
+	m_particle.VelocityVariation = { 1.0f, 1.0f };
+	m_particle.Position = { -3.0f, 0.0f };
 
 	/*
 	auto textureShader = m_shaderLibrary.Load("assets/shaders/Texture.glsl");
 	m_shaderLibrary.Load("assets/shaders/FlatColor.glsl");
 	*/
 
-	m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
+	m_atlasTex = Texture2D::Create("assets/textures/tileAtlas.png");
+	m_spritemap = {
+		SubTexture2D::Create(m_atlasTex, { 16, 80 }, { 16, 16 }),
+		SubTexture2D::Create(m_atlasTex, { 32, 80 }, { 16, 16 }),
+		SubTexture2D::Create(m_atlasTex, { 0,  64 }, { 16, 16 }),
+		SubTexture2D::Create(m_atlasTex, { 16, 64 }, { 16, 16 }),
+		SubTexture2D::Create(m_atlasTex, { 32, 64 }, { 16, 16 })
+	};
+		
 	m_gridTex = Texture2D::Create("assets/textures/grid.png");
 
 	m_clickSound = Audio::Create("assets/audio/click.wav");
@@ -44,7 +54,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 	m_cameraController.OnUpdate(tS);
 	m_particleSystem.OnUpdate(tS);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 1; i++)
 		m_particleSystem.Emit(m_particle);
 
 	//------------ Render --------------------------------------
@@ -61,36 +71,16 @@ void DemoLayer::OnUpdate(Timestep tS)
 
 		Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
 
-		int n = 0;
+		int n = 5;
 
 		for (int x = 0; x < n; x++)
 		{
 			for (int y = 0; y < n; y++)
 			{
-				float fx = (float)x;
-				float fy = (float)y;
+				glm::vec2 pos = { (float)x , (float)y };
 
-				// --- Position (spread out)
-				glm::vec3 pos = { fx * 1.1f, fy * 1.1f, fx / n };
 
-				// --- Wavy size pattern
-				glm::vec2 size = {
-					1.0f + 0.5f * sin(fx + fy * 0.3f),
-					1.0f + 0.5f * cos(fx * 0.2f + fy)
-				};
-
-				// --- Smooth rotation spiral
-				float rotation = (fx * 15.0f) + (fy * 8.0f);
-
-				// --- "Beautiful" rainbow gradient
-				glm::vec4 color = {
-					(sin(fx * 0.5f) * 0.5f) + 0.5f,
-					(sin(fy * 0.5f) * 0.5f) + 0.5f,
-					(sin((fx + fy) * 0.3f) * 0.5f) + 0.5f,
-					1.0f
-				};
-
-				Renderer2D::DrawQuad(m_logoTex, pos, size, rotation, color);
+				Renderer2D::DrawQuad(m_spritemap[x], pos);
 			}
 		}
 
