@@ -113,6 +113,12 @@ namespace Polarity {
 		}
 	}
 
+	void Application::Shutdown()
+	{
+		LOG_INFO("Shutdown...");
+		m_running = false;
+	}
+
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
 		m_running = false;

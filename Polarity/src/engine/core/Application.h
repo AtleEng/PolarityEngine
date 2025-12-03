@@ -19,6 +19,7 @@ namespace Polarity {
 		virtual ~Application();
 
 		void Run();
+		void Shutdown();
 
 		void OnEvent(Event& e);
 

@@ -38,6 +38,7 @@ private:
 	std::array<Ref<SubTexture2D>, 5> m_spritemap;
 	Ref<Texture2D> m_atlasTex;
 	Ref<Texture2D> m_gridTex;
+	Ref<Texture2D> m_logoTex;
 
 	Ref<AudioSource> m_clickSound;
 
