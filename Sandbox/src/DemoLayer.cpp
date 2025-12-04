@@ -12,6 +12,13 @@ DemoLayer::DemoLayer()
 
 void DemoLayer::OnAttach()
 {
+	POLARITY_PROFILE_FUNCTION();
+
+	FramebufferSpecification fbSpec;
+	fbSpec.Width = 1280;
+	fbSpec.Height = 720;
+	m_framebuffer = Framebuffer::Create(fbSpec);
+
 	Random::Init();
 	m_particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -66,6 +73,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 
 		{
 			POLARITY_PROFILE_SCOPE("RenderPrep");
+			m_framebuffer->Bind();
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 		}
@@ -90,6 +98,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 		m_particleSystem.OnRender();
 
 		Renderer2D::EndScene();
+		m_framebuffer->Unbind();
 	}
 }
 
@@ -221,6 +230,9 @@ void DemoLayer::OnImGuiRender()
 		if (showScene)
 		{
 			ImGui::Begin("Scene");
+			uint32_t textureID = m_framebuffer->GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f },
+				{ 0,1 }, { 1,0 });
 			
 			ImGui::End();
 		}

@@ -21,7 +21,7 @@ namespace Polarity {
 		case Polarity::ShaderDataType::Bool:	return GL_BOOL;
 		}
 
-		LOG_MAJOR_ERROR("Unknown ShaderDataType !!!");
+		LOG_MAJOR_ERROR("Unknown ShaderDataType!");
 		return 0;
 	}
 

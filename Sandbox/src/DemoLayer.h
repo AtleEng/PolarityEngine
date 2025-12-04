@@ -49,5 +49,7 @@ private:
 	Grid<Tile, 16> m_worldGrid;
 
 	bool isDebugging = false;
+
+	Ref<Framebuffer> m_framebuffer;
 };
 

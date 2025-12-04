@@ -180,6 +180,8 @@
     <ClInclude Include="src\engine\debug\Instrumentor.h" />
     <ClInclude Include="src\engine\audio\Audio.h" />
     <ClInclude Include="thirdparty\mini_audio\mini_audio.h" />
+    <ClInclude Include="src\engine\renderer\Framebuffer.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLFramebuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\core\Application.cpp">
@@ -264,5 +266,7 @@
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\audio\Audio.cpp" />
+    <ClCompile Include="src\engine\renderer\Framebuffer.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLFramebuffer.cpp" />
   </ItemGroup>
 </Project>
