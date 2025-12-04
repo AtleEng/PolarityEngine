@@ -30,15 +30,9 @@ private:
 	ParticleSystem m_particleSystem;
 	ParticleProps m_particle;
 
-	glm::vec3 m_pos		 = glm::vec3(0.0f);
-	glm::vec2 m_size	 = glm::vec2(1.0f);
-	glm::vec4 m_color	 = glm::vec4(0.8f, 0.2f, 0.3f, 1.0f);
-	float	  m_rotation = 0;
-
 	std::array<Ref<SubTexture2D>, 5> m_spritemap;
 	Ref<Texture2D> m_atlasTex;
 	Ref<Texture2D> m_gridTex;
-	Ref<Texture2D> m_logoTex;
 
 	Ref<AudioSource> m_clickSound;
 
@@ -49,7 +43,5 @@ private:
 	Grid<Tile, 16> m_worldGrid;
 
 	bool isDebugging = false;
-
-	Ref<Framebuffer> m_framebuffer;
 };
 

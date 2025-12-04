@@ -4,10 +4,10 @@
 #include "LayerStack.h"
 #include "Timestep.h"
 
-#include "../events/Event.h"
-#include "../events/ApplicationEvent.h"
+#include "engine/events/Event.h"
+#include "engine/events/ApplicationEvent.h"
 
-#include "../imGui/ImGuiLayer.h"
+#include "engine/imGui/ImGuiLayer.h"
 
 namespace Polarity {
 
@@ -15,7 +15,7 @@ namespace Polarity {
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "App");
 		virtual ~Application();
 
 		void Run();

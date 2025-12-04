@@ -32,6 +32,10 @@ group "Core"
 	include "Polarity"
 group ""
 
+group "Tools"
+	include "PolarityEditor"
+group ""
+
 group "Misc"
 	include "Sandbox"
 group ""

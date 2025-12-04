@@ -10,6 +10,9 @@
     <Filter Include="Source Files\src\engine">
       <UniqueIdentifier>{258122B1-91B8-6A48-9AC2-CE6B06799141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\audio">
+      <UniqueIdentifier>{06A72930-72BF-105A-3B6C-A0F3A743A5F3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\core">
       <UniqueIdentifier>{BDB0B4F9-A96B-A4A5-5223-1DF03EBDEE35}</UniqueIdentifier>
     </Filter>
@@ -43,8 +46,14 @@
     <Filter Include="Header Files\src\engine">
       <UniqueIdentifier>{5D31C695-C968-0E2D-D272-72503E293526}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\src\engine\audio">
+      <UniqueIdentifier>{3EA18EA3-AAB9-75CD-7366-0567DF3D0A67}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\src\engine\core">
       <UniqueIdentifier>{F543C74A-E1FE-B6F6-8AB6-2F4176500187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\debug">
+      <UniqueIdentifier>{B31DBCA3-1F36-A3CD-E8E2-326754BA3767}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\events">
       <UniqueIdentifier>{C126CA1E-AD4C-9485-9692-19518257B951}</UniqueIdentifier>
@@ -74,6 +83,9 @@
   <ItemGroup>
     <ClInclude Include="src\Polarity.h">
       <Filter>Header Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\audio\Audio.h">
+      <Filter>Header Files\src\engine\audio</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\core\Application.h">
       <Filter>Header Files\src\engine\core</Filter>
@@ -105,6 +117,9 @@
     <ClInclude Include="src\engine\core\Window.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\debug\Instrumentor.h">
+      <Filter>Header Files\src\engine\debug</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\events\ApplicationEvent.h">
       <Filter>Header Files\src\engine\events</Filter>
     </ClInclude>
@@ -121,6 +136,9 @@
       <Filter>Header Files\src\engine\imGui</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\renderer\Buffer.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\renderer\Framebuffer.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\renderer\GraphicsContext.h">
@@ -156,6 +174,9 @@
     <ClInclude Include="src\platform\openGL\OpenGLContext.h">
       <Filter>Header Files\src\platform\openGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\platform\openGL\OpenGLFramebuffer.h">
+      <Filter>Header Files\src\platform\openGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h">
       <Filter>Header Files\src\platform\openGL</Filter>
     </ClInclude>
@@ -177,13 +198,11 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\debug\Instrumentor.h" />
-    <ClInclude Include="src\engine\audio\Audio.h" />
-    <ClInclude Include="thirdparty\mini_audio\mini_audio.h" />
-    <ClInclude Include="src\engine\renderer\Framebuffer.h" />
-    <ClInclude Include="src\platform\openGL\OpenGLFramebuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\audio\Audio.cpp">
+      <Filter>Source Files\src\engine\audio</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\core\Application.cpp">
       <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
@@ -206,6 +225,9 @@
       <Filter>Source Files\src\engine\imGui</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\Buffer.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\Framebuffer.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\GraphicsContext.cpp">
@@ -241,6 +263,9 @@
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp">
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\openGL\OpenGLFramebuffer.cpp">
+      <Filter>Source Files\src\platform\openGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp">
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
@@ -265,8 +290,5 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\audio\Audio.cpp" />
-    <ClCompile Include="src\engine\renderer\Framebuffer.cpp" />
-    <ClCompile Include="src\platform\openGL\OpenGLFramebuffer.cpp" />
   </ItemGroup>
 </Project>

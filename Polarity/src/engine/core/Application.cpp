@@ -12,7 +12,7 @@ namespace Polarity {
 
 	Application* Application::s_instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		POLARITY_PROFILE_FUNCTION();
 
@@ -39,7 +39,7 @@ namespace Polarity {
 		LOG_EX("PolarityEngine", TextColor::Orange, info.c_str());
 
 
-		m_window = std::unique_ptr<Window>(Window::Create());
+		m_window = std::unique_ptr<Window>(Window::Create(WindowProps(name)));
 		m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(OnEvent));
 
 
