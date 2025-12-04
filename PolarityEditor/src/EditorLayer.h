@@ -32,6 +32,7 @@ namespace Polarity
 
 		Ref<AudioSource> m_clickSound;
 
+		glm::vec2 m_viewportSize;
 		Ref<Framebuffer> m_framebuffer;
 	};
 

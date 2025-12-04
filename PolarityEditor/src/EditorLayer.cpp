@@ -88,7 +88,7 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		static bool showScene = true;
+		static bool showViewport = true;
 		static bool showHierarcy = true;
 		static bool showConsole = true;
 		static bool showInspector = true;
@@ -154,7 +154,7 @@ namespace Polarity
 			}
 			if (ImGui::BeginMenu("View"))
 			{
-				if (ImGui::MenuItem("Scene", NULL, &showScene));
+				if (ImGui::MenuItem("Viewport", NULL, &showViewport));
 				if (ImGui::MenuItem("Hierarcy", NULL, &showHierarcy));
 				if (ImGui::MenuItem("Console", NULL, &showConsole));
 				if (ImGui::MenuItem("Inspector", NULL, &showInspector));
@@ -185,14 +185,25 @@ namespace Polarity
 			ImGui::EndMenuBar();
 		}
 
-		if (showScene)
+		if (showViewport)
 		{
-			ImGui::Begin("Scene");
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+			ImGui::Begin("Viewport");
+
+			ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+			if (m_viewportSize != *(glm::vec2*)&viewportSize)
+			{
+				m_framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+				m_viewportSize = { viewportSize.x, viewportSize.y };
+
+				m_cameraController.OnResize(viewportSize.x, viewportSize.y);
+			}
 			uint32_t textureID = m_framebuffer->GetColorAttachmentRendererID();
-			ImGui::Image((void*)textureID, ImVec2{ 1280.0f, 720.0f },
+			ImGui::Image((void*)textureID, ImVec2{ m_viewportSize.x, m_viewportSize.y },
 				{ 0,1 }, { 1,0 });
 
 			ImGui::End();
+			ImGui::PopStyleVar();
 		}
 		if (showHierarcy)
 		{

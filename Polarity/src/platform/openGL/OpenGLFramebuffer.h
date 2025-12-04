@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/renderer/Framebuffer.h"
+
 namespace Polarity
 {
 	class OpenGLFramebuffer : public Framebuffer
@@ -13,6 +14,8 @@ namespace Polarity
 
 		virtual void Bind() override;
 		virtual void Unbind() override;
+
+		void Resize(uint32_t width, uint32_t height) override;
 
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { return m_ColorAttachment; }
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }

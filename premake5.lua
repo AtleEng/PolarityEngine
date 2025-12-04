@@ -1,7 +1,7 @@
 
 workspace "Polarity"
     architecture "x64"
-    startproject "Sandbox"
+    startproject "PolarityEditor"
 
     configurations
     {
