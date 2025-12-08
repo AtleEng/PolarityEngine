@@ -26,10 +26,10 @@ namespace Polarity {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		inline Window& GetWindow() { return *m_window; }
+		Window& GetWindow() { return *m_window; }
 
-		inline static Application& Get() { return *s_instance; }
-		inline ImGuiLayer& GetImGuiLayer() { return *m_imGuiLayer; }
+		static Application& Get() { return *s_instance; }
+		ImGuiLayer& GetImGuiLayer() { return *m_imGuiLayer; }
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
@@ -37,12 +37,12 @@ namespace Polarity {
 
 	private:           
 		std::unique_ptr<Window> m_window;
-		ImGuiLayer* m_imGuiLayer;
 
 		bool m_running = true;
 		bool m_minimized = false;
 
 		LayerStack m_layerStack;
+		ImGuiLayer* m_imGuiLayer;
 
 		float m_lastFrameTime = 0.0f;
 

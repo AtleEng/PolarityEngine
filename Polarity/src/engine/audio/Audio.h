@@ -31,6 +31,7 @@ namespace Polarity {
 
 		friend class Audio;
 	};
+
 	class Audio
 	{
 	public:
@@ -38,9 +39,20 @@ namespace Polarity {
 
 		static Ref<AudioSource> Create(const std::string& filePath);
 
+		// Play
 		static void Play(const Ref<AudioSource>& source);
+
+		//Stop
 		static void Stop(const Ref<AudioSource>& source);
+
+		// Master volume
+		static void  SetMasterVolume(float volume);
+		static float GetMasterVolume();
+		static void  MuteMasterVolume(bool enable);
 	private:
 		static ma_engine s_engine;
+
+		static float s_MasterVolume;
+		static bool s_IsMuted;
 	};
 }

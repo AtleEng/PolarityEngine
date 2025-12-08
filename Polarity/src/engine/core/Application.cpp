@@ -63,11 +63,11 @@ namespace Polarity {
 
 		for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
 		{
-			(*--i)->OnEvent(e);
 			if (e.handled)
 			{
 				break;
 			}
+			(*--i)->OnEvent(e);
 		}
 	}
 

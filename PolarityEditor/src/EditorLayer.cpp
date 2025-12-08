@@ -47,8 +47,8 @@ namespace Polarity
 		POLARITY_PROFILE_FUNCTION();
 
 		Renderer2D::ResetStats();
-
-		m_cameraController.OnUpdate(tS);
+		if (m_ViewportFocused)
+			m_cameraController.OnUpdate(tS);
 
 		//------------ Render --------------------------------------
 		{
@@ -87,6 +87,8 @@ namespace Polarity
 	void EditorLayer::OnImGuiRender()
 	{
 		POLARITY_PROFILE_FUNCTION();
+
+		static float volume = 1;
 
 		static bool showViewport = true;
 		static bool showHierarcy = true;
@@ -139,6 +141,8 @@ namespace Polarity
 				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("New TODO"));
+				if (ImGui::MenuItem("Open TODO"));
 				if (ImGui::MenuItem("Build TODO"));
 				ImGui::Separator();
 				if (ImGui::MenuItem("Exit")) Application::Get().Shutdown();
@@ -188,7 +192,11 @@ namespace Polarity
 		if (showViewport)
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+
 			ImGui::Begin("Viewport");
+			m_ViewportFocused = ImGui::IsWindowFocused();
+			m_ViewportHovered = ImGui::IsWindowHovered();
+			Application::Get().GetImGuiLayer().BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
 			ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 			if (m_viewportSize != *(glm::vec2*)&viewportSize)
@@ -215,11 +223,19 @@ namespace Polarity
 		{
 			ImGui::Begin("Console");
 
+			ImGui::DragFloat("Volume", &volume, 0.01f, 0.00f, 1.00f);
+			Audio::SetMasterVolume(volume);
+
 			ImGui::End();
 		}
 		if (showInspector)
 		{
+			static char textBuffer[256] = "";
+
 			ImGui::Begin("Inspector");
+			ImGui::Text("Name of entity");
+			ImGui::Separator();
+			ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
 
 			ImGui::End();
 		}
@@ -296,7 +312,6 @@ namespace Polarity
 	{
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(POLARITY_BIND_EVENT_FN(OnKeyPressedEvent));
-
 		m_cameraController.OnEvent(event);
 	}
 

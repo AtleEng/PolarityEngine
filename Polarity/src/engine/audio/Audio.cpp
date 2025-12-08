@@ -7,6 +7,8 @@
 namespace Polarity
 {
 	ma_engine Audio::s_engine;
+	float Audio::s_MasterVolume = 1;
+	bool Audio::s_IsMuted = false;
 
 	//=== AudioSource =================================================================================//
 	AudioSource::AudioSource(ma_engine *pEngine, const std::string& filePath)
@@ -64,6 +66,23 @@ namespace Polarity
 
 		LOG_INFO("Creating AudioSource: %s", filePath.c_str());
 		return CreateRef<AudioSource>(&s_engine ,filePath);
+	}
+
+	void Audio::SetMasterVolume(float volume)
+	{
+		s_MasterVolume = volume;
+		ma_engine_set_volume(&s_engine, volume);
+	}
+
+	float Audio::GetMasterVolume()
+	{
+		return s_MasterVolume;
+	}
+
+	void Audio::MuteMasterVolume(bool enable)
+	{
+		s_IsMuted = enable;
+		ma_engine_set_volume(&s_engine, enable ? 0.0f : s_MasterVolume);
 	}
 
 	void Audio::Play(const Ref<AudioSource>& source)

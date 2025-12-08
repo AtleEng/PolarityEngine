@@ -10,11 +10,40 @@ void Polarity::CamController::OnUpdate(Timestep ts)
 {
 	POLARITY_PROFILE_FUNCTION();
 
+	static float currentCamSpeed = 1.0f;
+	static float camSpeed = 1.0f;
+	static float fastCamSpeed = 2.5f;
+	if (Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift))
+	{
+		currentCamSpeed = fastCamSpeed;
+	}
+	else
+	{
+		currentCamSpeed = camSpeed;
+	}
+
 	if (Input::IsKeyPressed(Key::R))
 	{
 		m_camPos = glm::vec3(0.0f);
 		m_zoomLevel = 1;
 		m_camera.SetProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+	}
+
+	if (Input::IsKeyPressed(Key::W))
+	{
+		m_camPos.y += currentCamSpeed * ts * m_zoomLevel;
+	}
+	if (Input::IsKeyPressed(Key::A))
+	{
+		m_camPos.x -= currentCamSpeed * ts * m_zoomLevel;
+	}
+	if (Input::IsKeyPressed(Key::S))
+	{
+		m_camPos.y -= currentCamSpeed * ts * m_zoomLevel;
+	}
+	if (Input::IsKeyPressed(Key::D))
+	{
+		m_camPos.x += currentCamSpeed * ts * m_zoomLevel;
 	}
 
 	if (Input::IsMouseButtonPressed(Mouse::Button2))
@@ -36,6 +65,7 @@ void Polarity::CamController::OnUpdate(Timestep ts)
 	{
 		m_camPos = origin - difference;
 	}
+
 	m_camera.SetPosition({ m_camPos });
 }
 
