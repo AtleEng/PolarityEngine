@@ -135,7 +135,6 @@ namespace Polarity {
 		}
 
 		m_minimized = false;
-		LOG_DEBUG("Window resized: (%f, %f)", e.GetWidth(), e.GetHeight())
-			return false;
+		return false;
 	}
 }

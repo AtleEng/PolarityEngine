@@ -6,7 +6,9 @@
 #include <iomanip>
 #include <sstream>
 
-const char* TextColorTable[TextColor::Count] =
+static std::vector<LogListener> g_Listeners;
+
+const char* TextColorTable[(int)TextColor::Count] =
 {
     "\x1b[30m",       // BLACK
     "\x1b[31m",       // RED
@@ -22,28 +24,38 @@ const char* TextColorTable[TextColor::Count] =
 };
 
 
-void _log(const char* prefix, TextColor textColor, const char* msg, ...)
+void _log(const char* prefix, TextColor textColor, bool shouldNotify, const char* msg, ...)
 {
     POLARITY_PROFILE_FUNCTION();
 
-    char textBuffer[8192] = {};
+    char messageBuffer[4096];
 
     va_list args;
     va_start(args, msg);
-
-    // Combine prefix and color with the user format string
-    snprintf(textBuffer, sizeof(textBuffer), "%s%s %s%s %s", TextColorTable[(int)TextColor::White], GetTimeString().c_str(), TextColorTable[(int)textColor], prefix, TextColorTable[(int)TextColor::White]);
-
-    // Append the user-provided formatted string
-    size_t len = strlen(textBuffer);
-    vsnprintf(textBuffer + len, sizeof(textBuffer) - len, msg, args);
-
+    vsnprintf(messageBuffer, sizeof(messageBuffer), msg, args);
     va_end(args);
 
-    // Reset color
-    strcat_s(textBuffer, "\033[0m");
+    LogEvent event;
+    event.color = textColor;
+    event.prefix = prefix;
+    event.message = messageBuffer;
+    event.time = GetTimeString();
 
-    puts(textBuffer);
+    // Console formatting
+    printf("%s%s %s%s%s %s\033[0m\n",
+        TextColorTable[(int)TextColor::White],
+        event.time.c_str(),
+        TextColorTable[(int)textColor],
+        event.prefix.c_str(),
+        TextColorTable[(int)TextColor::White],
+        event.message.c_str()
+    );
+
+    if (shouldNotify)
+    {
+        for (auto& listener : g_Listeners)
+            listener(event);
+    }
 }
 
 std::string GetTimeString()
@@ -67,5 +79,15 @@ std::string GetTimeString()
         << '.' << std::setw(3) << std::setfill('0') << ms.count();
 
     return ss.str();
+}
+
+void AddLogListener(LogListener listener)
+{
+    g_Listeners.push_back(listener);
+}
+
+void RemoveLogListener(LogListener listener)
+{
+    g_Listeners.erase(std::remove(g_Listeners.begin(), g_Listeners.end(), listener));
 }
 

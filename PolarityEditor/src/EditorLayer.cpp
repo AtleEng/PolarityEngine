@@ -7,8 +7,123 @@
 
 namespace Polarity
 {
+	struct EditorLog
+	{
+		ImGuiTextBuffer     Buf;
+		ImGuiTextFilter     Filter;
+		ImVector<int>       LineOffsets; // Index to lines offset. We maintain this with AddLog() calls.
+		bool                AutoScroll;  // Keep scrolling if already at the bottom.
+
+		EditorLog()
+		{
+			AutoScroll = true;
+			Clear();
+		}
+
+		void Clear()
+		{
+			Buf.clear();
+			LineOffsets.clear();
+			LineOffsets.push_back(0);
+		}
+
+		void AddLog(const char* fmt, ...) IM_FMTARGS(2)
+		{
+			int old_size = Buf.size();
+			va_list args;
+			va_start(args, fmt);
+			Buf.appendfv(fmt, args);
+			va_end(args);
+			for (int new_size = Buf.size(); old_size < new_size; old_size++)
+				if (Buf[old_size] == '\n')
+					LineOffsets.push_back(old_size + 1);
+		}
+
+		void Draw(const char* title, bool* p_open = NULL)
+		{
+			if (!ImGui::Begin(title, p_open))
+			{
+				ImGui::End();
+				return;
+			}
+
+			// Options menu
+			if (ImGui::BeginPopup("Options"))
+			{
+				ImGui::Checkbox("Auto-scroll", &AutoScroll);
+				ImGui::Checkbox("Show Time TODO", &AutoScroll);
+				ImGui::EndPopup();
+			}
+
+			// Main window
+			if (ImGui::Button("Options"))
+				ImGui::OpenPopup("Options");
+			ImGui::SameLine();
+			bool clear = ImGui::Button("Clear");
+			ImGui::SameLine();
+			bool copy = ImGui::Button("Copy");
+			ImGui::SameLine();
+			Filter.Draw("Filter", -100.0f);
+
+			ImGui::Separator();
+
+			if (ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar))
+			{
+				if (clear)
+					Clear();
+				if (copy)
+					ImGui::LogToClipboard();
+
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+				const char* buf = Buf.begin();
+				const char* buf_end = Buf.end();
+				if (Filter.IsActive())
+				{
+					for (int line_no = 0; line_no < LineOffsets.Size; line_no++)
+					{
+						const char* line_start = buf + LineOffsets[line_no];
+						const char* line_end = (line_no + 1 < LineOffsets.Size) ? (buf + LineOffsets[line_no + 1] - 1) : buf_end;
+						if (Filter.PassFilter(line_start, line_end))
+							ImGui::TextUnformatted(line_start, line_end);
+					}
+				}
+				else
+				{
+					ImGuiListClipper clipper;
+					clipper.Begin(LineOffsets.Size);
+					while (clipper.Step())
+					{
+						for (int line_no = clipper.DisplayStart; line_no < clipper.DisplayEnd; line_no++)
+						{
+							const char* line_start = buf + LineOffsets[line_no];
+							const char* line_end = (line_no + 1 < LineOffsets.Size) ? (buf + LineOffsets[line_no + 1] - 1) : buf_end;
+							ImGui::TextUnformatted(line_start, line_end);
+						}
+					}
+					clipper.End();
+				}
+				ImGui::PopStyleVar();
+
+				if (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+					ImGui::SetScrollHereY(1.0f);
+			}
+			ImGui::EndChild();
+			ImGui::End();
+		}
+	};
+
+	static EditorLog g_EditorLog;
+
+	void EditorLog_Listener(const LogEvent& e)
+	{
+		g_EditorLog.AddLog("%s %s %s\n",
+			e.prefix.c_str(),
+			e.time.c_str(),
+			e.message.c_str());
+	}
+
 	EditorLayer::EditorLayer()
-		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f)
+		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_viewportSize(1280, 720)
 	{
 	}
 
@@ -20,6 +135,8 @@ namespace Polarity
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
+
+		AddLogListener(EditorLog_Listener);
 
 
 		m_atlasTex = Texture2D::Create("assets/textures/tileAtlas.png");
@@ -98,7 +215,7 @@ namespace Polarity
 		static bool showProfiler = false;
 
 		static bool enable = true;
-		ImGui::ShowDemoWindow(&enable);
+		//ImGui::ShowDemoWindow(&enable);
 
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
@@ -221,12 +338,7 @@ namespace Polarity
 		}
 		if (showConsole)
 		{
-			ImGui::Begin("Console");
-
-			ImGui::DragFloat("Volume", &volume, 0.01f, 0.00f, 1.00f);
-			Audio::SetMasterVolume(volume);
-
-			ImGui::End();
+			g_EditorLog.Draw("Console");
 		}
 		if (showInspector)
 		{
@@ -236,6 +348,9 @@ namespace Polarity
 			ImGui::Text("Name of entity");
 			ImGui::Separator();
 			ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
+
+			ImGui::DragFloat("Volume", &volume, 0.01f, 0.00f, 1.00f);
+			Audio::SetMasterVolume(volume);
 
 			ImGui::End();
 		}
@@ -324,5 +439,4 @@ namespace Polarity
 		}
 		return false;
 	}
-
 }
