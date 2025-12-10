@@ -22,6 +22,13 @@ namespace Polarity
 		bool OnKeyPressedEvent(KeyPressedEvent& event);
 
 	private:
+		void ShowViewport  ();
+		void ShowHierarcy  ();
+		void ShowConsole   ();
+		void ShowInspector ();
+		void ShowAssets	   ();
+		void ShowProfiler  ();
+	private:
 		CamController  m_cameraController;
 		ShaderLibrary  m_shaderLibrary;
 

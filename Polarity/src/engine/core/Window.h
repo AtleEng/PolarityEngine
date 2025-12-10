@@ -1,6 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "../events/Event.h"
+#include <glm/glm.hpp>
 
 namespace Polarity {
 
@@ -10,10 +11,13 @@ namespace Polarity {
 		uint32_t Width;
 		uint32_t Height;
 
+		bool Decorated;
+
 		WindowProps(const std::string& title = "Polarity Engine",
 			uint32_t width = 1280,
-			uint32_t height = 720)
-			: Title(title), Width(width), Height(height)
+			uint32_t height = 720,
+			bool decorated = true)
+			: Title(title), Width(width), Height(height), Decorated(decorated)
 		{}
 	};
 
@@ -28,6 +32,9 @@ namespace Polarity {
 
 		virtual unsigned int GetWidth() const = 0;
 		virtual unsigned int GetHeight() const = 0;
+
+		virtual glm::vec2 GetPosition() = 0;
+		virtual void SetPosition(glm::vec2 pos) = 0;
 
 		//attribs
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;

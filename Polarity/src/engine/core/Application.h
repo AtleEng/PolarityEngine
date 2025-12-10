@@ -15,7 +15,7 @@ namespace Polarity {
 	class Application
 	{
 	public:
-		Application(const std::string& name = "App");
+		Application(const WindowProps props = WindowProps("App"));
 		virtual ~Application();
 
 		void Run();

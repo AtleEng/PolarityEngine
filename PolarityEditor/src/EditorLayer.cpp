@@ -51,7 +51,6 @@ namespace Polarity
 			if (ImGui::BeginPopup("Options"))
 			{
 				ImGui::Checkbox("Auto-scroll", &AutoScroll);
-				ImGui::Checkbox("Show Time TODO", &AutoScroll);
 				ImGui::EndPopup();
 			}
 
@@ -205,8 +204,6 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		static float volume = 1;
-
 		static bool showViewport = true;
 		static bool showHierarcy = true;
 		static bool showConsole = true;
@@ -214,213 +211,102 @@ namespace Polarity
 		static bool showAssets = true;
 		static bool showProfiler = false;
 
-		static bool enable = true;
-		//ImGui::ShowDemoWindow(&enable);
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
 
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | 
+			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | 
+			ImGuiWindowFlags_MenuBar;
 
-		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		// because it would be confusing to have two docking targets within each others.
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
 
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowPos({ viewport->WorkPos.x,  viewport->WorkPos.y});
 		ImGui::SetNextWindowSize(viewport->WorkSize);
 		ImGui::SetNextWindowViewport(viewport->ID);
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-			window_flags |= ImGuiWindowFlags_NoBackground;
-
-
-
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("DockSpace", &enable, window_flags);
-
-		ImGui::PopStyleVar();
-		ImGui::PopStyleVar(2);
-
-		// Submit the DockSpace
-		ImGuiIO& io = ImGui::GetIO();
-		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		ImGui::PushStyleVar(ImGuiStyleVar_TabRounding, 1.0f);
+		if (ImGui::Begin("DockSpace", nullptr, window_flags))
 		{
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 4.0f));
+
+			if (ImGui::BeginMenuBar())
+			{
+				float titleHeight = 24.0f;
+
+				uint32_t texID = m_logoTex->GetRendererID();
+				ImGui::Image((void*)texID, ImVec2{ titleHeight, titleHeight },
+					ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+				if (ImGui::BeginMenu("File"))
+				{
+					if (ImGui::MenuItem("New Scene TODO"));
+					if (ImGui::MenuItem("Open... TODO"));
+					if (ImGui::MenuItem("Build Game TODO"));
+					ImGui::Separator();
+					if (ImGui::MenuItem("Quit")) Application::Get().Shutdown();
+
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu("Edit"))
+				{
+					if (ImGui::MenuItem("Project Settings TODO"));
+					if (ImGui::MenuItem("Editor Settings TODO"));
+
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu("View"))
+				{
+					if (ImGui::MenuItem("Viewport", NULL, &showViewport));
+					if (ImGui::MenuItem("Hierarcy", NULL, &showHierarcy));
+					if (ImGui::MenuItem("Console", NULL, &showConsole));
+					if (ImGui::MenuItem("Inspector", NULL, &showInspector));
+					if (ImGui::MenuItem("Assets", NULL, &showAssets));
+					if (ImGui::MenuItem("Profiler", NULL, &showProfiler));
+					ImGui::Separator();
+					if (ImGui::MenuItem("Reset Layout")); //TODO
+
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu("Tools"))
+				{
+					if (ImGui::MenuItem("?"));
+
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu("Create"))
+				{
+					if (ImGui::MenuItem("?"));
+
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
+			ImGui::PopStyleVar();
+
+
+			// Submit the DockSpace
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-		}
 
-		if (ImGui::BeginMenuBar())
-		{
-			uint32_t texID = m_logoTex->GetRendererID();
-			ImGui::Image((void*)texID, ImVec2{ 20, 20 },
-				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("New TODO"));
-				if (ImGui::MenuItem("Open TODO"));
-				if (ImGui::MenuItem("Build TODO"));
-				ImGui::Separator();
-				if (ImGui::MenuItem("Exit")) Application::Get().Shutdown();
+			ImGui::ShowDemoWindow();
 
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Edit"))
-			{
-				if (ImGui::MenuItem("Project Settings TODO"));
-				if (ImGui::MenuItem("Editor Settings TODO"));
-
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("View"))
-			{
-				if (ImGui::MenuItem("Viewport", NULL, &showViewport));
-				if (ImGui::MenuItem("Hierarcy", NULL, &showHierarcy));
-				if (ImGui::MenuItem("Console", NULL, &showConsole));
-				if (ImGui::MenuItem("Inspector", NULL, &showInspector));
-				if (ImGui::MenuItem("Assets", NULL, &showAssets));
-				if (ImGui::MenuItem("Profiler", NULL, &showProfiler));
-				ImGui::Separator();
-				if (ImGui::MenuItem("Reset Layout")); //Layout...
-
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Tools"))
-			{
-				if (ImGui::MenuItem("?"));
-
-				ImGui::EndMenu();
-			}
-			if (ImGui::BeginMenu("Create"))
-			{
-				if (ImGui::MenuItem("?"));
-				if (ImGui::MenuItem("?"));
-				if (ImGui::MenuItem("?"));
-				if (ImGui::MenuItem("?"));
-				if (ImGui::MenuItem("?"));
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenuBar();
-		}
-
-		if (showViewport)
-		{
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-
-			ImGui::Begin("Viewport");
-			m_ViewportFocused = ImGui::IsWindowFocused();
-			m_ViewportHovered = ImGui::IsWindowHovered();
-			Application::Get().GetImGuiLayer().BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
-
-			ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-			if (m_viewportSize != *(glm::vec2*)&viewportSize)
-			{
-				m_framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-				m_viewportSize = { viewportSize.x, viewportSize.y };
-
-				m_cameraController.OnResize(viewportSize.x, viewportSize.y);
-			}
-			uint32_t textureID = m_framebuffer->GetColorAttachmentRendererID();
-			ImGui::Image((void*)textureID, ImVec2{ m_viewportSize.x, m_viewportSize.y },
-				{ 0,1 }, { 1,0 });
-
-			ImGui::End();
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(5.0f, 5.0f));
+			if (showViewport) { ShowViewport(); }
+			if (showHierarcy) { ShowHierarcy(); }
+			if (showConsole) { ShowConsole(); }
+			if (showInspector) { ShowInspector(); }
+			if (showAssets) { ShowAssets(); }
+			if (showProfiler) { ShowProfiler(); }
 			ImGui::PopStyleVar();
-		}
-		if (showHierarcy)
-		{
-			ImGui::Begin("Hierarcy");
 
 			ImGui::End();
 		}
-		if (showConsole)
-		{
-			g_EditorLog.Draw("Console");
-		}
-		if (showInspector)
-		{
-			static char textBuffer[256] = "";
-
-			ImGui::Begin("Inspector");
-			ImGui::Text("Name of entity");
-			ImGui::Separator();
-			ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
-
-			ImGui::DragFloat("Volume", &volume, 0.01f, 0.00f, 1.00f);
-			Audio::SetMasterVolume(volume);
-
-			ImGui::End();
-		}
-		if (showAssets)
-		{
-			ImGui::Begin("Assets");
-
-			ImGui::End();
-		}
-
-		if (showProfiler)
-		{
-			ImGuiIO& io = ImGui::GetIO();
-			ImGuiWindowFlags window_flags =
-				ImGuiWindowFlags_NoDecoration |
-				ImGuiWindowFlags_NoDocking |
-				ImGuiWindowFlags_AlwaysAutoResize |
-				ImGuiWindowFlags_NoSavedSettings |
-				ImGuiWindowFlags_NoFocusOnAppearing |
-				ImGuiWindowFlags_NoNav |
-				ImGuiWindowFlags_NoMove;
-
-			const float PAD = 10.0f;
-			const ImGuiViewport* viewport = ImGui::GetMainViewport();
-
-			ImVec2 window_pos = ImVec2(
-				viewport->WorkPos.x + viewport->WorkSize.x - PAD,
-				viewport->WorkPos.y + PAD
-			);
-
-			ImVec2 window_pos_pivot = ImVec2(1.0f, 0.0f);
-
-			ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::SetNextWindowBgAlpha(0.45f);
-
-			ImGui::SetNextWindowSize(ImVec2(160.0f, 0.0f));
-
-			ImGui::Begin("Performance", nullptr, window_flags);
-
-			// Title
-			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0.85f, 0.4f, 1));
-			ImGui::Text("PERFORMANCE");
-			ImGui::PopStyleColor();
-			ImGui::Separator();
-			ImGui::Spacing();
-
-			// CPU
-			ImGui::Text("CPU");
-			ImGui::Spacing();
-
-			ImGui::Text("FPS        %.1f", io.Framerate);
-			ImGui::Text("Delta Time %.4f", io.DeltaTime);
-
-			// Renderer
-			Renderer2D::Statistics stats = Renderer2D::GetStats();
-
-			ImGui::Separator();
-			ImGui::Text("Renderer");
-			ImGui::Spacing();
-
-			ImGui::Text("Draw Calls %d", stats.DrawCalls);
-			ImGui::Text("Quads %d", stats.QuadCount);
-			ImGui::Text("Vertices %d", stats.GetTotalVertexCount());
-			ImGui::Text("Indices %d", stats.GetTotalIndexCount());
-
-			ImGui::End();
-		}
-
-		ImGui::End();
+		ImGui::PopStyleVar(4);
 	}
 
 	void EditorLayer::OnEvent(Event& event)
@@ -438,5 +324,105 @@ namespace Polarity
 			Audio::Play(m_clickSound);
 		}
 		return false;
+	}
+
+	void EditorLayer::ShowViewport()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+
+		ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoCollapse);
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer().BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (m_viewportSize != *(glm::vec2*)&viewportSize)
+		{
+			m_framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+			m_viewportSize = { viewportSize.x, viewportSize.y };
+
+			m_cameraController.OnResize(viewportSize.x, viewportSize.y);
+		}
+		uint32_t textureID = m_framebuffer->GetColorAttachmentRendererID();
+		ImGui::Image((void*)textureID, ImVec2{ m_viewportSize.x, m_viewportSize.y },
+			{ 0,1 }, { 1,0 });
+
+		ImGui::End();
+		ImGui::PopStyleVar();
+	}
+
+	void EditorLayer::ShowHierarcy()
+	{
+		ImGui::Begin("Hierarcy", nullptr);
+
+		ImGui::End();
+	}
+
+	void EditorLayer::ShowConsole()
+	{
+		g_EditorLog.Draw("Console");
+	}
+
+	void EditorLayer::ShowInspector()
+	{
+		static char textBuffer[256] = "";
+		static glm::vec2 pos;
+
+		ImGui::Begin("Inspector", nullptr);
+		ImGui::Text("Name of entity");
+		ImGui::Separator();
+		ImGui::DragFloat2("Position", glm::value_ptr(pos), 0.1f);
+		ImGui::DragFloat2("Size", glm::value_ptr(pos), 0.1f);
+		ImGui::DragFloat("Rotation", glm::value_ptr(pos), 0.1f);
+		/*
+		ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
+
+		ImGui::DragFloat("Volume", &volume, 0.01f, 0.00f, 1.00f);
+		Audio::SetMasterVolume(volume);
+		*/
+
+		ImGui::End();
+	}
+
+	void EditorLayer::ShowAssets()
+	{
+		ImGui::Begin("Assets", nullptr);
+
+		ImGui::End();
+	}
+
+	void EditorLayer::ShowProfiler()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		
+		ImGui::Begin("Profiler");
+
+		// Title
+		ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1, 0.85f, 0.4f, 1));
+		ImGui::Text("PERFORMANCE");
+		ImGui::PopStyleColor();
+		ImGui::Separator();
+		ImGui::Spacing();
+
+		// CPU
+		ImGui::Text("CPU");
+		ImGui::Spacing();
+
+		ImGui::Text("FPS        %.1f", io.Framerate);
+		ImGui::Text("Delta Time %.4f", io.DeltaTime);
+
+		// Renderer
+		Renderer2D::Statistics stats = Renderer2D::GetStats();
+
+		ImGui::Separator();
+		ImGui::Text("Renderer");
+		ImGui::Spacing();
+
+		ImGui::Text("Draw Calls %d", stats.DrawCalls);
+		ImGui::Text("Quads %d", stats.QuadCount);
+		ImGui::Text("Vertices %d", stats.GetTotalVertexCount());
+		ImGui::Text("Indices %d", stats.GetTotalIndexCount());
+
+		ImGui::End();
 	}
 }

@@ -54,6 +54,9 @@ namespace Polarity
 			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
 				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 		#endif
+			if(!props.Decorated)
+				glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
 			m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
@@ -169,6 +172,18 @@ namespace Polarity
 		POLARITY_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_context->SwapBuffers();
+	}
+
+	glm::vec2 WindowsWindow::GetPosition()
+	{
+		int x, y;
+		glfwGetWindowPos(m_window, &x, &y);
+		return glm::vec2(x, y);
+	}
+
+	void WindowsWindow::SetPosition(glm::vec2 pos)
+	{
+		glfwSetWindowPos(m_window, pos.x, pos.y);
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
