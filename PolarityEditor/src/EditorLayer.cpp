@@ -221,6 +221,68 @@ namespace Polarity
 			ImGuiWindowFlags_MenuBar;
 
 		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
+		style.FrameRounding = 2;
+		style.GrabRounding = 5;
+		style.FrameBorderSize = 1;
+		style.ChildBorderSize = 0;
+		ImVec4* colors = ImGui::GetStyle().Colors;
+		colors[ImGuiCol_Text] = ImVec4(0.86f, 0.86f, 0.86f, 1.00f);
+		colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+		colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.06f, 0.06f, 1.00f);
+		colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+		colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
+		colors[ImGuiCol_Border] = ImVec4(0.23f, 0.23f, 0.23f, 0.50f);
+		colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+		colors[ImGuiCol_FrameBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.54f);
+		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.34f, 0.34f, 0.34f, 0.40f);
+		colors[ImGuiCol_FrameBgActive] = ImVec4(0.34f, 0.34f, 0.34f, 0.67f);
+		colors[ImGuiCol_TitleBg] = ImVec4(0.04f, 0.04f, 0.04f, 1.00f);
+		colors[ImGuiCol_TitleBgActive] = ImVec4(0.06f, 0.06f, 0.07f, 1.00f);
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
+		colors[ImGuiCol_MenuBarBg] = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
+		colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
+		colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
+		colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+		colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
+		colors[ImGuiCol_CheckMark] = ImVec4(0.31f, 0.55f, 0.33f, 1.00f);
+		colors[ImGuiCol_SliderGrab] = ImVec4(0.21f, 0.28f, 0.38f, 1.00f);
+		colors[ImGuiCol_SliderGrabActive] = ImVec4(0.26f, 0.37f, 0.50f, 1.00f);
+		colors[ImGuiCol_Button] = ImVec4(0.20f, 0.25f, 0.30f, 0.40f);
+		colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.29f, 0.35f, 1.00f);
+		colors[ImGuiCol_ButtonActive] = ImVec4(0.21f, 0.24f, 0.27f, 1.00f);
+		colors[ImGuiCol_Header] = ImVec4(0.20f, 0.18f, 0.24f, 0.31f);
+		colors[ImGuiCol_HeaderHovered] = ImVec4(0.19f, 0.21f, 0.23f, 0.80f);
+		colors[ImGuiCol_HeaderActive] = ImVec4(0.15f, 0.17f, 0.20f, 1.00f);
+		colors[ImGuiCol_Separator] = ImVec4(0.12f, 0.12f, 0.14f, 0.50f);
+		colors[ImGuiCol_SeparatorHovered] = ImVec4(0.30f, 0.32f, 0.34f, 0.78f);
+		colors[ImGuiCol_SeparatorActive] = ImVec4(0.28f, 0.34f, 0.40f, 1.00f);
+		colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.20f);
+		colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+		colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
+		colors[ImGuiCol_Tab] = ImVec4(0.07f, 0.08f, 0.08f, 0.86f);
+		colors[ImGuiCol_TabHovered] = ImVec4(0.15f, 0.17f, 0.19f, 0.80f);
+		colors[ImGuiCol_TabActive] = ImVec4(0.11f, 0.13f, 0.15f, 1.00f);
+		colors[ImGuiCol_TabUnfocused] = ImVec4(0.10f, 0.12f, 0.15f, 0.97f);
+		colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.08f, 0.08f, 0.09f, 1.00f);
+		colors[ImGuiCol_DockingPreview] = ImVec4(0.33f, 0.34f, 0.36f, 0.70f);
+		colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
+		colors[ImGuiCol_PlotLines] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
+		colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
+		colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+		colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+		colors[ImGuiCol_TableHeaderBg] = ImVec4(0.19f, 0.19f, 0.20f, 1.00f);
+		colors[ImGuiCol_TableBorderStrong] = ImVec4(0.31f, 0.31f, 0.35f, 1.00f);
+		colors[ImGuiCol_TableBorderLight] = ImVec4(0.23f, 0.23f, 0.25f, 1.00f);
+		colors[ImGuiCol_TableRowBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+		colors[ImGuiCol_TableRowBgAlt] = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
+		colors[ImGuiCol_TextSelectedBg] = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
+		colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
+		colors[ImGuiCol_NavHighlight] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+		colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+		colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+		colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+
+
 
 		ImGui::SetNextWindowPos({ viewport->WorkPos.x,  viewport->WorkPos.y});
 		ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -233,7 +295,7 @@ namespace Polarity
 		if (ImGui::Begin("DockSpace", nullptr, window_flags))
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 4.0f));
-
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4.0f, 8.0f));
 			if (ImGui::BeginMenuBar())
 			{
 				float titleHeight = 24.0f;
@@ -286,7 +348,7 @@ namespace Polarity
 				}
 				ImGui::EndMenuBar();
 			}
-			ImGui::PopStyleVar();
+			ImGui::PopStyleVar(2);
 
 
 			// Submit the DockSpace
@@ -295,6 +357,7 @@ namespace Polarity
 
 			ImGui::ShowDemoWindow();
 
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1.0f, 2.0f));
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(5.0f, 5.0f));
 			if (showViewport) { ShowViewport(); }
 			if (showHierarcy) { ShowHierarcy(); }
@@ -302,7 +365,8 @@ namespace Polarity
 			if (showInspector) { ShowInspector(); }
 			if (showAssets) { ShowAssets(); }
 			if (showProfiler) { ShowProfiler(); }
-			ImGui::PopStyleVar();
+			
+			ImGui::PopStyleVar(2);
 
 			ImGui::End();
 		}
@@ -371,16 +435,38 @@ namespace Polarity
 		ImGui::Begin("Inspector", nullptr);
 		ImGui::Text("Name of entity");
 		ImGui::Separator();
-		ImGui::DragFloat2("Position", glm::value_ptr(pos), 0.1f);
-		ImGui::DragFloat2("Size", glm::value_ptr(pos), 0.1f);
-		ImGui::DragFloat("Rotation", glm::value_ptr(pos), 0.1f);
-		/*
-		ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
+		if (ImGui::BeginTabBar("Components"))
+		{
+			if (ImGui::BeginTabItem("Transform"))
+			{
+			ImGui::DragFloat2("Position", glm::value_ptr(pos), 0.1f);
+			ImGui::DragFloat2("Size", glm::value_ptr(pos), 0.1f);
+			ImGui::DragFloat("Rotation", glm::value_ptr(pos), 0.1f);
+			ImGui::Separator();
+			ImGui::EndTabItem();
+			}
 
-		ImGui::DragFloat("Volume", &volume, 0.01f, 0.00f, 1.00f);
-		Audio::SetMasterVolume(volume);
-		*/
+			if (ImGui::BeginTabItem("Audio"))
+			{
+			ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
+			ImGui::SliderFloat("Volume", glm::value_ptr(pos), 0.00f, 1.00f);
+			ImGui::Separator();
+			ImGui::EndTabItem();
+			}
 
+			if (ImGui::BeginTabItem("Sprite"))
+			{
+				ImGui::InputText("Texture", textBuffer, IM_ARRAYSIZE(textBuffer));
+				static float scale;
+				ImGui::DragFloat("Scale", &scale, 0.1f);
+				static glm::vec4 color;
+				ImGui::ColorEdit4("Tint", glm::value_ptr(color));
+
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
+		}
 		ImGui::End();
 	}
 
