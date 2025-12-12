@@ -122,7 +122,7 @@ namespace Polarity
 	}
 
 	EditorLayer::EditorLayer()
-		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_viewportSize(1280, 720)
+		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_viewportSize(1280, 720), m_Scene(CreateRef<Scene>())
 	{
 	}
 
@@ -418,6 +418,19 @@ namespace Polarity
 	void EditorLayer::ShowHierarcy()
 	{
 		ImGui::Begin("Hierarcy", nullptr);
+
+		if (ImGui::Button("Spawn"))
+		{
+			m_Scene->Spawn();
+		}
+		if (ImGui::Button("Kill"))
+		{
+			m_Scene->Kill(0); // WARNING
+		}
+		if (ImGui::Button("List"))
+		{
+			m_Scene->List();
+		}
 
 		ImGui::End();
 	}

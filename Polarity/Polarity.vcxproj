@@ -143,6 +143,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\ECS\ComponentManager.h" />
+    <ClInclude Include="src\engine\ECS\Registry.h" />
+    <ClInclude Include="src\engine\ECS\EntityManager.h" />
+    <ClInclude Include="src\engine\ECS\Types.h" />
+    <ClInclude Include="src\engine\scene\Scene.h" />
+    <ClInclude Include="src\engine\ECS\SystemManager.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\audio\Audio.h" />
     <ClInclude Include="src\engine\core\Application.h" />
@@ -203,6 +209,9 @@
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
     <ClCompile Include="src\engine\renderer\Texture.cpp" />
     <ClCompile Include="src\engine\renderer\VertexArray.cpp" />
+    <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
+    <ClCompile Include="src\engine\ECS\Registry.cpp" />
+    <ClCompile Include="src\engine\scene\Scene.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLFramebuffer.cpp" />

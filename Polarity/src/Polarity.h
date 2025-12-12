@@ -32,3 +32,6 @@
 
 // ----- ImGUI ----------------------------------
 #include "engine/imGui/ImGuiLayer.h"
+
+// ----- Scene -------------------------------
+#include "engine/scene/Scene.h"

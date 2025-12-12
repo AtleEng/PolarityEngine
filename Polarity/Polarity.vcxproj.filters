@@ -198,6 +198,12 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\scene\Scene.h" />
+    <ClInclude Include="src\engine\ECS\Registry.h" />
+    <ClInclude Include="src\engine\ECS\EntityManager.h" />
+    <ClInclude Include="src\engine\ECS\ComponentManager.h" />
+    <ClInclude Include="src\engine\ECS\SystemManager.h" />
+    <ClInclude Include="src\engine\ECS\Types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\audio\Audio.cpp">
@@ -290,5 +296,8 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scene\Scene.cpp" />
+    <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
+    <ClCompile Include="src\engine\ECS\Registry.cpp" />
   </ItemGroup>
 </Project>

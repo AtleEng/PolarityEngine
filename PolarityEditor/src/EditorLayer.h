@@ -43,5 +43,7 @@ namespace Polarity
 		bool m_ViewportHovered = false;
 		glm::vec2 m_viewportSize;
 		Ref<Framebuffer> m_framebuffer;
+
+		Ref<Scene> m_Scene;
 	};
 }
