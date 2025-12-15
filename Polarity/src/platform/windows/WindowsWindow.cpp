@@ -57,6 +57,9 @@ namespace Polarity
 			if(!props.Decorated)
 				glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
+			if(!props.Titlebar)
+				glfwWindowHint(GLFW_TITLEBAR, GLFW_FALSE);
+
 			m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}

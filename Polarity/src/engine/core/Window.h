@@ -12,12 +12,12 @@ namespace Polarity {
 		uint32_t Height;
 
 		bool Decorated;
+		bool Titlebar;
 
 		WindowProps(const std::string& title = "Polarity Engine",
-			uint32_t width = 1280,
-			uint32_t height = 720,
-			bool decorated = true)
-			: Title(title), Width(width), Height(height), Decorated(decorated)
+			uint32_t width = 1280, uint32_t height = 720,
+			bool decorated = true, bool titlebar = true)
+			: Title(title), Width(width), Height(height), Decorated(decorated), Titlebar(titlebar)
 		{}
 	};
 

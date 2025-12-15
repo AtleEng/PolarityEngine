@@ -70,6 +70,8 @@ namespace Polarity::ECS
 
 		T& GetData(Entity entity)
 		{
+			LOG_INFO("GetData: entity %d, index=%zu", entity, m_EntityToIndexArray[entity]);
+
 			if (entity >= MAX_ENTITIES || entity < 0)
 			{
 				LOG_ERROR("GetData() failed, invalid entity ID (entity:%d).", entity);
@@ -93,6 +95,23 @@ namespace Polarity::ECS
 			return m_ComponentArray[index];
 		}
 
+		bool HasComponent(Entity entity)
+		{
+			LOG_INFO("HasComponent: entity %d, index=%zu", entity, m_EntityToIndexArray[entity]);
+			if (m_EntityToIndexArray[entity] == INVALID_INDEX || entity >= MAX_ENTITIES || entity < 0)
+			{
+				return false;
+			}
+			size_t index = m_EntityToIndexArray[entity];
+			bool exists = (index < m_Size&& m_IndexToEntityArray[index] == entity);
+
+			if (!exists)
+			{
+				return false;
+			}
+			return true;
+		}
+
 		void EntityDestroyed(Entity entity) override
 		{
 			size_t index = m_EntityToIndexArray[entity];
@@ -104,6 +123,13 @@ namespace Polarity::ECS
 			}
 
 			RemoveData(entity);
+		}
+
+		size_t Size() const { return m_Size; }
+
+		const Entity* Entities() const
+		{
+			return m_IndexToEntityArray.data();
 		}
 
 	private:
@@ -145,6 +171,7 @@ namespace Polarity::ECS
 		template<typename T>
 		void AddComponent(Entity entity, T component)
 		{
+			LOG_INFO("AddComponent: entity %d", entity);
 			GetComponentArray<T>()->InsertData(entity, component);
 		}
 
@@ -160,6 +187,12 @@ namespace Polarity::ECS
 			return GetComponentArray<T>()->GetData(entity);
 		}
 
+		template<typename T>
+		bool HasComponent(Entity entity)
+		{
+			return GetComponentArray<T>()->HasComponent(entity);
+		}
+
 		void EntityDestroyed(Entity entity)
 		{
 			for (auto const& pair : m_ComponentArrays)
@@ -167,11 +200,6 @@ namespace Polarity::ECS
 				pair.second->EntityDestroyed(entity);
 			}
 		}
-
-	private:
-		std::unordered_map<const char*, ComponentType> m_ComponentTypes{};
-		std::unordered_map<const char*, std::shared_ptr<IComponentArray>> m_ComponentArrays{};
-		ComponentType m_NextComponentType{};
 
 		template<typename T>
 		std::shared_ptr<ComponentArray<T>> GetComponentArray()
@@ -186,5 +214,10 @@ namespace Polarity::ECS
 
 			return std::static_pointer_cast<ComponentArray<T>>(m_ComponentArrays[typeName]);
 		}
+
+	private:
+		std::unordered_map<const char*, ComponentType> m_ComponentTypes{};
+		std::unordered_map<const char*, std::shared_ptr<IComponentArray>> m_ComponentArrays{};
+		ComponentType m_NextComponentType{};	
 	};
 }

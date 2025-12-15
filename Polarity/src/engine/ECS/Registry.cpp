@@ -6,8 +6,8 @@ namespace Polarity::ECS
 
 	Registry::Registry()
 	{
-		m_EntityManager = CreateScope<EntityManager>();
-		m_ComponentManager = CreateScope<ComponentManager>();
+		m_EntityManager = EntityManager();
+		m_ComponentManager = ComponentManager();
 	}
 
 	Registry::~Registry()
@@ -16,18 +16,20 @@ namespace Polarity::ECS
 
 	Entity Registry::CreateEntity()
 	{
-		return m_EntityManager->CreateEntity();
+		return m_EntityManager.CreateEntity();
 	}
 
 	void Registry::DestroyEntity(Entity entity)
 	{
-		m_ComponentManager->EntityDestroyed(entity);
+		m_ComponentManager.EntityDestroyed(entity);
 
-		m_EntityManager->DestroyEntity(entity);
+		m_EntityManager.DestroyEntity(entity);
+
+		m_SystemManager.EntityDestroyed(entity);
 	}
 
 	int Registry::GetEntityAmount()
 	{
-		return m_EntityManager->GetEntityAmount();
+		return m_EntityManager.GetEntityAmount();
 	}
 }

@@ -181,6 +181,7 @@ namespace Polarity
 
 			Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
 
+			
 			int n = 5;
 
 			for (int x = 0; x < n; x++)
