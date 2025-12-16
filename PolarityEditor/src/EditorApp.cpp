@@ -9,7 +9,7 @@ namespace Polarity
 	{
 	public:
 		EditorApp()
-			: Application(WindowProps("Polarity Editor", 1280, 720, true))
+			: Application(WindowProps("Polarity Editor", 1280, 720, true, false))
 		{
 			POLARITY_PROFILE_FUNCTION();
 

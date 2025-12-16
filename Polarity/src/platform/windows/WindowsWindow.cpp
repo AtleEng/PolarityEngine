@@ -1,6 +1,10 @@
 #include "polpch.h"
 #include "WindowsWindow.h"
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+#include <windows.h>
+
 #include "engine/events/ApplicationEvent.h"
 #include "engine/events/KeyEvent.h"
 #include "engine/events/MouseEvent.h"
@@ -11,6 +15,7 @@
 namespace Polarity
 {
 	static uint8_t s_GLFWWindowCount = 0;
+
 
 	static void GLFWErrorCallback(int error, const char* msg)
 	{
@@ -50,15 +55,16 @@ namespace Polarity
 		{
 			POLARITY_PROFILE_SCOPE("glfwCreateWindow");
 
-		#if defined(POLARITY_DEBUG)
+#if defined(POLARITY_DEBUG)
 			if (Renderer::GetAPI() == RendererAPI::API::OpenGL)
 				glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-		#endif
-			if(!props.Decorated)
+#endif
+			if (!props.Decorated)
 				glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-
-			if(!props.Titlebar)
+			if (!props.Titlebar)
 				glfwWindowHint(GLFW_TITLEBAR, GLFW_FALSE);
+
+
 
 			m_window = glfwCreateWindow((int)props.Width, (int)props.Height, m_data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
@@ -144,7 +150,7 @@ namespace Polarity
 		glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xOffset, double yOffset)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			
+
 			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data.EventCallback(event);
 		});
@@ -195,7 +201,7 @@ namespace Polarity
 			glfwSwapInterval(1);
 		else
 			glfwSwapInterval(0);
-		
+
 		m_data.VSync = enabled;
 	}
 	bool WindowsWindow::IsVSync() const

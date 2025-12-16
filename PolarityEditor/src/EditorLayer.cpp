@@ -181,7 +181,7 @@ namespace Polarity
 
 			Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
 
-			
+
 			int n = 5;
 
 			for (int x = 0; x < n; x++)
@@ -216,10 +216,11 @@ namespace Polarity
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
 
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | 
-			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | 
-			ImGuiWindowFlags_MenuBar;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar;
 
 		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
 		style.FrameRounding = 2;
@@ -285,7 +286,7 @@ namespace Polarity
 
 
 
-		ImGui::SetNextWindowPos({ viewport->WorkPos.x,  viewport->WorkPos.y});
+		ImGui::SetNextWindowPos({ viewport->WorkPos.x,  viewport->WorkPos.y });
 		ImGui::SetNextWindowSize(viewport->WorkSize);
 		ImGui::SetNextWindowViewport(viewport->ID);
 
@@ -347,6 +348,51 @@ namespace Polarity
 
 					ImGui::EndMenu();
 				}
+
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0)); // Drag area 
+				float space = ImGui::GetContentRegionAvail().x - (32 * 3); // space minus buttons 
+				
+				ImGui::InvisibleButton("##DragZone", ImVec2(space, titleHeight));
+				
+				if (ImGui::IsItemHovered())
+					ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeAll);
+
+				static bool dragging = false;
+				static ImVec2 dragStartMouse;
+				static glm::ivec2 dragStartWindow;
+
+				if (ImGui::IsItemActive())
+				{
+					if (!dragging)
+					{
+						dragging = true;
+						dragStartMouse = ImGui::GetMousePos();
+						dragStartWindow = Application::Get().GetWindow().GetPosition();
+					}
+
+					ImVec2 mouseNow = ImGui::GetMousePos();
+					ImVec2 delta = { mouseNow.x - dragStartMouse.x + 4, mouseNow.y - dragStartMouse.y + 31 };
+
+					Application::Get().GetWindow().SetPosition({
+						dragStartWindow.x + (int)delta.x,
+						dragStartWindow.y + (int)delta.y
+						});
+				}
+				else
+				{
+					dragging = false;
+				}
+
+				// --- Window buttons --- 
+				if (ImGui::Button("-", { 32, titleHeight }))
+					LOG_DEBUG("Minimize!");
+				if (ImGui::Button("[]", { 32, titleHeight }))
+					LOG_DEBUG("Maximize!");
+				if (ImGui::Button("X", { 32, titleHeight }))
+					Application::Get().Shutdown();
+				
+				ImGui::PopStyleVar();
+
 				ImGui::EndMenuBar();
 			}
 			ImGui::PopStyleVar(2);
@@ -366,7 +412,7 @@ namespace Polarity
 			if (showInspector) { ShowInspector(); }
 			if (showAssets) { ShowAssets(); }
 			if (showProfiler) { ShowProfiler(); }
-			
+
 			ImGui::PopStyleVar(2);
 
 			ImGui::End();
@@ -453,19 +499,19 @@ namespace Polarity
 		{
 			if (ImGui::BeginTabItem("Transform"))
 			{
-			ImGui::DragFloat2("Position", glm::value_ptr(pos), 0.1f);
-			ImGui::DragFloat2("Size", glm::value_ptr(pos), 0.1f);
-			ImGui::DragFloat("Rotation", glm::value_ptr(pos), 0.1f);
-			ImGui::Separator();
-			ImGui::EndTabItem();
+				ImGui::DragFloat2("Position", glm::value_ptr(pos), 0.1f);
+				ImGui::DragFloat2("Size", glm::value_ptr(pos), 0.1f);
+				ImGui::DragFloat("Rotation", glm::value_ptr(pos), 0.1f);
+				ImGui::Separator();
+				ImGui::EndTabItem();
 			}
 
 			if (ImGui::BeginTabItem("Audio"))
 			{
-			ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
-			ImGui::SliderFloat("Volume", glm::value_ptr(pos), 0.00f, 1.00f);
-			ImGui::Separator();
-			ImGui::EndTabItem();
+				ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
+				ImGui::SliderFloat("Volume", glm::value_ptr(pos), 0.00f, 1.00f);
+				ImGui::Separator();
+				ImGui::EndTabItem();
 			}
 
 			if (ImGui::BeginTabItem("Sprite"))
@@ -494,7 +540,7 @@ namespace Polarity
 	void EditorLayer::ShowProfiler()
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		
+
 		ImGui::Begin("Profiler");
 
 		// Title
