@@ -35,3 +35,7 @@
 
 // ----- Scene -------------------------------
 #include "engine/scene/Scene.h"
+#include "engine/scene/Components.h"
+
+// ----- Utility -------------------------------
+#include "engine/utils/Random.h"

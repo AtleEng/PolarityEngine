@@ -4,6 +4,7 @@
 #include "engine/renderer/Renderer.h"
 #include "engine/audio/Audio.h"
 #include "Input.h"
+#include "engine/utils/Random.h"
 
 #include <GLFW/glfw3.h>  //temp
 
@@ -44,8 +45,8 @@ namespace Polarity {
 
 
 		Renderer::Init();
-
 		Audio::Init();
+		Random::Init();
 
 		// ImGui
 		m_imGuiLayer = new ImGuiLayer();

@@ -44,33 +44,38 @@ namespace Polarity::ECS
 
 		void RemoveData(Entity entity)
 		{
+			if (entity >= MAX_ENTITIES)
+			{
+				LOG_ERROR("RemoveData() failed, invalid entity ID (%d).", entity);
+				return;
+			}
 			size_t index = m_EntityToIndexArray[entity];
-			bool exists = (index < m_Size&& m_IndexToEntityArray[index] == entity);
+			bool exists = (index == INVALID_INDEX || index < m_Size&& m_IndexToEntityArray[index] == entity);
 
 			if (!exists)
 			{
 				LOG_ERROR("RemoveData() failed, tried removing non-existent component (%d).", entity);
 				return;
 			}
-
-			// Copy element at end into deleted element's place to maintain density
-			size_t indexOfRemovedEntity = index;
 			size_t indexOfLastElement = m_Size - 1;
-			m_ComponentArray[indexOfRemovedEntity] = m_ComponentArray[indexOfLastElement];
 
-			// Update arrays
-			Entity entityOfLastElement = m_IndexToEntityArray[indexOfLastElement];
-			m_EntityToIndexArray[entityOfLastElement] = indexOfRemovedEntity;
-			m_IndexToEntityArray[indexOfRemovedEntity] = entityOfLastElement;
+			if (index != indexOfLastElement)
+			{
+				m_ComponentArray[index] = m_ComponentArray[indexOfLastElement];
+
+				Entity entityOfLastElement = m_IndexToEntityArray[indexOfLastElement];
+				m_EntityToIndexArray[entityOfLastElement] = index;
+				m_IndexToEntityArray[index] = entityOfLastElement;
+			}
 
 			m_EntityToIndexArray[entity] = INVALID_INDEX;
+			m_IndexToEntityArray[indexOfLastElement] = INVALID_ENTITY;
 
 			--m_Size;
 		}
 
 		T& GetData(Entity entity)
 		{
-			LOG_INFO("GetData: entity %d, index=%zu", entity, m_EntityToIndexArray[entity]);
 
 			if (entity >= MAX_ENTITIES || entity < 0)
 			{
@@ -97,7 +102,6 @@ namespace Polarity::ECS
 
 		bool HasComponent(Entity entity)
 		{
-			LOG_INFO("HasComponent: entity %d, index=%zu", entity, m_EntityToIndexArray[entity]);
 			if (m_EntityToIndexArray[entity] == INVALID_INDEX || entity >= MAX_ENTITIES || entity < 0)
 			{
 				return false;
@@ -133,7 +137,7 @@ namespace Polarity::ECS
 		}
 
 	private:
-		static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
+		
 
 		std::array<T, MAX_ENTITIES> m_ComponentArray{};
 		std::array<size_t, MAX_ENTITIES> m_EntityToIndexArray{};
@@ -178,6 +182,7 @@ namespace Polarity::ECS
 		template<typename T>
 		void RemoveComponent(Entity entity)
 		{
+			LOG_INFO("RemovedComponent: entity %d", entity);
 			GetComponentArray<T>()->RemoveData(entity);
 		}
 
@@ -197,6 +202,7 @@ namespace Polarity::ECS
 		{
 			for (auto const& pair : m_ComponentArrays)
 			{
+				LOG_INFO("RemovedComponent: entity %d", entity);
 				pair.second->EntityDestroyed(entity);
 			}
 		}

@@ -134,9 +134,6 @@ namespace Polarity
 		s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
 		s_Data.whiteTexture->Bind();
-
-		
-
 		s_Data.TextureSlotIndex = 1;
 
 		StartBatch();
@@ -147,6 +144,7 @@ namespace Polarity
 		POLARITY_PROFILE_FUNCTION();
 
 		Flush();
+		StartBatch();
 	}
 
 	//Draw batch
@@ -154,16 +152,18 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
+		if (s_Data.QuadIndexCount == 0)
+			return;
+
+		uint32_t dataSize =
+			(uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr -
+				(uint8_t*)s_Data.QuadVertexBufferBase);
+
 		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
-		//Bind textures
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
-		{
 			s_Data.TextureSlots[i]->Bind(i);
-		}
 
-		//Draw quadbatch
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 
 		s_Data.Stats.DrawCalls++;
@@ -173,7 +173,6 @@ namespace Polarity
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
 		s_Data.TextureSlotIndex = 1;
 	}
 
@@ -206,6 +205,9 @@ namespace Polarity
 		}
 		if (textureIndex == 0.0f)
 		{
+			if (s_Data.TextureSlotIndex >= Renderer2DStorage::MaxTextureSlots)
+				NextBatch();
+
 			textureIndex = (float)s_Data.TextureSlotIndex;
 			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
 			s_Data.TextureSlotIndex++;

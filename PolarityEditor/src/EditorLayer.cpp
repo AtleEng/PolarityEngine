@@ -122,7 +122,7 @@ namespace Polarity
 	}
 
 	EditorLayer::EditorLayer()
-		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_viewportSize(1280, 720), m_Scene(CreateRef<Scene>())
+		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_viewportSize(1280, 720)
 	{
 	}
 
@@ -134,6 +134,9 @@ namespace Polarity
 		fbSpec.Width = 1280;
 		fbSpec.Height = 720;
 		m_framebuffer = Framebuffer::Create(fbSpec);
+
+		m_ActiveScene = CreateRef<Scene>();
+
 
 		AddLogListener(EditorLog_Listener);
 
@@ -169,9 +172,7 @@ namespace Polarity
 		//------------ Render --------------------------------------
 		{
 			POLARITY_PROFILE_SCOPE("Render Draw");
-
-			Renderer2D::BeginScene(m_cameraController.GetCamera());
-
+			
 			{
 				POLARITY_PROFILE_SCOPE("RenderPrep");
 				m_framebuffer->Bind();
@@ -179,22 +180,12 @@ namespace Polarity
 				RenderCommand::Clear();
 			}
 
-			Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
+			Renderer2D::BeginScene(m_cameraController.GetCamera());
 
+			//Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.1f, 0.1f, 0.1f, 1.0f }, 50);
 
-			int n = 5;
-
-			for (int x = 0; x < n; x++)
-			{
-				for (int y = 0; y < n; y++)
-				{
-					glm::vec2 pos = { (float)x , (float)y };
-
-
-					Renderer2D::DrawQuad(m_spritemap[x], pos);
-				}
-			}
-
+			//------------ Scene --------------------------------------
+			m_ActiveScene->OnUpdate(tS);
 
 			Renderer2D::EndScene();
 			m_framebuffer->Unbind();
@@ -468,15 +459,15 @@ namespace Polarity
 
 		if (ImGui::Button("Spawn"))
 		{
-			m_Scene->Spawn();
+			m_ActiveScene->Spawn();
 		}
 		if (ImGui::Button("Kill"))
 		{
-			m_Scene->Kill(0); // WARNING
+			m_ActiveScene->Kill("EntityName");
 		}
 		if (ImGui::Button("List"))
 		{
-			m_Scene->List();
+			m_ActiveScene->List();
 		}
 
 		ImGui::End();

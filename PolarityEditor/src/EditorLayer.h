@@ -44,6 +44,6 @@ namespace Polarity
 		glm::vec2 m_viewportSize;
 		Ref<Framebuffer> m_framebuffer;
 
-		Ref<Scene> m_Scene;
+		Ref<Scene> m_ActiveScene;
 	};
 }
