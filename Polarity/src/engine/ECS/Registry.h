@@ -73,15 +73,17 @@ namespace Polarity::ECS
 		}
 
 		template<typename T>
-		void AddComponent(Entity entity, T component)
+		T& AddComponent(Entity entity, T component)
 		{
-			m_ComponentManager.AddComponent<T>(entity, component);
+			T& c = m_ComponentManager.AddComponent<T>(entity, component);
 
 			auto signature = m_EntityManager.GetSignature(entity);
 			signature.set(m_ComponentManager.GetComponentType<T>(), true);
 			m_EntityManager.SetSignature(entity, signature);
 
 			m_SystemManager.EntitySignatureChanged(entity, signature);
+
+			return c;
 		}
 
 		template<typename T>

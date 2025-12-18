@@ -137,6 +137,10 @@ namespace Polarity
 
 		m_ActiveScene = CreateRef<Scene>();
 
+		auto square = m_ActiveScene->Spawn();
+		if(square)
+			square.GetComponent<SpriteComponent>().Color = { 1, 0, 1, 1 };
+
 
 		AddLogListener(EditorLog_Listener);
 
@@ -168,6 +172,8 @@ namespace Polarity
 		Renderer2D::ResetStats();
 		if (m_ViewportFocused)
 			m_cameraController.OnUpdate(tS);
+
+		
 
 		//------------ Render --------------------------------------
 		{
@@ -457,14 +463,19 @@ namespace Polarity
 		{
 			m_ActiveScene->Spawn();
 		}
+		ImGui::SameLine();
 		if (ImGui::Button("Kill"))
 		{
 			m_ActiveScene->Kill("EntityName");
 		}
+		ImGui::SameLine();
 		if (ImGui::Button("List"))
 		{
 			m_ActiveScene->List();
 		}
+		ImGui::Separator();
+
+		
 
 		ImGui::End();
 	}

@@ -6,6 +6,8 @@
 
 namespace Polarity
 {
+	class Entity;
+
 	class Scene
 	{
 	public:
@@ -14,11 +16,14 @@ namespace Polarity
 
 		void OnUpdate(Timestep tS);
 
-		ECS::Entity Spawn();
+		Entity Spawn();
 		void Kill(std::string name);
 		void List();
 	private:
 		ECS::Registry m_Registry;
 		std::vector<ECS::Entity> m_DestroyQueue;
+
+
+		friend class Entity;
 	};
 }

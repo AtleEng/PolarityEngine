@@ -148,6 +148,7 @@
     <ClInclude Include="src\engine\ECS\EntityManager.h" />
     <ClInclude Include="src\engine\ECS\Types.h" />
     <ClInclude Include="src\engine\scene\Components.h" />
+    <ClInclude Include="src\engine\scene\Entity.h" />
     <ClInclude Include="src\engine\scene\Scene.h" />
     <ClInclude Include="src\engine\ECS\SystemManager.h" />
     <ClInclude Include="src\engine\utils\Random.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="src\engine\renderer\VertexArray.cpp" />
     <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
+    <ClCompile Include="src\engine\scene\Entity.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
     <ClCompile Include="src\engine\utils\Random.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />

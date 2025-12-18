@@ -1,10 +1,13 @@
 #include "polpch.h"
 #include "Scene.h"
 
-#include "Components.h"
+
 
 #include "engine/renderer/Renderer2D.h"
 #include "engine/utils/Random.h"
+
+#include "Components.h"
+#include "Entity.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -41,22 +44,20 @@ namespace Polarity
 		}
 	}
 
-	ECS::Entity Scene::Spawn()
+	Entity Scene::Spawn()
 	{
-		ECS::Entity entity = m_Registry.CreateEntity();
-		LOG_DEBUG("Spawning entity: %d", entity);
+		Entity entity = { m_Registry.CreateEntity(), this };
 
-		const NameComponent& name = NameComponent();
-		m_Registry.AddComponent(entity, name);
+		entity.AddComponent<NameComponent>();
 
 		TransformComponent& transform = TransformComponent();
 		transform.Transform[3].x = Random::Float() * 10;
 		transform.Transform[3].y = Random::Float() * 10;
-		m_Registry.AddComponent(entity, transform);
+		entity.AddComponent<TransformComponent>(transform);
 
-		const SpriteComponent& sprite = SpriteComponent();
-		m_Registry.AddComponent(entity, sprite);
+		entity.AddComponent<SpriteComponent>();
 
+		LOG_DEBUG("Spawning entity: %d", entity.GetComponent<NameComponent>().Name);
 		return entity;
 	}
 

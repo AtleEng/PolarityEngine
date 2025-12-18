@@ -206,6 +206,7 @@
     <ClInclude Include="src\engine\ECS\Types.h" />
     <ClInclude Include="src\engine\scene\Components.h" />
     <ClInclude Include="src\engine\utils\Random.h" />
+    <ClInclude Include="src\engine\scene\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\audio\Audio.cpp">
@@ -302,5 +303,6 @@
     <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\utils\Random.cpp" />
+    <ClCompile Include="src\engine\scene\Entity.cpp" />
   </ItemGroup>
 </Project>

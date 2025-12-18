@@ -173,10 +173,11 @@ namespace Polarity::ECS
 		}
 
 		template<typename T>
-		void AddComponent(Entity entity, T component)
+		T& AddComponent(Entity entity, T component)
 		{
 			LOG_INFO("AddComponent: entity %d", entity);
 			GetComponentArray<T>()->InsertData(entity, component);
+			return GetComponentArray<T>()->GetData(entity);
 		}
 
 		template<typename T>
