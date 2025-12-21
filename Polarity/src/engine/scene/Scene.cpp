@@ -20,6 +20,8 @@ namespace Polarity
 		m_Registry.RegisterComponent<NameComponent>();
 		m_Registry.RegisterComponent<TransformComponent>();
 		m_Registry.RegisterComponent<SpriteComponent>();
+
+		m_Registry.RegisterComponent<CameraComponent>();
 	}
 
 	Scene::~Scene()
@@ -29,14 +31,43 @@ namespace Polarity
 
 	void Scene::OnUpdate(Timestep tS)
 	{
-		auto group = m_Registry.GetGroup<TransformComponent, SpriteComponent>();
-
-		for (auto entity : group)
+		// ----------------------------------------------- Find Main Camera in Scene --
+		Camera* mainCamera = nullptr;
+		glm::mat4 cameraTransform;
 		{
-			auto& [transform, sprite] = group.Get(entity);
+			for (auto entity : m_Registry.GetView<CameraComponent, TransformComponent>())
+			{
+				auto& camera = m_Registry.GetComponent<CameraComponent>(entity);
+				auto& transform = m_Registry.GetComponent<TransformComponent>(entity);
 
-			Renderer2D::DrawQuad(transform.Transform, sprite.Color);
+				if (camera.Primary)
+				{
+					mainCamera = &camera.Camera;
+					cameraTransform = transform.Transform;
+					break;
+				}
+			}
 		}
+		// ---------------------------------------------------------- Render Sprites --
+		if (mainCamera)
+		{
+			Renderer2D::BeginScene(mainCamera->GetProjection(), cameraTransform);
+
+			for (auto entity : m_Registry.GetView<TransformComponent, SpriteComponent>())
+			{
+				auto& transform =	m_Registry.GetComponent<TransformComponent>(entity);
+				auto& sprite =		m_Registry.GetComponent<SpriteComponent>(entity);
+
+				Renderer2D::DrawQuad(transform.Transform, sprite.Color);
+			}
+
+			Renderer2D::EndScene();
+		}
+		else
+		{
+			//LOG_ERROR("Scene has no main camera!");
+		}
+		// ----------------------------------------------------------------------------
 
 		for (auto e : m_DestroyQueue)
 		{
@@ -44,20 +75,35 @@ namespace Polarity
 		}
 	}
 
-	Entity Scene::Spawn()
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		for (auto e : m_Registry.GetView<CameraComponent>())
+		{
+			auto& camera = m_Registry.GetComponent<CameraComponent>(e);
+			if (!camera.FixedAspectRatio)
+			{
+				camera.Camera.SetViewPortSize(width, height);
+			}
+		}
+	}
+
+	Entity Scene::Spawn(std::string name)
 	{
 		Entity entity = { m_Registry.CreateEntity(), this };
 
-		entity.AddComponent<NameComponent>();
+		NameComponent& nameComp = NameComponent();
+		nameComp.Name = name;
+		entity.AddComponent<NameComponent>(nameComp);
 
 		TransformComponent& transform = TransformComponent();
 		transform.Transform[3].x = Random::Float() * 10;
 		transform.Transform[3].y = Random::Float() * 10;
 		entity.AddComponent<TransformComponent>(transform);
 
-		entity.AddComponent<SpriteComponent>();
-
-		LOG_DEBUG("Spawning entity: %d", entity.GetComponent<NameComponent>().Name);
+		LOG_DEBUG("Spawn: %s", entity.GetComponent<NameComponent>().Name.c_str());
 		return entity;
 	}
 
@@ -76,12 +122,12 @@ namespace Polarity
 
 		if (target != ECS::INVALID_ENTITY)
 		{
-			LOG_DEBUG("Destroying entity: %d", target);
+			LOG_DEBUG("Kill: %s", name.c_str());
 			m_Registry.DestroyEntity(target);
 		}
 		else
 		{
-			LOG_DEBUG("Kill(%s) failed", name.c_str());
+			LOG_DEBUG("Kill failed: %s", name.c_str());
 		}
 	}
 

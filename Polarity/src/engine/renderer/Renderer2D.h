@@ -1,6 +1,7 @@
 #pragma once
 
 #include "OrthographicCamera.h"
+#include "Camera.h"
 #include "Texture.h"
 
 namespace Polarity
@@ -11,7 +12,8 @@ namespace Polarity
 		static void Init();
 		static void Shutdown();
 
-		static void BeginScene(OrthographicCamera& camera);
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+		static void BeginScene(const OrthographicCamera& camera); //TODO remove
 		static void EndScene();
 		static void Flush();
 

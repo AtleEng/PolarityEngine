@@ -39,6 +39,9 @@ namespace Polarity
 
 		Ref<AudioSource> m_clickSound;
 
+		Entity m_CamEntity;
+		Entity m_SCamEntity;
+
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
 		glm::vec2 m_viewportSize;

@@ -28,6 +28,10 @@ namespace Polarity
 			{
 				m_Scene->m_Registry.RemoveComponent<T>(m_EntityHandle);
 			}
+			else
+			{
+				LOG_WARN("RemovedComponent() failed for: %s", GetName().c_str());
+			}
 		}
 
 		template<typename T>
@@ -45,7 +49,7 @@ namespace Polarity
 		operator bool() const { return m_EntityHandle != ECS::INVALID_ENTITY; }
 		operator ECS::Entity() const { return m_EntityHandle; }
 
-		//const std::string& GetName() { return GetComponent<NameComponent>().Name; }
+		const std::string& GetName() { return GetComponent<NameComponent>().Name; }
 
 		bool operator==(const Entity& other) const
 		{

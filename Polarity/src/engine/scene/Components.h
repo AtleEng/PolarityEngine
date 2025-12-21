@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "SceneCamera.h"
 #include <glm/glm.hpp>
 
 namespace Polarity
@@ -26,10 +26,21 @@ namespace Polarity
 	struct SpriteComponent
 	{
 		glm::vec4 Color = glm::vec4(1.0f);
+		float Scale = 1;
 
 		SpriteComponent() = default;
 		SpriteComponent(const SpriteComponent&) = default;
 		SpriteComponent(const glm::vec4& color)
 			: Color(color) {}
+	};
+
+	struct CameraComponent
+	{
+		SceneCamera Camera;
+		bool Primary = true;
+		bool FixedAspectRatio = false;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
 	};
 }

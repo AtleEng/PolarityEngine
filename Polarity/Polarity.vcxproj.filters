@@ -207,6 +207,8 @@
     <ClInclude Include="src\engine\scene\Components.h" />
     <ClInclude Include="src\engine\utils\Random.h" />
     <ClInclude Include="src\engine\scene\Entity.h" />
+    <ClInclude Include="src\engine\renderer\Camera.h" />
+    <ClInclude Include="src\engine\scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\audio\Audio.cpp">
@@ -304,5 +306,6 @@
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\utils\Random.cpp" />
     <ClCompile Include="src\engine\scene\Entity.cpp" />
+    <ClCompile Include="src\engine\scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

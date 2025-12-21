@@ -175,7 +175,6 @@ namespace Polarity::ECS
 		template<typename T>
 		T& AddComponent(Entity entity, T component)
 		{
-			LOG_INFO("AddComponent: entity %d", entity);
 			GetComponentArray<T>()->InsertData(entity, component);
 			return GetComponentArray<T>()->GetData(entity);
 		}
@@ -183,7 +182,6 @@ namespace Polarity::ECS
 		template<typename T>
 		void RemoveComponent(Entity entity)
 		{
-			LOG_INFO("RemovedComponent: entity %d", entity);
 			GetComponentArray<T>()->RemoveData(entity);
 		}
 
@@ -203,7 +201,6 @@ namespace Polarity::ECS
 		{
 			for (auto const& pair : m_ComponentArrays)
 			{
-				LOG_INFO("RemovedComponent: entity %d", entity);
 				pair.second->EntityDestroyed(entity);
 			}
 		}

@@ -7,17 +7,53 @@ namespace Polarity::ECS
 {
 	class Registry;
 
-	template<typename T>
+	template<typename... Components>
 	class View
 	{
 	public:
-		View(const Entity* entities, size_t size)
-			: m_Entities(entities), m_Size(size) {}
+		View(Registry* registry, const Entity* entities, size_t size)
+			: m_Registry(registry), m_Entities(entities), m_Size(size) {}
 
-		const Entity* begin() const { return m_Entities; }
-		const Entity* end()   const { return m_Entities + m_Size; }
+		class Iterator
+		{
+		public:
+			Iterator(Registry* registry, const Entity* ptr, const Entity* end)
+				: m_Registry(registry), m_Ptr(ptr), m_End(end)
+			{
+				SkipInvalid();
+			}
+
+			Entity operator*() const { return *m_Ptr; }
+
+			Iterator& operator++()
+			{
+				++m_Ptr;
+				SkipInvalid();
+				return *this;
+			}
+
+			bool operator!=(const Iterator& other) const
+			{
+				return m_Ptr != other.m_Ptr;
+			}
+
+		private:
+			void SkipInvalid()
+			{
+				while (m_Ptr != m_End && !(m_Registry->HasComponent<Components>(*m_Ptr) && ...))
+					++m_Ptr;
+			}
+
+			Registry* m_Registry;
+			const Entity* m_Ptr;
+			const Entity* m_End;
+		};
+
+		Iterator begin() const { return Iterator(m_Registry, m_Entities, m_Entities + m_Size); }
+		Iterator end()   const { return Iterator(m_Registry, m_Entities + m_Size, m_Entities + m_Size); }
 
 	private:
+		Registry* m_Registry;
 		const Entity* m_Entities;
 		size_t m_Size;
 	};
@@ -110,11 +146,15 @@ namespace Polarity::ECS
 			return m_ComponentManager.HasComponent<T>(entity);
 		}
 
-		template<typename T>
-		View<T> GetView()
+		template<typename First, typename... Rest>
+		View<First, Rest...> GetView()
 		{
-			auto storage = m_ComponentManager.GetComponentArray<T>();
-			return View<T>(storage->Entities(), storage->Size());
+			auto storage = m_ComponentManager.GetComponentArray<First>();
+			return View<First, Rest...>(
+				this,
+				storage->Entities(),
+				storage->Size()
+				);
 		}
 
 		template<typename Owned, typename... Observed>

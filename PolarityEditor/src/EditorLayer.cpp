@@ -137,9 +137,16 @@ namespace Polarity
 
 		m_ActiveScene = CreateRef<Scene>();
 
+		m_CamEntity = m_ActiveScene->Spawn("Main Camera");
+		m_CamEntity.AddComponent<CameraComponent>();
+
+		m_SCamEntity = m_ActiveScene->Spawn("PreRender Camera");
+		auto& cam = m_SCamEntity.AddComponent<CameraComponent>();
+		cam.FixedAspectRatio = true;
+
 		auto square = m_ActiveScene->Spawn();
-		if(square)
-			square.GetComponent<SpriteComponent>().Color = { 1, 0, 1, 1 };
+		auto& sprite = square.AddComponent<SpriteComponent>();
+		sprite.Color = { 1, 0, 1, 1 };
 
 
 		AddLogListener(EditorLog_Listener);
@@ -169,31 +176,34 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		Renderer2D::ResetStats();
+		//------------ Resize window --------------------------------
+		if (FramebufferSpecification spec = m_framebuffer->GetSpecification();
+			m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f &&
+			(spec.Width != m_viewportSize.x || spec.Height != m_viewportSize.y))
+		{
+			m_framebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+			m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
+
+			m_ActiveScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+		}
+
 		if (m_ViewportFocused)
 			m_cameraController.OnUpdate(tS);
 
-		
 
-		//------------ Render --------------------------------------
+		//------------ Render ---------------------------------------
 		{
 			POLARITY_PROFILE_SCOPE("Render Draw");
-			
-			{
-				POLARITY_PROFILE_SCOPE("RenderPrep");
-				m_framebuffer->Bind();
-				RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-				RenderCommand::Clear();
-			}
 
-			Renderer2D::BeginScene(m_cameraController.GetCamera());
+			Renderer2D::ResetStats();
 
-			Renderer2D::DrawQuad(m_gridTex, { 0.0f, 0.0f , -0.1f }, { 100.0f, 100.0f }, 0, { 0.11f, 0.13f, 0.13f, 1.00f }, 50);
+			m_framebuffer->Bind();
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+			RenderCommand::Clear();
 
-			//------------ Scene --------------------------------------
+			//------------ Scene -------------------------------------
 			m_ActiveScene->OnUpdate(tS);
 
-			Renderer2D::EndScene();
 			m_framebuffer->Unbind();
 		}
 	}
@@ -220,7 +230,7 @@ namespace Polarity
 			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar;
 
 		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
-		
+
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_Text] = ImVec4(0.92f, 0.86f, 0.70f, 1.00f);
 		colors[ImGuiCol_TextDisabled] = ImVec4(0.84f, 0.77f, 0.63f, 1.00f);
@@ -344,9 +354,9 @@ namespace Polarity
 
 				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0)); // Drag area 
 				float space = ImGui::GetContentRegionAvail().x - (32 * 3); // space minus buttons 
-				
+
 				ImGui::InvisibleButton("##DragZone", ImVec2(space, titleHeight));
-				
+
 
 				static bool dragging = false;
 				static ImVec2 dragStartMouse;
@@ -382,7 +392,7 @@ namespace Polarity
 					LOG_DEBUG("Maximize!");
 				if (ImGui::Button("X", { 32, titleHeight }))
 					Application::Get().Shutdown();
-				
+
 				colors[ImGuiCol_Button] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
 				ImGui::PopStyleVar();
 
@@ -440,9 +450,9 @@ namespace Polarity
 		Application::Get().GetImGuiLayer().BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (m_viewportSize != *(glm::vec2*)&viewportSize)
+		glm::vec2 newSize = { viewportSize.x, viewportSize.y };
+		if (m_viewportSize != newSize)
 		{
-			m_framebuffer->Resize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 			m_viewportSize = { viewportSize.x, viewportSize.y };
 
 			m_cameraController.OnResize(viewportSize.x, viewportSize.y);
@@ -461,12 +471,13 @@ namespace Polarity
 
 		if (ImGui::Button("Spawn"))
 		{
-			m_ActiveScene->Spawn();
+			auto entity = m_ActiveScene->Spawn();
+			entity.AddComponent<SpriteComponent>();
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Kill"))
 		{
-			m_ActiveScene->Kill("EntityName");
+			m_ActiveScene->Kill("NewEntity");
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("List"))
@@ -474,8 +485,16 @@ namespace Polarity
 			m_ActiveScene->List();
 		}
 		ImGui::Separator();
-
 		
+		for (auto entity : m_ActiveScene->GetView<NameComponent>())
+		{
+			NameComponent& name = entity.GetComponent<NameComponent>();
+			if (ImGui::Button(name.Name.c_str()))
+			{
+				
+			}
+		}
+
 
 		ImGui::End();
 	}
@@ -488,43 +507,46 @@ namespace Polarity
 	void EditorLayer::ShowInspector()
 	{
 		static char textBuffer[256] = "";
-		static glm::vec2 pos;
+
+		Entity entity = m_CamEntity;
 
 		ImGui::Begin("Inspector", nullptr);
-		ImGui::Text("Name of entity");
+		ImGui::Text(entity.GetName().c_str());
 		ImGui::Separator();
-		if (ImGui::BeginTabBar("Components"))
+
+		if (entity.HasComponent<TransformComponent>())
 		{
-			if (ImGui::BeginTabItem("Transform"))
+			auto& transform = entity.GetComponent<TransformComponent>().Transform;
+			if (ImGui::CollapsingHeader("Transform"))
 			{
-				ImGui::DragFloat2("Position", glm::value_ptr(pos), 0.1f);
-				ImGui::DragFloat2("Size", glm::value_ptr(pos), 0.1f);
-				ImGui::DragFloat("Rotation", glm::value_ptr(pos), 0.1f);
-				ImGui::Separator();
-				ImGui::EndTabItem();
+				ImGui::DragFloat2("Position", glm::value_ptr(transform[3]), 0.1f);
+				ImGui::DragFloat2("Size", glm::value_ptr(transform[2]), 0.1f);
+				ImGui::DragFloat("Rotation", glm::value_ptr(transform[1]), 0.1f);
 			}
-
-			if (ImGui::BeginTabItem("Audio"))
+		}
+		if (entity.HasComponent<CameraComponent>())
+		{
+			auto& camera = entity.GetComponent<CameraComponent>();
+			if (ImGui::CollapsingHeader("Camera"))
 			{
-				ImGui::InputText("##TextInput", textBuffer, IM_ARRAYSIZE(textBuffer));
-				ImGui::SliderFloat("Volume", glm::value_ptr(pos), 0.00f, 1.00f);
-				ImGui::Separator();
-				ImGui::EndTabItem();
+				ImGui::Checkbox("Main Camera", &camera.Primary);
+				ImGui::Checkbox("Fixed Aspect Ratio", &camera.FixedAspectRatio);
+				ImGui::Text("AspectRatio: %f", camera.Camera.GetAspectRatio());
 			}
-
-			if (ImGui::BeginTabItem("Sprite"))
+		}
+		if (entity.HasComponent<SpriteComponent>())
+		{
+			auto& sprite = entity.GetComponent<SpriteComponent>();
+			if (ImGui::CollapsingHeader("Sprite"))
 			{
 				ImGui::InputText("Texture", textBuffer, IM_ARRAYSIZE(textBuffer));
 				static float scale;
-				ImGui::DragFloat("Scale", &scale, 0.1f);
+				ImGui::DragFloat("Scale", &sprite.Scale, 0.1f);
 				static glm::vec4 color;
-				ImGui::ColorEdit4("Tint", glm::value_ptr(color));
-
-				ImGui::EndTabItem();
+				ImGui::ColorEdit4("Tint", glm::value_ptr(sprite.Color));
 			}
-
-			ImGui::EndTabBar();
 		}
+
 		ImGui::End();
 	}
 
