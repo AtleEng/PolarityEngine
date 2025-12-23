@@ -10,6 +10,7 @@ namespace Polarity::ECS
 		for (Entity entity = 0; entity < MAX_ENTITIES; ++entity)
 		{
 			m_AvailableEntities.push(entity);
+			m_Alive[entity] = false;
 		}
 	}
 
@@ -18,15 +19,17 @@ namespace Polarity::ECS
 		if (m_LivingEntityCount >= MAX_ENTITIES)
 		{
 			LOG_ERROR("CreateEntity() failed, too many entities in existence (%d).", MAX_ENTITIES);
-			return -1;
+			return INVALID_ENTITY;
 		}
 
 		// Take an ID from the front of the queue
-		Entity id = m_AvailableEntities.front();
+		Entity entity = m_AvailableEntities.front();
 		m_AvailableEntities.pop();
+
+		m_Alive[entity] = true;
 		++m_LivingEntityCount;
 
-		return id;
+		return entity;
 	}
 
 	void EntityManager::DestroyEntity(Entity entity)
@@ -48,6 +51,8 @@ namespace Polarity::ECS
 
 		// Put the destroyed ID at the back of the queue
 		m_AvailableEntities.push(entity);
+
+		m_Alive[entity] = false;
 		--m_LivingEntityCount;
 	}
 
@@ -73,6 +78,11 @@ namespace Polarity::ECS
 
 		// Get this entity's signature from the array
 		return m_Signatures[entity];
+	}
+
+	bool EntityManager::IsAlive(Entity entity)
+	{
+		return entity < MAX_ENTITIES&& m_Alive[entity];
 	}
 
 	int EntityManager::GetEntityAmount()

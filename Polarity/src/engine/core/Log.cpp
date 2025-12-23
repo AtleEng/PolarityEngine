@@ -5,6 +5,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <functional>
 
 static std::vector<LogListener> g_Listeners;
 
@@ -86,8 +87,8 @@ void AddLogListener(LogListener listener)
     g_Listeners.push_back(listener);
 }
 
-void RemoveLogListener(LogListener listener)
+void RemoveLogListener(LogListener listener) //TODO fix
 {
-    g_Listeners.erase(std::remove(g_Listeners.begin(), g_Listeners.end(), listener));
+    //g_Listeners.erase(std::remove(g_Listeners.begin(), g_Listeners.end(), listener));
 }
 

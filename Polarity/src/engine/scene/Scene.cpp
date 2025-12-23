@@ -131,6 +131,11 @@ namespace Polarity
 		}
 	}
 
+	bool Scene::IsAlive(ECS::Entity handle)
+	{
+		return m_Registry.IsAlive(handle);
+	}
+
 	void Scene::List()
 	{
 

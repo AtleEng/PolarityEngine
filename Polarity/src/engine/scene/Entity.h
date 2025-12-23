@@ -50,6 +50,8 @@ namespace Polarity
 		operator ECS::Entity() const { return m_EntityHandle; }
 
 		const std::string& GetName() { return GetComponent<NameComponent>().Name; }
+		const uint32_t GetID() { return m_EntityHandle; }
+		bool IsAlive();
 
 		bool operator==(const Entity& other) const
 		{

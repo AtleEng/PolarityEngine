@@ -3,6 +3,9 @@
 #include <array>
 
 #include "CamController.h"
+#include "Panels/EditorPanel.h"
+#include "Panels/ViewportPanel.h"
+#include "Panels/MenubarPanel.h"
 
 namespace Polarity 
 {
@@ -22,31 +25,19 @@ namespace Polarity
 		bool OnKeyPressedEvent(KeyPressedEvent& event);
 
 	private:
-		void ShowViewport  ();
-		void ShowHierarcy  ();
-		void ShowConsole   ();
-		void ShowInspector ();
-		void ShowAssets	   ();
 		void ShowProfiler  ();
 	private:
 		CamController  m_cameraController;
-		ShaderLibrary  m_shaderLibrary;
 
-		std::array<Ref<SubTexture2D>, 5> m_spritemap;
-		Ref<Texture2D> m_atlasTex;
-		Ref<Texture2D> m_gridTex;
 		Ref<Texture2D> m_logoTex;
-
-		Ref<AudioSource> m_clickSound;
 
 		Entity m_CamEntity;
 		Entity m_SCamEntity;
 
-		bool m_ViewportFocused = false;
-		bool m_ViewportHovered = false;
-		glm::vec2 m_viewportSize;
-		Ref<Framebuffer> m_framebuffer;
 
-		Ref<Scene> m_ActiveScene;
+		EditorContext m_EditorContext;
+
+		MenubarPanel* m_MenubarPanel	= nullptr;
+		ViewportPanel* m_ViewportPanel	= nullptr;
 	};
 }

@@ -28,6 +28,11 @@ namespace Polarity::ECS
 		m_SystemManager.EntityDestroyed(entity);
 	}
 
+	bool Registry::IsAlive(Entity entity)
+	{
+		return entity != INVALID_ENTITY && m_EntityManager.IsAlive(entity);
+	}
+
 	int Registry::GetEntityAmount()
 	{
 		return m_EntityManager.GetEntityAmount();

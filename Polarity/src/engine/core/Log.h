@@ -39,7 +39,7 @@ struct LogEvent
     std::string time;
 };
 
-using LogListener = void(*)(const LogEvent&);
+using LogListener = std::function<void(const LogEvent&)>;
 
 void AddLogListener     (LogListener listener);
 void RemoveLogListener  (LogListener listener);
