@@ -66,7 +66,7 @@ namespace Polarity
 				ImGui::MenuItem("General");
 				ImGui::EndMenu();
 			}
-
+			/*
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0)); // Drag area 
 			float space = ImGui::GetContentRegionAvail().x - (32 * 3); // space minus buttons 
 
@@ -111,6 +111,7 @@ namespace Polarity
 			colors[ImGuiCol_Button] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
 			ImGui::PopStyleVar();
 
+			*/
 			ImGui::EndMenuBar();
 		}
 		ImGui::PopStyleVar(2);

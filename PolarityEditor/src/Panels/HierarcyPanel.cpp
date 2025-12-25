@@ -28,15 +28,28 @@ namespace Polarity
 
 		for (auto entity : ctx.ActiveScene->GetView<NameComponent>())
 		{
-			NameComponent& name = entity.GetComponent<NameComponent>();
-			std::string label = name.Name + "##" + std::to_string(entity.GetID());
-			if (ImGui::Button(label.c_str()))
-			{
-				LOG_INFO("Selected %s", name.Name.c_str());
-				ctx.SelectedEntity = entity;
-			}
+			DrawEntityNode(entity, ctx);
 		}
 
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+			ctx.SelectedEntity = {};
+
 		ImGui::End();
+	}
+	void HierarcyPanel::DrawEntityNode(Entity entity, EditorContext& ctx)
+	{
+		std::string name = entity.GetComponent<NameComponent>().Name;
+
+		ImGuiTreeNodeFlags flags = ((ctx.SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+		bool opened = ImGui::TreeNodeEx((void*)entity.GetID(), flags, name.c_str());
+		if (ImGui::IsItemClicked())
+		{
+			LOG_INFO("Selected %s", name.c_str());
+			ctx.SelectedEntity = entity;
+		}
+		if (opened)
+		{
+			ImGui::TreePop();
+		}
 	}
 }

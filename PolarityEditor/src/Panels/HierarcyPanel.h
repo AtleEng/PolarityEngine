@@ -10,6 +10,6 @@ namespace Polarity
 
         void OnImGuiRender(EditorContext& ctx) override;
     private:
-        
+        void DrawEntityNode(Entity entity, EditorContext& ctx);
     };
 }
