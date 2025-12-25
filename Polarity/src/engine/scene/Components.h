@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneCamera.h"
+#include "ScriptableEntity.h"
 #include <glm/glm.hpp>
 
 namespace Polarity
@@ -42,5 +43,20 @@ namespace Polarity
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
+	};
+
+	struct ScriptComponent
+	{
+		ScriptableEntity* Instance = nullptr;
+
+		ScriptableEntity*( *InstantiateScript)();
+		void (*DestroyScript)(ScriptComponent*);
+
+		template<typename T>
+		void Bind()
+		{
+			InstantiateScript = []() { return static_cast<ScriptableEntity*>( new T()); };
+			DestroyScript = [](ScriptComponent* sc) { delete sc->Instance; sc->Instance = nullptr; };
+		}
 	};
 }

@@ -36,6 +36,7 @@
 // ----- Scene -------------------------------
 #include "engine/scene/Scene.h"
 #include "engine/scene/Entity.h"
+#include "engine/scene/ScriptableEntity.h"
 #include "engine/scene/Components.h"
 
 // ----- Utility -------------------------------

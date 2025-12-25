@@ -13,13 +13,15 @@
 
 namespace Polarity
 {
-	
+
 	Scene::Scene()
 		:m_Registry()
 	{
 		m_Registry.RegisterComponent<NameComponent>();
 		m_Registry.RegisterComponent<TransformComponent>();
 		m_Registry.RegisterComponent<SpriteComponent>();
+
+		m_Registry.RegisterComponent<ScriptComponent>();
 
 		m_Registry.RegisterComponent<CameraComponent>();
 	}
@@ -31,6 +33,21 @@ namespace Polarity
 
 	void Scene::OnUpdate(Timestep tS)
 	{
+		// ---------------------------------------------------------- Update Scripts --
+		{
+			for (auto entity : m_Registry.GetView<ScriptComponent>())
+			{
+				auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
+				if (!script.Instance)
+				{
+					script.Instance = script.InstantiateScript();
+					script.Instance->m_Scene = this;
+					script.Instance->m_EntityHandle = entity;
+					script.Instance->OnCreate();
+				}
+				script.Instance->OnUpdate(tS);
+			}
+		}
 		// ----------------------------------------------- Find Main Camera in Scene --
 		Camera* mainCamera = nullptr;
 		glm::mat4 cameraTransform;
@@ -55,8 +72,8 @@ namespace Polarity
 
 			for (auto entity : m_Registry.GetView<TransformComponent, SpriteComponent>())
 			{
-				auto& transform =	m_Registry.GetComponent<TransformComponent>(entity);
-				auto& sprite =		m_Registry.GetComponent<SpriteComponent>(entity);
+				auto& transform = m_Registry.GetComponent<TransformComponent>(entity);
+				auto& sprite = m_Registry.GetComponent<SpriteComponent>(entity);
 
 				Renderer2D::DrawQuad(transform.Transform, sprite.Color);
 			}

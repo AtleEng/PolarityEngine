@@ -33,6 +33,8 @@ namespace Polarity
 			}
 			return entities;
 		}
+
+		ECS::Registry& GetRegistry() { return m_Registry; }
 	private:
 		ECS::Registry m_Registry;
 		std::vector<ECS::Entity> m_DestroyQueue;

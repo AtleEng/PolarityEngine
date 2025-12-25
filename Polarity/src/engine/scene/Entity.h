@@ -49,7 +49,7 @@ namespace Polarity
 		operator bool() const { return m_EntityHandle != ECS::INVALID_ENTITY; }
 		operator ECS::Entity() const { return m_EntityHandle; }
 
-		const std::string& GetName() { return GetComponent<NameComponent>().Name; }
+		const std::string& GetName();
 		const uint32_t GetID() { return m_EntityHandle; }
 		bool IsAlive();
 

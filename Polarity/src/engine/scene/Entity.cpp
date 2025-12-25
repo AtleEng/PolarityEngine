@@ -9,6 +9,12 @@ namespace Polarity
 		: m_EntityHandle(handle), m_Scene(scene)
 	{
 	}
+
+	const std::string& Entity::GetName()
+	{
+		return GetComponent<NameComponent>().Name;
+	}
+
 	bool Entity::IsAlive()
 	{
 		return m_EntityHandle != ECS::INVALID_ENTITY && m_Scene->IsAlive(m_EntityHandle);

@@ -153,6 +153,7 @@
     <ClInclude Include="src\engine\scene\Scene.h" />
     <ClInclude Include="src\engine\ECS\SystemManager.h" />
     <ClInclude Include="src\engine\scene\SceneCamera.h" />
+    <ClInclude Include="src\engine\scene\ScriptableEntity.h" />
     <ClInclude Include="src\engine\utils\Random.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\audio\Audio.h" />

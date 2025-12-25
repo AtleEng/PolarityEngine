@@ -64,6 +64,41 @@ namespace Polarity
 		sprite.Color = { 1, 0, 1, 1 };
 
 		m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
+
+		class CamControll : public ScriptableEntity
+		{
+		public:
+			float speed = 5.0f;
+
+			void OnCreate()
+			{
+
+			}
+
+			void OnDestroy()
+			{
+
+			}
+
+			void OnUpdate(Timestep ts)
+			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+
+				if (Input::IsKeyPressed(Key::A))
+					transform[3][0] -= speed * ts;
+				if (Input::IsKeyPressed(Key::D))
+					transform[3][0] += speed * ts;
+				if (Input::IsKeyPressed(Key::W))
+					transform[3][1] += speed * ts;
+				if (Input::IsKeyPressed(Key::S))
+					transform[3][1] -= speed * ts;
+			}
+		private:
+			float test = 1.0f;
+		};
+
+		m_CamEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
+		m_SCamEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
 	}
 
 	void EditorLayer::OnDetach()
