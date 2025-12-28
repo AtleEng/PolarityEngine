@@ -82,16 +82,16 @@ namespace Polarity
 
 			void OnUpdate(Timestep ts)
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& position = GetComponent<TransformComponent>().Position;
 
 				if (Input::IsKeyPressed(Key::A))
-					transform[3][0] -= speed * ts;
+					position.x -= speed * ts;
 				if (Input::IsKeyPressed(Key::D))
-					transform[3][0] += speed * ts;
+					position.x += speed * ts;
 				if (Input::IsKeyPressed(Key::W))
-					transform[3][1] += speed * ts;
+					position.y += speed * ts;
 				if (Input::IsKeyPressed(Key::S))
-					transform[3][1] -= speed * ts;
+					position.y -= speed * ts;
 			}
 		private:
 			float test = 1.0f;
@@ -144,7 +144,7 @@ namespace Polarity
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
 			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar;
 
-		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
+		//style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		{
@@ -215,9 +215,6 @@ namespace Polarity
 		ImGui::PushStyleVar(ImGuiStyleVar_TabRounding, 1.0f);
 		if (ImGui::Begin("DockSpace", nullptr, window_flags))
 		{
-			
-
-
 			// Submit the DockSpace
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);

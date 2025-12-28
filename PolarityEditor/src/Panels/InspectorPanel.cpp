@@ -2,10 +2,57 @@
 #include "InspectorPanel.h"
 
 #include "imgui/imgui.h"
+#include <imgui/imgui_internal.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
+
 #include <glm/gtc/type_ptr.hpp>
 
 namespace Polarity
 {
+
+	static void DrawVec3(const std::string& lable, glm::vec3& values, float resetValue = 0.0f, float columWidth = 100.0f)
+	{
+		ImGui::PushID(lable.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columWidth);
+		ImGui::Text(lable.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{0, 0});
+
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = {lineHeight + 3, lineHeight};
+
+		if (ImGui::Button("X", buttonSize))
+			values.x = resetValue;
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##X", &values.x, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		if (ImGui::Button("Y", buttonSize))
+			values.y = resetValue;
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##Y", &values.y, 0.1f);
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		if (ImGui::Button("Z", buttonSize))
+			values.z = resetValue;
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##Z", &values.z, 0.1f);
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+	}
 	void InspectorPanel::OnImGuiRender(EditorContext& ctx)
 	{
 		ImGui::Begin("Inspector", nullptr);
@@ -37,11 +84,16 @@ namespace Polarity
 
 		if (entity.HasComponent<TransformComponent>())
 		{
-			auto& transform = entity.GetComponent<TransformComponent>().Transform;
+			auto& transform = entity.GetComponent<TransformComponent>();
 			if (ImGui::TreeNodeEx((void*)(entity.GetID() + "Transform"), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
-				ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+				DrawVec3("Position", transform.Position);
 
+				glm::vec3 rot = glm::degrees(transform.Rotation);
+				DrawVec3("Rotation", rot);
+				transform.Rotation = glm::radians(rot);
+
+				DrawVec3("Scale", transform.Scale, 1.0f);
 				ImGui::TreePop();
 			}
 		}

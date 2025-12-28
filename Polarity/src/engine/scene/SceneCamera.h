@@ -40,7 +40,7 @@ namespace Polarity
 		void RecalculateProjection();
 
 	private:
-		ProjectionType m_ProjectionType = ProjectionType::Perspective;
+		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
 
 		float m_PerspectiveFOV = glm::radians(45.0f);
 		float m_PerspectiveNear = 0.1f, m_PerspectiveFar = 100.0f;

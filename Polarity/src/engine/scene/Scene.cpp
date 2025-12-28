@@ -60,7 +60,7 @@ namespace Polarity
 				if (camera.Primary)
 				{
 					mainCamera = &camera.Camera;
-					cameraTransform = transform.Transform;
+					cameraTransform = transform.GetTransform();
 					break;
 				}
 			}
@@ -75,7 +75,7 @@ namespace Polarity
 				auto& transform = m_Registry.GetComponent<TransformComponent>(entity);
 				auto& sprite = m_Registry.GetComponent<SpriteComponent>(entity);
 
-				Renderer2D::DrawQuad(transform.Transform, sprite.Color);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
 			}
 
 			Renderer2D::EndScene();
@@ -116,8 +116,8 @@ namespace Polarity
 		entity.AddComponent<NameComponent>(nameComp);
 
 		TransformComponent& transform = TransformComponent();
-		transform.Transform[3].x = Random::Float() * 10;
-		transform.Transform[3].y = Random::Float() * 10;
+		//transform.Position.x = Random::Float() * 10;
+		//transform.Position.y = Random::Float() * 10;
 		entity.AddComponent<TransformComponent>(transform);
 
 		LOG_DEBUG("Spawn: %s", entity.GetComponent<NameComponent>().Name.c_str());
