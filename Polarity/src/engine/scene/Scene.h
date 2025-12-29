@@ -19,6 +19,7 @@ namespace Polarity
 
 		Entity Spawn(std::string name = "NewEntity");
 		void Kill(std::string name);
+		void Kill(ECS::Entity handle);
 		bool IsAlive(ECS::Entity handle);
 		void List();
 

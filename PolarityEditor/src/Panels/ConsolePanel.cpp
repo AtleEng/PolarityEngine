@@ -7,7 +7,7 @@ namespace Polarity
 {
 	void ConsolePanel::OnImGuiRender(EditorContext& ctx)
 	{
-		if (!ImGui::Begin("Console"))
+		if (!ImGui::Begin("Console", &m_IsOpen))
 		{
 			ImGui::End();
 			return;

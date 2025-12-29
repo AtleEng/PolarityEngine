@@ -42,12 +42,12 @@ namespace Polarity
 			{
 				for (auto& panel : ctx.Panels)
 				{
-					if (panel->ShowInViewMenu)
+					if (panel->m_ShowInViewMenu)
 					{
 					ImGui::MenuItem(
 						panel->GetName(),
 						nullptr,
-						&panel->IsOpen
+						&panel->m_IsOpen
 					);
 					}
 				}
@@ -56,7 +56,7 @@ namespace Polarity
 				{
 					for (auto& panel : ctx.Panels)
 					{
-						panel->IsOpen = true;
+						panel->m_IsOpen = true;
 					}
 				}
 				ImGui::EndMenu();

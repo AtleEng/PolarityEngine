@@ -140,12 +140,17 @@ namespace Polarity
 		if (target != ECS::INVALID_ENTITY)
 		{
 			LOG_DEBUG("Kill: %s", name.c_str());
-			m_Registry.DestroyEntity(target);
+			Kill(target);
 		}
 		else
 		{
 			LOG_DEBUG("Kill failed: %s", name.c_str());
 		}
+	}
+
+	void Scene::Kill(ECS::Entity handle)
+	{
+		m_Registry.DestroyEntity(handle);
 	}
 
 	bool Scene::IsAlive(ECS::Entity handle)

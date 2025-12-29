@@ -55,7 +55,7 @@ namespace Polarity
 	}
 	void InspectorPanel::OnImGuiRender(EditorContext& ctx)
 	{
-		ImGui::Begin("Inspector", nullptr);
+		ImGui::Begin("Inspector", &m_IsOpen);
 		if (!ctx.SelectedEntity || !ctx.SelectedEntity.IsAlive())
 		{
 			ImGui::Text("Select a entity to inspect");

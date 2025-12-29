@@ -7,7 +7,7 @@ namespace Polarity
 {
 	void AssetsPanel::OnImGuiRender(EditorContext& ctx)
 	{
-		ImGui::Begin("Assets", nullptr);
+		ImGui::Begin("Assets", &m_IsOpen);
 
 		ImGui::End();
 	}

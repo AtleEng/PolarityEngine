@@ -21,12 +21,10 @@ namespace Polarity
 	public:
 		virtual ~EditorPanel() = default;
 
-		bool IsOpen = true;
-		bool ShowInViewMenu = true;
+		bool m_IsOpen = true;
+		bool m_ShowInViewMenu = true;
 
 		virtual const char* GetName() const = 0;
 		virtual void OnImGuiRender(EditorContext& ctx) = 0;
-
-		bool Open = true;
 	};
 }

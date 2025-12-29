@@ -112,6 +112,11 @@ namespace Polarity
 
 		m_ViewportPanel->UpdateViewport(m_EditorContext);
 
+		if (Input::IsKeyPressed(Key::Delete) && m_EditorContext.SelectedEntity.IsAlive())
+		{
+			m_EditorContext.ActiveScene->Kill(m_EditorContext.SelectedEntity.GetID());
+		}
+
 
 		//------------ Render ---------------------------------------
 		{
@@ -148,6 +153,7 @@ namespace Polarity
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		{
+			/*
 			colors[ImGuiCol_Text] = ImVec4(0.92f, 0.86f, 0.70f, 1.00f);
 			colors[ImGuiCol_TextDisabled] = ImVec4(0.84f, 0.77f, 0.63f, 1.00f);
 			colors[ImGuiCol_WindowBg] = ImVec4(0.11f, 0.13f, 0.13f, 1.00f);
@@ -203,6 +209,7 @@ namespace Polarity
 			colors[ImGuiCol_NavWindowingHighlight] = ImVec4(0.98f, 0.95f, 0.78f, 1.00f);
 			colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.84f, 0.77f, 0.63f, 1.00f);
 			colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.74f, 0.68f, 0.58f, 1.00f);
+			*/
 		}
 
 		ImGui::SetNextWindowPos({ viewport->WorkPos.x,  viewport->WorkPos.y });
@@ -226,7 +233,7 @@ namespace Polarity
 
 			for (auto& panel : m_EditorContext.Panels)
 			{
-				if(panel->IsOpen)
+				if(panel->m_IsOpen)
 					panel->OnImGuiRender(m_EditorContext);
 			}
 
