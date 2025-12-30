@@ -11,36 +11,39 @@ namespace Polarity
 	{
 		ImGui::Begin("Hierarcy", &m_IsOpen);
 
-		ImGui::Text("Name of Scene TODO");
-
-		ImGui::SameLine();
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-		ImVec2 buttonSize = { lineHeight, lineHeight };
-
-		float space = ImGui::GetContentRegionAvail().x - (buttonSize.x * 2); // space minus buttons 
-
-		ImGui::InvisibleButton("##DragZone", ImVec2(space, lineHeight));
-		ImGui::PushMultiItemsWidths(2, ImGui::CalcItemWidth());
-		
-		ImGui::SameLine();
-		if (ImGui::Button("+", buttonSize))
+		if (ImGui::BeginTable("SceneHeader", 2, ImGuiTableFlags_SizingStretchProp))
 		{
-			auto entity = ctx.ActiveScene->Spawn();
-			entity.AddComponent<SpriteComponent>();
-		}
-		ImGui::PopItemWidth();
+			ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("Buttons", ImGuiTableColumnFlags_WidthFixed);
 
-		ImGui::SameLine();
-		if (ImGui::Button("-", buttonSize))
-		{
-			if(ctx.SelectedEntity.IsAlive())
-				ctx.ActiveScene->Kill(ctx.SelectedEntity.GetID());
-		}
-		ImGui::PopItemWidth();
+			ImGui::TableNextRow();
 
-		ImGui::PopStyleVar();
-		ImGui::Columns(1);
+			// Label
+			ImGui::TableSetColumnIndex(0);
+			ImGui::TextUnformatted("Name of Scene TODO");
+
+			// Buttons
+			ImGui::TableSetColumnIndex(1);
+
+			float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+			ImVec2 btnSize(lineHeight, lineHeight);
+
+			if (ImGui::Button("+", btnSize))
+			{
+				auto entity = ctx.ActiveScene->Spawn();
+				entity.AddComponent<SpriteComponent>();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("-", btnSize))
+			{
+				if (ctx.SelectedEntity.IsAlive())
+					ctx.ActiveScene->Kill(ctx.SelectedEntity.GetID());
+			}
+
+			ImGui::EndTable();
+		}
 
 		ImGui::Separator();
 

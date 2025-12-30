@@ -53,6 +53,35 @@ namespace Polarity
 
 		ImGui::PopID();
 	}
+	
+	static void DrawFloat(const std::string& lable, float& value, float resetValue = 0.0f, float columWidth = 100.0f)
+	{
+		ImGui::PushID(lable.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, columWidth);
+		ImGui::Text(lable.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushMultiItemsWidths(1, ImGui::CalcItemWidth());
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3, lineHeight };
+
+		if (ImGui::Button("*", buttonSize))
+			value = resetValue;
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##value", &value, 0.1f);
+		ImGui::PopItemWidth();
+
+		ImGui::PopStyleVar();
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+	}
+
 	void InspectorPanel::OnImGuiRender(EditorContext& ctx)
 	{
 		ImGui::Begin("Inspector", &m_IsOpen);
@@ -66,19 +95,43 @@ namespace Polarity
 		Entity entity = ctx.SelectedEntity;
 		ECS::Entity entityID = entity.GetID();
 
-		auto& name = entity.GetComponent<NameComponent>();
-
-		// If selection changed
-		if (m_lastSelected != entityID)
+		if (ImGui::BeginTable("SceneHeader", 2, ImGuiTableFlags_SizingStretchProp))
 		{
-			memset(m_textBuffer, 0, sizeof(m_textBuffer));
-			strncpy(m_textBuffer, name.Name.c_str(), sizeof(m_textBuffer) - 1);
-			m_lastSelected = entityID;
-		}
+			ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
+			ImGui::TableSetupColumn("Buttons", ImGuiTableColumnFlags_WidthFixed);
 
-		if (ImGui::InputText("##NameOfEntity", m_textBuffer, IM_ARRAYSIZE(m_textBuffer)))
-		{
-			name.Name = m_textBuffer;
+			ImGui::TableNextRow();
+
+			// Label
+			ImGui::TableSetColumnIndex(0);
+			auto& name = entity.GetComponent<NameComponent>();
+
+			// If selection changed
+			if (m_lastSelected != entityID)
+			{
+				memset(m_textBuffer, 0, sizeof(m_textBuffer));
+				strncpy(m_textBuffer, name.Name.c_str(), sizeof(m_textBuffer) - 1);
+				m_lastSelected = entityID;
+			}
+
+			if (ImGui::InputText("##NameOfEntity", m_textBuffer, IM_ARRAYSIZE(m_textBuffer)))
+			{
+				name.Name = m_textBuffer;
+			}
+
+			// Buttons
+			ImGui::TableSetColumnIndex(1);
+
+			float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+			ImVec2 btnSize(lineHeight, lineHeight);
+
+			if (ImGui::Button("+", btnSize))
+			{
+				auto entity = ctx.ActiveScene->Spawn();
+				entity.AddComponent<SpriteComponent>();
+			}
+
+			ImGui::EndTable();
 		}
 		ImGui::Separator();
 
@@ -128,31 +181,31 @@ namespace Polarity
 				if (camera.Camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
 				{
 					float perspectiveVerticalFov = glm::degrees(camera.Camera.GetPerspectiveVerticalFOV());
-					if (ImGui::DragFloat("FOV", &perspectiveVerticalFov))
-						camera.Camera.SetPerspectiveVerticalFOV(glm::radians(perspectiveVerticalFov));
+					DrawFloat("FOV", perspectiveVerticalFov, 60);
+					camera.Camera.SetPerspectiveVerticalFOV(glm::radians(perspectiveVerticalFov));
 
 					float perspectiveNear = camera.Camera.GetPerspectiveNearClip();
-					if (ImGui::DragFloat("Near", &perspectiveNear))
-						camera.Camera.SetPerspectiveNearClip(perspectiveNear);
+					DrawFloat("Near", perspectiveNear, 0.1f);
+					camera.Camera.SetPerspectiveNearClip(perspectiveNear);
 
 					float perspectiveFar = camera.Camera.GetPerspectiveFarClip();
-					if (ImGui::DragFloat("Far", &perspectiveFar))
-						camera.Camera.SetPerspectiveFarClip(perspectiveFar);
+					DrawFloat("Far", perspectiveFar, 100.0f);
+					camera.Camera.SetPerspectiveFarClip(perspectiveFar);
 				}
 
 				if (camera.Camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
 				{
 					float orthoSize = camera.Camera.GetOrthographicSize();
-					if (ImGui::DragFloat("Size", &orthoSize))
-						camera.Camera.SetOrthographicSize(orthoSize);
+					DrawFloat("Size", orthoSize, 10);
+					camera.Camera.SetOrthographicSize(orthoSize);
 
 					float orthoNear = camera.Camera.GetOrthographicNearClip();
-					if (ImGui::DragFloat("Near", &orthoNear))
-						camera.Camera.SetOrthographicNearClip(orthoNear);
+					DrawFloat("Near", orthoNear, -1.0f);
+					camera.Camera.SetOrthographicNearClip(orthoNear);
 
 					float orthoFar = camera.Camera.GetOrthographicFarClip();
-					if (ImGui::DragFloat("Far", &orthoFar))
-						camera.Camera.SetOrthographicFarClip(orthoFar);
+					DrawFloat("Far", orthoFar, 1.0f);
+					camera.Camera.SetOrthographicFarClip(orthoFar);
 				}
 
 				ImGui::TreePop();
@@ -174,15 +227,36 @@ namespace Polarity
 		}
 		if (entity.HasComponent<ScriptComponent>())
 		{
-			auto& camera = entity.GetComponent<ScriptComponent>();
+			auto& script = entity.GetComponent<ScriptComponent>();
 			if (ImGui::TreeNodeEx((void*)(entity.GetID() + "Script"), ImGuiTreeNodeFlags_DefaultOpen, "Script"))
 			{
-				
+				ImGui::Text("Script");
 
 				ImGui::TreePop();
 			}
 		}
 
+		if (ImGui::BeginPopupContextWindow("##PopFocus", ImGuiPopupFlags_MouseButtonRight))
+		{
+				if (ImGui::MenuItem("Copy TODO")) {}
+				if (ImGui::MenuItem("Paste TODO")) {}
+				if (ImGui::MenuItem("Duplicate TODO")) {}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Delete")){}
+
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::BeginPopupContextWindow("##PopUnfocus", ImGuiPopupFlags_MouseButtonRight |
+			ImGuiPopupFlags_NoOpenOverItems))
+		{
+			if (ImGui::MenuItem("Paste")) {}
+			ImGui::Separator();
+			if (ImGui::MenuItem("Create empty"))
+				ctx.ActiveScene->Spawn("Empty");
+
+			ImGui::EndPopup();
+		}
 		ImGui::End();
 	}
 }
