@@ -19,11 +19,11 @@ namespace Polarity
 	{
 		m_Registry.RegisterComponent<NameComponent>();
 		m_Registry.RegisterComponent<TransformComponent>();
+
 		m_Registry.RegisterComponent<SpriteComponent>();
+		m_Registry.RegisterComponent<CameraComponent>();
 
 		m_Registry.RegisterComponent<ScriptComponent>();
-
-		m_Registry.RegisterComponent<CameraComponent>();
 	}
 
 	Scene::~Scene()

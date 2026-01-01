@@ -129,7 +129,7 @@ namespace Polarity::ECS
 			m_ComponentManager.RemoveComponent<T>(entity);
 
 			auto signature = m_EntityManager.GetSignature(entity);
-			signature.set(mComponentManager.GetComponentType<T>(), false);
+			signature.set(m_ComponentManager.GetComponentType<T>(), false);
 			m_EntityManager.SetSignature(entity, signature);
 
 			m_SystemManager.EntitySignatureChanged(entity, signature);

@@ -18,7 +18,14 @@ namespace Polarity
 		template<typename T>
 		T& AddComponent(T component = T())
 		{
-			return m_Scene->m_Registry.AddComponent(m_EntityHandle, component);
+			if (HasComponent<T>())
+			{
+				LOG_WARN("AddComponent() failed for: %s", GetName().c_str());
+				return GetComponent<T>();
+			}
+			T& newComponent = m_Scene->m_Registry.AddComponent(m_EntityHandle, component);
+			m_Scene->OnComponentAdded<T>(*this);
+			return newComponent;
 		}
 
 		template<typename T>

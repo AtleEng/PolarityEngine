@@ -16,6 +16,7 @@ namespace Polarity
 
 		void OnUpdate(Timestep tS);
 		void OnViewportResize(uint32_t width, uint32_t height);
+		
 
 		Entity Spawn(std::string name = "NewEntity");
 		void Kill(std::string name);
@@ -36,6 +37,15 @@ namespace Polarity
 		}
 
 		ECS::Registry& GetRegistry() { return m_Registry; }
+	private:
+		template<typename T>
+		void OnComponentAdded(Entity entity)
+		{
+			if (entity.HasComponent<CameraComponent>())
+			{
+				entity.GetComponent<CameraComponent>().Camera.SetViewPortSize(m_ViewportWidth, m_ViewportHeight);
+			}
+		}
 	private:
 		ECS::Registry m_Registry;
 		std::vector<ECS::Entity> m_DestroyQueue;
