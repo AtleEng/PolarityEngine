@@ -5,7 +5,7 @@
 
 namespace Polarity
 {
-	void MenubarPanel::OnImGuiRender(EditorContext& ctx)
+	void MenubarPanel::OnDraw()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 4.0f));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4.0f, 8.0f));
@@ -40,7 +40,8 @@ namespace Polarity
 			}
 			if (ImGui::BeginMenu("Windows"))
 			{
-				for (auto& panel : ctx.Panels)
+				/*
+				for (auto& panel : m_Context.Panels)
 				{
 					if (panel->m_ShowInViewMenu)
 					{
@@ -54,11 +55,12 @@ namespace Polarity
 				ImGui::Separator();
 				if (ImGui::MenuItem("Reset Layout")) //TODO
 				{
-					for (auto& panel : ctx.Panels)
+					for (auto& panel : m_Context.Panels)
 					{
 						panel->m_IsOpen = true;
 					}
 				}
+				*/
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Help"))

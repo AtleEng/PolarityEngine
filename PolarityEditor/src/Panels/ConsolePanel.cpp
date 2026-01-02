@@ -5,7 +5,11 @@
 
 namespace Polarity
 {
-	void ConsolePanel::OnImGuiRender(EditorContext& ctx)
+	void ConsolePanel::OnStart()
+	{
+
+	}
+	void ConsolePanel::OnDraw()
 	{
 		if (!ImGui::Begin("Console", &m_IsOpen))
 		{

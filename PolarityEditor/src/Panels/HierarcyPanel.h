@@ -8,9 +8,10 @@ namespace Polarity
     public:
         const char* GetName() const override { return "Hierarcy"; }
 
-        void OnImGuiRender(EditorContext& ctx) override;
+        void OnStart() override;
+        void OnDraw() override;
     private:
-        void DrawEntityNode(Entity entity, EditorContext& ctx);
+        void DrawEntityNode(Entity entity, EditorContext* ctx);
     private:
         Entity m_HoveredEntity;
     };

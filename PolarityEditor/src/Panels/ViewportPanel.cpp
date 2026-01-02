@@ -5,7 +5,7 @@
 
 namespace Polarity
 {
-	void ViewportPanel::OnImGuiRender(EditorContext& ctx)
+	void ViewportPanel::OnDraw()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
@@ -20,7 +20,7 @@ namespace Polarity
 		{
 			m_viewportSize = { viewportSize.x, viewportSize.y };
 		}
-		uint32_t textureID = ctx.ViewportFramebuffer->GetColorAttachmentRendererID();
+		uint32_t textureID = m_Context->ViewportFramebuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)textureID, ImVec2{ m_viewportSize.x, m_viewportSize.y },
 			{ 0,1 }, { 1,0 });
 

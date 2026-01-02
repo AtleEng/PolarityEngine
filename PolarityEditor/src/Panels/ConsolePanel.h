@@ -17,7 +17,8 @@ namespace Polarity
     public:
         const char* GetName() const override { return "Console"; }
 
-        void OnImGuiRender(EditorContext& ctx) override;
+        void OnStart() override;
+        void OnDraw() override;
 		void Clear();
 		void AddLog(const char* fmt, ...) IM_FMTARGS(2);
 		void Bind_Log(const LogEvent& e);

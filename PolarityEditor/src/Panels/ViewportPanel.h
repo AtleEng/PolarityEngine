@@ -8,16 +8,22 @@ namespace Polarity
     public:
         const char* GetName() const override { return "Viewport"; }
 
-        void OnImGuiRender(EditorContext& ctx) override;
-        void UpdateViewport(EditorContext& ctx)
+        void OnStart() override {}
+        void OnDraw() override;
+        void UpdateViewport()
         {
+            if (!m_Context || !m_Context->ViewportFramebuffer)
+            {
+                LOG_MAJOR_ERROR("Viewports Framebuffer is null!");
+                return;
+            }
             //------------ Resize window --------------------------------
-            if (FramebufferSpecification spec = ctx.ViewportFramebuffer->GetSpecification();
+            if (FramebufferSpecification spec = m_Context->ViewportFramebuffer->GetSpecification();
                 m_viewportSize.x > 0.0f && m_viewportSize.y > 0.0f &&
                 (spec.Width != m_viewportSize.x || spec.Height != m_viewportSize.y))
             {
-                ctx.ViewportFramebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
-                ctx.ActiveScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+                m_Context->ViewportFramebuffer->Resize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
+                m_Context->ActiveScene->OnViewportResize((uint32_t)m_viewportSize.x, (uint32_t)m_viewportSize.y);
 
                 //m_cameraController.OnResize(m_viewportSize.x, m_viewportSize.y);
             }

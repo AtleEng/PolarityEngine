@@ -8,7 +8,8 @@ namespace Polarity
     public:
         const char* GetName() const override { return "Assets"; }
 
-        void OnImGuiRender(EditorContext& ctx) override;
+        void OnStart() override {}
+        void OnDraw() override;
     private:
 
     };

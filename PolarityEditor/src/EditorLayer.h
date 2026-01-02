@@ -36,8 +36,5 @@ namespace Polarity
 
 
 		EditorContext m_EditorContext;
-
-		MenubarPanel* m_MenubarPanel	= nullptr;
-		ViewportPanel* m_ViewportPanel	= nullptr;
 	};
 }

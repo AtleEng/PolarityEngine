@@ -8,7 +8,8 @@ namespace Polarity
     public:
         const char* GetName() const override { return "Inspector"; }
 
-        void OnImGuiRender(EditorContext& ctx) override;
+        void OnStart() override;
+        void OnDraw() override;
     private:
         char m_textBuffer[256] = ""; //byt namn
         ECS::Entity m_lastSelected = ECS::INVALID_ENTITY;
