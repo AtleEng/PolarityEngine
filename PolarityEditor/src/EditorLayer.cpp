@@ -12,6 +12,8 @@
 
 #include "Panels/PanelManager.h"
 
+#include "engine/scene/SceneSerializer.h"
+
 namespace Polarity
 {
 	EditorLayer::EditorLayer()

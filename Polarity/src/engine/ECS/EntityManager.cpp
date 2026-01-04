@@ -1,6 +1,7 @@
 #include "polpch.h"
 #include "EntityManager.h"
 
+
 namespace Polarity::ECS
 {
 
@@ -16,7 +17,7 @@ namespace Polarity::ECS
 
 	Entity EntityManager::CreateEntity()
 	{
-		if (m_LivingEntityCount >= MAX_ENTITIES)
+		if (m_AliveEntities.size() >= MAX_ENTITIES)
 		{
 			LOG_ERROR("CreateEntity() failed, too many entities in existence (%d).", MAX_ENTITIES);
 			return INVALID_ENTITY;
@@ -27,7 +28,7 @@ namespace Polarity::ECS
 		m_AvailableEntities.pop();
 
 		m_Alive[entity] = true;
-		++m_LivingEntityCount;
+		m_AliveEntities.push_back(entity);
 
 		return entity;
 	}
@@ -40,7 +41,7 @@ namespace Polarity::ECS
 			return;
 		}
 		// Ensure we cannot go negative
-		if (m_LivingEntityCount <= 0)
+		if (m_AliveEntities.size() <= 0)
 		{
 			LOG_ERROR("DestroyEntity() failed, no living entities left.");
 			return;
@@ -53,7 +54,12 @@ namespace Polarity::ECS
 		m_AvailableEntities.push(entity);
 
 		m_Alive[entity] = false;
-		--m_LivingEntityCount;
+		auto it = std::find(m_AliveEntities.begin(), m_AliveEntities.end(), entity);
+		if (it != m_AliveEntities.end())
+		{
+			*it = m_AliveEntities.back();
+			m_AliveEntities.pop_back();
+		}
 	}
 
 	void EntityManager::SetSignature(Entity entity, Signature signature)
@@ -87,6 +93,6 @@ namespace Polarity::ECS
 
 	int EntityManager::GetEntityAmount()
 	{
-		return m_LivingEntityCount;
+		return m_AliveEntities.size();
 	}
 }

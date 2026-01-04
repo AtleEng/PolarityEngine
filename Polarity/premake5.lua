@@ -40,7 +40,8 @@ project "Polarity"
         "%{includedir.Glad}",
         "%{includedir.ImGui}",
         "%{includedir.glm}",
-        "%{includedir.stb_image}"
+        "%{includedir.stb_image}",
+        "%{includedir.yaml_cpp}"
     }
 
     links
@@ -48,7 +49,8 @@ project "Polarity"
         "GLFW",
         "Glad",
         "ImGui",
-        "opengl32.lib"
+        "opengl32.lib",
+        "yaml-cpp"
     }
 
     filter "system:windows"

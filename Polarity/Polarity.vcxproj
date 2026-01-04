@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>POLARITY_ARCH="x86_64";POLARITY_PLATFORM="windows";POLARITY_CONFIG="Debug";POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_DEBUG;POLARITY_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -98,7 +98,7 @@
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>POLARITY_ARCH="x86_64";POLARITY_PLATFORM="windows";POLARITY_CONFIG="Release";POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -123,7 +123,7 @@
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>POLARITY_ARCH="x86_64";POLARITY_PLATFORM="windows";POLARITY_CONFIG="Dist";POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -143,19 +143,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\ECS\ComponentManager.h" />
-    <ClInclude Include="src\engine\ECS\Registry.h" />
-    <ClInclude Include="src\engine\ECS\EntityManager.h" />
-    <ClInclude Include="src\engine\ECS\Types.h" />
-    <ClInclude Include="src\engine\renderer\Camera.h" />
-    <ClInclude Include="src\engine\scene\Components.h" />
-    <ClInclude Include="src\engine\scene\Entity.h" />
-    <ClInclude Include="src\engine\scene\Scene.h" />
-    <ClInclude Include="src\engine\ECS\SystemManager.h" />
-    <ClInclude Include="src\engine\scene\SceneCamera.h" />
-    <ClInclude Include="src\engine\scene\ScriptableEntity.h" />
-    <ClInclude Include="src\engine\utils\Random.h" />
     <ClInclude Include="src\Polarity.h" />
+    <ClInclude Include="src\engine\ECS\ComponentManager.h" />
+    <ClInclude Include="src\engine\ECS\EntityManager.h" />
+    <ClInclude Include="src\engine\ECS\Registry.h" />
+    <ClInclude Include="src\engine\ECS\SystemManager.h" />
+    <ClInclude Include="src\engine\ECS\Types.h" />
     <ClInclude Include="src\engine\audio\Audio.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -174,6 +167,7 @@
     <ClInclude Include="src\engine\events\MouseEvent.h" />
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
     <ClInclude Include="src\engine\renderer\Buffer.h" />
+    <ClInclude Include="src\engine\renderer\Camera.h" />
     <ClInclude Include="src\engine\renderer\Framebuffer.h" />
     <ClInclude Include="src\engine\renderer\GraphicsContext.h" />
     <ClInclude Include="src\engine\renderer\OrthographicCamera.h" />
@@ -184,6 +178,13 @@
     <ClInclude Include="src\engine\renderer\Shader.h" />
     <ClInclude Include="src\engine\renderer\Texture.h" />
     <ClInclude Include="src\engine\renderer\VertexArray.h" />
+    <ClInclude Include="src\engine\scene\Components.h" />
+    <ClInclude Include="src\engine\scene\Entity.h" />
+    <ClInclude Include="src\engine\scene\Scene.h" />
+    <ClInclude Include="src\engine\scene\SceneCamera.h" />
+    <ClInclude Include="src\engine\scene\SceneSerializer.h" />
+    <ClInclude Include="src\engine\scene\ScriptableEntity.h" />
+    <ClInclude Include="src\engine\utils\Random.h" />
     <ClInclude Include="src\platform\openGL\OpenGLBuffer.h" />
     <ClInclude Include="src\platform\openGL\OpenGLContext.h" />
     <ClInclude Include="src\platform\openGL\OpenGLFramebuffer.h" />
@@ -196,6 +197,8 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
+    <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\audio\Audio.cpp" />
     <ClCompile Include="src\engine\core\Application.cpp" />
     <ClCompile Include="src\engine\core\Layer.cpp" />
@@ -215,11 +218,10 @@
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
     <ClCompile Include="src\engine\renderer\Texture.cpp" />
     <ClCompile Include="src\engine\renderer\VertexArray.cpp" />
-    <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
-    <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\scene\Entity.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
     <ClCompile Include="src\engine\scene\SceneCamera.cpp" />
+    <ClCompile Include="src\engine\scene\SceneSerializer.cpp" />
     <ClCompile Include="src\engine\utils\Random.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
@@ -244,6 +246,9 @@
     </ProjectReference>
     <ProjectReference Include="thirdparty\imgui\ImGui.vcxproj">
       <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
+    <ProjectReference Include="thirdparty\yaml-cpp\yaml-cpp.vcxproj">
+      <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

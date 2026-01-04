@@ -147,6 +147,15 @@ namespace Polarity::ECS
 			return m_ComponentManager.HasComponent<T>(entity);
 		}
 
+		template<typename Func>
+		void Each(Func&& func)
+		{
+			for (Entity entity : m_EntityManager.m_AliveEntities)
+			{
+				func(entity);
+			}
+		}
+
 		template<typename First, typename... Rest>
 		View<First, Rest...> GetView()
 		{

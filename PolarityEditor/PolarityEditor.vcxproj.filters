@@ -15,14 +15,30 @@
     <ClInclude Include="src\EditorLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panels\InspectorPanel.h" />
-    <ClInclude Include="src\Panels\HierarcyPanel.h" />
-    <ClInclude Include="src\Panels\ConsolePanel.h" />
-    <ClInclude Include="src\Panels\AssetsPanel.h" />
-    <ClInclude Include="src\Panels\EditorPanel.h" />
-    <ClInclude Include="src\Panels\ViewportPanel.h" />
-    <ClInclude Include="src\Panels\MenubarPanel.h" />
-    <ClInclude Include="src\Panels\PanelManager.h" />
+    <ClInclude Include="src\Panels\AssetsPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\ConsolePanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\EditorPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\HierarcyPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\InspectorPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\MenubarPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\PanelManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Panels\ViewportPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CamController.cpp">
@@ -34,13 +50,27 @@
     <ClCompile Include="src\EditorLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Panels\InspectorPanel.cpp" />
-    <ClCompile Include="src\Panels\HierarcyPanel.cpp" />
-    <ClCompile Include="src\Panels\ConsolePanel.cpp" />
-    <ClCompile Include="src\Panels\AssetsPanel.cpp" />
-    <ClCompile Include="src\Panels\ViewportPanel.cpp" />
-    <ClCompile Include="src\Panels\MenubarPanel.cpp" />
-    <ClCompile Include="src\Panels\PanelManager.cpp" />
+    <ClCompile Include="src\Panels\AssetsPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\ConsolePanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\HierarcyPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\InspectorPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\MenubarPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\PanelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panels\ViewportPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />

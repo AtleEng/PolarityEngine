@@ -10,6 +10,9 @@
     <Filter Include="Source Files\src\engine">
       <UniqueIdentifier>{258122B1-91B8-6A48-9AC2-CE6B06799141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\ECS">
+      <UniqueIdentifier>{EF7F3393-5B8D-6179-E473-5D6450802D30}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\audio">
       <UniqueIdentifier>{06A72930-72BF-105A-3B6C-A0F3A743A5F3}</UniqueIdentifier>
     </Filter>
@@ -21,6 +24,12 @@
     </Filter>
     <Filter Include="Source Files\src\engine\renderer">
       <UniqueIdentifier>{8B7AD0FE-77CB-BB40-A02F-AA028CDF4EAA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\engine\scene">
+      <UniqueIdentifier>{22866531-8E9E-4C5B-574B-DCF4C322E1F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\engine\utils">
+      <UniqueIdentifier>{651A9331-D132-7A5B-9ADF-09F506B70EF5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\platform">
       <UniqueIdentifier>{F4FA6A03-60BD-9E8D-A96D-2D1A156F776B}</UniqueIdentifier>
@@ -46,6 +55,9 @@
     <Filter Include="Header Files\src\engine">
       <UniqueIdentifier>{5D31C695-C968-0E2D-D272-72503E293526}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\src\engine\ECS">
+      <UniqueIdentifier>{278C2486-9399-526C-1C80-4E57888C1E23}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\src\engine\audio">
       <UniqueIdentifier>{3EA18EA3-AAB9-75CD-7366-0567DF3D0A67}</UniqueIdentifier>
     </Filter>
@@ -63,6 +75,12 @@
     </Filter>
     <Filter Include="Header Files\src\engine\renderer">
       <UniqueIdentifier>{C3E9E9F0-AF3A-D532-D89E-C3F4C44E689C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\scene">
+      <UniqueIdentifier>{5A80CAA4-C698-B1CE-8F45-4168FB1C4668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\utils">
+      <UniqueIdentifier>{9D14F8A4-092D-DFCE-D2D9-6E683EB17368}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\platform">
       <UniqueIdentifier>{2C99BB9F-985B-EF29-E10B-7EB64D0DC807}</UniqueIdentifier>
@@ -83,6 +101,21 @@
   <ItemGroup>
     <ClInclude Include="src\Polarity.h">
       <Filter>Header Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ECS\ComponentManager.h">
+      <Filter>Header Files\src\engine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ECS\EntityManager.h">
+      <Filter>Header Files\src\engine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ECS\Registry.h">
+      <Filter>Header Files\src\engine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ECS\SystemManager.h">
+      <Filter>Header Files\src\engine\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\ECS\Types.h">
+      <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\audio\Audio.h">
       <Filter>Header Files\src\engine\audio</Filter>
@@ -138,6 +171,9 @@
     <ClInclude Include="src\engine\renderer\Buffer.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\Camera.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\renderer\Framebuffer.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
@@ -167,6 +203,27 @@
     </ClInclude>
     <ClInclude Include="src\engine\renderer\VertexArray.h">
       <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scene\Components.h">
+      <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scene\Entity.h">
+      <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scene\Scene.h">
+      <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scene\SceneCamera.h">
+      <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scene\SceneSerializer.h">
+      <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scene\ScriptableEntity.h">
+      <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\utils\Random.h">
+      <Filter>Header Files\src\engine\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\openGL\OpenGLBuffer.h">
       <Filter>Header Files\src\platform\openGL</Filter>
@@ -198,19 +255,14 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scene\Scene.h" />
-    <ClInclude Include="src\engine\ECS\Registry.h" />
-    <ClInclude Include="src\engine\ECS\EntityManager.h" />
-    <ClInclude Include="src\engine\ECS\ComponentManager.h" />
-    <ClInclude Include="src\engine\ECS\SystemManager.h" />
-    <ClInclude Include="src\engine\ECS\Types.h" />
-    <ClInclude Include="src\engine\scene\Components.h" />
-    <ClInclude Include="src\engine\utils\Random.h" />
-    <ClInclude Include="src\engine\scene\Entity.h" />
-    <ClInclude Include="src\engine\renderer\Camera.h" />
-    <ClInclude Include="src\engine\scene\SceneCamera.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\ECS\EntityManager.cpp">
+      <Filter>Source Files\src\engine\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\ECS\Registry.cpp">
+      <Filter>Source Files\src\engine\ECS</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\audio\Audio.cpp">
       <Filter>Source Files\src\engine\audio</Filter>
     </ClCompile>
@@ -268,6 +320,21 @@
     <ClCompile Include="src\engine\renderer\VertexArray.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scene\Entity.cpp">
+      <Filter>Source Files\src\engine\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\scene\Scene.cpp">
+      <Filter>Source Files\src\engine\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\scene\SceneCamera.cpp">
+      <Filter>Source Files\src\engine\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\scene\SceneSerializer.cpp">
+      <Filter>Source Files\src\engine\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\utils\Random.cpp">
+      <Filter>Source Files\src\engine\utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp">
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
@@ -301,11 +368,5 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\scene\Scene.cpp" />
-    <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
-    <ClCompile Include="src\engine\ECS\Registry.cpp" />
-    <ClCompile Include="src\engine\utils\Random.cpp" />
-    <ClCompile Include="src\engine\scene\Entity.cpp" />
-    <ClCompile Include="src\engine\scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

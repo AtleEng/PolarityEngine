@@ -2,6 +2,7 @@
 #include "MenubarPanel.h"
 
 #include "imgui/imgui.h"
+#include "engine/scene/SceneSerializer.h"
 
 namespace Polarity
 {
@@ -9,7 +10,7 @@ namespace Polarity
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 4.0f));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4.0f, 8.0f));
-
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 2.0f));
 		if (ImGui::BeginMenuBar())
 		{
 			float titleHeight = 24.0f; // TODO make a bigger title
@@ -22,8 +23,16 @@ namespace Polarity
 			if (ImGui::BeginMenu("File")) // all commands to manage files
 			{
 				if (ImGui::MenuItem("New TODO        Ctrl+N"));
-				if (ImGui::MenuItem("Open TODO       Ctrl+O"));
-				if (ImGui::MenuItem("Save TODO       Ctrl+S"));
+				if (ImGui::MenuItem("Open TODO       Ctrl+O"))
+				{
+					SceneSerializer serializer(m_Context->ActiveScene);
+					serializer.DeSerialize("assets/scenes/Example.pol");
+				}
+				if (ImGui::MenuItem("Save TODO       Ctrl+S"))
+				{
+					SceneSerializer serializer(m_Context->ActiveScene);
+					serializer.Serialize("assets/scenes/Example.pol");
+				}
 				if (ImGui::MenuItem("Build TODO      Ctrl+B"));
 				if (ImGui::MenuItem("Play TODO       F5"));
 				ImGui::Separator();
@@ -116,6 +125,6 @@ namespace Polarity
 			*/
 			ImGui::EndMenuBar();
 		}
-		ImGui::PopStyleVar(2);
+		ImGui::PopStyleVar(3);
 	}
 }

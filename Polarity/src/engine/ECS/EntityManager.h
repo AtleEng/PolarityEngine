@@ -25,10 +25,12 @@ namespace Polarity::ECS
 		// Array of signatures where the index corresponds to the entity ID
 		std::array<Signature, MAX_ENTITIES> m_Signatures{};
 
-		// Array of all entities that are alive
+		// Array of all entities that tracks if théy are alive or not
 		std::array<bool, MAX_ENTITIES> m_Alive{};
 
-		// Total living entities - used to keep limits on how many exist
-		uint32_t m_LivingEntityCount{};
+		// Array of only alive entities
+		std::vector<Entity> m_AliveEntities {};
+
+		friend class Registry;
 	};
 }

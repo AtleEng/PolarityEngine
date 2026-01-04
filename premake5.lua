@@ -19,12 +19,14 @@ includedir["Glad"]      = "%{wks.location}/Polarity/thirdparty/Glad/include"
 includedir["ImGui"]     = "%{wks.location}/Polarity/thirdparty/imgui"
 includedir["glm"]       = "%{wks.location}/Polarity/thirdparty/glm"
 includedir["stb_image"] = "%{wks.location}/Polarity/thirdparty/stb_image"
+includedir["yaml_cpp"]  = "%{wks.location}/Polarity/thirdparty/yaml-cpp/include"
 
 
 group "Dependencies"
     include "Polarity/thirdparty/GLFW"
     include "Polarity/thirdparty/Glad"
     include "Polarity/thirdparty/imgui"
+    include "Polarity/thirdparty/yaml-cpp"
 group ""
 
 

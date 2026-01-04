@@ -1,8 +1,6 @@
 #include "polpch.h"
 #include "Scene.h"
 
-
-
 #include "engine/renderer/Renderer2D.h"
 #include "engine/utils/Random.h"
 
@@ -111,16 +109,14 @@ namespace Polarity
 	{
 		Entity entity = { m_Registry.CreateEntity(), this };
 
-		NameComponent& nameComp = NameComponent();
+		auto& nameComp = NameComponent();
 		nameComp.Name = name;
 		entity.AddComponent<NameComponent>(nameComp);
 
-		TransformComponent& transform = TransformComponent();
-		//transform.Position.x = Random::Float() * 10;
-		//transform.Position.y = Random::Float() * 10;
+		auto& transform = TransformComponent();
 		entity.AddComponent<TransformComponent>(transform);
 
-		LOG_DEBUG("Spawn: %s", entity.GetComponent<NameComponent>().Name.c_str());
+		LOG_DEBUG("Spawn: %s", name.c_str());
 		return entity;
 	}
 
