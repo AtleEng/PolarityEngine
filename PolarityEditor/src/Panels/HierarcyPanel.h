@@ -6,10 +6,14 @@ namespace Polarity
     class HierarcyPanel : public EditorPanel
     {
     public:
-        const char* GetName() const override { return "Hierarcy"; }
+        static constexpr PanelID StaticPanelID = PanelID::SceneHierarchy;
+        static constexpr bool AllowMultiple() { return false; }
 
-        void OnStart() override;
+        HierarcyPanel()
+            : EditorPanel(StaticPanelID, 0, "SceneHierarcy") {}
+
         void OnDraw() override;
+
     private:
         void DrawEntityNode(Entity entity, EditorContext* ctx);
     private:

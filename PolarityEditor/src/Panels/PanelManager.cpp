@@ -2,30 +2,46 @@
 #include "PanelManager.h"
 
 namespace Polarity {
-	std::vector<Ref<EditorPanel>> PanelManager::m_Panels;
 
-	void PanelManager::Init()
-	{
-		
-	}
-	void PanelManager::OpenPanel()
-	{
-	}
-	void PanelManager::ClosePanel()
-	{
-	}
+    void PanelManager::SetContext(EditorContext& ctx)
+    {
+        for (auto& [id, panels] : m_Panels)
+        {
+            for (auto it = panels.begin(); it != panels.end(); )
+            {
+                (*it)->SetContext(ctx);
+            }
+        }
+    }
+
 	void PanelManager::OnDraw()
 	{
-		for (int i = 0; i < m_Panels.size(); i++)
-		{
-			m_Panels[i]->OnDraw();
-		}
+        for (auto& [id, panels] : m_Panels)
+        {
+            for (auto it = panels.begin(); it != panels.end(); )
+            {
+                if (!(*it)->IsOpen())
+                {
+                    (*it)->OnDetach();
+                    it = panels.erase(it);
+                }
+                else
+                {
+                    (*it)->OnDraw();
+                    ++it;
+                }
+            }
+        }
 	}
-	void PanelManager::SetContext(EditorContext& ctx)
+	void PanelManager::Clear()
 	{
-		for (int i = 0; i < m_Panels.size(); i++)
-		{
-			m_Panels[i]->SetContext(ctx);
-		}
+        for (auto& [id, panels] : m_Panels)
+        {
+            for (auto it = panels.begin(); it != panels.end(); )
+            {
+                (*it)->Close();
+                ++it;
+            }
+        }
 	}
 }

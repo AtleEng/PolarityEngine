@@ -37,4 +37,11 @@ namespace Polarity::ECS
 	{
 		return m_EntityManager.GetEntityAmount();
 	}
+	void Registry::Clear()
+	{
+		for (Entity ent : m_EntityManager.m_AliveEntities)
+		{
+			DestroyEntity(ent);
+		}		
+	}
 }

@@ -1,9 +1,7 @@
 #include "polpch.h"
 #include "InspectorPanel.h"
 
-#include "imgui/imgui.h"
 #include <imgui/imgui_internal.h>
-#include <imgui/misc/cpp/imgui_stdlib.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -209,11 +207,10 @@ namespace Polarity
 		}
 	}
 
-	void InspectorPanel::OnStart()
-	{}
 	void InspectorPanel::OnDraw()
 	{
-		ImGui::Begin("Inspector", &m_IsOpen);
+		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
+
 		if (!m_Context->SelectedEntity || !m_Context->SelectedEntity.IsAlive())
 		{
 			ImGui::Text("Select a entity to inspect");
@@ -230,14 +227,14 @@ namespace Polarity
 		// If selection changed
 		if (m_lastSelected != entityID)
 		{
-			memset(m_textBuffer, 0, sizeof(m_textBuffer));
-			strncpy(m_textBuffer, name.Name.c_str(), sizeof(m_textBuffer) - 1);
+			memset(m_NameBuf, 0, sizeof(m_NameBuf));
+			strncpy(m_NameBuf, name.Name.c_str(), sizeof(m_NameBuf) - 1);
 			m_lastSelected = entityID;
 		}
 
-		if (ImGui::InputText("##NameOfEntity", m_textBuffer, IM_ARRAYSIZE(m_textBuffer)))
+		if (ImGui::InputText("##NameOfEntity", m_NameBuf, IM_ARRAYSIZE(m_NameBuf)))
 		{
-			name.Name = m_textBuffer;
+			name.Name = m_NameBuf;
 		}
 
 		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
@@ -346,7 +343,7 @@ namespace Polarity
 
 		DrawComponent<SpriteComponent>("Sprite", entity, [](auto& component)
 		{
-			//ImGui::InputText("Texture", m_textBuffer, IM_ARRAYSIZE(m_textBuffer));
+			ImGui::Text("Texture");
 			ImGui::DragFloat("Scale", &component.Scale, 0.1f);
 			ImGui::ColorEdit4("Tint", glm::value_ptr(component.Color));
 		});
@@ -355,6 +352,7 @@ namespace Polarity
 		{
 			ImGui::Text("Script");
 		});
+
 		ImGui::End();
 	}
 }

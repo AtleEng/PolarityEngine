@@ -92,9 +92,10 @@ namespace Polarity::ECS
 		// EntityManager
 		Entity CreateEntity();
 		void DestroyEntity(Entity entity);
-		bool IsAlive(Entity entity);
 
+		bool IsAlive(Entity entity);
 		int GetEntityAmount();
+		void Clear();
 
 		// ComponentManager
 		template<typename T>

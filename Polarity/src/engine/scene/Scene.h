@@ -14,15 +14,17 @@ namespace Polarity
 		Scene();
 		~Scene();
 
-		void OnUpdate(Timestep tS);
+		void OnUpdate(Timestep ts);
 		void OnViewportResize(uint32_t width, uint32_t height);
 		
 
-		Entity Spawn(std::string name = "NewEntity");
-		void Kill(std::string name);
-		void Kill(ECS::Entity handle);
+		Entity CreateEntity(std::string name = "New Entity");
+
+		void DestroyEntity(std::string name);
+		void DestroyEntity(ECS::Entity handle);
+		void ClearEntities();
+
 		bool IsAlive(ECS::Entity handle);
-		void List();
 
 		template<typename First, typename... Rest>
 		std::vector<Entity> GetView()

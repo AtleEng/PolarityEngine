@@ -237,7 +237,7 @@ namespace Polarity
 
                 LOG_TRACE("Deserialized %s: %d", name.c_str(), uuid);
 
-                Entity newEntity = m_Scene->Spawn(name);
+                Entity newEntity = m_Scene->CreateEntity(name);
 
                 auto transformComponent = entity["TransformComponent"];
                 if (transformComponent)

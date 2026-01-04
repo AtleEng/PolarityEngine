@@ -6,9 +6,9 @@ namespace Polarity
     class MenubarPanel : public EditorPanel
     {
     public:
-        const char* GetName() const override { return "MenubarPanel"; }
-
-        void OnStart() override {}
+        static constexpr PanelID StaticPanelID = PanelID::Assets;
+        //void OnAttach() override;
+        //void OnDetach() override;
         void OnDraw() override;
     private:
 

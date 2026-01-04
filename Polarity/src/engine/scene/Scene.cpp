@@ -80,7 +80,7 @@ namespace Polarity
 		}
 		else
 		{
-			//LOG_ERROR("Scene has no main camera!");
+			LOG_WARN("Scene has no main camera!");
 		}
 		// ----------------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ namespace Polarity
 		}
 	}
 
-	Entity Scene::Spawn(std::string name)
+	Entity Scene::CreateEntity(std::string name)
 	{
 		Entity entity = { m_Registry.CreateEntity(), this };
 
@@ -116,11 +116,11 @@ namespace Polarity
 		auto& transform = TransformComponent();
 		entity.AddComponent<TransformComponent>(transform);
 
-		LOG_DEBUG("Spawn: %s", name.c_str());
+		LOG_DEBUG("Created %s", name.c_str());
 		return entity;
 	}
 
-	void Scene::Kill(std::string name)
+	void Scene::DestroyEntity(std::string name)
 	{
 		ECS::Entity target = ECS::INVALID_ENTITY;
 
@@ -135,39 +135,28 @@ namespace Polarity
 
 		if (target != ECS::INVALID_ENTITY)
 		{
-			LOG_DEBUG("Kill: %s", name.c_str());
-			Kill(target);
+			LOG_DEBUG("Destroyed %s", name.c_str());
+			DestroyEntity(target);
 		}
 		else
 		{
-			LOG_DEBUG("Kill failed: %s", name.c_str());
+			LOG_DEBUG("Destroyed failed for %s", name.c_str());
 		}
 	}
 
-	void Scene::Kill(ECS::Entity handle)
+	void Scene::DestroyEntity(ECS::Entity handle)
 	{
+		LOG_DEBUG("Destroyed %d", handle);
 		m_Registry.DestroyEntity(handle);
+	}
+
+	void Scene::ClearEntities()
+	{
+		m_Registry.Clear();
 	}
 
 	bool Scene::IsAlive(ECS::Entity handle)
 	{
 		return m_Registry.IsAlive(handle);
-	}
-
-	void Scene::List()
-	{
-
-		std::string s = "\n Entity List:";
-		for (auto entity : m_Registry.GetView<NameComponent>())
-		{
-			s += "\n  ";
-			if (m_Registry.HasComponent<NameComponent>(entity))
-			{
-				const NameComponent& compName = m_Registry.GetComponent<NameComponent>(entity);
-				s += compName.Name;
-			}
-		}
-
-		LOG_DEBUG(s.c_str());
 	}
 }

@@ -7,11 +7,9 @@
 
 namespace Polarity
 {
-	void HierarcyPanel::OnStart()
-	{}
 	void HierarcyPanel::OnDraw()
 	{
-		ImGui::Begin("Hierarcy", &m_IsOpen);
+		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
 
 		ImGui::TextUnformatted("Name of Scene TODO");
 
@@ -21,7 +19,7 @@ namespace Polarity
 
 		if (ImGui::Button("+", btnSize))
 		{
-			auto entity = m_Context->ActiveScene->Spawn();
+			auto entity = m_Context->ActiveScene->CreateEntity();
 			entity.AddComponent<SpriteComponent>();
 		}
 
@@ -44,7 +42,7 @@ namespace Polarity
 				if (ImGui::MenuItem("Duplicate TODO")) {}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Delete"))
-					m_Context->ActiveScene->Kill(m_HoveredEntity.GetID());
+					m_Context->ActiveScene->DestroyEntity(m_HoveredEntity.GetID());
 			}
 
 			ImGui::EndPopup();
@@ -56,7 +54,7 @@ namespace Polarity
 			if (ImGui::MenuItem("Paste")) {}
 			ImGui::Separator();
 			if (ImGui::MenuItem("Create empty"))
-				m_Context->ActiveScene->Spawn("Empty");
+				m_Context->ActiveScene->CreateEntity("Empty");
 
 			ImGui::EndPopup();
 		}

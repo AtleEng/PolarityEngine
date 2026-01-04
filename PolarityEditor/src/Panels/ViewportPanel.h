@@ -6,9 +6,12 @@ namespace Polarity
     class ViewportPanel : public EditorPanel
     {
     public:
-        const char* GetName() const override { return "Viewport"; }
+        static constexpr PanelID StaticPanelID = PanelID::Viewport;
+        static constexpr bool AllowMultiple() { return true; }
 
-        void OnStart() override {}
+        ViewportPanel(uint32_t instanceID)
+            : EditorPanel(StaticPanelID, instanceID, "Viewport") {}
+
         void OnDraw() override;
         void UpdateViewport()
         {

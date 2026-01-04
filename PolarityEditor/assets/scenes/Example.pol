@@ -1,8 +1,8 @@
 Scene: Untitled
 Entities:
-  - Entity: 3
+  - Entity: 0
     NameComponent:
-      Name: Camera
+      Name: Main Camera
     TransformComponent:
       Position: [0, 0, 0]
       Rotation: [0, 0, 0]
@@ -13,28 +13,56 @@ Entities:
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.100000001
         PerspectiveFar: 100
-        OrthographicSize: 20
+        OrthographicSize: 10
         OrthographicNear: -1
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: false
-  - Entity: 4
+  - Entity: 1
     NameComponent:
-      Name: Player
+      Name: PreRender Camera
     TransformComponent:
       Position: [0, 0, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 100
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: true
+  - Entity: 4
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0.349999994, -0.100000001, 0]
+      Rotation: [0.52359879, 0.785398185, 0]
+      Scale: [1, 1, 1]
     SpriteComponent:
-      Color: [0.107993513, 0.725581408, 0.527378738, 1]
+      Color: [1, 0, 0, 1]
       Scale: 1
   - Entity: 5
     NameComponent:
-      Name: Enemy
+      Name: New Entity
     TransformComponent:
-      Position: [4.4000001, 3.80000019, 0]
-      Rotation: [0, 0, 0]
+      Position: [-0.349999994, -0.100000001, 0]
+      Rotation: [-0.52359879, 0.785398185, 0]
       Scale: [1, 1, 1]
     SpriteComponent:
-      Color: [0.85581398, 0.135338023, 0.135338023, 1]
+      Color: [0, 0.0372092724, 1, 1]
+      Scale: 1
+  - Entity: 6
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0, 0.50000006, 0]
+      Rotation: [1.04719758, 0, 0.785398185]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      Color: [0, 1, 0.14883709, 1]
       Scale: 1

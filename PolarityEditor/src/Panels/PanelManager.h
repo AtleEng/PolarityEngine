@@ -1,45 +1,59 @@
 #pragma once
-#include "../EditorLayer.h"
 #include "EditorPanel.h"
 
 namespace Polarity {
 
-class PanelManager
-{
-public:
-	static void Init();
-
-	template<typename T, typename... Args>
-static Ref<T> AddPanel(Args&&... args)
-{
-    static_assert(std::is_base_of_v<EditorPanel, T>);
-
-    auto panel = CreateRef<T>(std::forward<Args>(args)...);
-    panel->OnStart();
-    m_Panels.emplace_back(panel);
-    return panel;
-}
-
-	static void OpenPanel();
-	static void ClosePanel();
-
-	template<typename T>
-	static T* GetPanel()
+	class PanelManager
 	{
-        static_assert(std::is_base_of_v<EditorPanel, T>);
+	public:
+		void SetContext(EditorContext& ctx);
+		void OnDraw();
+		void Clear();
 
-        for (const auto& panel : m_Panels)
-        {
-            if (auto casted = std::dynamic_pointer_cast<T>(panel))
-                return casted.get();
-        }
-        return nullptr;
-	}
+		template<typename T, typename... Args>
+		T& OpenPanel(EditorContext& ctx, Args&&... args)
+		{
+			static_assert(std::is_base_of_v<EditorPanel, T>);
 
-	static void OnDraw();
+			constexpr PanelID id = T::StaticPanelID;
 
-	static void SetContext(EditorContext& ctx);
-private:
-	static std::vector<Ref<EditorPanel>> m_Panels;
-};
+			auto& list = m_Panels[id];
+
+			if constexpr (T::AllowMultiple())
+			{
+				uint32_t instanceID = m_NextInstanceID++;
+				auto panel = CreateRef<T>(instanceID, std::forward<Args>(args)...);
+				panel->SetContext(ctx);
+				panel->OnAttach();
+				list.emplace_back(panel);
+				return *panel;
+			}
+			else
+			{
+				if (!list.empty())
+					return *static_cast<T*>(list.front().get());
+
+				auto panel = CreateRef<T>(std::forward<Args>(args)...);
+				panel->SetContext(ctx);
+				panel->OnAttach();
+				list.emplace_back(panel);
+				return *panel;
+			}
+		}
+
+		template<typename T>
+		T* GetPanel()
+		{
+			PanelID id = T::StaticPanelID;
+			auto it = m_Panels.find(id);
+			if (it == m_Panels.end() || it->second.empty())
+				return nullptr;
+
+			return static_cast<T*>(it->second.front().get());
+		}
+
+	private:
+		std::unordered_map<PanelID, std::vector<Ref<EditorPanel>>> m_Panels;
+		uint32_t m_NextInstanceID = 1;
+	};
 }

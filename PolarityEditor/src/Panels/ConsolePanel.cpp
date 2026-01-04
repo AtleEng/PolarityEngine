@@ -5,17 +5,10 @@
 
 namespace Polarity
 {
-	void ConsolePanel::OnStart()
-	{
-
-	}
 	void ConsolePanel::OnDraw()
 	{
-		if (!ImGui::Begin("Console", &m_IsOpen))
-		{
-			ImGui::End();
-			return;
-		}
+		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
+		
 
 		// Options menu
 		if (ImGui::BeginPopup("Options"))
@@ -39,7 +32,7 @@ namespace Polarity
 		if (ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar))
 		{
 			if (clear)
-				Clear();
+				ClearLog();
 			if (copy)
 				ImGui::LogToClipboard();
 
@@ -80,14 +73,14 @@ namespace Polarity
 		ImGui::End();
 	}
 
-	void ConsolePanel::Clear()
+	void ConsolePanel::ClearLog()
 	{
 		m_EditorLog.Buf.clear();
 		m_EditorLog.LineOffsets.clear();
 		m_EditorLog.LineOffsets.push_back(0);
 	}
 
-	void ConsolePanel::Bind_Log(const LogEvent& e)
+	void ConsolePanel::BindLog(const LogEvent& e)
 	{
 		AddLog("%s %s %s\n",
 			e.prefix.c_str(),

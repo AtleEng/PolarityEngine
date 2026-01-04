@@ -9,15 +9,14 @@
 #include "Panels/ConsolePanel.h"
 #include "Panels/InspectorPanel.h"
 #include "Panels/HierarcyPanel.h"
-
-#include "Panels/PanelManager.h"
+#include "Panels/ViewportPanel.h"
 
 #include "engine/scene/SceneSerializer.h"
 
 namespace Polarity
 {
 	EditorLayer::EditorLayer()
-		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f)
+		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_PanelManager()
 	{
 	}
 
@@ -32,32 +31,33 @@ namespace Polarity
 		m_EditorContext.ActiveScene = CreateRef<Scene>();
 
 		// --------------------------------------------------- Panels
-		PanelManager::Init();
-		PanelManager::AddPanel<AssetsPanel>();
-		PanelManager::AddPanel<HierarcyPanel>();
-		PanelManager::AddPanel<InspectorPanel>();
-		PanelManager::AddPanel<MenubarPanel>();
-		PanelManager::AddPanel<ViewportPanel>();
-		auto consolePanel = PanelManager::AddPanel<ConsolePanel>();
-		std::weak_ptr<ConsolePanel> weakPanel = consolePanel;
 
-		AddLogListener([weakPanel](const LogEvent& e)
+		m_PanelManager.OpenPanel<HierarcyPanel> (m_EditorContext);
+		m_PanelManager.OpenPanel<ViewportPanel> (m_EditorContext);
+		m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
+		m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
+		m_PanelManager.OpenPanel<AssetsPanel>   (m_EditorContext);
+		
+		auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
+		auto panelId = consolePanel.GetInstanceID();
+
+		AddLogListener([this, panelId](const LogEvent& e)
 		{
-			if (auto panel = weakPanel.lock())
+			if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
 			{
-				panel->Bind_Log(e);
+				panel->BindLog(e);
 			}
 		});
-		PanelManager::SetContext(m_EditorContext);
+
 		//-------------------------------------------------------- Entites
-		m_CamEntity = m_EditorContext.ActiveScene->Spawn("Main Camera");
+		m_CamEntity = m_EditorContext.ActiveScene->CreateEntity("Main Camera");
 		m_CamEntity.AddComponent<CameraComponent>();
 
-		m_SCamEntity = m_EditorContext.ActiveScene->Spawn("PreRender Camera");
+		m_SCamEntity = m_EditorContext.ActiveScene->CreateEntity("PreRender Camera");
 		auto& cam = m_SCamEntity.AddComponent<CameraComponent>();
 		cam.FixedAspectRatio = true;
 
-		auto square = m_EditorContext.ActiveScene->Spawn();
+		auto square = m_EditorContext.ActiveScene->CreateEntity();
 		auto& sprite = square.AddComponent<SpriteComponent>();
 		sprite.Color = { 1, 0, 1, 1 };
 
@@ -108,11 +108,13 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		PanelManager::GetPanel<ViewportPanel>()->UpdateViewport();
+		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
+		if(viewport)
+			viewport->UpdateViewport();
 
 		if (Input::IsKeyPressed(Key::Delete) && m_EditorContext.SelectedEntity.IsAlive())
 		{
-			m_EditorContext.ActiveScene->Kill(m_EditorContext.SelectedEntity.GetID());
+			m_EditorContext.ActiveScene->DestroyEntity(m_EditorContext.SelectedEntity.GetID());
 		}
 
 
@@ -145,7 +147,7 @@ namespace Polarity
 
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
-			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_MenuBar;
+			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_MenuBar;
 
 		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
 
@@ -224,6 +226,9 @@ namespace Polarity
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 			ImGui::PopStyleVar();
+
+			DrawMenubarPanel();
+
 			ImGui::ShowDemoWindow();
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2.0f, 6.0f));
@@ -231,7 +236,7 @@ namespace Polarity
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 1.0f));
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2.0f, 2.0f));
 			
-			PanelManager::OnDraw();
+			m_PanelManager.OnDraw();
 
 			ImGui::PopStyleVar(4);
 
@@ -289,5 +294,145 @@ namespace Polarity
 		ImGui::Text("Indices %d", stats.GetTotalIndexCount());
 
 		ImGui::End();
+	}
+	void EditorLayer::DrawMenubarPanel()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 4.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4.0f, 8.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 2.0f));
+		if (ImGui::BeginMenuBar())
+		{
+			float titleHeight = 24.0f; // TODO make a bigger title
+			/*
+			uint32_t texID = m_logoTex->GetRendererID();
+			ImGui::Image((void*)texID, ImVec2{ titleHeight, titleHeight },
+				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			*/
+
+			if (ImGui::BeginMenu("File")) // all commands to manage files
+			{
+				if (ImGui::MenuItem("New TODO        Ctrl+N"))
+				{
+					m_EditorContext.ActiveScene->ClearEntities();
+				}
+				if (ImGui::MenuItem("Open TODO       Ctrl+O"))
+				{
+					m_EditorContext.ActiveScene->ClearEntities();
+					SceneSerializer serializer(m_EditorContext.ActiveScene);
+					serializer.DeSerialize("assets/scenes/Example.pol");
+				}
+				if (ImGui::MenuItem("Save TODO       Ctrl+S"))
+				{
+					SceneSerializer serializer(m_EditorContext.ActiveScene);
+					serializer.Serialize("assets/scenes/Example.pol");
+				}
+				if (ImGui::MenuItem("Build TODO      Ctrl+B"));
+				if (ImGui::MenuItem("Play TODO       F5"));
+				ImGui::Separator();
+				if (ImGui::MenuItem("Quit")) Application::Get().Shutdown();
+
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Edit")) // all commands to edit project
+			{
+				if (ImGui::MenuItem("Project Settings TODO"));
+				if (ImGui::MenuItem("Editor Settings TODO"));
+
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("View"))
+			{
+				if (ImGui::MenuItem("Hierarcy"))
+					m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Viewport"))
+					m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Inspector"))
+				m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Assets"))
+				m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Console"))
+				{
+
+				auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
+				auto panelId = consolePanel.GetInstanceID();
+
+				AddLogListener([this, panelId](const LogEvent& e)
+				{
+					if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
+					{
+						panel->BindLog(e);
+					}
+				});
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Reset Layout"))
+				{
+					m_PanelManager.Clear();
+					m_PanelManager.OpenPanel<HierarcyPanel> (m_EditorContext);
+					m_PanelManager.OpenPanel<ViewportPanel> (m_EditorContext);
+					m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<AssetsPanel>   (m_EditorContext);
+				}
+				
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Help"))
+			{
+				ImGui::MenuItem("General");
+				ImGui::EndMenu();
+			}
+			/*
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0)); // Drag area
+			float space = ImGui::GetContentRegionAvail().x - (32 * 3); // space minus buttons
+
+			ImGui::InvisibleButton("##DragZone", ImVec2(space, titleHeight));
+
+
+			static bool dragging = false;
+			static ImVec2 dragStartMouse;
+			static glm::ivec2 dragStartWindow;
+
+			if (ImGui::IsItemActive())
+			{
+				if (!dragging)
+				{
+					dragging = true;
+					dragStartMouse = ImGui::GetMousePos();
+					dragStartWindow = Application::Get().GetWindow().GetPosition();
+				}
+
+				ImVec2 mouseNow = ImGui::GetMousePos();
+				ImVec2 delta = { mouseNow.x - dragStartMouse.x + 4, mouseNow.y - dragStartMouse.y + 31 };
+
+				Application::Get().GetWindow().SetPosition({
+					dragStartWindow.x + (int)delta.x,
+					dragStartWindow.y + (int)delta.y
+					});
+			}
+			else
+			{
+				dragging = false;
+			}
+			ImVec4* colors = ImGui::GetStyle().Colors;
+			colors[ImGuiCol_Button] = ImVec4(0.11f, 0.13f, 0.13f, 1.00f);
+			// --- Window buttons ---
+			if (ImGui::Button("-", { 32, titleHeight }))
+				LOG_DEBUG("Minimize!");
+			if (ImGui::Button("[]", { 32, titleHeight }))
+				LOG_DEBUG("Maximize!");
+			if (ImGui::Button("X", { 32, titleHeight }))
+				Application::Get().Shutdown();
+
+			colors[ImGuiCol_Button] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
+			ImGui::PopStyleVar();
+
+			*/
+			ImGui::EndMenuBar();
+		}
+		ImGui::PopStyleVar(3);
 	}
 }

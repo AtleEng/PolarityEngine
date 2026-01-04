@@ -15,13 +15,16 @@ namespace Polarity
     class ConsolePanel : public EditorPanel
     {
     public:
-        const char* GetName() const override { return "Console"; }
+		static constexpr PanelID StaticPanelID = PanelID::Console;
 
-        void OnStart() override;
+		ConsolePanel()
+			: EditorPanel(StaticPanelID, 0, "Console") {}
+
         void OnDraw() override;
-		void Clear();
+
+		void ClearLog();
 		void AddLog(const char* fmt, ...) IM_FMTARGS(2);
-		void Bind_Log(const LogEvent& e);
+		void BindLog(const LogEvent& e);
     private:
 		EditorLog m_EditorLog;
     };

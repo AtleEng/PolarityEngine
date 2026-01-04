@@ -3,9 +3,7 @@
 #include <array>
 
 #include "CamController.h"
-#include "Panels/EditorPanel.h"
-#include "Panels/ViewportPanel.h"
-#include "Panels/MenubarPanel.h"
+#include "Panels/PanelManager.h"
 
 namespace Polarity 
 {
@@ -25,7 +23,8 @@ namespace Polarity
 		bool OnKeyPressedEvent(KeyPressedEvent& event);
 
 	private:
-		void ShowProfiler  ();
+		void ShowProfiler();
+		void DrawMenubarPanel();
 	private:
 		CamController  m_cameraController;
 
@@ -36,5 +35,6 @@ namespace Polarity
 
 
 		EditorContext m_EditorContext;
+		PanelManager m_PanelManager;
 	};
 }

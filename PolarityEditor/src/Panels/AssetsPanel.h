@@ -6,10 +6,13 @@ namespace Polarity
     class AssetsPanel : public EditorPanel
     {
     public:
-        const char* GetName() const override { return "Assets"; }
+        static constexpr PanelID StaticPanelID = PanelID::Assets;
 
-        void OnStart() override {}
+        AssetsPanel()
+            : EditorPanel(StaticPanelID, 0, "Assets") {}
+
         void OnDraw() override;
+
     private:
 
     };
