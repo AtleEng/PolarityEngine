@@ -62,7 +62,7 @@ namespace Polarity
 		auto& sprite = square.AddComponent<SpriteComponent>();
 		sprite.Color = { 1, 0, 1, 1 };
 
-		m_logoTex = Texture2D::Create("assets/textures/PolarityLogo.png");
+		m_logoTex = Texture2D::Create("assets/textures/Logo.png");
 
 		class CamControll : public ScriptableEntity
 		{
@@ -211,18 +211,17 @@ namespace Polarity
 		ImGui::SetNextWindowSize(viewport->WorkSize);
 		ImGui::SetNextWindowViewport(viewport->ID);
 
-		//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		//ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		//ImGui::PushStyleVar(ImGuiStyleVar_TabRounding, 1.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 7.0f));
+
 		if (ImGui::Begin("DockSpace", nullptr, window_flags))
 		{
+			DrawMenubarPanel();
+			ImGui::PopStyleVar();
 			// Submit the DockSpace
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 			ImGui::PopStyleVar();
-
-			DrawMenubarPanel();
 
 			ImGui::ShowDemoWindow();
 
@@ -347,6 +346,7 @@ namespace Polarity
 		}
 	}
 
+
 	void EditorLayer::ShowProfiler()
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -384,16 +384,31 @@ namespace Polarity
 
 	void EditorLayer::DrawMenubarPanel()
 	{
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 4.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8.0f, 8.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 2.0f));
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0f, 6.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(6.0f, 4.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
+
 		if (ImGui::BeginMenuBar())
 		{
-			float titleHeight = 24.0f; // TODO make a bigger title
+			float imageSize = 24.0f;
+			float menuBarHeight = ImGui::GetFrameHeight();
+
+			float cursorY = ImGui::GetCursorPosY();
+			ImGui::SetCursorPosY(cursorY + (menuBarHeight - imageSize) * 0.5f);
 
 			uint32_t texID = m_logoTex->GetRendererID();
-			ImGui::Image((void*)texID, ImVec2{ titleHeight, titleHeight },
-				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::Image(
+				(void*)texID,
+				ImVec2(imageSize, imageSize),
+				ImVec2(0, 1),
+				ImVec2(1, 0)
+			);
+
+			// Restore Y pos
+			ImGui::SetCursorPosY(cursorY);
 
 
 			if (ImGui::BeginMenu("File")) // all commands to manage files
@@ -480,52 +495,7 @@ namespace Polarity
 				ImGui::MenuItem("General");
 				ImGui::EndMenu();
 			}
-			/*
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0)); // Drag area
-			float space = ImGui::GetContentRegionAvail().x - (32 * 3); // space minus buttons
-
-			ImGui::InvisibleButton("##DragZone", ImVec2(space, titleHeight));
-
-
-			static bool dragging = false;
-			static ImVec2 dragStartMouse;
-			static glm::ivec2 dragStartWindow;
-
-			if (ImGui::IsItemActive())
-			{
-				if (!dragging)
-				{
-					dragging = true;
-					dragStartMouse = ImGui::GetMousePos();
-					dragStartWindow = Application::Get().GetWindow().GetPosition();
-				}
-
-				ImVec2 mouseNow = ImGui::GetMousePos();
-				ImVec2 delta = { mouseNow.x - dragStartMouse.x + 4, mouseNow.y - dragStartMouse.y + 31 };
-
-				Application::Get().GetWindow().SetPosition({
-					dragStartWindow.x + (int)delta.x,
-					dragStartWindow.y + (int)delta.y
-					});
-			}
-			else
-			{
-				dragging = false;
-			}
-			ImVec4* colors = ImGui::GetStyle().Colors;
-			colors[ImGuiCol_Button] = ImVec4(0.11f, 0.13f, 0.13f, 1.00f);
-			// --- Window buttons ---
-			if (ImGui::Button("-", { 32, titleHeight }))
-				LOG_DEBUG("Minimize!");
-			if (ImGui::Button("[]", { 32, titleHeight }))
-				LOG_DEBUG("Maximize!");
-			if (ImGui::Button("X", { 32, titleHeight }))
-				Application::Get().Shutdown();
-
-			colors[ImGuiCol_Button] = ImVec4(0.16f, 0.16f, 0.16f, 1.00f);
-			ImGui::PopStyleVar();
-
-			*/
+			ImGui::TextDisabled(m_CurrentFilepath.c_str());
 			ImGui::EndMenuBar();
 		}
 		ImGui::PopStyleVar(3);
