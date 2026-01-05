@@ -78,10 +78,6 @@ namespace Polarity
 
 			Renderer2D::EndScene();
 		}
-		else
-		{
-			LOG_WARN("Scene has no main camera!");
-		}
 		// ----------------------------------------------------------------------------
 
 		for (auto e : m_DestroyQueue)

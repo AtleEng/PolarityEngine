@@ -10,6 +10,7 @@ namespace Polarity {
             for (auto it = panels.begin(); it != panels.end(); )
             {
                 (*it)->SetContext(ctx);
+                ++it;
             }
         }
     }

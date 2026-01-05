@@ -24,7 +24,7 @@ namespace Polarity {
 		KeyPressedEvent(KeyCode keycode, int repeatCount)
 			: KeyEvent(keycode), m_repeatCount(repeatCount) {}
 
-		KeyCode GetRepeatCount() const
+		int GetRepeatCount() const // maybe enum here?
 		{
 			return m_repeatCount;
 		}

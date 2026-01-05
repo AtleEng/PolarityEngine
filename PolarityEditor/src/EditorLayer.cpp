@@ -12,6 +12,7 @@
 #include "Panels/ViewportPanel.h"
 
 #include "engine/scene/SceneSerializer.h"
+#include "engine/utils/PlatformUtils.h"
 
 namespace Polarity
 {
@@ -32,12 +33,12 @@ namespace Polarity
 
 		// --------------------------------------------------- Panels
 
-		m_PanelManager.OpenPanel<HierarcyPanel> (m_EditorContext);
-		m_PanelManager.OpenPanel<ViewportPanel> (m_EditorContext);
+		m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
+		m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
 		m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
 		m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
-		m_PanelManager.OpenPanel<AssetsPanel>   (m_EditorContext);
-		
+		m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
+
 		auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
 		auto panelId = consolePanel.GetInstanceID();
 
@@ -109,14 +110,8 @@ namespace Polarity
 		POLARITY_PROFILE_FUNCTION();
 
 		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
-		if(viewport)
+		if (viewport)
 			viewport->UpdateViewport();
-
-		if (Input::IsKeyPressed(Key::Delete) && m_EditorContext.SelectedEntity.IsAlive())
-		{
-			m_EditorContext.ActiveScene->DestroyEntity(m_EditorContext.SelectedEntity.GetID());
-		}
-
 
 		//------------ Render ---------------------------------------
 		{
@@ -235,30 +230,121 @@ namespace Polarity
 			ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 1.0f));
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2.0f, 2.0f));
-			
+
 			m_PanelManager.OnDraw();
 
 			ImGui::PopStyleVar(4);
 
 			ImGui::End();
 		}
-		
+
 	}
 
 	void EditorLayer::OnEvent(Event& event)
 	{
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(POLARITY_BIND_EVENT_FN(OnKeyPressedEvent));
-		m_cameraController.OnEvent(event);
+		//m_cameraController.OnEvent(event);
 	}
 
 	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& event)
 	{
-		if (event.GetKeyCode() == Key::F3)
+		if (event.GetRepeatCount() > 0)
+			return false;
+		bool ctrl = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+		switch (event.GetKeyCode())
 		{
-			
+		case Key::N:
+		{
+			if (ctrl)
+			{
+				NewScene();
+			}
+			break;
 		}
+		case Key::O:
+		{
+			if (ctrl)
+			{
+				OpenScene();
+			}
+			break;
+		}
+		case Key::S:
+		{
+			if (ctrl)
+			{
+				if (shift)
+				{
+					SaveAsScene();
+				}
+				else
+				{
+					SaveScene();
+				}
+			}
+			break;
+		}
+		case Key::Delete:
+		{
+			if (m_EditorContext.SelectedEntity.IsAlive())
+			{
+				m_EditorContext.ActiveScene->DestroyEntity(m_EditorContext.SelectedEntity.GetID());
+			}
+		}
+		}
+
 		return false;
+	}
+
+	void EditorLayer::NewScene()
+	{
+		m_EditorContext.SelectedEntity = {};
+		m_EditorContext.ActiveScene = CreateRef<Scene>();
+		m_EditorContext.ViewportFramebuffer->Resize((uint32_t)m_EditorContext.ViewportSize.x, (uint32_t)m_EditorContext.ViewportSize.y);
+		m_EditorContext.ActiveScene->OnViewportResize((uint32_t)m_EditorContext.ViewportSize.x, (uint32_t)m_EditorContext.ViewportSize.y);
+	}
+
+	void EditorLayer::OpenScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Polarity Scene (*.pol)\0*.pol\0");
+		if (!filepath.empty())
+		{
+			NewScene();
+
+			SceneSerializer serializer(m_EditorContext.ActiveScene);
+			serializer.DeSerialize(filepath);
+
+			m_CurrentFilepath = filepath;
+		}
+	}
+
+	void EditorLayer::SaveScene()
+	{
+		if (!m_CurrentFilepath.empty())
+		{
+			SceneSerializer serializer(m_EditorContext.ActiveScene);
+			serializer.Serialize(m_CurrentFilepath);
+
+			LOG_INFO("Scene saved!");
+		}
+		else
+		{
+			SaveAsScene();
+		}
+	}
+
+	void EditorLayer::SaveAsScene()
+	{
+		std::string filepath = FileDialogs::SaveFile("Polarity Scene (*.pol)\0*.pol\0");
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(m_EditorContext.ActiveScene);
+			serializer.Serialize(filepath);
+
+			m_CurrentFilepath = filepath;
+		}
 	}
 
 	void EditorLayer::ShowProfiler()
@@ -295,46 +381,50 @@ namespace Polarity
 
 		ImGui::End();
 	}
+
 	void EditorLayer::DrawMenubarPanel()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(8.0f, 4.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(4.0f, 8.0f));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8.0f, 8.0f));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8.0f, 2.0f));
 		if (ImGui::BeginMenuBar())
 		{
 			float titleHeight = 24.0f; // TODO make a bigger title
-			/*
+
 			uint32_t texID = m_logoTex->GetRendererID();
 			ImGui::Image((void*)texID, ImVec2{ titleHeight, titleHeight },
 				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-			*/
+
 
 			if (ImGui::BeginMenu("File")) // all commands to manage files
 			{
-				if (ImGui::MenuItem("New TODO        Ctrl+N"))
-				{
-					m_EditorContext.ActiveScene->ClearEntities();
-				}
-				if (ImGui::MenuItem("Open TODO       Ctrl+O"))
-				{
-					m_EditorContext.ActiveScene->ClearEntities();
-					SceneSerializer serializer(m_EditorContext.ActiveScene);
-					serializer.DeSerialize("assets/scenes/Example.pol");
-				}
-				if (ImGui::MenuItem("Save TODO       Ctrl+S"))
-				{
-					SceneSerializer serializer(m_EditorContext.ActiveScene);
-					serializer.Serialize("assets/scenes/Example.pol");
-				}
-				if (ImGui::MenuItem("Build TODO      Ctrl+B"));
-				if (ImGui::MenuItem("Play TODO       F5"));
+				if (ImGui::MenuItem("New", "Ctrl + N"))
+					NewScene();
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenScene();
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
+					SaveScene();
+				if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
+					SaveAsScene();
+
 				ImGui::Separator();
-				if (ImGui::MenuItem("Quit")) Application::Get().Shutdown();
+				if (ImGui::MenuItem("Build TODO", "Ctrl+B"));
+				if (ImGui::MenuItem("Play TODO", "F5"));
+				ImGui::Separator();
+				if (ImGui::MenuItem("Quit", "Alt+F4")) Application::Get().Shutdown();
 
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Edit")) // all commands to edit project
 			{
+				if (ImGui::MenuItem("Undo", "Ctrl+Z"));
+				if (ImGui::MenuItem("Redo", "Ctrl+Y"));
+				ImGui::Separator();
+				if (ImGui::MenuItem("Cut", "Ctrl+X"));
+				if (ImGui::MenuItem("Copy", "Ctrl+C"));
+				if (ImGui::MenuItem("Paste", "Ctrl+V"));
+				if (ImGui::MenuItem("Duplicate", "Ctrl+D"));
+				ImGui::Separator();
 				if (ImGui::MenuItem("Project Settings TODO"));
 				if (ImGui::MenuItem("Editor Settings TODO"));
 
@@ -342,42 +432,47 @@ namespace Polarity
 			}
 			if (ImGui::BeginMenu("View"))
 			{
-				if (ImGui::MenuItem("Hierarcy"))
-					m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
-
-				if (ImGui::MenuItem("Viewport"))
-					m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
-
-				if (ImGui::MenuItem("Inspector"))
-				m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
-
-				if (ImGui::MenuItem("Assets"))
-				m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
-
-				if (ImGui::MenuItem("Console"))
+				if (ImGui::BeginMenu("Open..."))
 				{
 
-				auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
-				auto panelId = consolePanel.GetInstanceID();
+					if (ImGui::MenuItem("Hierarcy"))
+						m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
 
-				AddLogListener([this, panelId](const LogEvent& e)
-				{
-					if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
+					if (ImGui::MenuItem("Viewport"))
+						m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
+
+					if (ImGui::MenuItem("Inspector"))
+						m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
+
+					if (ImGui::MenuItem("Assets"))
+						m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
+
+					if (ImGui::MenuItem("Console"))
 					{
-						panel->BindLog(e);
+
+						auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
+						auto panelId = consolePanel.GetInstanceID();
+
+						AddLogListener([this, panelId](const LogEvent& e)
+						{
+							if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
+							{
+								panel->BindLog(e);
+							}
+						});
 					}
-				});
+					ImGui::EndMenu();
 				}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Reset Layout"))
 				{
 					m_PanelManager.Clear();
-					m_PanelManager.OpenPanel<HierarcyPanel> (m_EditorContext);
-					m_PanelManager.OpenPanel<ViewportPanel> (m_EditorContext);
+					m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
 					m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
-					m_PanelManager.OpenPanel<AssetsPanel>   (m_EditorContext);
+					m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
 				}
-				
+
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Help"))

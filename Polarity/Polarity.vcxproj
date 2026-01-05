@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\utils\PlatformUtils.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\ECS\ComponentManager.h" />
     <ClInclude Include="src\engine\ECS\EntityManager.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="src\engine\scene\SceneCamera.cpp" />
     <ClCompile Include="src\engine\scene\SceneSerializer.cpp" />
     <ClCompile Include="src\engine\utils\Random.cpp" />
+    <ClCompile Include="src\engine\utils\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLFramebuffer.cpp" />

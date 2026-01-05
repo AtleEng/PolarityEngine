@@ -19,7 +19,7 @@ namespace Polarity
 
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 	private:
-		bool m_BlockEvents = true;
+		bool m_BlockEvents = false;
 		float m_Time = 0;
 	};
 }

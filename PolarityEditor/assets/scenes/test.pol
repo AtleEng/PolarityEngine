@@ -4,7 +4,7 @@ Entities:
     NameComponent:
       Name: Main Camera
     TransformComponent:
-      Position: [0, 0, 0]
+      Position: [0, -0.91337204, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
@@ -22,7 +22,7 @@ Entities:
     NameComponent:
       Name: PreRender Camera
     TransformComponent:
-      Position: [0, 0, 0]
+      Position: [0, -0.91337204, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
@@ -36,33 +36,13 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: true
-  - Entity: 4
+  - Entity: 2
     NameComponent:
       Name: New Entity
     TransformComponent:
-      Position: [0.349999994, -0.100000001, 0]
-      Rotation: [0.52359879, 0.785398185, 0]
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     SpriteComponent:
-      Color: [1, 0, 0, 1]
-      Scale: 1
-  - Entity: 5
-    NameComponent:
-      Name: New Entity
-    TransformComponent:
-      Position: [-0.349999994, -0.100000001, 0]
-      Rotation: [-0.52359879, 0.785398185, 0]
-      Scale: [1, 1, 1]
-    SpriteComponent:
-      Color: [0, 0.0372092724, 1, 1]
-      Scale: 1
-  - Entity: 6
-    NameComponent:
-      Name: New Entity
-    TransformComponent:
-      Position: [0, 0.50000006, 0]
-      Rotation: [1.04719758, 0, 0.785398185]
-      Scale: [1, 1, 1]
-    SpriteComponent:
-      Color: [0, 1, 0.14883709, 1]
+      Color: [1, 0, 1, 1]
       Scale: 1

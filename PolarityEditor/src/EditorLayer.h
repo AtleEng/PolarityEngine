@@ -22,6 +22,11 @@ namespace Polarity
 
 		bool OnKeyPressedEvent(KeyPressedEvent& event);
 
+		void NewScene();
+		void OpenScene();
+		void SaveScene();
+		void SaveAsScene();
+
 	private:
 		void ShowProfiler();
 		void DrawMenubarPanel();
@@ -36,5 +41,7 @@ namespace Polarity
 
 		EditorContext m_EditorContext;
 		PanelManager m_PanelManager;
+
+		std::string m_CurrentFilepath = "";
 	};
 }

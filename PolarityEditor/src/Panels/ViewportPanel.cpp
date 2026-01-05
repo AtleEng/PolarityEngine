@@ -13,16 +13,18 @@ namespace Polarity
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		Application::Get().GetImGuiLayer().BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
+		//Application::Get().GetImGuiLayer().BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 
-		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		glm::vec2 newSize = { viewportSize.x, viewportSize.y };
-		if (m_viewportSize != newSize)
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		glm::vec2 viewportSize = m_Context->ViewportSize;
+
+		glm::vec2 newSize = { viewportPanelSize.x, viewportPanelSize.y };
+		if (viewportSize != newSize)
 		{
-			m_viewportSize = { viewportSize.x, viewportSize.y };
+			m_Context->ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 		}
 		uint32_t textureID = m_Context->ViewportFramebuffer->GetColorAttachmentRendererID();
-		ImGui::Image((void*)textureID, ImVec2{ m_viewportSize.x, m_viewportSize.y },
+		ImGui::Image((void*)textureID, ImVec2{ viewportSize.x, viewportSize.y },
 			{ 0,1 }, { 1,0 });
 
 		ImGui::End();
