@@ -36,7 +36,6 @@ namespace Polarity
 		m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
 		m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
 		m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
-		m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
 		m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
 
 		auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
@@ -62,7 +61,13 @@ namespace Polarity
 		auto& sprite = square.AddComponent<SpriteComponent>();
 		sprite.Color = { 1, 0, 1, 1 };
 
-		m_logoTex = Texture2D::Create("assets/textures/Logo.png");
+		m_LogoTex = Texture2D::Create("assets/textures/Logo.png");
+		m_IconsTex = Texture2D::Create("assets/textures/icons.png");
+
+		m_EditorContext.Textures.push_back(SubTexture2D::CreateFromUniformGrid(m_IconsTex, { 7, 8 }, 50)); // cog
+		m_EditorContext.Textures.push_back(SubTexture2D::CreateFromUniformGrid(m_IconsTex, { 6, 9 }, 50)); // Lock
+		m_EditorContext.Textures.push_back(SubTexture2D::CreateFromUniformGrid(m_IconsTex, { 5, 4 }, 50)); // menu
+
 
 		class CamControll : public ScriptableEntity
 		{
@@ -142,7 +147,7 @@ namespace Polarity
 
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
-			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_MenuBar;
+			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
 		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
 
@@ -207,32 +212,22 @@ namespace Polarity
 
 		}
 
+
 		ImGui::SetNextWindowPos({ viewport->WorkPos.x,  viewport->WorkPos.y });
 		ImGui::SetNextWindowSize(viewport->WorkSize);
 		ImGui::SetNextWindowViewport(viewport->ID);
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 7.0f));
-
 		if (ImGui::Begin("DockSpace", nullptr, window_flags))
 		{
 			DrawMenubarPanel();
-			ImGui::PopStyleVar();
+
 			// Submit the DockSpace
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-			ImGui::PopStyleVar();
 
-			ImGui::ShowDemoWindow();
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(2.0f, 6.0f));
-			ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4.0f, 1.0f));
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(2.0f, 2.0f));
+			//ImGui::ShowDemoWindow();
 
 			m_PanelManager.OnDraw();
-
-			ImGui::PopStyleVar(4);
 
 			ImGui::End();
 		}
@@ -384,22 +379,15 @@ namespace Polarity
 
 	void EditorLayer::DrawMenubarPanel()
 	{
-		ImGuiStyle& style = ImGui::GetStyle();
-
-		
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0f, 6.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(6.0f, 4.0f));
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
-
-		if (ImGui::BeginMenuBar())
+		if (ImGui::BeginMainMenuBar())
 		{
-			float imageSize = 24.0f;
+			float imageSize = 18.0f;
 			float menuBarHeight = ImGui::GetFrameHeight();
 
 			float cursorY = ImGui::GetCursorPosY();
 			ImGui::SetCursorPosY(cursorY + (menuBarHeight - imageSize) * 0.5f);
 
-			uint32_t texID = m_logoTex->GetRendererID();
+			uint32_t texID = m_LogoTex->GetRendererID();
 			ImGui::Image(
 				(void*)texID,
 				ImVec2(imageSize, imageSize),
@@ -410,8 +398,7 @@ namespace Polarity
 			// Restore Y pos
 			ImGui::SetCursorPosY(cursorY);
 
-
-			if (ImGui::BeginMenu("File")) // all commands to manage files
+			if (ImGui::BeginMenu("Scene"))
 			{
 				if (ImGui::MenuItem("New", "Ctrl + N"))
 					NewScene();
@@ -421,16 +408,12 @@ namespace Polarity
 					SaveScene();
 				if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
 					SaveAsScene();
-
-				ImGui::Separator();
-				if (ImGui::MenuItem("Build TODO", "Ctrl+B"));
-				if (ImGui::MenuItem("Play TODO", "F5"));
 				ImGui::Separator();
 				if (ImGui::MenuItem("Quit", "Alt+F4")) Application::Get().Shutdown();
 
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("Edit")) // all commands to edit project
+			if (ImGui::BeginMenu("Editor")) // all commands to edit project
 			{
 				if (ImGui::MenuItem("Undo", "Ctrl+Z"));
 				if (ImGui::MenuItem("Redo", "Ctrl+Y"));
@@ -440,14 +423,26 @@ namespace Polarity
 				if (ImGui::MenuItem("Paste", "Ctrl+V"));
 				if (ImGui::MenuItem("Duplicate", "Ctrl+D"));
 				ImGui::Separator();
-				if (ImGui::MenuItem("Project Settings TODO"));
-				if (ImGui::MenuItem("Editor Settings TODO"));
+				if (ImGui::MenuItem("Options TODO"));
+
+				ImGui::Separator();
+				ImGui::MenuItem("Play", "F5");
+				ImGui::MenuItem("Simulate", "Shift+F5");
 
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("View"))
 			{
-				if (ImGui::BeginMenu("Open..."))
+				if (ImGui::BeginMenu("Show"))
+				{
+					if (ImGui::MenuItem("Grid"));
+
+					ImGui::Separator();
+					if (ImGui::MenuItem("Gizmos"));
+
+					ImGui::EndMenu();
+				}
+				if (ImGui::BeginMenu("Open"))
 				{
 
 					if (ImGui::MenuItem("Hierarcy"))
@@ -496,8 +491,8 @@ namespace Polarity
 				ImGui::EndMenu();
 			}
 			ImGui::TextDisabled(m_CurrentFilepath.c_str());
-			ImGui::EndMenuBar();
+
+			ImGui::EndMainMenuBar();
 		}
-		ImGui::PopStyleVar(3);
 	}
 }

@@ -11,7 +11,7 @@ namespace Polarity
 	{
 		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
 
-		ImGui::TextUnformatted("Name of Scene TODO");
+		ImGui::TextUnformatted("Name");
 
 		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
 		ImVec2 btnSize(lineHeight, lineHeight);

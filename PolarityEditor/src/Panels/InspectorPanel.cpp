@@ -179,16 +179,32 @@ namespace Polarity
 
 			bool open = ImGui::TreeNodeEx((void*)(name.c_str() + entity.GetID()), treeNodeFlags, name.c_str());
 			float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+
+
 			ImVec2 btnSize(lineHeight, lineHeight);
-			ImGui::SameLine(avilibleRegion.x - lineHeight * 0.8f);
-			if (ImGui::Button("*", btnSize))
+			ImGui::SameLine(avilibleRegion.x - lineHeight * 1.5f);
+			ImGui::TextDisabled("?");
+			if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+			{
+				ImGui::BeginTooltip();
+				ImGui::Text("info here");
+				ImGui::EndTooltip();
+			}
+
+			ImGui::SameLine(avilibleRegion.x - lineHeight * 0.5f);
+			if (ImGui::Button("*"))
 			{
 				ImGui::OpenPopup("ComponentSettings");
 			}
-			//ImGui::PopStyleVar();
+
 			bool removeComponent = false;
 			if (ImGui::BeginPopup("ComponentSettings"))
 			{
+
+				ImGui::TextDisabled(name.c_str());
+				if (ImGui::MenuItem("Reset TODO")) {}
+				ImGui::Separator();
+
 				if (ImGui::MenuItem("Copy TODO")) {}
 
 				if (ImGui::MenuItem("Remove"))
@@ -213,7 +229,7 @@ namespace Polarity
 
 		if (!m_Context->SelectedEntity || !m_Context->SelectedEntity.IsAlive())
 		{
-			ImGui::Text("Select a entity to inspect");
+			ImGui::TextDisabled("Select a entity");
 			ImGui::End();
 			return;
 		}
@@ -231,7 +247,12 @@ namespace Polarity
 			strncpy(m_NameBuf, name.Name.c_str(), sizeof(m_NameBuf) - 1);
 			m_lastSelected = entityID;
 		}
+		bool isActive = true;
+		if (ImGui::Checkbox("##isActive", &isActive))
+		{
 
+		}
+		ImGui::SameLine();
 		if (ImGui::InputText("##NameOfEntity", m_NameBuf, IM_ARRAYSIZE(m_NameBuf)))
 		{
 			name.Name = m_NameBuf;
@@ -239,19 +260,21 @@ namespace Polarity
 
 		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
 		ImVec2 btnSize(lineHeight, lineHeight);
-		ImGui::SameLine(ImGui::GetWindowWidth() - lineHeight * 4);
+		ImGui::SameLine(ImGui::GetWindowWidth() - lineHeight * 2);
 		bool isLocked;
-		if (ImGui::Checkbox("Lock", &isLocked))
+		if (ImGui::Checkbox("##Lock", &isLocked))
 		{
 			LOG_DEBUG("Lock inspector");
 		}
+
 		ImGui::SameLine(ImGui::GetWindowWidth() - lineHeight);
-		if (ImGui::Button("+", btnSize))
+		if (ImGui::Button("+##AddComponent", btnSize))
 		{
 			ImGui::OpenPopup("AddComponent");
 		}
 		if (ImGui::BeginPopup("AddComponent"))
 		{
+			ImGui::TextDisabled("Add Component");
 			if (ImGui::MenuItem("Transform"))
 			{
 				entity.AddComponent<TransformComponent>();
