@@ -14,6 +14,6 @@ namespace Polarity
         void OnDraw() override;
 
     private:
-
+        
     };
 }

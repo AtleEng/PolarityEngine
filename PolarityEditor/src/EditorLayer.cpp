@@ -14,6 +14,8 @@
 #include "engine/scene/SceneSerializer.h"
 #include "engine/utils/PlatformUtils.h"
 
+#include "UIIcons.h"
+
 namespace Polarity
 {
 	EditorLayer::EditorLayer()
@@ -24,6 +26,12 @@ namespace Polarity
 	void EditorLayer::OnAttach()
 	{
 		POLARITY_PROFILE_FUNCTION();
+
+		UIIcons::Init();
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Bold.ttf", 18.0f);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf", 18.0f);
 
 		FramebufferSpecification fbSpec;
 		fbSpec.Width = 1280;
@@ -60,14 +68,6 @@ namespace Polarity
 		auto square = m_EditorContext.ActiveScene->CreateEntity();
 		auto& sprite = square.AddComponent<SpriteComponent>();
 		sprite.Color = { 1, 0, 1, 1 };
-
-		m_LogoTex = Texture2D::Create("assets/textures/Logo.png");
-		m_IconsTex = Texture2D::Create("assets/textures/icons.png");
-
-		m_EditorContext.Textures.push_back(SubTexture2D::CreateFromUniformGrid(m_IconsTex, { 7, 8 }, 50)); // cog
-		m_EditorContext.Textures.push_back(SubTexture2D::CreateFromUniformGrid(m_IconsTex, { 6, 9 }, 50)); // Lock
-		m_EditorContext.Textures.push_back(SubTexture2D::CreateFromUniformGrid(m_IconsTex, { 5, 4 }, 50)); // menu
-
 
 		class CamControll : public ScriptableEntity
 		{
@@ -150,9 +150,53 @@ namespace Polarity
 			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
 		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
+		style.TabRounding = 0;
+		style.ScrollbarRounding = 0;
+		style.ScrollbarSize = 6;
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		{
+			ImVec4 backgroundColor =					ImVec4(0.15f, 0.15f, 0.16f, 1.00f);
+			colors[ImGuiCol_WindowBg] =					backgroundColor;
+			colors[ImGuiCol_ChildBg] =					backgroundColor;
+			colors[ImGuiCol_PopupBg] =					backgroundColor;
+			colors[ImGuiCol_TitleBg] =					backgroundColor;
+			colors[ImGuiCol_TitleBgActive] =			backgroundColor;
+			colors[ImGuiCol_TitleBgCollapsed] =			backgroundColor;
+			colors[ImGuiCol_MenuBarBg] =				backgroundColor;
+			colors[ImGuiCol_Tab] =						backgroundColor;
+			colors[ImGuiCol_TabActive] =				backgroundColor;
+			colors[ImGuiCol_TabUnfocused] =				backgroundColor;
+			colors[ImGuiCol_TabUnfocusedActive] =		backgroundColor;
+			colors[ImGuiCol_ScrollbarBg] =				backgroundColor;
+
+			ImVec4 iteamBaseColor =						ImVec4(0.20f, 0.19f, 0.18f, 1.00f);
+			colors[ImGuiCol_FrameBg] =					iteamBaseColor;
+			colors[ImGuiCol_Button] =					iteamBaseColor;
+			colors[ImGuiCol_Header] =					iteamBaseColor;
+			colors[ImGuiCol_TabHovered] =				iteamBaseColor;
+			colors[ImGuiCol_ScrollbarGrab] =			iteamBaseColor;
+			colors[ImGuiCol_SliderGrab] =				iteamBaseColor;
+			colors[ImGuiCol_ResizeGrip] =				iteamBaseColor;
+
+			ImVec4 iteamHoveredColor =					ImVec4(0.31f, 0.29f, 0.27f, 1.00f);
+			colors[ImGuiCol_FrameBgHovered] =			iteamHoveredColor;
+			colors[ImGuiCol_FrameBgActive] =			iteamHoveredColor;
+			colors[ImGuiCol_ScrollbarGrabHovered] =		iteamHoveredColor;
+			colors[ImGuiCol_ScrollbarGrabActive] =		iteamHoveredColor;
+			colors[ImGuiCol_SliderGrabActive] =			iteamHoveredColor;
+			colors[ImGuiCol_ButtonHovered] =			iteamHoveredColor;
+			colors[ImGuiCol_ButtonActive] =				iteamHoveredColor;
+			colors[ImGuiCol_HeaderHovered] =			iteamHoveredColor;
+			colors[ImGuiCol_HeaderActive] =				iteamHoveredColor;
+			colors[ImGuiCol_Separator] =				iteamHoveredColor;
+			colors[ImGuiCol_SeparatorHovered] =			iteamHoveredColor;
+			colors[ImGuiCol_SeparatorActive] =			iteamHoveredColor;
+			colors[ImGuiCol_ResizeGripHovered] =		iteamHoveredColor;
+			colors[ImGuiCol_ResizeGripActive] =			iteamHoveredColor;
+
+
+			/*
 			colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 			colors[ImGuiCol_TextDisabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
 			colors[ImGuiCol_WindowBg] = ImVec4(0.08f, 0.08f, 0.09f, 1.00f);
@@ -209,6 +253,7 @@ namespace Polarity
 			colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
 			colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
 
+			*/
 
 		}
 
@@ -225,7 +270,7 @@ namespace Polarity
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-			//ImGui::ShowDemoWindow();
+			ImGui::ShowDemoWindow();
 
 			m_PanelManager.OnDraw();
 
@@ -387,13 +432,15 @@ namespace Polarity
 			float cursorY = ImGui::GetCursorPosY();
 			ImGui::SetCursorPosY(cursorY + (menuBarHeight - imageSize) * 0.5f);
 
-			uint32_t texID = m_LogoTex->GetRendererID();
+			auto& plusIcon = UIIcons::Get(UIIcon::Logo);
+			uint32_t texID = plusIcon->GetTexture()->GetRendererID();
+			const glm::vec2* uvs = plusIcon->GetTexCoords();
 			ImGui::Image(
 				(void*)texID,
 				ImVec2(imageSize, imageSize),
-				ImVec2(0, 1),
-				ImVec2(1, 0)
-			);
+				ImVec2(uvs[0].x, uvs[0].y),
+				ImVec2(uvs[2].x, uvs[2].y));
+			
 
 			// Restore Y pos
 			ImGui::SetCursorPosY(cursorY);

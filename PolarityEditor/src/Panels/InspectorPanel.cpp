@@ -7,6 +7,31 @@
 
 namespace Polarity
 {
+	static bool DrawButtonImage(Ref<SubTexture2D> tex, const std::string& label)
+	{
+		bool isKlicked = false;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+		ImGui::PushID(label.c_str());
+
+		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+		ImVec2 btnSize(lineHeight, lineHeight);
+
+		uint32_t texID = tex->GetTexture()->GetRendererID();
+		const glm::vec2* uvs = tex->GetTexCoords();
+		if (ImGui::ImageButton((void*)texID,
+			btnSize,
+			ImVec2(uvs[0].x, uvs[2].y),
+			ImVec2(uvs[2].x, uvs[0].y)))
+		{
+			isKlicked = true;
+		}
+		
+		ImGui::PopID();
+		ImGui::PopStyleVar();
+		return isKlicked;
+	}
+	
 	static bool DrawAxisValue(
 		const char* axis,
 		float& value,
@@ -182,17 +207,9 @@ namespace Polarity
 
 
 			ImVec2 btnSize(lineHeight, lineHeight);
-			ImGui::SameLine(avilibleRegion.x - lineHeight * 1.5f);
-			ImGui::TextDisabled("?");
-			if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
-			{
-				ImGui::BeginTooltip();
-				ImGui::Text("info here");
-				ImGui::EndTooltip();
-			}
 
 			ImGui::SameLine(avilibleRegion.x - lineHeight * 0.5f);
-			if (ImGui::Button("*"))
+			if (DrawButtonImage(UIIcons::Get(UIIcon::Settings), "##settings"))
 			{
 				ImGui::OpenPopup("ComponentSettings");
 			}
@@ -222,6 +239,7 @@ namespace Polarity
 				entity.RemoveComponent<T>();
 		}
 	}
+
 
 	void InspectorPanel::OnDraw()
 	{
@@ -260,15 +278,19 @@ namespace Polarity
 
 		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
 		ImVec2 btnSize(lineHeight, lineHeight);
-		ImGui::SameLine(ImGui::GetWindowWidth() - lineHeight * 2);
-		bool isLocked;
-		if (ImGui::Checkbox("##Lock", &isLocked))
-		{
-			LOG_DEBUG("Lock inspector");
+		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - btnSize.x * 2);
+
+		auto icon = m_Locked
+			? UIIcons::Get(UIIcon::Lock)
+			: UIIcons::Get(UIIcon::Unlock);
+
+		if (DrawButtonImage(icon, "iconLock")) {
+			m_Locked = !m_Locked;
 		}
 
-		ImGui::SameLine(ImGui::GetWindowWidth() - lineHeight);
-		if (ImGui::Button("+##AddComponent", btnSize))
+		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - btnSize.x);
+
+		if (DrawButtonImage(UIIcons::Get(UIIcon::Plus), "iconPlus"))
 		{
 			ImGui::OpenPopup("AddComponent");
 		}

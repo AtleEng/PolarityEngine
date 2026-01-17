@@ -34,10 +34,6 @@ namespace Polarity
 	private:
 		CamController  m_cameraController;
 
-		Ref<Texture2D> m_LogoTex;
-		Ref<Texture2D> m_IconsTex;
-		Ref<SubTexture2D> m_OptionIconTex;
-
 		Entity m_CamEntity;
 		Entity m_SCamEntity;
 

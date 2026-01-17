@@ -18,5 +18,7 @@ namespace Polarity
     private:
         char m_NameBuf[256] = "";
         ECS::Entity m_lastSelected = ECS::INVALID_ENTITY;
+
+        bool m_Locked = false;
     };
 }

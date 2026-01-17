@@ -36,6 +36,7 @@
     <ClInclude Include="src\Panels\ViewportPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\UIIcons.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CamController.cpp">
@@ -65,6 +66,7 @@
     <ClCompile Include="src\Panels\ViewportPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\UIIcons.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />

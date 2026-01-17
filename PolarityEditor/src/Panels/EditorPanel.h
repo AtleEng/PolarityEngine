@@ -4,6 +4,8 @@
 #include "engine/scene/Scene.h"
 #include "engine/scene/Entity.h"
 
+#include "../UIIcons.h";
+
 namespace Polarity
 {
 	class EditorPanel;
@@ -14,8 +16,6 @@ namespace Polarity
 		Entity SelectedEntity;
 		Ref<Framebuffer> ViewportFramebuffer;
 		glm::vec2 ViewportSize = { 1280, 720 };
-
-		std::vector<Ref<SubTexture2D>> Textures = {};
 	};
 	enum class PanelID : uint8_t
 	{

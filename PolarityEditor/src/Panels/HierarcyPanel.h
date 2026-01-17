@@ -12,6 +12,7 @@ namespace Polarity
         HierarcyPanel()
             : EditorPanel(StaticPanelID, 0, "SceneHierarcy") {}
 
+        //void OnAttach() override;
         void OnDraw() override;
 
     private:

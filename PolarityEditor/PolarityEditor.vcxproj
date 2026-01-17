@@ -155,6 +155,7 @@
     <ClInclude Include="src\Panels\InspectorPanel.h" />
     <ClInclude Include="src\Panels\PanelManager.h" />
     <ClInclude Include="src\Panels\ViewportPanel.h" />
+    <ClInclude Include="src\UIIcons.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CamController.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\Panels\InspectorPanel.cpp" />
     <ClCompile Include="src\Panels\PanelManager.cpp" />
     <ClCompile Include="src\Panels\ViewportPanel.cpp" />
+    <ClCompile Include="src\UIIcons.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />

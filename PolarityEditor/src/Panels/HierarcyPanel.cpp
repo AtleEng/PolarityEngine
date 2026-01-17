@@ -9,19 +9,28 @@ namespace Polarity
 {
 	void HierarcyPanel::OnDraw()
 	{
+		auto& plusIcon = UIIcons::Get(UIIcon::DotMenu);
+		uint32_t texID = plusIcon->GetTexture()->GetRendererID();
+		const glm::vec2* uvs = plusIcon->GetTexCoords();
+
 		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
 
 		ImGui::TextUnformatted("Name");
 
-		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+		float lineHeight = ImGui::GetTextLineHeight();
 		ImVec2 btnSize(lineHeight, lineHeight);
-		ImGui::SameLine(ImGui::GetWindowWidth() - lineHeight);
+		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - btnSize.x);
 
-		if (ImGui::Button("+", btnSize))
+		if (ImGui::ImageButton((void*)texID,
+			btnSize,
+			ImVec2(uvs[2].x, uvs[0].y),
+			ImVec2(uvs[0].x, uvs[2].y)))
 		{
 			auto entity = m_Context->ActiveScene->CreateEntity();
 			entity.AddComponent<SpriteComponent>();
 		}
+		ImGui::PopStyleVar();
 
 		ImGui::Separator();
 
