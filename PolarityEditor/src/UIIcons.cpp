@@ -11,7 +11,7 @@ namespace Polarity {
 	void UIIcons::Init() {
 		assert(!s_initialized && "UIIcons already initialized");
 
-		s_IconAtlas = Texture2D::Create("assets/textures/icons2.png");
+		s_IconAtlas = Texture2D::Create("assets/textures/icons.png");
 
 		s_icons[static_cast<size_t>(UIIcon::Logo)] =
 			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 0, 2 }, 18);

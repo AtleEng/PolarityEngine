@@ -27,7 +27,7 @@
     <ClInclude Include="src\Panels\HierarcyPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Panels\InspectorPanel.h">
+    <ClInclude Include="src\Panels\PropertitiesPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Panels\PanelManager.h">
@@ -36,7 +36,9 @@
     <ClInclude Include="src\Panels\ViewportPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\UIIcons.h" />
+    <ClInclude Include="src\UIIcons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CamController.cpp">
@@ -57,7 +59,7 @@
     <ClCompile Include="src\Panels\HierarcyPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Panels\InspectorPanel.cpp">
+    <ClCompile Include="src\Panels\PropertitiesPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Panels\PanelManager.cpp">
@@ -66,7 +68,9 @@
     <ClCompile Include="src\Panels\ViewportPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\UIIcons.cpp" />
+    <ClCompile Include="src\UIIcons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />

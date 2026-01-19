@@ -3,13 +3,13 @@
 
 namespace Polarity
 {
-    class InspectorPanel : public EditorPanel
+    class PropertitiesPanel : public EditorPanel
     {
     public:
         static constexpr PanelID StaticPanelID = PanelID::Properties;
         static constexpr bool AllowMultiple() { return true; }
 
-        InspectorPanel(uint32_t instanceID)
+        PropertitiesPanel(uint32_t instanceID)
             : EditorPanel(StaticPanelID, instanceID, "Propertities") {}
 
         //void OnAttach() override;
@@ -17,7 +17,7 @@ namespace Polarity
         void OnDraw() override;
     private:
         char m_NameBuf[256] = "";
-        ECS::Entity m_lastSelected = ECS::INVALID_ENTITY;
+        Entity m_lastSelected = {};
 
         bool m_Locked = false;
     };

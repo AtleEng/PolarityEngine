@@ -7,7 +7,7 @@
 
 #include "Panels/AssetsPanel.h"
 #include "Panels/ConsolePanel.h"
-#include "Panels/InspectorPanel.h"
+#include "Panels/PropertitiesPanel.h"
 #include "Panels/HierarcyPanel.h"
 #include "Panels/ViewportPanel.h"
 
@@ -43,7 +43,7 @@ namespace Polarity
 
 		m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
 		m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
-		m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
+		m_PanelManager.OpenPanel<PropertitiesPanel>(m_EditorContext);
 		m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
 
 		auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
@@ -156,44 +156,44 @@ namespace Polarity
 
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		{
-			ImVec4 backgroundColor =					ImVec4(0.15f, 0.15f, 0.16f, 1.00f);
-			colors[ImGuiCol_WindowBg] =					backgroundColor;
-			colors[ImGuiCol_ChildBg] =					backgroundColor;
-			colors[ImGuiCol_PopupBg] =					backgroundColor;
-			colors[ImGuiCol_TitleBg] =					backgroundColor;
-			colors[ImGuiCol_TitleBgActive] =			backgroundColor;
-			colors[ImGuiCol_TitleBgCollapsed] =			backgroundColor;
-			colors[ImGuiCol_MenuBarBg] =				backgroundColor;
-			colors[ImGuiCol_Tab] =						backgroundColor;
-			colors[ImGuiCol_TabActive] =				backgroundColor;
-			colors[ImGuiCol_TabUnfocused] =				backgroundColor;
-			colors[ImGuiCol_TabUnfocusedActive] =		backgroundColor;
-			colors[ImGuiCol_ScrollbarBg] =				backgroundColor;
+			ImVec4 backgroundColor = ImVec4(0.15f, 0.15f, 0.16f, 1.00f);
+			colors[ImGuiCol_WindowBg] = backgroundColor;
+			colors[ImGuiCol_ChildBg] = backgroundColor;
+			colors[ImGuiCol_PopupBg] = backgroundColor;
+			colors[ImGuiCol_TitleBg] = backgroundColor;
+			colors[ImGuiCol_TitleBgActive] = backgroundColor;
+			colors[ImGuiCol_TitleBgCollapsed] = backgroundColor;
+			colors[ImGuiCol_MenuBarBg] = backgroundColor;
+			colors[ImGuiCol_Tab] = backgroundColor;
+			colors[ImGuiCol_TabActive] = backgroundColor;
+			colors[ImGuiCol_TabUnfocused] = backgroundColor;
+			colors[ImGuiCol_TabUnfocusedActive] = backgroundColor;
+			colors[ImGuiCol_ScrollbarBg] = backgroundColor;
 
-			ImVec4 iteamBaseColor =						ImVec4(0.20f, 0.19f, 0.18f, 1.00f);
-			colors[ImGuiCol_FrameBg] =					iteamBaseColor;
-			colors[ImGuiCol_Button] =					iteamBaseColor;
-			colors[ImGuiCol_Header] =					iteamBaseColor;
-			colors[ImGuiCol_TabHovered] =				iteamBaseColor;
-			colors[ImGuiCol_ScrollbarGrab] =			iteamBaseColor;
-			colors[ImGuiCol_SliderGrab] =				iteamBaseColor;
-			colors[ImGuiCol_ResizeGrip] =				iteamBaseColor;
+			ImVec4 iteamBaseColor = ImVec4(0.20f, 0.19f, 0.18f, 1.00f);
+			colors[ImGuiCol_FrameBg] = iteamBaseColor;
+			colors[ImGuiCol_Button] = iteamBaseColor;
+			colors[ImGuiCol_Header] = iteamBaseColor;
+			colors[ImGuiCol_TabHovered] = iteamBaseColor;
+			colors[ImGuiCol_ScrollbarGrab] = iteamBaseColor;
+			colors[ImGuiCol_SliderGrab] = iteamBaseColor;
+			colors[ImGuiCol_ResizeGrip] = iteamBaseColor;
 
-			ImVec4 iteamHoveredColor =					ImVec4(0.31f, 0.29f, 0.27f, 1.00f);
-			colors[ImGuiCol_FrameBgHovered] =			iteamHoveredColor;
-			colors[ImGuiCol_FrameBgActive] =			iteamHoveredColor;
-			colors[ImGuiCol_ScrollbarGrabHovered] =		iteamHoveredColor;
-			colors[ImGuiCol_ScrollbarGrabActive] =		iteamHoveredColor;
-			colors[ImGuiCol_SliderGrabActive] =			iteamHoveredColor;
-			colors[ImGuiCol_ButtonHovered] =			iteamHoveredColor;
-			colors[ImGuiCol_ButtonActive] =				iteamHoveredColor;
-			colors[ImGuiCol_HeaderHovered] =			iteamHoveredColor;
-			colors[ImGuiCol_HeaderActive] =				iteamHoveredColor;
-			colors[ImGuiCol_Separator] =				iteamHoveredColor;
-			colors[ImGuiCol_SeparatorHovered] =			iteamHoveredColor;
-			colors[ImGuiCol_SeparatorActive] =			iteamHoveredColor;
-			colors[ImGuiCol_ResizeGripHovered] =		iteamHoveredColor;
-			colors[ImGuiCol_ResizeGripActive] =			iteamHoveredColor;
+			ImVec4 iteamHoveredColor = ImVec4(0.31f, 0.29f, 0.27f, 1.00f);
+			colors[ImGuiCol_FrameBgHovered] = iteamHoveredColor;
+			colors[ImGuiCol_FrameBgActive] = iteamHoveredColor;
+			colors[ImGuiCol_ScrollbarGrabHovered] = iteamHoveredColor;
+			colors[ImGuiCol_ScrollbarGrabActive] = iteamHoveredColor;
+			colors[ImGuiCol_SliderGrabActive] = iteamHoveredColor;
+			colors[ImGuiCol_ButtonHovered] = iteamHoveredColor;
+			colors[ImGuiCol_ButtonActive] = iteamHoveredColor;
+			colors[ImGuiCol_HeaderHovered] = iteamHoveredColor;
+			colors[ImGuiCol_HeaderActive] = iteamHoveredColor;
+			colors[ImGuiCol_Separator] = iteamHoveredColor;
+			colors[ImGuiCol_SeparatorHovered] = iteamHoveredColor;
+			colors[ImGuiCol_SeparatorActive] = iteamHoveredColor;
+			colors[ImGuiCol_ResizeGripHovered] = iteamHoveredColor;
+			colors[ImGuiCol_ResizeGripActive] = iteamHoveredColor;
 
 
 			/*
@@ -270,7 +270,7 @@ namespace Polarity
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-			ImGui::ShowDemoWindow();
+			//ImGui::ShowDemoWindow();
 
 			m_PanelManager.OnDraw();
 
@@ -432,15 +432,15 @@ namespace Polarity
 			float cursorY = ImGui::GetCursorPosY();
 			ImGui::SetCursorPosY(cursorY + (menuBarHeight - imageSize) * 0.5f);
 
-			auto& plusIcon = UIIcons::Get(UIIcon::Logo);
-			uint32_t texID = plusIcon->GetTexture()->GetRendererID();
-			const glm::vec2* uvs = plusIcon->GetTexCoords();
+			auto& logoIcon = UIIcons::Get(UIIcon::Logo);
+			uint32_t texID = logoIcon->GetTexture()->GetRendererID();
+			const glm::vec2* uvs = logoIcon->GetTexCoords();
 			ImGui::Image(
 				(void*)texID,
 				ImVec2(imageSize, imageSize),
 				ImVec2(uvs[0].x, uvs[0].y),
 				ImVec2(uvs[2].x, uvs[2].y));
-			
+
 
 			// Restore Y pos
 			ImGui::SetCursorPosY(cursorY);
@@ -469,6 +469,7 @@ namespace Polarity
 				if (ImGui::MenuItem("Copy", "Ctrl+C"));
 				if (ImGui::MenuItem("Paste", "Ctrl+V"));
 				if (ImGui::MenuItem("Duplicate", "Ctrl+D"));
+				if (ImGui::MenuItem("Delete", "Del"));
 				ImGui::Separator();
 				if (ImGui::MenuItem("Options TODO"));
 
@@ -489,36 +490,33 @@ namespace Polarity
 
 					ImGui::EndMenu();
 				}
-				if (ImGui::BeginMenu("Open"))
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Hierarcy"))
+					m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Viewport"))
+					m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Properties"))
+					m_PanelManager.OpenPanel<PropertitiesPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Assets"))
+					m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
+
+				if (ImGui::MenuItem("Console"))
 				{
 
-					if (ImGui::MenuItem("Hierarcy"))
-						m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
+					auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
+					auto panelId = consolePanel.GetInstanceID();
 
-					if (ImGui::MenuItem("Viewport"))
-						m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
-
-					if (ImGui::MenuItem("Inspector"))
-						m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
-
-					if (ImGui::MenuItem("Assets"))
-						m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
-
-					if (ImGui::MenuItem("Console"))
+					AddLogListener([this, panelId](const LogEvent& e)
 					{
-
-						auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
-						auto panelId = consolePanel.GetInstanceID();
-
-						AddLogListener([this, panelId](const LogEvent& e)
+						if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
 						{
-							if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
-							{
-								panel->BindLog(e);
-							}
-						});
-					}
-					ImGui::EndMenu();
+							panel->BindLog(e);
+						}
+					});
 				}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Reset Layout"))
@@ -526,7 +524,7 @@ namespace Polarity
 					m_PanelManager.Clear();
 					m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
 					m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
-					m_PanelManager.OpenPanel<InspectorPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<PropertitiesPanel>(m_EditorContext);
 					m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
 				}
 
@@ -537,7 +535,8 @@ namespace Polarity
 				ImGui::MenuItem("General");
 				ImGui::EndMenu();
 			}
-			ImGui::TextDisabled(m_CurrentFilepath.c_str());
+
+			//ImGui::TextDisabled(m_CurrentFilepath.c_str());
 
 			ImGui::EndMainMenuBar();
 		}

@@ -222,6 +222,9 @@
     <ClInclude Include="src\engine\scene\ScriptableEntity.h">
       <Filter>Header Files\src\engine\scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\utils\PlatformUtils.h">
+      <Filter>Header Files\src\engine\utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\utils\Random.h">
       <Filter>Header Files\src\engine\utils</Filter>
     </ClInclude>
@@ -255,7 +258,6 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
@@ -336,6 +338,9 @@
     <ClCompile Include="src\engine\utils\Random.cpp">
       <Filter>Source Files\src\engine\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\utils\WindowsPlatformUtils.cpp">
+      <Filter>Source Files\src\engine\utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp">
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
@@ -369,6 +374,5 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\utils\WindowsPlatformUtils.cpp" />
   </ItemGroup>
 </Project>

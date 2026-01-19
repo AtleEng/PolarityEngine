@@ -1,5 +1,5 @@
 // icon
-IDI_APP_ICON ICON "Polarity/assets/PolarityIcon.ico"
+IDI_APP_ICON ICON "PolarityEditor/resources/icon.ico"
 
 // info
 1 VERSIONINFO
@@ -16,9 +16,9 @@ BEGIN
 		BLOCK "040904B0"
 		BEGIN
 			VALUE "CompanyName", "Polarity Studios"
-			VALUE "FileDescription", "Test Application for the Polarity engine"
+			VALUE "FileDescription", "Official editor for the Polarity engine"
 			VALUE "FileVersion", "1.0.0.0"
-			VALUE "ProductName", "Sandbox"
+			VALUE "ProductName", "Polarity Editor"
 			VALUE "ProductVersion", "1.0.0.0"
 			VALUE "Comments", "Dev build"
 		END

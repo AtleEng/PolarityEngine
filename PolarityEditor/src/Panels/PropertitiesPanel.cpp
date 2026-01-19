@@ -1,5 +1,5 @@
 #include "polpch.h"
-#include "InspectorPanel.h"
+#include "PropertitiesPanel.h"
 
 #include <imgui/imgui_internal.h>
 
@@ -26,12 +26,12 @@ namespace Polarity
 		{
 			isKlicked = true;
 		}
-		
+
 		ImGui::PopID();
 		ImGui::PopStyleVar();
 		return isKlicked;
 	}
-	
+
 	static bool DrawAxisValue(
 		const char* axis,
 		float& value,
@@ -241,30 +241,40 @@ namespace Polarity
 	}
 
 
-	void InspectorPanel::OnDraw()
+	void PropertitiesPanel::OnDraw()
 	{
 		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
 
-		if (!m_Context->SelectedEntity || !m_Context->SelectedEntity.IsAlive())
+		Entity entity;
+		if (m_Locked)
 		{
+			entity = m_lastSelected;
+		}
+		else
+		{
+			entity = m_Context->SelectedEntity;
+		}
+
+		if (!entity || !entity.IsAlive())
+		{
+			m_Locked = false;
 			ImGui::TextDisabled("Select a entity");
 			ImGui::End();
 			return;
 		}
 
-		Entity entity = m_Context->SelectedEntity;
-		ECS::Entity entityID = entity.GetID();
-
 
 		auto& name = entity.GetComponent<NameComponent>();
 
 		// If selection changed
-		if (m_lastSelected != entityID)
+		if (m_lastSelected != entity)
 		{
 			memset(m_NameBuf, 0, sizeof(m_NameBuf));
 			strncpy(m_NameBuf, name.Name.c_str(), sizeof(m_NameBuf) - 1);
-			m_lastSelected = entityID;
+
+			m_lastSelected = entity;
 		}
+
 		bool isActive = true;
 		if (ImGui::Checkbox("##isActive", &isActive))
 		{
