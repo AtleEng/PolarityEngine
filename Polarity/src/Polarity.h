@@ -8,16 +8,19 @@
 #include "engine/core/Timestep.h"
 #include "engine/audio/Audio.h"
 
-// ----- Debug -----------------------------------
+// ----- Debug ------------------------------------
 #include "engine/debug/Instrumentor.h"
 
-// ----- Event ----------------------------------
+// ----- Math -------------------------------------
+#include "engine/math/Math.h"
+
+// ----- Event ------------------------------------
 #include "engine/events/Event.h"
 #include "engine/events/KeyEvent.h"
 #include "engine/events/MouseEvent.h"
 #include "engine/events/ApplicationEvent.h"
 
-// ----- Renderer -------------------------------
+// ----- Renderer ---------------------------------
 #include "engine/renderer/Renderer.h"
 #include "engine/renderer/Renderer2D.h"
 #include "engine/renderer/RenderCommand.h"
@@ -30,14 +33,14 @@
 
 #include "engine/renderer/OrthographicCamera.h"
 
-// ----- ImGUI ----------------------------------
+// ----- ImGUI ------------------------------------
 #include "engine/imGui/ImGuiLayer.h"
 
-// ----- Scene -------------------------------
+// ----- Scene ------------------------------------
 #include "engine/scene/Scene.h"
 #include "engine/scene/Entity.h"
 #include "engine/scene/ScriptableEntity.h"
 #include "engine/scene/Components.h"
 
-// ----- Utility -------------------------------
+// ----- Utility ----------------------------------
 #include "engine/utils/Random.h"

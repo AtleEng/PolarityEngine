@@ -1,16 +1,30 @@
 #pragma once
 #include "EditorPanel.h"
 
+#include <algorithm>
+
 namespace Polarity
 {
+    enum class GizmoMode
+    {
+        World,
+        Local
+    };
+    enum class GizmoOperation
+    {
+        Translate,
+        Rotate,
+        Scale,
+        Bounds
+    };
+
     class ViewportPanel : public EditorPanel
     {
     public:
         static constexpr PanelID StaticPanelID = PanelID::Viewport;
-        static constexpr bool AllowMultiple() { return true; }
 
-        ViewportPanel(uint32_t instanceID)
-            : EditorPanel(StaticPanelID, instanceID, "Viewport") {}
+        ViewportPanel()
+            : EditorPanel(StaticPanelID, 0, "Viewport") {}
 
         void OnDraw() override;
         void UpdateViewport()
@@ -35,8 +49,15 @@ namespace Polarity
             //if (m_ViewportFocused)
                 //m_cameraController.OnUpdate(tS);
         }
+
+        void SetGizmoMode(GizmoMode mode) { m_GizmoMode = mode; }
+        void SetGizmoOperation(GizmoOperation operation) { m_GizmoOperation = operation; }
+
     private:
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
+
+        GizmoMode m_GizmoMode = GizmoMode::Local;
+        GizmoOperation m_GizmoOperation = GizmoOperation::Translate;
     };
 }

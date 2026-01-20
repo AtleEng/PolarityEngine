@@ -25,6 +25,7 @@ namespace Polarity
 		void ClearEntities();
 
 		bool IsAlive(ECS::Entity handle);
+		Entity GetPrimaryCameraEntity();
 
 		template<typename First, typename... Rest>
 		std::vector<Entity> GetView()

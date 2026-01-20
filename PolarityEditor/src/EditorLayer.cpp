@@ -2,6 +2,7 @@
 
 
 #include "imgui/imgui.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -139,6 +140,7 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
+
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -267,6 +269,9 @@ namespace Polarity
 			DrawMenubarPanel();
 
 			// Submit the DockSpace
+			float minWinSizeX = style.WindowMinSize.x;
+			style.WindowMinSize.x = 260.0f;
+
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
@@ -286,6 +291,7 @@ namespace Polarity
 		//m_cameraController.OnEvent(event);
 	}
 
+	//Handle all key commands
 	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& event)
 	{
 		if (event.GetRepeatCount() > 0)
@@ -331,6 +337,43 @@ namespace Polarity
 			{
 				m_EditorContext.ActiveScene->DestroyEntity(m_EditorContext.SelectedEntity.GetID());
 			}
+			break;
+		}
+		case Key::Q:
+		{
+			auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
+			if (viewport)
+			{
+				viewport->SetGizmoOperation(GizmoOperation::Bounds);
+			}
+			break;
+		}
+		case Key::W:
+		{
+			auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
+			if (viewport)
+			{
+				viewport->SetGizmoOperation(GizmoOperation::Translate);
+			}
+			break;
+		}
+		case Key::E:
+		{
+			auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
+			if (viewport)
+			{
+				viewport->SetGizmoOperation(GizmoOperation::Rotate);
+			}
+			break;
+		}
+		case Key::R:
+		{
+			auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
+			if (viewport)
+			{
+				viewport->SetGizmoOperation(GizmoOperation::Scale);
+			}
+			break;
 		}
 		}
 

@@ -120,19 +120,19 @@ namespace Polarity
 	{
 		ECS::Entity target = ECS::INVALID_ENTITY;
 
-		for (auto e : m_Registry.GetView<NameComponent>())
+		for (auto entity : m_Registry.GetView<NameComponent>())
 		{
-			if (m_Registry.GetComponent<NameComponent>(e).Name == name)
+			if (m_Registry.GetComponent<NameComponent>(entity).Name == name)
 			{
-				target = e;
+				target = entity;
 				break;
 			}
 		}
 
 		if (target != ECS::INVALID_ENTITY)
 		{
-			LOG_DEBUG("Destroyed %s", name.c_str());
 			DestroyEntity(target);
+			LOG_DEBUG("Destroyed %s", name.c_str());
 		}
 		else
 		{
@@ -154,5 +154,19 @@ namespace Polarity
 	bool Scene::IsAlive(ECS::Entity handle)
 	{
 		return m_Registry.IsAlive(handle);
+	}
+
+	Entity Scene::GetPrimaryCameraEntity()
+	{
+		auto view = m_Registry.GetView<CameraComponent>();
+		for (auto entity : view)
+		{
+			const auto& camera = m_Registry.GetComponent<CameraComponent>(entity);
+			if (camera.Primary)
+			{
+				return Entity(entity, this);
+			}
+		}
+		return {};
 	}
 }

@@ -22,10 +22,23 @@ project "Polarity"
     {
         "src/**.h",
         "src/**.cpp",
+
+        "thirdparty/stb_image/**.h",
         "thirdparty/stb_image/**.cpp",
-        "thirdparty/stb_image/**.h"
+
+        "thirdparty/glm/glm/**.hpp",
+        "thirdparty/glm/glm/**.inl",
+
+        "thirdparty/ImGuizmo/**.h",
+        "thirdparty/ImGuizmo/**.cpp"
     }
- 
+
+    defines
+	{
+		"_CRT_SECURE_NO_WARNINGS",
+		"GLFW_INCLUDE_NONE"
+	}
+
     vpaths
     {
         ["Header Files/*"] = { "**.h"},
@@ -41,7 +54,8 @@ project "Polarity"
         "%{includedir.ImGui}",
         "%{includedir.glm}",
         "%{includedir.stb_image}",
-        "%{includedir.yaml_cpp}"
+        "%{includedir.yaml_cpp}",
+        "%{includedir.ImGuizmo}"
     }
 
     links
@@ -52,6 +66,9 @@ project "Polarity"
         "opengl32.lib",
         "yaml-cpp"
     }
+
+    filter "files:thirdparty/ImGuizmo/**.cpp"
+    flags { "NoPCH" }
 
     filter "system:windows"
         systemversion "latest"

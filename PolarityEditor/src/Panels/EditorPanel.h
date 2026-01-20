@@ -16,6 +16,8 @@ namespace Polarity
 		Entity SelectedEntity;
 		Ref<Framebuffer> ViewportFramebuffer;
 		glm::vec2 ViewportSize = { 1280, 720 };
+
+
 	};
 	enum class PanelID : uint8_t
 	{

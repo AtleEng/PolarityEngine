@@ -255,14 +255,16 @@ namespace Polarity
 		glm::mat4 transform(1.0f);
 		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
 		{
-			transform = glm::translate(transform, position);
-			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), position) *
+				glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		else
 		{
-			transform = glm::translate(transform, position);
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), position) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		DrawQuad(texture, transform, tint, textureScale);
 	}
@@ -272,14 +274,16 @@ namespace Polarity
 		glm::mat4 transform(1.0f);
 		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
 		{
-			transform = glm::translate(transform, { position.x, position.y, 0.0f });
-			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f }) *
+				glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		else
 		{
-			transform = glm::translate(transform, { position.x, position.y, 0.0f });
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		DrawQuad(texture, transform, tint, textureScale);
 	}
@@ -295,14 +299,16 @@ namespace Polarity
 		glm::mat4 transform(1.0f);
 		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
 		{
-			transform = glm::translate(transform, position);
-			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), position) *
+				glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		else
 		{
-			transform = glm::translate(transform, position);
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), position) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		DrawQuad(subTexture, transform, tint, textureScale);
 	}
@@ -312,14 +318,16 @@ namespace Polarity
 		glm::mat4 transform(1.0f);
 		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
 		{
-			transform = glm::translate(transform, { position.x, position.y, 0.0f });
-			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f }) *
+				glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		else
 		{
-			transform = glm::translate(transform, { position.x, position.y, 0.0f });
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		DrawQuad(subTexture, transform, tint, textureScale);
 	}
@@ -353,14 +361,16 @@ namespace Polarity
 		glm::mat4 transform(1.0f);
 		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
 		{
-			transform = glm::translate(transform, position);
-			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), position) *
+				glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		else
 		{
-			transform = glm::translate(transform, position);
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), position) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		DrawQuad(transform, color);
 	}
@@ -370,14 +380,16 @@ namespace Polarity
 		glm::mat4 transform(1.0f);
 		if (rotation != 0) //For preformance we don't calculate rotation if we dont have to
 		{
-			transform = glm::translate(transform, { position.x, position.y, 0.0f });
-			transform = glm::rotate(transform, glm::radians(rotation), glm::vec3(0, 0, 1));
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f }) *
+				glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		else
 		{
-			transform = glm::translate(transform, { position.x, position.y, 0.0f });
-			transform = glm::scale(transform, glm::vec3(size, 1.0f));
+			transform =
+				glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f }) *
+				glm::scale(glm::mat4(1.0f), glm::vec3(size, 1.0f));
 		}
 		DrawQuad(transform, tint);
 	}
