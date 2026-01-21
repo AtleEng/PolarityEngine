@@ -18,7 +18,8 @@ Polarity Engine is a lightweight, cross-platform 2D game engine for low-level ga
 
 ## Features
 
-Right now the engine provides abstractions for input, and 2d texture rendering on only windows
+Right now the engine provides a development framework with abstractions for input, audio, entity-componet-system and 2d texture rendering (only windows right now).
+It also has a editor with limited use cases at the moment.
 
 ---
 
@@ -27,6 +28,7 @@ Right now the engine provides abstractions for input, and 2d texture rendering o
 Brief explanation of key folders/files:
 
 - `Polarity` - Engine files
+- `PolarityEditor` - Editor
 - `Sandbox` - Example project
 
 <details>
@@ -61,7 +63,7 @@ Project folder        <-- Have the same name as your game
 └── TestGame/         <-- Your game (Copied version of Sandbox)  
 ```
 
-### Setup
+### Setup (not up to date)
 - Clone the repository as a submodule:
 ```text
 git submodule add https://github.com/AtleEng/PolarityEngine
@@ -204,11 +206,13 @@ Then remove the premake5.lua in `PolarityEngine`
 
   | Library     | Purpose              |
   |-------------|----------------------|
-  | **OpenGL**  | Rendering backend    |
   | **GLFW**    | Windowing & input    |
+  | **OpenGL**  | Rendering backend    |
   | **ImGui**   | Debug/Editor UI      |
+  | **ImGuizmo** | Render gizmos     |
   | **GLM**     | Math library         |
   | **stb_image** | Image loading     |
+  | **yaml** | Save/load     |
 
 </details>
 
@@ -216,23 +220,7 @@ Then remove the premake5.lua in `PolarityEngine`
 
 ## Roadmap
 
-### Core Systems
-
-- Platform abstraction — *In Progress*
-- Audio system — *Not started*
-- ECS system — *Not started*
-
-### Rendering
-- OpenGL 2D renderer — *Basic prototype done*
-- Batch rendering — *Not started*
-- Texture atlas — *Not started*
-
-### Tools
-- Editor — *Not started*
-
-### Platforms
-- Linux — *Planned*
-- macOS — *Planned*
+Get a somewhat working editor, then start working on a modular engine system
 
 ---
 
