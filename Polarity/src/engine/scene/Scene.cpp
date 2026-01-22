@@ -29,7 +29,7 @@ namespace Polarity
 
 	}
 
-	void Scene::OnUpdate(Timestep tS)
+	void Scene::OnUpdateRuntime(Timestep tS)
 	{
 		// ---------------------------------------------------------- Update Scripts --
 		{
@@ -78,6 +78,28 @@ namespace Polarity
 
 			Renderer2D::EndScene();
 		}
+		// ----------------------------------------------------------------------------
+
+		for (auto e : m_DestroyQueue)
+		{
+			m_DestroyQueue.push_back(e);
+		}
+	}
+
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+	{
+		// ---------------------------------------------------------- Render Sprites --
+		Renderer2D::BeginScene(camera);
+
+		for (auto entity : m_Registry.GetView<TransformComponent, SpriteComponent>())
+		{
+			auto& transform = m_Registry.GetComponent<TransformComponent>(entity);
+			auto& sprite = m_Registry.GetComponent<SpriteComponent>(entity);
+
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+		}
+
+		Renderer2D::EndScene();
 		// ----------------------------------------------------------------------------
 
 		for (auto e : m_DestroyQueue)

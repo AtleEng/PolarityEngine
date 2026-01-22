@@ -20,7 +20,7 @@
 namespace Polarity
 {
 	EditorLayer::EditorLayer()
-		: Layer("DemoLayer"), m_cameraController(1280.0f / 720.0f), m_PanelManager()
+		: Layer("DemoLayer"), m_PanelManager()
 	{
 	}
 
@@ -39,6 +39,7 @@ namespace Polarity
 		fbSpec.Height = 720;
 		m_EditorContext.ViewportFramebuffer = Framebuffer::Create(fbSpec);
 		m_EditorContext.ActiveScene = CreateRef<Scene>();
+		m_EditorContext.EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		// --------------------------------------------------- Panels
 
@@ -59,11 +60,11 @@ namespace Polarity
 		});
 
 		//-------------------------------------------------------- Entites
-		m_CamEntity = m_EditorContext.ActiveScene->CreateEntity("Main Camera");
-		m_CamEntity.AddComponent<CameraComponent>();
+		Entity camEntity = m_EditorContext.ActiveScene->CreateEntity("Main Camera");
+		camEntity.AddComponent<CameraComponent>();
 
-		m_SCamEntity = m_EditorContext.ActiveScene->CreateEntity("PreRender Camera");
-		auto& cam = m_SCamEntity.AddComponent<CameraComponent>();
+		Entity sCamEntity = m_EditorContext.ActiveScene->CreateEntity("PreRender Camera");
+		auto& cam = sCamEntity.AddComponent<CameraComponent>();
 		cam.FixedAspectRatio = true;
 
 		auto square = m_EditorContext.ActiveScene->CreateEntity();
@@ -102,8 +103,8 @@ namespace Polarity
 			float test = 1.0f;
 		};
 
-		m_CamEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
-		m_SCamEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
+		camEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
+		sCamEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -111,13 +112,19 @@ namespace Polarity
 
 	}
 
-	void EditorLayer::OnUpdate(Timestep tS)
+	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		POLARITY_PROFILE_FUNCTION();
 
 		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
 		if (viewport)
-			viewport->UpdateViewport();
+		{
+			viewport->UpdateViewport(m_EditorContext.EditorCamera);
+			if (viewport->IsFocused())
+			{
+				m_EditorContext.EditorCamera.OnUpdate(ts);
+			}
+		}
 
 		//------------ Render ---------------------------------------
 		{
@@ -130,7 +137,7 @@ namespace Polarity
 			RenderCommand::Clear();
 
 			//------------ Scene -------------------------------------
-			m_EditorContext.ActiveScene->OnUpdate(tS);
+			m_EditorContext.ActiveScene->OnUpdateEditor(ts, m_EditorContext.EditorCamera);
 
 			m_EditorContext.ViewportFramebuffer->Unbind();
 		}
@@ -286,9 +293,10 @@ namespace Polarity
 
 	void EditorLayer::OnEvent(Event& event)
 	{
+		m_EditorContext.EditorCamera.OnEvent(event);
+
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(POLARITY_BIND_EVENT_FN(OnKeyPressedEvent));
-		//m_cameraController.OnEvent(event);
 	}
 
 	//Handle all key commands

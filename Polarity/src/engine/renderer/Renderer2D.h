@@ -3,6 +3,7 @@
 #include "OrthographicCamera.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "EditorCamera.h"
 
 namespace Polarity
 {
@@ -13,6 +14,7 @@ namespace Polarity
 		static void Shutdown();
 
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+		static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const OrthographicCamera& camera); //TODO remove
 		static void EndScene();
 		static void Flush();

@@ -1606,6 +1606,7 @@
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\math\Math.h" />
+    <ClInclude Include="src\engine\renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
@@ -1747,5 +1748,6 @@
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\math\Math.cpp" />
+    <ClCompile Include="src\engine\renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

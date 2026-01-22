@@ -13,19 +13,16 @@ namespace Polarity
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 
 		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open, ImGuiWindowFlags_NoCollapse);
+		ImGuizmo::BeginFrame();
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 
 		ImVec2 viewportMin = ImGui::GetCursorScreenPos();
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		glm::vec2 viewportSize = m_Context->ViewportSize;
 
-		glm::vec2 newSize = { viewportPanelSize.x, viewportPanelSize.y };
-		if (viewportSize != newSize)
-		{
-			m_Context->ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-		}
+		glm::vec2 viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		m_Context->ViewportSize = viewportSize;
 
 		uint32_t textureID = m_Context->ViewportFramebuffer->GetColorAttachmentRendererID();
 		ImGui::Image(
@@ -39,13 +36,13 @@ namespace Polarity
 		Entity selectedEntity = m_Context->SelectedEntity;
 		if (selectedEntity)
 		{
+			ImGuizmo::SetID((int)selectedEntity.GetID());
 			// camera
-			auto cameraEntity = m_Context->ActiveScene->GetPrimaryCameraEntity();
-			auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+			auto& camera = m_Context->EditorCamera;
 			const glm::mat4& cameraProjection = camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			glm::mat4 cameraView = camera.GetViewMatrix();
 
-			ImGuizmo::SetOrthographic(camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic);
+			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 
 			ImGuizmo::SetRect(
@@ -61,18 +58,16 @@ namespace Polarity
 
 			// Snapping
 			bool snap = Input::IsKeyPressed(Key::LeftControl);
-			float snapValue = 0.5f; // Snap to 0.5m for translation/scale
+			float snapValue = 0.5f; // Snap to 0.5 for translation/scale
 			// Snap to 45 degrees for rotation
 			if ((ImGuizmo::OPERATION)m_GizmoOperation == ImGuizmo::OPERATION::ROTATE)
 				snapValue = 45.0f;
 
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-			glm::mat4 delta = glm::mat4(1.0f);
-
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
 				(ImGuizmo::OPERATION)m_GizmoOperation, (ImGuizmo::MODE)m_GizmoMode, glm::value_ptr(transform),
-				glm::value_ptr(delta), snap ? snapValues : nullptr);
+				nullptr, snap ? snapValues : nullptr);
 
 			if (ImGuizmo::IsUsing())
 			{

@@ -210,7 +210,7 @@ namespace Polarity::ECS
 		{
 			const char* typeName = typeid(T).name();
 
-			if (m_ComponentTypes.find(typeName) == m_ComponentTypes.end())
+			if (m_ComponentTypes.find(typeName) == m_ComponentTypes.end()) //TODO maybe use typeIndex
 			{
 				LOG_ERROR("GetComponentArray() failed, component not registered before use.");
 				return nullptr;

@@ -2,7 +2,8 @@
 #include <Polarity.h>
 #include <array>
 
-#include "CamController.h"
+#include "engine/renderer/EditorCamera.h"
+
 #include "Panels/PanelManager.h"
 
 namespace Polarity 
@@ -32,11 +33,6 @@ namespace Polarity
 
 		void DrawMenubarPanel();
 	private:
-		CamController  m_cameraController;
-
-		Entity m_CamEntity;
-		Entity m_SCamEntity;
-
 
 		EditorContext m_EditorContext;
 		PanelManager m_PanelManager;

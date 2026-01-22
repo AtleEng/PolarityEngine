@@ -81,6 +81,8 @@ namespace Polarity
 
 	void ImGuiLayer::Begin()
 	{
+		POLARITY_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 

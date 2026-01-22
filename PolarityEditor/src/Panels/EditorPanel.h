@@ -17,7 +17,7 @@ namespace Polarity
 		Ref<Framebuffer> ViewportFramebuffer;
 		glm::vec2 ViewportSize = { 1280, 720 };
 
-
+		EditorCamera EditorCamera;
 	};
 	enum class PanelID : uint8_t
 	{

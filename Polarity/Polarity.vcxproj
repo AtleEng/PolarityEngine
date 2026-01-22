@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\math\Math.h" />
+    <ClInclude Include="src\engine\renderer\EditorCamera.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\ECS\ComponentManager.h" />
     <ClInclude Include="src\engine\ECS\EntityManager.h" />
@@ -643,6 +644,7 @@
     <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\engine\renderer\Buffer.cpp" />
+    <ClCompile Include="src\engine\renderer\EditorCamera.cpp" />
     <ClCompile Include="src\engine\renderer\Framebuffer.cpp" />
     <ClCompile Include="src\engine\renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\engine\renderer\OrthographicCamera.cpp" />

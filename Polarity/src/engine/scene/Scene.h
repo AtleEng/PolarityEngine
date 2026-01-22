@@ -2,6 +2,7 @@
 
 #include "engine/core/Application.h"
 #include "engine/ECS/Registry.h"
+#include "engine/renderer/EditorCamera.h"
 
 
 namespace Polarity
@@ -14,7 +15,8 @@ namespace Polarity
 		Scene();
 		~Scene();
 
-		void OnUpdate(Timestep ts);
+		void OnUpdateRuntime(Timestep ts);
+		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 		
 
