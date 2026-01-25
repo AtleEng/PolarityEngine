@@ -1,5 +1,5 @@
 #include "polpch.h"
-#include "PlatformUtils.h"
+#include "engine/utils/PlatformUtils.h"
 
 //Windows only
 #include <commdlg.h> 
@@ -47,5 +47,10 @@ namespace Polarity
 			return ofn.lpstrFile;
 
 		return std::string();
+	}
+
+	float Time::GetTime()
+	{
+		return glfwGetTime();
 	}
 }

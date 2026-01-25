@@ -1,10 +1,11 @@
 #include "polpch.h"
 #include "Application.h"
 
+#include "Input.h"
 #include "engine/renderer/Renderer.h"
 #include "engine/audio/Audio.h"
-#include "Input.h"
 #include "engine/utils/Random.h"
+#include "engine//utils/PlatformUtils.h"
 
 #include <GLFW/glfw3.h>  //temp
 
@@ -17,10 +18,10 @@ namespace Polarity {
 	{
 		POLARITY_PROFILE_FUNCTION();
 
+		Logger::Init();
 		POL_CORE_ASSERT(!s_instance, "Application already exist!");
 		s_instance = this;
 
-		Logger::Init();
 		std::string info = "PolarityEngine v0.01 ";
 
 		info += "- ";
@@ -90,7 +91,7 @@ namespace Polarity {
 		{
 			POLARITY_PROFILE_SCOPE("Full Cycle");
 
-			float time = (float)glfwGetTime();  //TODO temporary (abstract function to plattform.h)
+			float time = Time::GetTime();
 			Timestep timeStep = time - m_lastFrameTime;
 			m_lastFrameTime = time;
 
