@@ -10,7 +10,7 @@ namespace Polarity
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 		: m_windowHandle(windowHandle)
 	{
-		LOG_ASSERT(windowHandle, "Window handle is null!");
+		LOG_ASSERT(windowHandle, "OpenGL: Window handle is null!");
 	}
 	void OpenGLContext::Init()
 	{
@@ -20,7 +20,7 @@ namespace Polarity
 		glfwMakeContextCurrent(m_windowHandle);
 
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		LOG_ASSERT(status, "Failed to initialize glad!");
+		LOG_ASSERT(status, "OpenGL: Failed to initialize glad!");
 	}
 	void OpenGLContext::SwapBuffers()
 	{

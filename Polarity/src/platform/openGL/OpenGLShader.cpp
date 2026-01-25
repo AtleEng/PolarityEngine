@@ -180,7 +180,7 @@ namespace Polarity {
 		}
 		else
 		{
-			LOG_ERROR("Could not open shader file: %s", shaderPath.c_str());
+			LOG_ERROR("OpenGL: Could not open shader file: %s", shaderPath.c_str());
 		}
 		return result;
 	}
@@ -221,7 +221,7 @@ namespace Polarity {
 
 		GLuint program = glCreateProgram();
 
-		LOG_ASSERT(shaderSources.size() <= 2, "File has more than 2 shaders (%i), which is unsupported!", shaderSources.size());
+		LOG_ASSERT(shaderSources.size() <= 2, "OpenGL: File has more than 2 shaders (%i), which is unsupported!", shaderSources.size());
 		std::array<GLuint, 2> glShaderIDs;
 		int shaderIndex = 0;
 
@@ -249,7 +249,7 @@ namespace Polarity {
 
 				glDeleteShader(shader);
 
-				LOG_MAJOR_ERROR("%s shader compilation failure!", kv.second.c_str());
+				LOG_MAJOR_ERROR("OpenGL: %s shader compilation failure!", kv.second.c_str());
 
 				break;
 			}
@@ -280,7 +280,7 @@ namespace Polarity {
 				glDeleteShader(id);
 			}
 
-			LOG_MAJOR_ERROR("Shader link failure !!!");
+			LOG_MAJOR_ERROR("OpenGL: Shader link failure!");
 
 			return;
 		}

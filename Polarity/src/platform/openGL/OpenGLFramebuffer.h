@@ -17,13 +17,21 @@ namespace Polarity
 
 		void Resize(uint32_t width, uint32_t height) override;
 
-		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override { return m_ColorAttachment; }
+		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override 
+		{
+			LOG_ASSERT(index < m_ColorAttachments.size(), "OpenGL: Tried get m_ColorAttachment with invalid index %d!", index); 
+			return m_ColorAttachments[index]; 
+		}
+
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; }
 	private:
 		uint32_t m_RendererID = 0;
 		FramebufferSpecification m_Specification;
 
-		uint32_t m_ColorAttachment = 0;
+		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecs;
+		FramebufferTextureSpecification m_DepthAttachmentSpec = FramebufferTextureFormat::None;
+
+		std::vector<uint32_t> m_ColorAttachments;
 		uint32_t m_DepthAttachment = 0;
 	};
 }
