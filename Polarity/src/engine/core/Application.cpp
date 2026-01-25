@@ -17,11 +17,11 @@ namespace Polarity {
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		LOG_ASSERT(!s_instance, "Application already exist !!!");
+		POL_CORE_ASSERT(!s_instance, "Application already exist!");
 		s_instance = this;
 
-
-		std::string info = "v0.01 ";
+		Logger::Init();
+		std::string info = "PolarityEngine v0.01 ";
 
 		info += "- ";
 		info += POLARITY_CONFIG;
@@ -37,13 +37,13 @@ namespace Polarity {
 		default:							info += " - Unknown"; break;
 		}
 		info += "\n";
-		LOG_EX("PolarityEngine", TextColor::Orange, info.c_str());
+		POL_CORE_INFO(info.c_str());
 
 
 		m_window = std::unique_ptr<Window>(Window::Create(props));
 		m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(OnEvent));
 
-
+		
 		Renderer::Init();
 		Audio::Init();
 		Random::Init();
@@ -116,7 +116,7 @@ namespace Polarity {
 
 	void Application::Shutdown()
 	{
-		LOG_INFO("Shutdown...");
+		POL_CORE_INFO("Shutdown...");
 		m_running = false;
 	}
 

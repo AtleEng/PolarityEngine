@@ -9,11 +9,11 @@ namespace Polarity
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:    LOG_ASSERT(false, "No RendererAPI!"); return nullptr;
+		case RendererAPI::API::None:    POL_CORE_ASSERT(false, "No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:  return CreateScope<OpenGLContext>(static_cast<GLFWwindow*>(window));
 		}
 
-		LOG_ASSERT(false, "Unknown RendererAPI!");
+		POL_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
 }

@@ -180,7 +180,7 @@ namespace Polarity {
 		}
 		else
 		{
-			LOG_ERROR("OpenGL: Could not open shader file: %s", shaderPath.c_str());
+			POL_CORE_ERROR("OpenGL: Could not open shader file: %s", shaderPath.c_str());
 		}
 		return result;
 	}
@@ -198,13 +198,13 @@ namespace Polarity {
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\r\n", pos); //End of shader type declaration line
-			LOG_ASSERT(eol != std::string::npos, "Syntax error in: %s", source.c_str());
+			POL_CORE_ASSERT(eol != std::string::npos, "Syntax error in: %s", source.c_str());
 			size_t begin = pos + typeTokenLength + 1; //Start of shader type name (after "#type " keyword)
 			std::string type = source.substr(begin, eol - begin);
-			LOG_ASSERT(ShaderTypeFromString(type), "Invalid type (%s) specified in: \n%s",type.c_str(), source.c_str());
+			POL_CORE_ASSERT(ShaderTypeFromString(type), "Invalid type (%s) specified in: \n%s",type.c_str(), source.c_str());
 
 			size_t nextLinePos = source.find_first_not_of("\r\n", eol); //Start of shader code after shader type declaration line
-			LOG_ASSERT(nextLinePos != std::string::npos, "Syntax error in: %s", source.c_str());
+			POL_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error in: %s", source.c_str());
 			pos = source.find(typeToken, nextLinePos); //Start of next shader type declaration line
 
 			shaderSources[ShaderTypeFromString(type)] =
@@ -221,7 +221,7 @@ namespace Polarity {
 
 		GLuint program = glCreateProgram();
 
-		LOG_ASSERT(shaderSources.size() <= 2, "OpenGL: File has more than 2 shaders (%i), which is unsupported!", shaderSources.size());
+		POL_CORE_ASSERT(shaderSources.size() <= 2, "OpenGL: File has more than 2 shaders (%i), which is unsupported!", shaderSources.size());
 		std::array<GLuint, 2> glShaderIDs;
 		int shaderIndex = 0;
 
@@ -249,7 +249,7 @@ namespace Polarity {
 
 				glDeleteShader(shader);
 
-				LOG_MAJOR_ERROR("OpenGL: %s shader compilation failure!", kv.second.c_str());
+				POL_CORE_FATAL("OpenGL: %s shader compilation failure!", kv.second.c_str());
 
 				break;
 			}
@@ -280,7 +280,7 @@ namespace Polarity {
 				glDeleteShader(id);
 			}
 
-			LOG_MAJOR_ERROR("OpenGL: Shader link failure!");
+			POL_CORE_FATAL("OpenGL: Shader link failure!");
 
 			return;
 		}

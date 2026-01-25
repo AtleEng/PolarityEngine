@@ -31,7 +31,7 @@ namespace Polarity
 			POLARITY_PROFILE_SCOPE("stbi_load - OpenGLTexture2D");
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
-		LOG_ASSERT(data, "OpenGL: Failed to load image at: %s!", path.c_str());
+		POL_CORE_ASSERT(data, "OpenGL: Failed to load image at: %s!", path.c_str());
 		
 		//to make them unsigned
 		m_width = width;
@@ -48,7 +48,7 @@ namespace Polarity
 			m_dataFormat = GL_RGB;
 		}
 
-		LOG_ASSERT(m_internalFormat && m_dataFormat, "OpengGL: Texture format not supported!");
+		POL_CORE_ASSERT(m_internalFormat && m_dataFormat, "OpengGL: Texture format not supported!");
 
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);
@@ -76,7 +76,7 @@ namespace Polarity
 		POLARITY_PROFILE_FUNCTION();
 
 		uint32_t bpp = m_dataFormat == GL_RGBA ? 4 : 3;
-		LOG_ASSERT(size == m_width * m_height * bpp, "OpenGL: Size of data is not matching texture!");
+		POL_CORE_ASSERT(size == m_width * m_height * bpp, "OpenGL: Size of data is not matching texture!");
 		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
 	}
 

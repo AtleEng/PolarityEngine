@@ -206,7 +206,7 @@ namespace Polarity
 
     bool SceneSerializer::SerializeRuntime(const std::string& filepath)
     {
-        LOG_MAJOR_ERROR("NOT IMPLEMENTED!!!");
+        POL_CORE_FATAL("NOT IMPLEMENTED!!!");
         return false;
     }
 
@@ -221,7 +221,7 @@ namespace Polarity
             return false;
 
         std::string sceneName = data["Scene"].as<std::string>();
-        LOG_TRACE("Deseralizing scene: %s", sceneName.c_str());
+        POL_CORE_TRACE("Deseralizing scene: %s", sceneName.c_str());
 
         auto entities = data["Entities"];
         if (entities)
@@ -235,7 +235,7 @@ namespace Polarity
                 if (nameComponent)
                     name = nameComponent["Name"].as<std::string>();
 
-                LOG_TRACE("Deserialized %s: %d", name.c_str(), uuid);
+                POL_CORE_TRACE("Deserialized %s: %d", name.c_str(), uuid);
 
                 Entity newEntity = m_Scene->CreateEntity(name);
 
@@ -287,7 +287,7 @@ namespace Polarity
 
     bool SceneSerializer::DeSerializeRuntime(const std::string& filepath)
     {
-        LOG_MAJOR_ERROR("NOT IMPLEMENTED!!!");
+        POL_CORE_FATAL("NOT IMPLEMENTED!!!");
         return false;
     }
 }

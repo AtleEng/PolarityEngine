@@ -19,7 +19,7 @@ namespace Polarity
 
 		virtual uint32_t GetColorAttachmentRendererID(uint32_t index = 0) const override 
 		{
-			LOG_ASSERT(index < m_ColorAttachments.size(), "OpenGL: Tried get m_ColorAttachment with invalid index %d!", index); 
+			POL_CORE_ASSERT(index < m_ColorAttachments.size(), "OpenGL: Tried get m_ColorAttachment with invalid index %d!", index); 
 			return m_ColorAttachments[index]; 
 		}
 

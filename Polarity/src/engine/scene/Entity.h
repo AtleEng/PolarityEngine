@@ -20,7 +20,7 @@ namespace Polarity
 		{
 			if (HasComponent<T>())
 			{
-				LOG_WARN("AddComponent() failed for: %s", GetName().c_str());
+				POL_CORE_WARN("AddComponent() failed for: %s", GetName().c_str());
 				return GetComponent<T>();
 			}
 			T& newComponent = m_Scene->m_Registry.AddComponent(m_EntityHandle, component);
@@ -37,7 +37,7 @@ namespace Polarity
 			}
 			else
 			{
-				LOG_WARN("RemovedComponent() failed for: %s", GetName().c_str());
+				POL_CORE_WARN("RemovedComponent() failed for: %s", GetName().c_str());
 			}
 		}
 

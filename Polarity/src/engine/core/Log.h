@@ -5,68 +5,61 @@
 
 #include "Core.h"
 
-// ################################     Logging    ################################
-
-enum class TextColor
+namespace Polarity
 {
-    Black,
-    Red,
-    Green,
-    Yellow,
-    Blue,
-    Magenta,
-    Cyan,
-    White,
-    Orange,
-    Pink,
-    Aqua,
-    Count
-};
+	struct LogEvent
+	{
+		int color;
+		std::string prefix;
+		std::string message;
+		std::string time;
+	};
 
-extern const char* TextColorTable[(int)TextColor::Count];
+	class Logger {
+		using LogListener = std::function<void(const LogEvent&)>;
+	public:
+		static std::vector<LogListener> g_Listeners;
 
+		enum class TextColor
+		{
+			White,
+			Cyan,
+			Green,
+			Yellow,
+			Orange,
+			Red,
+			Count
+		};
+		static const char* TextColorTable[(int)TextColor::Count];
 
-void _log(const char* prefix,TextColor textColor, bool shouldNotify, const char* msg, ...);
-std::string GetTimeString();
+		static void Init();
 
+		static void Log(const char* prefix, TextColor textColor, const char* msg, ...);
+		
+		static void AddLogListener(LogListener listener);
+		static void RemoveLogListener(LogListener listener);
 
+	private:
+		static std::string GetTimeString();
+	};
+}
 
-struct LogEvent
-{
-    TextColor color;
-    std::string prefix;
-    std::string message;
-    std::string time;
-};
-
-using LogListener = std::function<void(const LogEvent&)>;
-
-void AddLogListener     (LogListener listener);
-void RemoveLogListener  (LogListener listener);
-
-
-
-#define LOG(msg, ...)                       _log("LOG   ", TextColor::White,  true, msg, ##__VA_ARGS__);
-#define LOG_EX(prefix, textColor, msg, ...) _log(prefix,     textColor,         true, msg, ##__VA_ARGS__);
-
-#define LOG_TRACE(msg, ...)                 _log("TRACE ", TextColor::Green,  true, msg, ##__VA_ARGS__);
-#define LOG_DEBUG(msg, ...)                 _log("DEBUG ", TextColor::Yellow, true, msg, ##__VA_ARGS__);
-#define LOG_INFO(msg, ...)                  _log("INFO  ", TextColor::Cyan,   true, msg, ##__VA_ARGS__);
-                                                             
-#define LOG_WARN(msg, ...)                  _log("WARN  ", TextColor::Orange, true, msg, ##__VA_ARGS__);
-#define LOG_ERROR(msg, ...)                 _log("ERROR ", TextColor::Red,    true, msg, ##__VA_ARGS__);
-#define LOG_MAJOR_ERROR(msg, ...)           LOG_ERROR(msg, ##__VA_ARGS__);  DEBUG_BREAK();
+#define POL_CORE_TRACE(msg, ...)                 Polarity::Logger::Log("TRACE ", Polarity::Logger::TextColor::Green,  msg, ##__VA_ARGS__);
+#define POL_CORE_DEBUG(msg, ...)                 Polarity::Logger::Log("DEBUG ", Polarity::Logger::TextColor::Yellow, msg, ##__VA_ARGS__);
+#define POL_CORE_INFO(msg, ...)                  Polarity::Logger::Log("INFO  ", Polarity::Logger::TextColor::Cyan,   msg, ##__VA_ARGS__);                                                      
+#define POL_CORE_WARN(msg, ...)                  Polarity::Logger::Log("WARN  ", Polarity::Logger::TextColor::Orange, msg, ##__VA_ARGS__);
+#define POL_CORE_ERROR(msg, ...)                 Polarity::Logger::Log("ERROR ", Polarity::Logger::TextColor::Red,    msg, ##__VA_ARGS__);
+#define POL_CORE_FATAL(msg, ...)                 POL_CORE_ERROR(msg, ##__VA_ARGS__);  DEBUG_BREAK();
 
 #ifdef POLARITY_ENABLE_ASSERTS
-#define LOG_ASSERT(x, msg, ...)             \
-	{										\
-		if (!(x))                           \
-		{                                   \
-		LOG_ERROR(msg, ##__VA_ARGS__);		\
-		DEBUG_BREAK();						\
-		}                                   \
+#define POL_CORE_ASSERT(x, msg, ...)            \
+	{										    \
+		if (!(x))                               \
+		{                                       \
+		POL_CORE_FATAL(msg, ##__VA_ARGS__);		\
+		}                                       \
 	}
 #else
-#define LOG_ASSERT(x, msg, ...)
+#define POL_CORE_ASSERT(x, msg, ...)
 #endif
 

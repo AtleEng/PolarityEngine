@@ -23,7 +23,7 @@ namespace Polarity::ECS
 
 			if (m_Systems.find(typeName) != m_Systems.end())
 			{
-				LOG_ERROR("RegisterSystem() failed, system is already registered!");
+				POL_CORE_ERROR("RegisterSystem() failed, system is already registered!");
 				return;
 			}
 
@@ -40,7 +40,7 @@ namespace Polarity::ECS
 
 			if (m_Systems.find(typeName) != m_Systems.end())
 			{
-				LOG_ERROR("SetSignature() failed, system is used before registered!");
+				POL_CORE_ERROR("SetSignature() failed, system is used before registered!");
 				return;
 			}
 

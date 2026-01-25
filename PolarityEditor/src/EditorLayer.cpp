@@ -54,7 +54,7 @@ namespace Polarity
 		auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
 		auto panelId = consolePanel.GetInstanceID();
 
-		AddLogListener([this, panelId](const LogEvent& e)
+		Logger::AddLogListener([this, panelId](const LogEvent& e)
 		{
 			if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
 			{
@@ -420,7 +420,7 @@ namespace Polarity
 			SceneSerializer serializer(m_EditorContext.ActiveScene);
 			serializer.Serialize(m_CurrentFilepath);
 
-			LOG_INFO("Scene saved!");
+			POL_CORE_INFO("Scene saved!");
 		}
 		else
 		{
@@ -564,7 +564,7 @@ namespace Polarity
 					auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
 					auto panelId = consolePanel.GetInstanceID();
 
-					AddLogListener([this, panelId](const LogEvent& e)
+					Logger::AddLogListener([this, panelId](const LogEvent& e)
 					{
 						if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
 						{

@@ -27,7 +27,7 @@ namespace Polarity::ECS
 
 			if (found)
 			{
-				LOG_ERROR("InsertData() failed, component added to same entity more than once (%d).", entity);
+				POL_CORE_ERROR("InsertData() failed, component added to same entity more than once (%d).", entity);
 				return;
 			}
 			else
@@ -46,7 +46,7 @@ namespace Polarity::ECS
 		{
 			if (entity >= MAX_ENTITIES)
 			{
-				LOG_ERROR("RemoveData() failed, invalid entity ID (%d).", entity);
+				POL_CORE_ERROR("RemoveData() failed, invalid entity ID (%d).", entity);
 				return;
 			}
 			size_t index = m_EntityToIndexArray[entity];
@@ -54,7 +54,7 @@ namespace Polarity::ECS
 
 			if (!exists)
 			{
-				LOG_ERROR("RemoveData() failed, tried removing non-existent component (%d).", entity);
+				POL_CORE_ERROR("RemoveData() failed, tried removing non-existent component (%d).", entity);
 				return;
 			}
 			size_t indexOfLastElement = m_Size - 1;
@@ -79,12 +79,12 @@ namespace Polarity::ECS
 
 			if (entity >= MAX_ENTITIES || entity < 0)
 			{
-				LOG_ERROR("GetData() failed, invalid entity ID (entity:%d).", entity);
+				POL_CORE_ERROR("GetData() failed, invalid entity ID (entity:%d).", entity);
 				return m_ComponentArray[0]; // Safe fallback
 			}
 			if (m_EntityToIndexArray[entity] == INVALID_INDEX)
 			{
-				LOG_ERROR("GetData() failed, entity has no component (entity:%d).", entity);
+				POL_CORE_ERROR("GetData() failed, entity has no component (entity:%d).", entity);
 				return m_ComponentArray[0];
 			}
 
@@ -93,7 +93,7 @@ namespace Polarity::ECS
 
 			if (!exists)
 			{
-				LOG_ERROR("GetData() failed, tried retrieving non-existent component (entity:%d, ).", entity);
+				POL_CORE_ERROR("GetData() failed, tried retrieving non-existent component (entity:%d, ).", entity);
 				return m_ComponentArray[0]; // Safe fallback
 			}
 
@@ -156,7 +156,7 @@ namespace Polarity::ECS
 
 			if (m_ComponentTypes.find(typeName) != m_ComponentTypes.end())
 			{
-				LOG_ERROR("RegisterComponent() failed, registering type more than once (%s).", typeName);
+				POL_CORE_ERROR("RegisterComponent() failed, registering type more than once (%s).", typeName);
 				return;
 			}
 
@@ -212,7 +212,7 @@ namespace Polarity::ECS
 
 			if (m_ComponentTypes.find(typeName) == m_ComponentTypes.end()) //TODO maybe use typeIndex
 			{
-				LOG_ERROR("GetComponentArray() failed, component not registered before use.");
+				POL_CORE_ERROR("GetComponentArray() failed, component not registered before use.");
 				return nullptr;
 			}
 

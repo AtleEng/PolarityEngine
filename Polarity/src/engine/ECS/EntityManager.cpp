@@ -19,7 +19,7 @@ namespace Polarity::ECS
 	{
 		if (m_AliveEntities.size() >= MAX_ENTITIES)
 		{
-			LOG_ERROR("CreateEntity() failed, too many entities in existence (%d).", MAX_ENTITIES);
+			POL_CORE_ERROR("CreateEntity() failed, too many entities in existence (%d).", MAX_ENTITIES);
 			return INVALID_ENTITY;
 		}
 
@@ -37,13 +37,13 @@ namespace Polarity::ECS
 	{
 		if (entity >= MAX_ENTITIES || entity < 0)
 		{
-			LOG_ERROR("DestroyEntity() failed, entity out of range. (%d).", entity);
+			POL_CORE_ERROR("DestroyEntity() failed, entity out of range. (%d).", entity);
 			return;
 		}
 		// Ensure we cannot go negative
 		if (m_AliveEntities.size() <= 0)
 		{
-			LOG_ERROR("DestroyEntity() failed, no living entities left.");
+			POL_CORE_ERROR("DestroyEntity() failed, no living entities left.");
 			return;
 		}
 
@@ -66,7 +66,7 @@ namespace Polarity::ECS
 	{
 		if (entity >= MAX_ENTITIES || entity < 0)
 		{
-			LOG_ERROR("SetSignature() failed, entity out of range. (%d).", entity);
+			POL_CORE_ERROR("SetSignature() failed, entity out of range. (%d).", entity);
 			return;
 		}
 
@@ -78,7 +78,7 @@ namespace Polarity::ECS
 	{
 		if (entity >= MAX_ENTITIES || entity < 0)
 		{
-			LOG_ERROR("GetSignature() failed, entity out of range. (%d).", entity);
+			POL_CORE_ERROR("GetSignature() failed, entity out of range. (%d).", entity);
 			return Signature{};
 		}
 

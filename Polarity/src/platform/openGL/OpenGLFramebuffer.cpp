@@ -83,7 +83,7 @@ namespace Polarity
 			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
 			}
 
-			LOG_ASSERT(false, "OpenGL: Wrong format!");
+			POL_CORE_ASSERT(false, "OpenGL: Wrong format!");
 			return 0;
 		}
 	}
@@ -162,7 +162,7 @@ namespace Polarity
 		// Control
 		if (m_ColorAttachments.size() > 1)
 		{
-			LOG_ASSERT(m_ColorAttachments.size() <= 4, "OpenGL: m_ColorAttachments is out of range!");
+			POL_CORE_ASSERT(m_ColorAttachments.size() <= 4, "OpenGL: m_ColorAttachments is out of range!");
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 			glDrawBuffers(m_ColorAttachments.size(), buffers);
 		}
@@ -171,7 +171,7 @@ namespace Polarity
 			glDrawBuffer(GL_NONE); // Only depth-pass
 		}
 
-		LOG_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "OpenGL: Framebuffer is incomplete!");
+		POL_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "OpenGL: Framebuffer is incomplete!");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -189,7 +189,7 @@ namespace Polarity
 	{
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
 		{
-			LOG_WARN("OpenGL: Attempted to resize framebuffer to invalid values %d, %d", width, height);
+			POL_CORE_WARN("OpenGL: Attempted to resize framebuffer to invalid values %d, %d", width, height);
 			return;
 		}
 		m_Specification.Width = width;

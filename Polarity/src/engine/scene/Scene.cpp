@@ -134,7 +134,7 @@ namespace Polarity
 		auto& transform = TransformComponent();
 		entity.AddComponent<TransformComponent>(transform);
 
-		LOG_DEBUG("Created %s", name.c_str());
+		POL_CORE_DEBUG("Created %s", name.c_str());
 		return entity;
 	}
 
@@ -154,17 +154,17 @@ namespace Polarity
 		if (target != ECS::INVALID_ENTITY)
 		{
 			DestroyEntity(target);
-			LOG_DEBUG("Destroyed %s", name.c_str());
+			POL_CORE_DEBUG("Destroyed %s", name.c_str());
 		}
 		else
 		{
-			LOG_DEBUG("Destroyed failed for %s", name.c_str());
+			POL_CORE_DEBUG("Destroyed failed for %s", name.c_str());
 		}
 	}
 
 	void Scene::DestroyEntity(ECS::Entity handle)
 	{
-		LOG_DEBUG("Destroyed %d", handle);
+		POL_CORE_DEBUG("Destroyed %d", handle);
 		m_Registry.DestroyEntity(handle);
 	}
 

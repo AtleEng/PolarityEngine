@@ -19,7 +19,7 @@ namespace Polarity
 
 	static void GLFWErrorCallback(int error, const char* msg)
 	{
-		LOG_ERROR("GLFW (%d): %s", error, msg);
+		POL_CORE_ERROR("GLFW (%d): %s", error, msg);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -40,14 +40,14 @@ namespace Polarity
 		m_data.Width = props.Width;
 		m_data.Height = props.Height;
 
-		LOG_INFO("Creating window: %s (%d, %d)", props.Title.c_str(), props.Width, props.Height);
+		POL_CORE_INFO("Creating window: %s (%d, %d)", props.Title.c_str(), props.Width, props.Height);
 
 		if (s_GLFWWindowCount == 0)
 		{
 			POLARITY_PROFILE_SCOPE("glfwInnit");
 
 			int success = glfwInit();
-			LOG_ASSERT(success, "Couldn't initialize GLFW !!!");
+			POL_CORE_ASSERT(success, "Couldn't initialize GLFW !!!");
 
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}

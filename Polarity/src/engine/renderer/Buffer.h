@@ -25,7 +25,7 @@ namespace Polarity {
 		case Polarity::ShaderDataType::Bool:	return 1;
 		}
 
-		LOG_MAJOR_ERROR("Unknown ShaderDataType !!!");
+		POL_CORE_FATAL("Unknown ShaderDataType !!!");
 		return 0;
 	}
 
@@ -61,7 +61,7 @@ namespace Polarity {
 			case Polarity::ShaderDataType::Bool:	return 1;
 			}
 
-			LOG_MAJOR_ERROR("Unknown ShaderDataType !!!");
+			POL_CORE_FATAL("Unknown ShaderDataType !!!");
 			return 0;
 		}
 	};

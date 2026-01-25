@@ -82,7 +82,7 @@ namespace Polarity
 		}
 		if (ImGui::IsItemClicked())
 		{
-			LOG_INFO("Selected %s", name.c_str());
+			POL_CORE_INFO("Selected %s", name.c_str());
 			ctx->SelectedEntity = entity;
 		}
 		if (opened)

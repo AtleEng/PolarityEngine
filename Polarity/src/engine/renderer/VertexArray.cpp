@@ -10,11 +10,11 @@ namespace Polarity {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		LOG_MAJOR_ERROR("RendererAPI: None is currently not supported !!!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("RendererAPI: None is currently not supported !!!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLVertexArray>();
 		}
 
-		LOG_MAJOR_ERROR("Unknown RendererAPI !!!");
+		POL_CORE_FATAL("Unknown RendererAPI !!!");
 		return nullptr;
 	}
 }

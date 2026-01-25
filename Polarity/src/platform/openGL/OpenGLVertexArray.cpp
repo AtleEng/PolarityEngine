@@ -21,7 +21,7 @@ namespace Polarity {
 		case Polarity::ShaderDataType::Bool:	return GL_BOOL;
 		}
 
-		LOG_MAJOR_ERROR("OpenGL: Unknown ShaderDataType!");
+		POL_CORE_FATAL("OpenGL: Unknown ShaderDataType!");
 		return 0;
 	}
 
@@ -59,7 +59,7 @@ namespace Polarity {
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		LOG_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "OpenGL: Vertex Buffer has no layout!");
+		POL_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "OpenGL: Vertex Buffer has no layout!");
 		
 		glBindVertexArray(m_rendererID);
 		vertexBuffer->Bind();
