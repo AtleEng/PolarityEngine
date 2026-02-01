@@ -15,6 +15,7 @@ namespace Polarity
 		Ref<Scene> ActiveScene;
 		Entity SelectedEntity;
 		Ref<Framebuffer> ViewportFramebuffer;
+		Ref<Framebuffer> PreviewFramebuffer;
 		glm::vec2 ViewportSize = { 1280, 720 };
 
 		EditorCamera EditorCamera;
@@ -26,6 +27,7 @@ namespace Polarity
 		Assets,
 		Console,
 		Viewport,
+		Preview
 	};
 	class EditorPanel
 	{

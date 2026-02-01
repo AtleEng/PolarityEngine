@@ -53,6 +53,7 @@ namespace Polarity
     private:
         bool m_ViewportFocused = false;
         bool m_ViewportHovered = false;
+        glm::vec2 m_ViewportBounds[2];
 
         GizmoMode m_GizmoMode = GizmoMode::Local;
         GizmoOperation m_GizmoOperation = GizmoOperation::Translate;

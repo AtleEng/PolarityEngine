@@ -142,6 +142,9 @@ namespace Polarity
 				case FramebufferTextureFormat::RGBA8:
 					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_RGBA8, GL_RGBA, m_Specification.Width, m_Specification.Height, i);
 					break;
+				case FramebufferTextureFormat::RED_INTEGER:
+					Utils::AttachColorTexture(m_ColorAttachments[i], m_Specification.Samples, GL_R32I, GL_RED_INTEGER, m_Specification.Width, m_Specification.Height, i);
+					break;
 				}
 			}
 		}
@@ -197,4 +200,14 @@ namespace Polarity
 
 		Invalidate();
 	}
+	// read a pixel (x, y) in the framebuffer. Warning: Framebuffer has to be bound
+	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
+	{
+		POL_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "OpenGL: AttachmentIndex out of bounds!");
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
+		int pixelData;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+		return pixelData;
+	} //TODO make this hardcoded method flexible
 }

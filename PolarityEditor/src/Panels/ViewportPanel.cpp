@@ -11,18 +11,34 @@ namespace Polarity
 	void ViewportPanel::OnDraw()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-
 		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open, ImGuiWindowFlags_NoCollapse);
-		ImGuizmo::BeginFrame();
+
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportBounds[0] = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportBounds[1] = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 
-		ImVec2 viewportMin = ImGui::GetCursorScreenPos();
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-
-		glm::vec2 viewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
 		m_Context->ViewportSize = viewportSize;
+
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+		my = viewportSize.y - my;
+
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			m_Context->ViewportFramebuffer->Bind(); // TODO fix
+			int pixelData = m_Context->ViewportFramebuffer->ReadPixel(1, mouseX, mouseY);
+			POL_CORE_DEBUG("Virtual mouse = %d, %d value = %d", mouseX, mouseY, pixelData);
+			m_Context->ViewportFramebuffer->Unbind();
+		}
 
 		uint32_t textureID = m_Context->ViewportFramebuffer->GetColorAttachmentRendererID();
 		ImGui::Image(
@@ -31,6 +47,9 @@ namespace Polarity
 			{ 0,1 },
 			{ 1,0 }
 		);
+
+		
+
 
 		// Gizmos (orthographic translate arrows is broken, maybe update thirdparty)
 		Entity selectedEntity = m_Context->SelectedEntity;
@@ -45,12 +64,7 @@ namespace Polarity
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 
-			ImGuizmo::SetRect(
-				viewportMin.x,
-				viewportMin.y,
-				viewportSize.x,
-				viewportSize.y
-			);
+			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
 			// entity
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();

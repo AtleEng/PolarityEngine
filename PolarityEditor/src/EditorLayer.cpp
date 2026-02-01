@@ -35,11 +35,18 @@ namespace Polarity
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf", 18.0f);
 
 
-		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
-		fbSpec.Width = 1280;
-		fbSpec.Height = 720;
-		m_EditorContext.ViewportFramebuffer = Framebuffer::Create(fbSpec);
+		FramebufferSpecification viewportFbSpec;
+		viewportFbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+		viewportFbSpec.Width = 1280;
+		viewportFbSpec.Height = 720;
+		m_EditorContext.ViewportFramebuffer = Framebuffer::Create(viewportFbSpec);
+
+		FramebufferSpecification previewFbSpec;
+		previewFbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		previewFbSpec.Width = 320;
+		previewFbSpec.Height = 180;
+		m_EditorContext.PreviewFramebuffer = Framebuffer::Create(previewFbSpec);
+
 		m_EditorContext.ActiveScene = CreateRef<Scene>();
 		m_EditorContext.EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
@@ -122,7 +129,7 @@ namespace Polarity
 		if (viewport)
 		{
 			viewport->UpdateViewport(m_EditorContext.EditorCamera);
-			if (viewport->IsFocused())
+			if (viewport->IsFocused() || viewport->IsHovered())
 			{
 				m_EditorContext.EditorCamera.OnUpdate(ts);
 			}
@@ -233,7 +240,11 @@ namespace Polarity
 
 	void EditorLayer::OnEvent(Event& event)
 	{
-		m_EditorContext.EditorCamera.OnEvent(event);
+		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
+		if (viewport && (viewport->IsHovered() || viewport->IsFocused()))
+		{
+			m_EditorContext.EditorCamera.OnEvent(event);
+		}
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(POLARITY_BIND_EVENT_FN(OnKeyPressedEvent));
