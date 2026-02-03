@@ -8,35 +8,31 @@ namespace Polarity {
 	
 	Ref<Shader> Shader::Create(const std::string& shaderPath)
 	{
-		POL_CORE_INFO("Creating shader: %s", shaderPath.c_str());
-
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		POL_CORE_FATAL("RendererAPI: None is currently not supported!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("Renderer: No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLShader>(shaderPath);
 		}
 
-		POL_CORE_FATAL("Unknown RendererAPI !!!");
+		POL_CORE_FATAL("Renderer: Unknown RendererAPI!");
 		return nullptr;
 	}
 
 	Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 	{
-		POL_CORE_INFO("Creating shader");
-
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		POL_CORE_FATAL("RendererAPI: None is currently not supported!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("Renderer: No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 
-		POL_CORE_FATAL("Unknown RendererAPI !!!");
+		POL_CORE_FATAL("Renderer: Unknown RendererAPI!");
 		return nullptr;
 	}
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
-		POL_CORE_ASSERT(!Exists(name), "Shader (%s) already exist!", name.c_str());
+		POL_CORE_ASSERT(!Exists(name), "Renderer: Shader %s already exist in ShaderLibrary!", name.c_str());
 		m_shaders[name] = shader;
 	}
 
@@ -62,7 +58,7 @@ namespace Polarity {
 	
 	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
-		POL_CORE_ASSERT(Exists(name), "Shader (%s) not found !!!", name.c_str());
+		POL_CORE_ASSERT(Exists(name), "Renderer: Shader %s not found in ShaderLibrary!", name.c_str());
 		return m_shaders[name];
 	}
 	bool ShaderLibrary::Exists(const std::string& name) const

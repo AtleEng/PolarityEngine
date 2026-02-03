@@ -11,15 +11,15 @@ namespace Polarity {
 
 		void			 SetProjection(float left, float right, float bottom, float top);
 
-		const glm::vec3& GetPosition() const					{ return m_position; }
+		const glm::vec3& GetPosition() const { return m_position; }
 		void			 SetPosition(const glm::vec3& position) { m_position = position; RecalculateViewMatrix(); }
 
-		float			 GetRotation() const					{ return m_rotation; }
-		void			 SetRotation(float rotation)			{ m_rotation = rotation; RecalculateViewMatrix(); }
+		float			 GetRotation() const { return m_rotation; }
+		void			 SetRotation(float rotation) { m_rotation = rotation; RecalculateViewMatrix(); }
 
-		const glm::mat4& GetProjectionMatrix() const			{ return m_projectionMatrix; }
-		const glm::mat4& GetViewMatrix() const					{ return m_viewMatrix; }
-		const glm::mat4& GetViewProjectionMatrix() const		{ return m_viewProjectionMatrix; }
+		const glm::mat4& GetProjectionMatrix() const { return m_projectionMatrix; }
+		const glm::mat4& GetViewMatrix() const { return m_viewMatrix; }
+		const glm::mat4& GetViewProjectionMatrix() const { return m_viewProjectionMatrix; }
 
 		const glm::vec2 ScreenToWorld(glm::vec2 position);
 	private:

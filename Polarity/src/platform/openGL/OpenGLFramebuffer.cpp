@@ -203,11 +203,16 @@ namespace Polarity
 	// read a pixel (x, y) in the framebuffer. Warning: Framebuffer has to be bound
 	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
 	{
+		return ReadPixels(attachmentIndex, x, y, 1, 1);
+	}
+	// read pixels (x->sizeX, y->sizeY) in the framebuffer. Warning: Framebuffer has to be bound
+	int OpenGLFramebuffer::ReadPixels(uint32_t attachmentIndex, int x, int y, int sizeX, int sizeY)
+	{
 		POL_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "OpenGL: AttachmentIndex out of bounds!");
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		int pixelData;
-		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
+		glReadPixels(x, y, sizeX, sizeY, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
-	} //TODO make this hardcoded method flexible
+	}
 }

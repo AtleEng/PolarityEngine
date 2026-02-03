@@ -8,27 +8,25 @@ namespace Polarity
 {
 	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
 	{
-		POL_CORE_INFO("Creating new texture (%i, %i)", width, height);
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		POL_CORE_FATAL("RendererAPI: None is currently not supported!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("Renderer: No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLTexture2D>(width, height);
 		}
 
-		POL_CORE_FATAL("Unknown RendererAPI!");
+		POL_CORE_FATAL("Renderer: Unknown RendererAPI!");
 		return nullptr;
 	}
 
 	Ref<Texture2D> Texture2D::Create(const std::string& path)
 	{
-		POL_CORE_INFO("Creating texture: %s", path.c_str());
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		POL_CORE_FATAL("RendererAPI: None is currently not supported!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("Renderer: No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLTexture2D>(path);
 		}
 
-		POL_CORE_FATAL("Unknown RendererAPI!");
+		POL_CORE_FATAL("Renderer: Unknown RendererAPI!");
 		return nullptr;
 	}
 

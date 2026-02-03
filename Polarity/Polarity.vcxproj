@@ -146,11 +146,11 @@
     <ClInclude Include="src\engine\math\Math.h" />
     <ClInclude Include="src\engine\renderer\EditorCamera.h" />
     <ClInclude Include="src\Polarity.h" />
-    <ClInclude Include="src\engine\ECS\ComponentManager.h" />
-    <ClInclude Include="src\engine\ECS\EntityManager.h" />
-    <ClInclude Include="src\engine\ECS\Registry.h" />
-    <ClInclude Include="src\engine\ECS\SystemManager.h" />
-    <ClInclude Include="src\engine\ECS\Types.h" />
+    <ClInclude Include="src\engine\ecs\ComponentManager.h" />
+    <ClInclude Include="src\engine\ecs\EntityManager.h" />
+    <ClInclude Include="src\engine\ecs\Registry.h" />
+    <ClInclude Include="src\engine\ecs\SystemManager.h" />
+    <ClInclude Include="src\engine\ecs\Types.h" />
     <ClInclude Include="src\engine\audio\Audio.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -633,8 +633,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\math\Math.cpp" />
-    <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
-    <ClCompile Include="src\engine\ECS\Registry.cpp" />
+    <ClCompile Include="src\engine\ecs\EntityManager.cpp" />
+    <ClCompile Include="src\engine\ecs\Registry.cpp" />
     <ClCompile Include="src\engine\audio\Audio.cpp" />
     <ClCompile Include="src\engine\core\Application.cpp" />
     <ClCompile Include="src\engine\core\Layer.cpp" />

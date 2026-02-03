@@ -1,12 +1,11 @@
 #pragma once
 
+#include "SceneCamera.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-
-#include "SceneCamera.h"
-#include "ScriptableEntity.h"
 
 namespace Polarity
 {
@@ -59,6 +58,8 @@ namespace Polarity
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
 	};
+
+	class ScriptableEntity; // forward declaration, see 'ScriptableEntity.h'
 
 	struct ScriptComponent
 	{

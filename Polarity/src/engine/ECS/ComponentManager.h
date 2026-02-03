@@ -27,7 +27,7 @@ namespace Polarity::ECS
 
 			if (found)
 			{
-				POL_CORE_ERROR("InsertData() failed, component added to same entity more than once (%d).", entity);
+				POL_CORE_ERROR("ECS: InsertData() failed, component added to same entity more than once id: %d!", entity);
 				return;
 			}
 			else
@@ -46,7 +46,7 @@ namespace Polarity::ECS
 		{
 			if (entity >= MAX_ENTITIES)
 			{
-				POL_CORE_ERROR("RemoveData() failed, invalid entity ID (%d).", entity);
+				POL_CORE_ERROR("ECS: RemoveData() failed, invalid entity id: %d!", entity);
 				return;
 			}
 			size_t index = m_EntityToIndexArray[entity];
@@ -54,7 +54,7 @@ namespace Polarity::ECS
 
 			if (!exists)
 			{
-				POL_CORE_ERROR("RemoveData() failed, tried removing non-existent component (%d).", entity);
+				POL_CORE_ERROR("ECS: RemoveData() failed, tried removing non-existent component id: %d!", entity);
 				return;
 			}
 			size_t indexOfLastElement = m_Size - 1;
@@ -79,12 +79,12 @@ namespace Polarity::ECS
 
 			if (entity >= MAX_ENTITIES || entity < 0)
 			{
-				POL_CORE_ERROR("GetData() failed, invalid entity ID (entity:%d).", entity);
+				POL_CORE_ERROR("ECS: GetData() failed, invalid entity id: %d!", entity);
 				return m_ComponentArray[0]; // Safe fallback
 			}
 			if (m_EntityToIndexArray[entity] == INVALID_INDEX)
 			{
-				POL_CORE_ERROR("GetData() failed, entity has no component (entity:%d).", entity);
+				POL_CORE_ERROR("ECS: GetData() failed, entity has no component id:%d!", entity);
 				return m_ComponentArray[0];
 			}
 
@@ -156,7 +156,7 @@ namespace Polarity::ECS
 
 			if (m_ComponentTypes.find(typeName) != m_ComponentTypes.end())
 			{
-				POL_CORE_ERROR("RegisterComponent() failed, registering type more than once (%s).", typeName);
+				POL_CORE_ERROR("ECS: RegisterComponent() failed, registering type more than once typeName: %s.", typeName);
 				return;
 			}
 
@@ -210,9 +210,9 @@ namespace Polarity::ECS
 		{
 			const char* typeName = typeid(T).name();
 
-			if (m_ComponentTypes.find(typeName) == m_ComponentTypes.end()) //TODO maybe use typeIndex
+			if (m_ComponentTypes.find(typeName) == m_ComponentTypes.end()) //TODO maybe use typeIndex for preformance
 			{
-				POL_CORE_ERROR("GetComponentArray() failed, component not registered before use.");
+				POL_CORE_ERROR("ECS: GetComponentArray() failed, component not registered before use typeName: %s!", typeName);
 				return nullptr;
 			}
 

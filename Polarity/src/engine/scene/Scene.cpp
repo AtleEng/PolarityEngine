@@ -5,6 +5,7 @@
 #include "engine/utils/Random.h"
 
 #include "Components.h"
+#include "ScriptableEntity.h"
 #include "Entity.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -39,8 +40,7 @@ namespace Polarity
 				if (!script.Instance)
 				{
 					script.Instance = script.InstantiateScript();
-					script.Instance->m_Scene = this;
-					script.Instance->m_EntityHandle = entity;
+					script.Instance->m_Entity = Entity{ entity, this };
 					script.Instance->OnCreate();
 				}
 				script.Instance->OnUpdate(tS);
@@ -126,6 +126,10 @@ namespace Polarity
 	Entity Scene::CreateEntity(std::string name)
 	{
 		Entity entity = { m_Registry.CreateEntity(), this };
+		if (entity.GetID() == ECS::INVALID_ENTITY)
+		{
+			return entity;
+		}
 
 		auto& nameComp = NameComponent();
 		nameComp.Name = name;
@@ -134,7 +138,7 @@ namespace Polarity
 		auto& transform = TransformComponent();
 		entity.AddComponent<TransformComponent>(transform);
 
-		POL_CORE_DEBUG("Created %s", name.c_str());
+		POL_CORE_INFO("Scene: Created %s", name.c_str());
 		return entity;
 	}
 
@@ -154,17 +158,17 @@ namespace Polarity
 		if (target != ECS::INVALID_ENTITY)
 		{
 			DestroyEntity(target);
-			POL_CORE_DEBUG("Destroyed %s", name.c_str());
+			POL_CORE_INFO("Scene: Destroyed entity: %s", name.c_str());
 		}
 		else
 		{
-			POL_CORE_DEBUG("Destroyed failed for %s", name.c_str());
+			POL_CORE_INFO("Destroyed failed for entity: %s", name.c_str());
 		}
 	}
 
 	void Scene::DestroyEntity(ECS::Entity handle)
 	{
-		POL_CORE_DEBUG("Destroyed %d", handle);
+		POL_CORE_INFO("Scene: Destroyed entity id: %d", handle);
 		m_Registry.DestroyEntity(handle);
 	}
 

@@ -1,9 +1,8 @@
 #pragma once
 
-#include "engine/core/Application.h"
-#include "engine/ECS/Registry.h"
+#include "engine/core/Timestep.h"
+#include "engine/ecs/Registry.h"
 #include "engine/renderer/EditorCamera.h"
-
 
 namespace Polarity
 {

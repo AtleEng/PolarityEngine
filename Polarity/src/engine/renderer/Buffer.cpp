@@ -10,11 +10,11 @@ namespace Polarity {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		POL_CORE_FATAL("No RendererAPI!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("Renderer: No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
-		POL_CORE_FATAL("Unknown RendererAPI!");
+		POL_CORE_FATAL("Renderer: Unknown RendererAPI!");
 		return nullptr;
 	}
 
@@ -22,11 +22,11 @@ namespace Polarity {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		POL_CORE_FATAL("No RendererAPI!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("Renderer: No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLVertexBuffer>(size);
 		}
 
-		POL_CORE_FATAL("Unknown RendererAPI!");
+		POL_CORE_FATAL("Renderer: Unknown RendererAPI!");
 		return nullptr;
 	}
 
@@ -34,11 +34,11 @@ namespace Polarity {
 	{
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		POL_CORE_FATAL("No RendererAPI!"); return nullptr;
+		case RendererAPI::API::None:		POL_CORE_FATAL("Renderer: No RendererAPI!"); return nullptr;
 		case RendererAPI::API::OpenGL:		return CreateRef<OpenGLIndexBuffer>(indices, count);
 		}
 
-		POL_CORE_FATAL("Unknown RendererAPI!");
+		POL_CORE_FATAL("Renderer: Unknown RendererAPI!");
 		return nullptr;
 	}
 }

@@ -7,7 +7,7 @@
 namespace Polarity::ECS
 {
 	using Entity = uint32_t;
-	const Entity MAX_ENTITIES = 30000;
+	const Entity MAX_ENTITIES = 50000;
 	const Entity INVALID_ENTITY = -1;
 
 	using ComponentType = std::uint8_t;

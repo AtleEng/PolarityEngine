@@ -1,10 +1,8 @@
 #pragma once
 
-#include "engine/core/Application.h"
-#include "engine/ECS/Registry.h"
+#include "Entity.h"
 
 namespace Polarity {
-	class Scene;
 
 	class ScriptableEntity
 	{
@@ -14,16 +12,14 @@ namespace Polarity {
 		template<typename T>
 		T& GetComponent()
 		{
-			return m_Scene->GetRegistry().GetComponent<T>(m_EntityHandle);
+			return m_Entity.GetComponent<T>();
 		}
 	protected:
 		virtual void OnCreate() {}
 		virtual void OnDestroy() {}
 		virtual void OnUpdate(Timestep ts) {}
 	private:
-		Scene* m_Scene = nullptr;
-		ECS::Entity m_EntityHandle{ ECS::INVALID_ENTITY };
-
+		Entity m_Entity;
 		friend class Scene;
 	};
 

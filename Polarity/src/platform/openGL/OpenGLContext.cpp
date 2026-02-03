@@ -16,7 +16,7 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		POL_CORE_INFO("OpenGL initializing...");
+		POL_CORE_INFO("OpenGL: initializing...");
 		glfwMakeContextCurrent(m_windowHandle);
 
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);

@@ -17,7 +17,7 @@ namespace Polarity
 
 		if (ma_sound_init_from_file(pEngine, filePath.c_str(), 0, nullptr, nullptr, &m_sound) != MA_SUCCESS)
 		{
-			POL_CORE_ERROR("Failed to load audioSource: %s", filePath.c_str());
+			POL_CORE_ERROR("Audio: Failed to load AudioSource: %s!", filePath.c_str());
 		}
 
 		m_loaded = true;
@@ -51,11 +51,11 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		POL_CORE_INFO("Audio initializing...");
+		POL_CORE_INFO("Audio: initializing...");
 
 		if (ma_engine_init(nullptr, &s_engine) != MA_SUCCESS)
 		{
-			POL_CORE_FATAL("Failed to initialize miniaudio engine!");
+			POL_CORE_FATAL("Audio: Failed to initialize miniaudio engine!");
 			return;
 		}
 	}
@@ -64,7 +64,6 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		POL_CORE_INFO("Creating AudioSource: %s", filePath.c_str());
 		return CreateRef<AudioSource>(&s_engine ,filePath);
 	}
 
@@ -91,7 +90,7 @@ namespace Polarity
 
 		if (!source || !source->m_loaded)
 		{
-			POL_CORE_WARN("Null audio reference");
+			POL_CORE_WARN("Audio: null AudioSource reference");
 			return;
 		}
 		ma_sound_start(&source->m_sound);
@@ -103,7 +102,7 @@ namespace Polarity
 
 		if (!source || !source->m_loaded)
 		{
-			POL_CORE_WARN("Null audio reference");
+			POL_CORE_WARN("Audio: null AudioSource reference");
 			return;
 		}
 		ma_sound_stop(&source->m_sound);

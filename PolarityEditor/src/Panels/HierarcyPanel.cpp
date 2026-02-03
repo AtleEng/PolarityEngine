@@ -28,7 +28,6 @@ namespace Polarity
 			ImVec2(uvs[0].x, uvs[2].y)))
 		{
 			auto entity = m_Context->ActiveScene->CreateEntity();
-			entity.AddComponent<SpriteComponent>();
 		}
 		ImGui::PopStyleVar();
 

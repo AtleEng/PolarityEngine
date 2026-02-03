@@ -1,7 +1,7 @@
 #pragma once
 
+#include "Scene.h"
 #include "Components.h"
-#include "engine/ECS/Registry.h"
 
 namespace Polarity
 {
@@ -20,7 +20,7 @@ namespace Polarity
 		{
 			if (HasComponent<T>())
 			{
-				POL_CORE_WARN("AddComponent() failed for: %s", GetName().c_str());
+				POL_CORE_WARN("Scene: AddComponent() failed for: %s", GetName().c_str());
 				return GetComponent<T>();
 			}
 			T& newComponent = m_Scene->m_Registry.AddComponent(m_EntityHandle, component);
@@ -37,7 +37,7 @@ namespace Polarity
 			}
 			else
 			{
-				POL_CORE_WARN("RemovedComponent() failed for: %s", GetName().c_str());
+				POL_CORE_WARN("Scene: RemovedComponent() failed for: %s", GetName().c_str());
 			}
 		}
 

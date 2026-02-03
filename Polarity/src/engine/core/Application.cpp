@@ -19,10 +19,10 @@ namespace Polarity {
 		POLARITY_PROFILE_FUNCTION();
 
 		Logger::Init();
-		POL_CORE_ASSERT(!s_instance, "Application already exist!");
+		POL_CORE_ASSERT(!s_instance, "Core: Application already exist!");
 		s_instance = this;
 
-		std::string info = "PolarityEngine v0.01 ";
+		std::string info = "Core: PolarityEngine v0.01 ";
 
 		info += "- ";
 		info += POLARITY_CONFIG;
@@ -117,7 +117,7 @@ namespace Polarity {
 
 	void Application::Shutdown()
 	{
-		POL_CORE_INFO("Shutdown...");
+		POL_CORE_INFO("Core: Shutdown...");
 		m_running = false;
 	}
 

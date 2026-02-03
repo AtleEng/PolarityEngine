@@ -9,13 +9,13 @@
 
 #elif POLARITY_PLATFORM_LINUX
 	#define DEBUG_BREAK() __builtin_debugtrap()
-	#error We only support Windows not Linux !!!
+	#error Polarity doesn't support linux!
 
 #elif POLARITY_PLATFORM_MAC
 	#define DEBUG_BREAK() __builtin_trap()
-	#error We only support Windows not Mac !!!
+	#error Polarity doesn't support mac!
 #else
-	#error Unknown platform!!!
+	#error Unknown platform!
 #endif
 
 

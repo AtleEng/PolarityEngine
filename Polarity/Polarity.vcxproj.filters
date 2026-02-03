@@ -153,19 +153,19 @@
     <ClInclude Include="src\Polarity.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ECS\ComponentManager.h">
+    <ClInclude Include="src\engine\ecs\ComponentManager.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ECS\EntityManager.h">
+    <ClInclude Include="src\engine\ecs\EntityManager.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ECS\Registry.h">
+    <ClInclude Include="src\engine\ecs\Registry.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ECS\SystemManager.h">
+    <ClInclude Include="src\engine\ecs\SystemManager.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ECS\Types.h">
+    <ClInclude Include="src\engine\ecs\Types.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\audio\Audio.h">
@@ -1609,10 +1609,10 @@
     <ClInclude Include="src\engine\renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\ECS\EntityManager.cpp">
+    <ClCompile Include="src\engine\ecs\EntityManager.cpp">
       <Filter>Source Files\src\engine\ECS</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\ECS\Registry.cpp">
+    <ClCompile Include="src\engine\ecs\Registry.cpp">
       <Filter>Source Files\src\engine\ECS</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\audio\Audio.cpp">
