@@ -72,7 +72,7 @@ namespace Polarity
 			{
 			case FramebufferTextureFormat::DEPTH24STENCIL8:  return true;
 			}
-
+			POL_CORE_ERROR("OpenGL: Wrong format!");
 			return false;
 		}
 
@@ -81,9 +81,10 @@ namespace Polarity
 			switch (format)
 			{
 			case FramebufferTextureFormat::RGBA8:       return GL_RGBA8;
+			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
 			}
 
-			POL_CORE_ASSERT(false, "OpenGL: Wrong format!");
+			POL_CORE_ERROR("OpenGL: Wrong format!");
 			return 0;
 		}
 	}
@@ -184,10 +185,12 @@ namespace Polarity
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
 	}
+
 	void OpenGLFramebuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+
 	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
 	{
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
@@ -200,19 +203,23 @@ namespace Polarity
 
 		Invalidate();
 	}
-	// read a pixel (x, y) in the framebuffer. Warning: Framebuffer has to be bound
-	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
-	{
-		return ReadPixels(attachmentIndex, x, y, 1, 1);
-	}
-	// read pixels (x->sizeX, y->sizeY) in the framebuffer. Warning: Framebuffer has to be bound
+
 	int OpenGLFramebuffer::ReadPixels(uint32_t attachmentIndex, int x, int y, int sizeX, int sizeY)
 	{
-		POL_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "OpenGL: AttachmentIndex out of bounds!");
+		POL_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "OpenGL: AttachmentIndex out of range!");
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		int pixelData;
 		glReadPixels(x, y, sizeX, sizeY, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
+	}
+
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		POL_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "OpenGL: AttachmentIndex out of range!");
+
+		auto& spec = m_ColorAttachmentSpecs[attachmentIndex];
+
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::FramebufferTextureFormatToGL((spec.TextureFormat)), GL_INT, &value);
 	}
 }

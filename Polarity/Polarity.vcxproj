@@ -143,14 +143,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\math\Math.h" />
-    <ClInclude Include="src\engine\renderer\EditorCamera.h" />
     <ClInclude Include="src\Polarity.h" />
-    <ClInclude Include="src\engine\ecs\ComponentManager.h" />
-    <ClInclude Include="src\engine\ecs\EntityManager.h" />
-    <ClInclude Include="src\engine\ecs\Registry.h" />
-    <ClInclude Include="src\engine\ecs\SystemManager.h" />
-    <ClInclude Include="src\engine\ecs\Types.h" />
+    <ClInclude Include="src\engine\ECS\ComponentManager.h" />
+    <ClInclude Include="src\engine\ECS\EntityManager.h" />
+    <ClInclude Include="src\engine\ECS\Registry.h" />
+    <ClInclude Include="src\engine\ECS\SystemManager.h" />
+    <ClInclude Include="src\engine\ECS\Types.h" />
     <ClInclude Include="src\engine\audio\Audio.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -168,8 +166,10 @@
     <ClInclude Include="src\engine\events\KeyEvent.h" />
     <ClInclude Include="src\engine\events\MouseEvent.h" />
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
+    <ClInclude Include="src\engine\math\Math.h" />
     <ClInclude Include="src\engine\renderer\Buffer.h" />
     <ClInclude Include="src\engine\renderer\Camera.h" />
+    <ClInclude Include="src\engine\renderer\EditorCamera.h" />
     <ClInclude Include="src\engine\renderer\Framebuffer.h" />
     <ClInclude Include="src\engine\renderer\GraphicsContext.h" />
     <ClInclude Include="src\engine\renderer\OrthographicCamera.h" />
@@ -632,9 +632,8 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\math\Math.cpp" />
-    <ClCompile Include="src\engine\ecs\EntityManager.cpp" />
-    <ClCompile Include="src\engine\ecs\Registry.cpp" />
+    <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
+    <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\audio\Audio.cpp" />
     <ClCompile Include="src\engine\core\Application.cpp" />
     <ClCompile Include="src\engine\core\Layer.cpp" />
@@ -643,6 +642,7 @@
     <ClCompile Include="src\engine\core\Window.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\engine\math\Math.cpp" />
     <ClCompile Include="src\engine\renderer\Buffer.cpp" />
     <ClCompile Include="src\engine\renderer\EditorCamera.cpp" />
     <ClCompile Include="src\engine\renderer\Framebuffer.cpp" />
@@ -660,7 +660,6 @@
     <ClCompile Include="src\engine\scene\SceneCamera.cpp" />
     <ClCompile Include="src\engine\scene\SceneSerializer.cpp" />
     <ClCompile Include="src\engine\utils\Random.cpp" />
-    <ClCompile Include="src\platform\windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLFramebuffer.cpp" />
@@ -669,6 +668,7 @@
     <ClCompile Include="src\platform\openGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\platform\windows\WindowsInput.cpp" />
+    <ClCompile Include="src\platform\windows\WindowsPlatformUtils.cpp" />
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp" />
     <ClCompile Include="src\polpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

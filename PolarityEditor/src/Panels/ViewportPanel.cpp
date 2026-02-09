@@ -35,7 +35,7 @@ namespace Polarity
 		if (Input::IsMouseButtonPressed(Mouse::Button0) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
 		{
 			m_Context->ViewportFramebuffer->Bind(); // TODO fix
-			int pixelData = m_Context->ViewportFramebuffer->ReadPixel(1, mouseX, mouseY);
+			int pixelData = m_Context->ViewportFramebuffer->ReadPixels(1, mouseX, mouseY);
 			POL_CORE_DEBUG("Virtual mouse = %d, %d value = %d", mouseX, mouseY, pixelData);
 			m_Context->ViewportFramebuffer->Unbind();
 		}

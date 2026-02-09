@@ -22,6 +22,9 @@
     <Filter Include="Source Files\src\engine\imGui">
       <UniqueIdentifier>{2F8EB530-9BA6-9C5A-6453-2CF4D02A31F4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\math">
+      <UniqueIdentifier>{3EF1B9F9-2AAC-A9A5-D363-22F0BFFDF335}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\renderer">
       <UniqueIdentifier>{8B7AD0FE-77CB-BB40-A02F-AA028CDF4EAA}</UniqueIdentifier>
     </Filter>
@@ -78,6 +81,9 @@
     </Filter>
     <Filter Include="Header Files\src\engine\imGui">
       <UniqueIdentifier>{67881AA4-D3A0-01CE-9C4D-916708259667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\math">
+      <UniqueIdentifier>{7684CC4A-623F-BCF6-0BF7-3441F7900687}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\renderer">
       <UniqueIdentifier>{C3E9E9F0-AF3A-D532-D89E-C3F4C44E689C}</UniqueIdentifier>
@@ -153,19 +159,19 @@
     <ClInclude Include="src\Polarity.h">
       <Filter>Header Files\src</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs\ComponentManager.h">
+    <ClInclude Include="src\engine\ECS\ComponentManager.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs\EntityManager.h">
+    <ClInclude Include="src\engine\ECS\EntityManager.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs\Registry.h">
+    <ClInclude Include="src\engine\ECS\Registry.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs\SystemManager.h">
+    <ClInclude Include="src\engine\ECS\SystemManager.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\ecs\Types.h">
+    <ClInclude Include="src\engine\ECS\Types.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\audio\Audio.h">
@@ -219,10 +225,16 @@
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h">
       <Filter>Header Files\src\engine\imGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\math\Math.h">
+      <Filter>Header Files\src\engine\math</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\renderer\Buffer.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\renderer\Camera.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\renderer\EditorCamera.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\renderer\Framebuffer.h">
@@ -1605,14 +1617,12 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\math\Math.h" />
-    <ClInclude Include="src\engine\renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\ecs\EntityManager.cpp">
+    <ClCompile Include="src\engine\ECS\EntityManager.cpp">
       <Filter>Source Files\src\engine\ECS</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\ecs\Registry.cpp">
+    <ClCompile Include="src\engine\ECS\Registry.cpp">
       <Filter>Source Files\src\engine\ECS</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\audio\Audio.cpp">
@@ -1639,7 +1649,13 @@
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp">
       <Filter>Source Files\src\engine\imGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\math\Math.cpp">
+      <Filter>Source Files\src\engine\math</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\renderer\Buffer.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\renderer\EditorCamera.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\Framebuffer.cpp">
@@ -1684,7 +1700,7 @@
     <ClCompile Include="src\engine\scene\SceneSerializer.cpp">
       <Filter>Source Files\src\engine\scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\platform\windows\WindowsPlatformUtils.cpp">
+    <ClCompile Include="src\engine\utils\Random.cpp">
       <Filter>Source Files\src\engine\utils</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp">
@@ -1709,6 +1725,9 @@
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\windows\WindowsInput.cpp">
+      <Filter>Source Files\src\platform\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\windows\WindowsPlatformUtils.cpp">
       <Filter>Source Files\src\platform\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\windows\WindowsWindow.cpp">
@@ -1744,8 +1763,5 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\math\Math.cpp" />
-    <ClCompile Include="src\engine\renderer\EditorCamera.cpp" />
-    <ClCompile Include="src\engine\utils\Random.cpp" />
   </ItemGroup>
 </Project>
