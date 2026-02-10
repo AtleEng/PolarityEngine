@@ -60,12 +60,12 @@ namespace Polarity {
 	//===============================================================================================
 
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
-		: m_count(count)
+		: m_Count(count)
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		glCreateBuffers(1, &m_rendererID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererID);
+		glCreateBuffers(1, &m_RendererID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 	}
 
@@ -73,14 +73,14 @@ namespace Polarity {
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		glDeleteBuffers(1, &m_rendererID);
+		glDeleteBuffers(1, &m_RendererID);
 	}
 
 	void OpenGLIndexBuffer::Bind() const
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_rendererID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	}
 	void OpenGLIndexBuffer::UnBind() const
 	{

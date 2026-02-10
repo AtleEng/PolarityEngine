@@ -6,21 +6,21 @@
 namespace Polarity
 {
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
-		: m_width(width), m_height(height)
+		: m_Width(width), m_Height(height)
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		m_internalFormat = GL_RGBA8;
-		m_dataFormat = GL_RGBA;
+		m_InternalFormat = GL_RGBA8;
+		m_DataFormat = GL_RGBA;
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);
-		glTextureStorage2D(m_rendererID, 1, m_internalFormat, m_width, m_height);
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
 
-		glTextureParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	}
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path)
-		: m_path(path)
+		: m_Path(path)
 	{
 		POLARITY_PROFILE_FUNCTION();
 
@@ -34,30 +34,30 @@ namespace Polarity
 		POL_CORE_ASSERT(data, "OpenGL: Failed to load image at: %s!", path.c_str());
 		
 		//to make them unsigned
-		m_width = width;
-		m_height = height;
+		m_Width = width;
+		m_Height = height;
 
 		if (channels == 4)
 		{
-			m_internalFormat = GL_RGBA8;
-			m_dataFormat = GL_RGBA;
+			m_InternalFormat = GL_RGBA8;
+			m_DataFormat = GL_RGBA;
 		}
 		else if (channels == 3)
 		{
-			m_internalFormat = GL_RGB8;
-			m_dataFormat = GL_RGB;
+			m_InternalFormat = GL_RGB8;
+			m_DataFormat = GL_RGB;
 		}
 
-		POL_CORE_ASSERT(m_internalFormat && m_dataFormat, "OpengGL: Texture format not supported!");
+		POL_CORE_ASSERT(m_InternalFormat && m_DataFormat, "OpengGL: Texture format not supported!");
 
 
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_rendererID);
-		glTextureStorage2D(m_rendererID, 1, m_internalFormat, m_width, m_height);
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
 
-		glTextureParameteri(m_rendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_rendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 
 
 		stbi_image_free(data);
@@ -67,7 +67,7 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		glDeleteTextures(1, &m_rendererID);
+		glDeleteTextures(1, &m_RendererID);
 	}
 
 
@@ -75,15 +75,15 @@ namespace Polarity
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		uint32_t bpp = m_dataFormat == GL_RGBA ? 4 : 3;
-		POL_CORE_ASSERT(size == m_width * m_height * bpp, "OpenGL: Size of data is not matching texture!");
-		glTextureSubImage2D(m_rendererID, 0, 0, 0, m_width, m_height, m_dataFormat, GL_UNSIGNED_BYTE, data);
+		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
+		POL_CORE_ASSERT(size == m_Width * m_Height * bpp, "OpenGL: Size of data is not matching texture!");
+		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 	}
 
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		glBindTextureUnit(slot, m_rendererID);
+		glBindTextureUnit(slot, m_RendererID);
 	}
 }

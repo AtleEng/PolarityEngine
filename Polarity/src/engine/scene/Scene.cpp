@@ -96,7 +96,7 @@ namespace Polarity
 			auto& transform = m_Registry.GetComponent<TransformComponent>(entity);
 			auto& sprite = m_Registry.GetComponent<SpriteComponent>(entity);
 
-			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+			Renderer2D::DrawSprite(transform.GetTransform(), sprite, entity);
 		}
 
 		Renderer2D::EndScene();

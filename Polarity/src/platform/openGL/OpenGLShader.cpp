@@ -39,7 +39,7 @@ namespace Polarity {
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
 		auto lastDot = shaderPath.rfind('.');
 		auto count = lastDot == std::string::npos ? shaderPath.size() - lastSlash : lastDot - lastSlash;
-		m_name = shaderPath.substr(lastSlash, count);
+		m_Name = shaderPath.substr(lastSlash, count);
 
 
 		std::string shaderSource = ReadFile(shaderPath);
@@ -48,7 +48,7 @@ namespace Polarity {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
-		: m_name(name)
+		: m_Name(name)
 	{
 		POLARITY_PROFILE_FUNCTION();
 
@@ -63,14 +63,14 @@ namespace Polarity {
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		glDeleteProgram(m_rendererID);
+		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
 		POLARITY_PROFILE_FUNCTION();
 
-		glUseProgram(m_rendererID);
+		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::UnBind() const
@@ -124,43 +124,43 @@ namespace Polarity {
 
 	void OpenGLShader::UploadUniformInt(const std::string& name, const int value)
 	{
-		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1i(location, value);
 	}
 
 	void OpenGLShader::UploadUniformIntArray(const std::string& name, const int* values, uint32_t count)
 	{
-		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1iv(location, count, values);
 	}
 
 	void OpenGLShader::UploadUniformFloat(const std::string& name, const float value)
 	{
-		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1f(location, value);
 	}
 
 	void OpenGLShader::UploadUniformFloat2(const std::string& name, const glm::vec2& value)
 	{
-		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform2f(location, value.x, value.y);
 	}
 
 	void OpenGLShader::UploadUniformFloat3(const std::string& name, const glm::vec3& value)
 	{
-		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
 	void OpenGLShader::UploadUniformFloat4(const std::string& name, const glm::vec4& value)
 	{
-		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform4f(location, value.x, value.y, value.z, value.w);
 	}
 
 	void OpenGLShader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
-		GLint location = glGetUniformLocation(m_rendererID, name.c_str());
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
@@ -249,7 +249,9 @@ namespace Polarity {
 
 				glDeleteShader(shader);
 
-				POL_CORE_FATAL("OpenGL: %s shader compilation failure!", kv.second.c_str());
+				POL_CORE_FATAL("OpenGL: Shader compilation failure (%s):\n%s",
+					StringFromShaderType(shaderType).c_str(),
+					infoLog.data());
 
 				break;
 			}
@@ -273,14 +275,14 @@ namespace Polarity {
 			std::vector<GLchar> infoLog(maxLength);
 			glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
 
-			// We don't need the program and shaders anymore.
+			// Clean up the program and shaders
 			glDeleteProgram(program);
 			for (auto id : glShaderIDs)
 			{
 				glDeleteShader(id);
 			}
 
-			POL_CORE_FATAL("OpenGL: Shader link failure!");
+			POL_CORE_FATAL("OpenGL: Shader link failure!\n%s", infoLog.data());
 
 			return;
 		}
@@ -291,7 +293,7 @@ namespace Polarity {
 			glDeleteShader(id);
 		}
 
-		m_rendererID = program;
+		m_RendererID = program;
 	}
 
 }

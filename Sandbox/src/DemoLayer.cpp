@@ -97,6 +97,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 void DemoLayer::OnImGuiRender()
 {
 	POLARITY_PROFILE_FUNCTION();
+
 	if (ImGui::Begin("Settings"))
 	{
 		ImGui::Text("Particle System:");
@@ -118,6 +119,10 @@ void DemoLayer::OnImGuiRender()
 		ImGui::ColorEdit4("Start color", glm::value_ptr(m_particle.ColorBegin));
 		ImGui::ColorEdit4("End color", glm::value_ptr(m_particle.ColorEnd));
 
+		if (ImGui::Button("Quit Game"))
+		{
+			Application::Get().Shutdown();
+		}
 		ImGui::End();
 	}
 }
@@ -138,10 +143,7 @@ bool DemoLayer::OnKeyPressedEvent(KeyPressedEvent& event)
 
 		
 		//Audio::Stop(m_clickSound);
-		Audio::Play(m_clickSound);
-		
-
-		
+		Audio::Play(m_clickSound);	
 	}
 	return false;
 }

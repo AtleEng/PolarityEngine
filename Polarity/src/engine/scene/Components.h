@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneCamera.h"
+#include "engine/renderer/Texture.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -40,6 +41,7 @@ namespace Polarity
 	};
 	struct SpriteComponent
 	{
+		Ref<Texture2D> Texture;
 		glm::vec4 Color = glm::vec4(1.0f);
 		float Scale = 1;
 

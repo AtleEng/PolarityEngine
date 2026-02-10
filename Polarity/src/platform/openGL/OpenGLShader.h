@@ -16,7 +16,7 @@ namespace Polarity
 		virtual void Bind()		const override;
 		virtual void UnBind()	const override;
 
-		virtual const std::string& GetName() const override { return m_name; }
+		virtual const std::string& GetName() const override { return m_Name; }
 
 		// ----- Set Uniforms -----
 		virtual void SetInt		(const std::string& name, int				value)		override;
@@ -41,7 +41,7 @@ namespace Polarity
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
 		void Compile(std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
-		uint32_t m_rendererID;
-		std::string m_name;
+		uint32_t m_RendererID;
+		std::string m_Name;
 	};
 }

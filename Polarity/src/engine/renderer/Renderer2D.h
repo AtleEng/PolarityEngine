@@ -5,6 +5,8 @@
 #include "Texture.h"
 #include "EditorCamera.h"
 
+#include "engine/scene/Components.h"
+
 namespace Polarity
 {
 	class Renderer2D
@@ -38,6 +40,13 @@ namespace Polarity
 		static void DrawQuad(const glm::vec3& position,	 const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
 		static void DrawQuad(const glm::vec2& position,	 const glm::vec2& size = glm::vec2(1.0f), const float rotation = 0, const glm::vec4& tint = glm::vec4(1.0f));
 	
+		//id
+		static void DrawQuadID(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f, int entityID = -1);
+		static void DrawQuadID(const glm::mat4& transform, const glm::vec4& tint = glm::vec4(1.0f), int entityID = -1);
+
+		//Draw Sprite
+		static void DrawSprite(const glm::mat4& transform, SpriteComponent& sc, int entityID);
+
 		// Stats
 		struct Statistics
 		{
@@ -49,6 +58,7 @@ namespace Polarity
 		};
 		static void ResetStats();
 		static Statistics GetStats();
+
 	private:
 		static void StartBatch();
 		static void NextBatch();
