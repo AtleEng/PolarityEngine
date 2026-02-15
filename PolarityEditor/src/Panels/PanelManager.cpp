@@ -34,6 +34,25 @@ namespace Polarity {
             }
         }
 	}
+    void PanelManager::OnMousePressedEvent(MouseButtonPressedEvent& e)
+    {
+        for (auto& [id, panels] : m_Panels)
+        {
+            for (auto it = panels.begin(); it != panels.end(); )
+            {
+                if (!(*it)->IsOpen())
+                {
+                    (*it)->OnDetach();
+                    it = panels.erase(it);
+                }
+                else
+                {
+                    (*it)->OnMousePressedEvent(e);
+                    ++it;
+                }
+            }
+        }
+    }
 	void PanelManager::Clear()
 	{
         for (auto& [id, panels] : m_Panels)

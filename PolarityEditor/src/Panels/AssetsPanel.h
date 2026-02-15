@@ -6,7 +6,7 @@ namespace Polarity
     class AssetsPanel : public EditorPanel
     {
     public:
-        static constexpr PanelID StaticPanelID = PanelID::Assets;
+        static constexpr PanelType StaticPanelID = PanelType::Assets;
 
         AssetsPanel()
             : EditorPanel(StaticPanelID, 0, "Assets") {}

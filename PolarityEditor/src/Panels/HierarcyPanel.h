@@ -6,7 +6,7 @@ namespace Polarity
     class HierarcyPanel : public EditorPanel
     {
     public:
-        static constexpr PanelID StaticPanelID = PanelID::SceneHierarchy;
+        static constexpr PanelType StaticPanelID = PanelType::SceneHierarchy;
         static constexpr bool AllowMultiple() { return false; }
 
         HierarcyPanel()
@@ -16,7 +16,7 @@ namespace Polarity
         void OnDraw() override;
 
     private:
-        void DrawEntityNode(Entity entity, EditorContext* ctx);
+        void DrawEntityNode(Entity entity);
     private:
         Entity m_HoveredEntity;
     };

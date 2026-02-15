@@ -72,7 +72,6 @@ namespace Polarity
 			{
 			case FramebufferTextureFormat::DEPTH24STENCIL8:  return true;
 			}
-			POL_CORE_ERROR("OpenGL: Wrong format!");
 			return false;
 		}
 
@@ -84,7 +83,7 @@ namespace Polarity
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
 			}
 
-			POL_CORE_ERROR("OpenGL: Wrong format!");
+			POL_CORE_ERROR("OpenGL: Wrong format for texture!");
 			return 0;
 		}
 	}

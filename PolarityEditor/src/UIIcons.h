@@ -21,7 +21,7 @@ namespace Polarity {
 
 		static void Init();
 
-		// Access an icon texture
+		// Get a ref to an icon texture for atlas
 		static Ref<SubTexture2D> Get(UIIcon icon);
 	};
 

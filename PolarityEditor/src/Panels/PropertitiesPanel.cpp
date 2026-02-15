@@ -252,7 +252,7 @@ namespace Polarity
 		}
 		else
 		{
-			entity = m_Context->SelectedEntity;
+			entity = m_Context->GetSelected();
 		}
 
 		if (!entity || !entity.IsAlive())

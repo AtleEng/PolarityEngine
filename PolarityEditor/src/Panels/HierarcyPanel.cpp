@@ -9,7 +9,7 @@ namespace Polarity
 {
 	void HierarcyPanel::OnDraw()
 	{
-		auto& plusIcon = UIIcons::Get(UIIcon::DotMenu);
+		auto& plusIcon = UIIcons::Get(UIIcon::Plus);
 		uint32_t texID = plusIcon->GetTexture()->GetRendererID();
 		const glm::vec2* uvs = plusIcon->GetTexCoords();
 
@@ -35,11 +35,11 @@ namespace Polarity
 
 		for (auto entity : m_Context->ActiveScene->GetView<NameComponent>())
 		{
-			DrawEntityNode(entity, m_Context);
+			DrawEntityNode(entity);
 		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-			m_Context->SelectedEntity = {};
+			m_Context->SetSelected({});
 
 		if (ImGui::BeginPopupContextWindow("##PopFocus", ImGuiPopupFlags_MouseButtonRight))
 		{
@@ -69,11 +69,12 @@ namespace Polarity
 
 		ImGui::End();
 	}
-	void HierarcyPanel::DrawEntityNode(Entity entity, EditorContext* ctx)
+
+	void HierarcyPanel::DrawEntityNode(Entity entity)
 	{
 		std::string name = entity.GetComponent<NameComponent>().Name;
 
-		ImGuiTreeNodeFlags flags = ((ctx->SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+		ImGuiTreeNodeFlags flags = ((m_Context->GetSelected() == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)entity.GetID(), flags, name.c_str());
 		if (ImGui::IsItemHovered())
 		{
@@ -81,8 +82,7 @@ namespace Polarity
 		}
 		if (ImGui::IsItemClicked())
 		{
-			POL_CORE_INFO("Selected %s", name.c_str());
-			ctx->SelectedEntity = entity;
+			m_Context->SetSelected(entity);
 		}
 		if (opened)
 		{

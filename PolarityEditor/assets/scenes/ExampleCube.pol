@@ -58,15 +58,15 @@ Entities:
     SpriteComponent:
       Color: [0, 1, 1, 1]
       Scale: 1
-  - Entity: 5
+  - Entity: 7
     NameComponent:
       Name: New Entity
     TransformComponent:
       Position: [0, -0.5, 0]
       Rotation: [-1.57079637, 0, 0]
-      Scale: [1, 0.999997854, 0.999997854]
+      Scale: [5, 4.9999752, 4.9999752]
     SpriteComponent:
-      Color: [1, 1, 0, 1]
+      Color: [0.0347490311, 0.0347490311, 0.0347490311, 1]
       Scale: 1
   - Entity: 6
     NameComponent:
@@ -77,14 +77,4 @@ Entities:
       Scale: [1, 0.999994993, 0.999994993]
     SpriteComponent:
       Color: [1, 1, 0, 1]
-      Scale: 1
-  - Entity: 7
-    NameComponent:
-      Name: New Entity
-    TransformComponent:
-      Position: [0, -0.5, 0]
-      Rotation: [-1.57079637, 0, 0]
-      Scale: [5, 4.9999752, 4.9999752]
-    SpriteComponent:
-      Color: [0.0347490311, 0.0347490311, 0.0347490311, 1]
       Scale: 1

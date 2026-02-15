@@ -146,7 +146,7 @@ namespace Polarity
 	{
 		enum : MouseCode
 		{
-			Button0 = 0,
+			LeftButton = 0,
 			Button1 = 1,
 			Button2 = 2,
 			Button3 = 3,
@@ -156,7 +156,7 @@ namespace Polarity
 			Button7 = 7,
 
 			ButtonLast = Button7,
-			ButtonLeft = Button0,
+			ButtonLeft = LeftButton,
 			ButtonRight = Button1,
 			ButtonMiddle = Button2
 		};

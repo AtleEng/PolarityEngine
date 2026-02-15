@@ -34,30 +34,29 @@ namespace Polarity
 		io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Bold.ttf", 18.0f);
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf", 18.0f);
 
-
 		FramebufferSpecification viewportFbSpec;
 		viewportFbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		viewportFbSpec.Width = 1280;
 		viewportFbSpec.Height = 720;
-		m_EditorContext.ViewportFramebuffer = Framebuffer::Create(viewportFbSpec);
+		m_Context.ViewportFramebuffer = Framebuffer::Create(viewportFbSpec);
 
 		FramebufferSpecification previewFbSpec;
 		previewFbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		previewFbSpec.Width = 320;
 		previewFbSpec.Height = 180;
-		m_EditorContext.PreviewFramebuffer = Framebuffer::Create(previewFbSpec);
+		m_Context.PreviewFramebuffer = Framebuffer::Create(previewFbSpec);
 
-		m_EditorContext.ActiveScene = CreateRef<Scene>();
-		m_EditorContext.EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+		m_Context.ActiveScene = CreateRef<Scene>();
+		m_Context.EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 
 		// --------------------------------------------------- Panels
 
-		m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
-		m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
-		m_PanelManager.OpenPanel<PropertitiesPanel>(m_EditorContext);
-		m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
+		m_PanelManager.OpenPanel<HierarcyPanel>(m_Context);
+		m_PanelManager.OpenPanel<ViewportPanel>(m_Context);
+		m_PanelManager.OpenPanel<PropertitiesPanel>(m_Context);
+		m_PanelManager.OpenPanel<AssetsPanel>(m_Context);
 
-		auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
+		auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_Context);
 		auto panelId = consolePanel.GetInstanceID();
 
 		Logger::AddLogListener([this, panelId](const LogEvent& e)
@@ -69,14 +68,14 @@ namespace Polarity
 		});
 
 		//-------------------------------------------------------- Entites
-		Entity camEntity = m_EditorContext.ActiveScene->CreateEntity("Main Camera");
+		Entity camEntity = m_Context.ActiveScene->CreateEntity("Main Camera");
 		camEntity.AddComponent<CameraComponent>();
 
-		Entity sCamEntity = m_EditorContext.ActiveScene->CreateEntity("PreRender Camera");
+		Entity sCamEntity = m_Context.ActiveScene->CreateEntity("PreRender Camera");
 		auto& cam = sCamEntity.AddComponent<CameraComponent>();
 		cam.FixedAspectRatio = true;
 
-		auto square = m_EditorContext.ActiveScene->CreateEntity();
+		auto square = m_Context.ActiveScene->CreateEntity();
 		auto& sprite = square.AddComponent<SpriteComponent>();
 		sprite.Color = { 1, 0, 1, 1 };
 
@@ -128,10 +127,10 @@ namespace Polarity
 		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
 		if (viewport)
 		{
-			viewport->UpdateViewport(m_EditorContext.EditorCamera);
+			viewport->UpdateViewport(m_Context.EditorCamera);
 			if (viewport->IsFocused() || viewport->IsHovered())
 			{
-				m_EditorContext.EditorCamera.OnUpdate(ts);
+				m_Context.EditorCamera.OnUpdate(ts);
 			}
 		}
 
@@ -141,15 +140,15 @@ namespace Polarity
 
 			Renderer2D::ResetStats();
 
-			m_EditorContext.ViewportFramebuffer->Bind();
+			m_Context.ViewportFramebuffer->Bind();
 			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 			RenderCommand::Clear();
 
-			m_EditorContext.ViewportFramebuffer->ClearAttachment(1, -1);
+			m_Context.ViewportFramebuffer->ClearAttachment(1, -1);
 			//------------ Scene -------------------------------------
-			m_EditorContext.ActiveScene->OnUpdateEditor(ts, m_EditorContext.EditorCamera);
+			m_Context.ActiveScene->OnUpdateEditor(ts, m_Context.EditorCamera);
 
-			m_EditorContext.ViewportFramebuffer->Unbind();
+			m_Context.ViewportFramebuffer->Unbind();
 		}
 	}
 
@@ -244,21 +243,22 @@ namespace Polarity
 		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
 		if (viewport && (viewport->IsHovered() || viewport->IsFocused()))
 		{
-			m_EditorContext.EditorCamera.OnEvent(event);
+			m_Context.EditorCamera.OnEvent(event);
 		}
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(POLARITY_BIND_EVENT_FN(OnKeyPressedEvent));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(POLARITY_BIND_EVENT_FN(OnMousePressedEvent));
 	}
 
 	//Handle all key commands
-	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& event)
+	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& e)
 	{
-		if (event.GetRepeatCount() > 0)
+		if (e.GetRepeatCount() > 0)
 			return false;
 		bool ctrl = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
 		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
-		switch (event.GetKeyCode())
+		switch (e.GetKeyCode())
 		{
 		case Key::N:
 		{
@@ -293,9 +293,9 @@ namespace Polarity
 		}
 		case Key::Delete:
 		{
-			if (m_EditorContext.SelectedEntity.IsAlive())
+			if (m_Context.GetSelected().IsAlive())
 			{
-				m_EditorContext.ActiveScene->DestroyEntity(m_EditorContext.SelectedEntity.GetID());
+				m_Context.ActiveScene->DestroyEntity(m_Context.GetSelected().GetID());
 			}
 			break;
 		}
@@ -340,12 +340,18 @@ namespace Polarity
 		return false;
 	}
 
+	bool EditorLayer::OnMousePressedEvent(MouseButtonPressedEvent& e)
+	{
+		m_PanelManager.OnMousePressedEvent(e);
+		return false;
+	}
+
 	void EditorLayer::NewScene()
 	{
-		m_EditorContext.SelectedEntity = {};
-		m_EditorContext.ActiveScene = CreateRef<Scene>();
-		m_EditorContext.ViewportFramebuffer->Resize((uint32_t)m_EditorContext.ViewportSize.x, (uint32_t)m_EditorContext.ViewportSize.y);
-		m_EditorContext.ActiveScene->OnViewportResize((uint32_t)m_EditorContext.ViewportSize.x, (uint32_t)m_EditorContext.ViewportSize.y);
+		m_Context.SetSelected({});
+		m_Context.ActiveScene = CreateRef<Scene>();
+		m_Context.ViewportFramebuffer->Resize((uint32_t)m_Context.ViewportSize.x, (uint32_t)m_Context.ViewportSize.y);
+		m_Context.ActiveScene->OnViewportResize((uint32_t)m_Context.ViewportSize.x, (uint32_t)m_Context.ViewportSize.y);
 	}
 
 	void EditorLayer::OpenScene()
@@ -355,10 +361,12 @@ namespace Polarity
 		{
 			NewScene();
 
-			SceneSerializer serializer(m_EditorContext.ActiveScene);
+			SceneSerializer serializer(m_Context.ActiveScene);
 			serializer.DeSerialize(filepath);
 
 			m_CurrentFilepath = filepath;
+
+			POL_CORE_INFO("Scene opened!");
 		}
 	}
 
@@ -366,7 +374,7 @@ namespace Polarity
 	{
 		if (!m_CurrentFilepath.empty())
 		{
-			SceneSerializer serializer(m_EditorContext.ActiveScene);
+			SceneSerializer serializer(m_Context.ActiveScene);
 			serializer.Serialize(m_CurrentFilepath);
 
 			POL_CORE_INFO("Scene saved!");
@@ -382,11 +390,40 @@ namespace Polarity
 		std::string filepath = FileDialogs::SaveFile("Polarity Scene (*.pol)\0*.pol\0");
 		if (!filepath.empty())
 		{
-			SceneSerializer serializer(m_EditorContext.ActiveScene);
+			SceneSerializer serializer(m_Context.ActiveScene);
 			serializer.Serialize(filepath);
 
 			m_CurrentFilepath = filepath;
+			POL_CORE_INFO("Scene saved!");
 		}
+	}
+
+	void EditorLayer::Undo()
+	{
+	}
+
+	void EditorLayer::Redon()
+	{
+	}
+
+	void EditorLayer::Cut()
+	{
+	}
+
+	void EditorLayer::Copy()
+	{
+	}
+
+	void EditorLayer::Paste()
+	{
+	}
+
+	void EditorLayer::Duplicate()
+	{
+	}
+
+	void EditorLayer::Delete()
+	{
 	}
 
 
@@ -496,21 +533,21 @@ namespace Polarity
 				ImGui::Separator();
 
 				if (ImGui::MenuItem("Hierarcy"))
-					m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<HierarcyPanel>(m_Context);
 
 				if (ImGui::MenuItem("Viewport"))
-					m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<ViewportPanel>(m_Context);
 
 				if (ImGui::MenuItem("Properties"))
-					m_PanelManager.OpenPanel<PropertitiesPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<PropertitiesPanel>(m_Context);
 
 				if (ImGui::MenuItem("Assets"))
-					m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<AssetsPanel>(m_Context);
 
 				if (ImGui::MenuItem("Console"))
 				{
 
-					auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_EditorContext);
+					auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_Context);
 					auto panelId = consolePanel.GetInstanceID();
 
 					Logger::AddLogListener([this, panelId](const LogEvent& e)
@@ -525,10 +562,10 @@ namespace Polarity
 				if (ImGui::MenuItem("Reset Layout"))
 				{
 					m_PanelManager.Clear();
-					m_PanelManager.OpenPanel<HierarcyPanel>(m_EditorContext);
-					m_PanelManager.OpenPanel<ViewportPanel>(m_EditorContext);
-					m_PanelManager.OpenPanel<PropertitiesPanel>(m_EditorContext);
-					m_PanelManager.OpenPanel<AssetsPanel>(m_EditorContext);
+					m_PanelManager.OpenPanel<HierarcyPanel>(m_Context);
+					m_PanelManager.OpenPanel<ViewportPanel>(m_Context);
+					m_PanelManager.OpenPanel<PropertitiesPanel>(m_Context);
+					m_PanelManager.OpenPanel<AssetsPanel>(m_Context);
 				}
 
 				ImGui::EndMenu();

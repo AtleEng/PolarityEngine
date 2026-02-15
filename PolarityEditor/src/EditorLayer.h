@@ -21,20 +21,42 @@ namespace Polarity
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 
-		bool OnKeyPressedEvent(KeyPressedEvent& event);
+
+		// Menu
+
+		// File
 
 		void NewScene();
 		void OpenScene();
 		void SaveScene();
 		void SaveAsScene();
 
+		// Edit
+
+		void Undo();
+		void Redon();
+		void Cut();
+		void Copy();
+		void Paste();
+		void Duplicate();
+		void Delete();
+
+		//void Options();
+
+		//void Play();
+		//void Pause();
+		//void Step();
+
 	private:
+		bool OnKeyPressedEvent(KeyPressedEvent& e);
+		bool OnMousePressedEvent(MouseButtonPressedEvent& e);
+
 		void ShowProfiler();
 
 		void DrawMenubarPanel();
 	private:
 
-		EditorContext m_EditorContext;
+		EditorContext m_Context;
 		PanelManager m_PanelManager;
 
 		std::string m_CurrentFilepath = "";

@@ -21,12 +21,14 @@ namespace Polarity
     class ViewportPanel : public EditorPanel
     {
     public:
-        static constexpr PanelID StaticPanelID = PanelID::Viewport;
+        static constexpr PanelType StaticPanelID = PanelType::Viewport;
 
         ViewportPanel()
             : EditorPanel(StaticPanelID, 0, "Viewport") {}
 
         void OnDraw() override;
+        void OnMousePressedEvent(MouseButtonPressedEvent& event) override;
+
         void UpdateViewport(EditorCamera& editor)
         {
             if (!m_Context || !m_Context->ViewportFramebuffer)

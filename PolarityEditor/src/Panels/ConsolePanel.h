@@ -15,7 +15,7 @@ namespace Polarity
     class ConsolePanel : public EditorPanel
     {
     public:
-		static constexpr PanelID StaticPanelID = PanelID::Console;
+		static constexpr PanelType StaticPanelID = PanelType::Console;
 
 		ConsolePanel()
 			: EditorPanel(StaticPanelID, 0, "Console") {}

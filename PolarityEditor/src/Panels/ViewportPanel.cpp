@@ -25,24 +25,6 @@ namespace Polarity
 		glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
 		m_Context->ViewportSize = viewportSize;
 
-		auto [mx, my] = ImGui::GetMousePos();
-		mx -= m_ViewportBounds[0].x;
-		my -= m_ViewportBounds[0].y;
-		my = viewportSize.y - my;
-
-		int mouseX = (int)mx;
-		int mouseY = (int)my;
-		if (Input::IsMouseButtonPressed(Mouse::Button0) && mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
-		{
-			m_Context->ViewportFramebuffer->Bind(); // TODO fix
-
-			int pixelData = m_Context->ViewportFramebuffer->ReadPixels(1, mouseX, mouseY);
-			POL_CORE_DEBUG("Virtual mouse = %d, %d value = %d", mouseX, mouseY, pixelData);
-			m_Context->SelectedEntity = pixelData == -1 ? Entity() : Entity((ECS::Entity)pixelData, m_Context->ActiveScene.get());
-
-			m_Context->ViewportFramebuffer->Unbind();
-		}
-
 		uint32_t textureID = m_Context->ViewportFramebuffer->GetColorAttachmentRendererID();
 		ImGui::Image(
 			(void*)textureID,
@@ -53,9 +35,8 @@ namespace Polarity
 
 		
 
-
 		// Gizmos (orthographic translate arrows is broken, maybe update thirdparty)
-		Entity selectedEntity = m_Context->SelectedEntity;
+		Entity selectedEntity = m_Context->GetSelected();
 		if (selectedEntity)
 		{
 			ImGuizmo::SetID((int)selectedEntity.GetID());
@@ -100,5 +81,30 @@ namespace Polarity
 
 		ImGui::End();
 		ImGui::PopStyleVar();
+	}
+	void ViewportPanel::OnMousePressedEvent(MouseButtonPressedEvent& event)
+	{
+		if (!m_ViewportHovered || ImGuizmo::IsOver())
+			return;
+
+		if (event.GetMouseButton() == Mouse::LeftButton)
+		{
+			glm::vec2 viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+
+			auto [mx, my] = ImGui::GetMousePos();
+			mx -= m_ViewportBounds[0].x;
+			my -= m_ViewportBounds[0].y;
+			my = viewportSize.y - my;
+
+			int mouseX = (int)mx;
+			int mouseY = (int)my;
+
+				m_Context->ViewportFramebuffer->Bind();
+
+				int pixelData = m_Context->ViewportFramebuffer->ReadPixels(1, mouseX, mouseY);
+				m_Context->SetSelected(pixelData == -1 ? Entity() : Entity((ECS::Entity)pixelData, m_Context->ActiveScene.get()));
+
+				m_Context->ViewportFramebuffer->Unbind();
+		}
 	}
 }

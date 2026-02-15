@@ -8,6 +8,7 @@ namespace Polarity {
 	public:
 		void SetContext(EditorContext& ctx);
 		void OnDraw();
+		void OnMousePressedEvent(MouseButtonPressedEvent& e);
 		void Clear();
 
 		template<typename T, typename... Args>
@@ -15,7 +16,7 @@ namespace Polarity {
 		{
 			static_assert(std::is_base_of_v<EditorPanel, T>);
 
-			constexpr PanelID id = T::StaticPanelID;
+			constexpr PanelType id = T::StaticPanelID;
 
 			auto& list = m_Panels[id];
 
@@ -44,7 +45,7 @@ namespace Polarity {
 		template<typename T>
 		T* GetPanel()
 		{
-			PanelID id = T::StaticPanelID;
+			PanelType id = T::StaticPanelID;
 			auto it = m_Panels.find(id);
 			if (it == m_Panels.end() || it->second.empty())
 				return nullptr;
@@ -53,7 +54,7 @@ namespace Polarity {
 		}
 
 	private:
-		std::unordered_map<PanelID, std::vector<Ref<EditorPanel>>> m_Panels;
+		std::unordered_map<PanelType, std::vector<Ref<EditorPanel>>> m_Panels;
 		uint32_t m_NextInstanceID = 1;
 	};
 }
