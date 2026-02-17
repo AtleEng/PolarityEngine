@@ -8,10 +8,10 @@ namespace Polarity
 	{
 	public:
 		RandomEngine()
-			: m_Engine(std::random_device{}()) {}   // random seed
+			: m_Engine(std::random_device{}()) {}
 
 		RandomEngine(uint32_t seed)
-			: m_Engine(seed) {}                     // set seed
+			: m_Engine(seed) {}
 
 		int Int(int min, int max)
 		{

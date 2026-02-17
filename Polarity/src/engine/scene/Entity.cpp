@@ -17,6 +17,6 @@ namespace Polarity
 
 	bool Entity::IsAlive()
 	{
-		return m_EntityHandle != ECS::INVALID_ENTITY && m_Scene->IsAlive(m_EntityHandle);
+		return m_Scene->IsAlive(m_EntityHandle);
 	}
 }

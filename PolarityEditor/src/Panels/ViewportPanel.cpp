@@ -82,10 +82,17 @@ namespace Polarity
 		ImGui::End();
 		ImGui::PopStyleVar();
 	}
+	
 	void ViewportPanel::OnMousePressedEvent(MouseButtonPressedEvent& event)
 	{
-		if (!m_ViewportHovered || ImGuizmo::IsOver())
+		if (!m_ViewportHovered)
 			return;
+		if (ImGuizmo::IsOver() && m_Context->GetSelected())
+		{
+			POL_CORE_DEBUG("!");
+			return;
+		}
+		
 
 		if (event.GetMouseButton() == Mouse::LeftButton)
 		{

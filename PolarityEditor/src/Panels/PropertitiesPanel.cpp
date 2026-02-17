@@ -11,7 +11,7 @@ namespace Polarity
 	{
 		bool isKlicked = false;
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1, 1));
 		ImGui::PushID(label.c_str());
 
 		float lineHeight = ImGui::GetTextLineHeightWithSpacing();

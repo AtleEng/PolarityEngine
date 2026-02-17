@@ -53,22 +53,18 @@ namespace Polarity
 			return m_Scene->m_Registry.HasComponent<T>(m_EntityHandle);
 		}
 
-		operator bool() const { return m_EntityHandle != ECS::INVALID_ENTITY; }
-		operator ECS::Entity() const { return m_EntityHandle; }
-
 		const std::string& GetName();
 		const uint32_t GetID() { return m_EntityHandle; }
 		bool IsAlive();
 
-		bool operator==(const Entity& other) const
-		{
-			return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene;
-		}
 
-		bool operator!=(const Entity& other) const
-		{
-			return !(*this == other);
-		}
+		operator bool() const { return m_Scene->IsAlive(m_EntityHandle); }
+
+		operator ECS::Entity() const { return m_EntityHandle; }
+
+		bool operator==(const Entity& other) const { return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene; }
+
+		bool operator!=(const Entity& other) const { return !(*this == other); }
 
 	private:
 		ECS::Entity m_EntityHandle{ ECS::INVALID_ENTITY };

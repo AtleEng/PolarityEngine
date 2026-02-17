@@ -17,7 +17,7 @@ namespace Polarity
 
 		ImGui::TextUnformatted("Name");
 
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1, 1));
 		float lineHeight = ImGui::GetTextLineHeight();
 		ImVec2 btnSize(lineHeight, lineHeight);
 		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - btnSize.x);

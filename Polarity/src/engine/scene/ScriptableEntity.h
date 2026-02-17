@@ -15,8 +15,11 @@ namespace Polarity {
 			return m_Entity.GetComponent<T>();
 		}
 	protected:
+		// Runs once at creation
 		virtual void OnCreate() {}
+		// Runs once at destruction
 		virtual void OnDestroy() {}
+		// Runs every frame
 		virtual void OnUpdate(Timestep ts) {}
 	private:
 		Entity m_Entity;
