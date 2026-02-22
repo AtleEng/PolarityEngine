@@ -49,13 +49,15 @@ project "Polarity"
     {
         "src",
         "thirdparty",
-        "%{includedir.GLFW}",
-        "%{includedir.Glad}",
-        "%{includedir.ImGui}",
-        "%{includedir.glm}",
-        "%{includedir.stb_image}",
-        "%{includedir.yaml_cpp}",
-        "%{includedir.ImGuizmo}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}",
+        "%{IncludeDir.ImGui}",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.yaml_cpp}",
+        "%{IncludeDir.ImGuizmo}",
+
+        "%{IncludeDir.VulkanSDK}"
     }
 
     links
@@ -88,11 +90,17 @@ project "Polarity"
         }
 
     filter "configurations:Release"
-        defines "POLARITY_RELEASE"
         runtime "Release"
         optimize "on"
+        defines
+        {
+            "POLARITY_RELEASE"
+        }
 
     filter "configurations:Dist"
-        defines "POLARITY_DIST"
         runtime "Release"
         optimize "on"
+        defines
+        {
+            "POLARITY_DIST"
+        }

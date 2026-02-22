@@ -7,8 +7,6 @@
 #include "engine/utils/Random.h"
 #include "engine//utils/PlatformUtils.h"
 
-#include <GLFW/glfw3.h>  //temp
-
 namespace Polarity {
 
 
@@ -16,7 +14,7 @@ namespace Polarity {
 
 	Application::Application(const WindowProps props)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		Logger::Init();
 		POL_CORE_ASSERT(!s_instance, "Core: Application already exist!");

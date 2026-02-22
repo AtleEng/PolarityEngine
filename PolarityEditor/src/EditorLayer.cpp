@@ -26,7 +26,7 @@ namespace Polarity
 
 	void EditorLayer::OnAttach()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		UIIcons::Init();
 
@@ -122,7 +122,7 @@ namespace Polarity
 
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
 		if (viewport)
@@ -154,7 +154,7 @@ namespace Polarity
 
 	void EditorLayer::OnImGuiRender()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 
 		ImGuiIO& io = ImGui::GetIO();

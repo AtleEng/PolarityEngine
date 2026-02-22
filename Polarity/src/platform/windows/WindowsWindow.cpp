@@ -34,7 +34,7 @@ namespace Polarity
 
 	void WindowsWindow::Init(const WindowProps& props)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		m_data.Title = props.Title;
 		m_data.Width = props.Width;
@@ -165,7 +165,7 @@ namespace Polarity
 
 	void WindowsWindow::Shutdown()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		glfwDestroyWindow(m_window);
 		--s_GLFWWindowCount;
@@ -178,7 +178,7 @@ namespace Polarity
 
 	void WindowsWindow::OnUpdate()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 		glfwPollEvents();
 		m_context->SwapBuffers();
 	}

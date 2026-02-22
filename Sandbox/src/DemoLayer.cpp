@@ -12,7 +12,7 @@ DemoLayer::DemoLayer()
 
 void DemoLayer::OnAttach()
 {
-	POLARITY_PROFILE_FUNCTION();
+	POL_PROFILE_FUNCTION();
 
 	Random::Init();
 	m_particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -49,7 +49,7 @@ void DemoLayer::OnDetach()
 
 void DemoLayer::OnUpdate(Timestep tS)
 {
-	POLARITY_PROFILE_FUNCTION();
+	POL_PROFILE_FUNCTION();
 
 	Renderer2D::ResetStats();
 
@@ -96,7 +96,7 @@ void DemoLayer::OnUpdate(Timestep tS)
 
 void DemoLayer::OnImGuiRender()
 {
-	POLARITY_PROFILE_FUNCTION();
+	POL_PROFILE_FUNCTION();
 
 	if (ImGui::Begin("Settings"))
 	{

@@ -13,7 +13,7 @@ namespace Polarity
 	//=== AudioSource =================================================================================//
 	AudioSource::AudioSource(ma_engine *pEngine, const std::string& filePath)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (ma_sound_init_from_file(pEngine, filePath.c_str(), 0, nullptr, nullptr, &m_sound) != MA_SUCCESS)
 		{
@@ -25,7 +25,7 @@ namespace Polarity
 	}
 	AudioSource::~AudioSource()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (m_loaded)
 			ma_sound_uninit(&m_sound);
@@ -49,7 +49,7 @@ namespace Polarity
 	//=== Audio =================================================================================//
 	void Audio::Init()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		POL_CORE_INFO("Audio: initializing...");
 
@@ -62,7 +62,7 @@ namespace Polarity
 
 	Ref<AudioSource> Audio::Create(const std::string& filePath)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		return CreateRef<AudioSource>(&s_engine ,filePath);
 	}
@@ -86,7 +86,7 @@ namespace Polarity
 
 	void Audio::Play(const Ref<AudioSource>& source)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (!source || !source->m_loaded)
 		{
@@ -98,7 +98,7 @@ namespace Polarity
 
 	void Audio::Stop(const Ref<AudioSource>& source)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (!source || !source->m_loaded)
 		{

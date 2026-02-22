@@ -11,7 +11,7 @@ namespace Polarity
 		EditorApp()
 			: Application(WindowProps("Polarity Editor", 1280, 720, true, true))
 		{
-			POLARITY_PROFILE_FUNCTION();
+			POL_PROFILE_FUNCTION();
 
 			PushLayer(new EditorLayer());
 		}

@@ -11,7 +11,7 @@ namespace Polarity
 		Sandbox()
 			: Application(WindowProps("Sandbox", 1280, 720, false, false))
 		{
-			POLARITY_PROFILE_FUNCTION();
+			POL_PROFILE_FUNCTION();
 
 			PushLayer(new DemoLayer());
 

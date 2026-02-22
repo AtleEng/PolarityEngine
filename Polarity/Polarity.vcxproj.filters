@@ -201,6 +201,9 @@
     <ClInclude Include="src\engine\core\Log.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\core\Timer.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\core\Timestep.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
@@ -264,6 +267,9 @@
     <ClInclude Include="src\engine\renderer\Texture.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\renderer\UniformBuffer.h">
+      <Filter>Header Files\src\engine\renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\renderer\VertexArray.h">
       <Filter>Header Files\src\engine\renderer</Filter>
     </ClInclude>
@@ -307,6 +313,9 @@
       <Filter>Header Files\src\platform\openGL</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\openGL\OpenGLTexture.h">
+      <Filter>Header Files\src\platform\openGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\openGL\OpenGLUniformBuffer.h">
       <Filter>Header Files\src\platform\openGL</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\openGL\OpenGLVertexArray.h">
@@ -1685,6 +1694,9 @@
     <ClCompile Include="src\engine\renderer\Texture.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\renderer\UniformBuffer.cpp">
+      <Filter>Source Files\src\engine\renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\renderer\VertexArray.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
     </ClCompile>
@@ -1719,6 +1731,9 @@
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLTexture.cpp">
+      <Filter>Source Files\src\platform\openGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\openGL\OpenGLUniformBuffer.cpp">
       <Filter>Source Files\src\platform\openGL</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\openGL\OpenGLVertexArray.cpp">

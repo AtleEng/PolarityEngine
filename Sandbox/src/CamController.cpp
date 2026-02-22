@@ -8,7 +8,7 @@ Polarity::CamController::CamController(float aspectRatio)
 
 void Polarity::CamController::OnUpdate(Timestep ts)
 {
-	POLARITY_PROFILE_FUNCTION();
+	POL_PROFILE_FUNCTION();
 
 	if (Input::IsKeyPressed(Key::R))
 	{

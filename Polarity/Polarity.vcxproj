@@ -77,10 +77,12 @@
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>POLARITY_ARCH="x86_64";POLARITY_PLATFORM="windows";POLARITY_CONFIG="Debug";_CRT_SECURE_NO_WARNINGS;POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_DEBUG;POLARITY_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;thirdparty\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\ImGui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;thirdparty\ImGuizmo;C:\VulkanSDK\1.4.341.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -98,13 +100,14 @@
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>POLARITY_ARCH="x86_64";POLARITY_PLATFORM="windows";POLARITY_CONFIG="Release";_CRT_SECURE_NO_WARNINGS;POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;thirdparty\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\ImGui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;thirdparty\ImGuizmo;C:\VulkanSDK\1.4.341.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -123,13 +126,14 @@
       <PrecompiledHeaderFile>polpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>POLARITY_ARCH="x86_64";POLARITY_PLATFORM="windows";POLARITY_CONFIG="Dist";_CRT_SECURE_NO_WARNINGS;POLARITY_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;POLARITY_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\imgui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;thirdparty\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;thirdparty;thirdparty\GLFW\include;thirdparty\Glad\include;thirdparty\ImGui;thirdparty\glm;thirdparty\stb_image;thirdparty\yaml-cpp\include;thirdparty\ImGuizmo;C:\VulkanSDK\1.4.341.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -158,6 +162,7 @@
     <ClInclude Include="src\engine\core\Layer.h" />
     <ClInclude Include="src\engine\core\LayerStack.h" />
     <ClInclude Include="src\engine\core\Log.h" />
+    <ClInclude Include="src\engine\core\Timer.h" />
     <ClInclude Include="src\engine\core\Timestep.h" />
     <ClInclude Include="src\engine\core\Window.h" />
     <ClInclude Include="src\engine\debug\Instrumentor.h" />
@@ -179,6 +184,7 @@
     <ClInclude Include="src\engine\renderer\RendererAPI.h" />
     <ClInclude Include="src\engine\renderer\Shader.h" />
     <ClInclude Include="src\engine\renderer\Texture.h" />
+    <ClInclude Include="src\engine\renderer\UniformBuffer.h" />
     <ClInclude Include="src\engine\renderer\VertexArray.h" />
     <ClInclude Include="src\engine\scene\Components.h" />
     <ClInclude Include="src\engine\scene\Entity.h" />
@@ -194,6 +200,7 @@
     <ClInclude Include="src\platform\openGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\platform\openGL\OpenGLShader.h" />
     <ClInclude Include="src\platform\openGL\OpenGLTexture.h" />
+    <ClInclude Include="src\platform\openGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\platform\openGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\platform\windows\WindowsWindow.h" />
     <ClInclude Include="src\polpch.h" />
@@ -654,6 +661,7 @@
     <ClCompile Include="src\engine\renderer\RendererAPI.cpp" />
     <ClCompile Include="src\engine\renderer\Shader.cpp" />
     <ClCompile Include="src\engine\renderer\Texture.cpp" />
+    <ClCompile Include="src\engine\renderer\UniformBuffer.cpp" />
     <ClCompile Include="src\engine\renderer\VertexArray.cpp" />
     <ClCompile Include="src\engine\scene\Entity.cpp" />
     <ClCompile Include="src\engine\scene\Scene.cpp" />
@@ -666,6 +674,7 @@
     <ClCompile Include="src\platform\openGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLShader.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLTexture.cpp" />
+    <ClCompile Include="src\platform\openGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\platform\windows\WindowsInput.cpp" />
     <ClCompile Include="src\platform\windows\WindowsPlatformUtils.cpp" />

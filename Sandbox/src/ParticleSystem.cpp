@@ -12,7 +12,7 @@ ParticleSystem::ParticleSystem(uint32_t maxParticles)
 
 void ParticleSystem::OnUpdate(Polarity::Timestep ts)
 {
-	POLARITY_PROFILE_FUNCTION();
+	POL_PROFILE_FUNCTION();
 
 	for (auto& particle : m_ParticlePool)
 	{
@@ -33,7 +33,7 @@ void ParticleSystem::OnUpdate(Polarity::Timestep ts)
 
 void ParticleSystem::OnRender()
 {
-	POLARITY_PROFILE_FUNCTION();
+	POL_PROFILE_FUNCTION();
 
 	for (auto& particle : m_ParticlePool)
 	{
@@ -58,7 +58,7 @@ void ParticleSystem::OnRender()
 
 void ParticleSystem::Emit(const ParticleProps& particleProps)
 {
-	POLARITY_PROFILE_FUNCTION();
+	POL_PROFILE_FUNCTION();
 	Particle& particle = m_ParticlePool[m_PoolIndex];
 	particle.Active = true;
 	particle.Position = particleProps.Position;

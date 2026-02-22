@@ -85,13 +85,8 @@ namespace Polarity
 	
 	void ViewportPanel::OnMousePressedEvent(MouseButtonPressedEvent& event)
 	{
-		if (!m_ViewportHovered)
+		if (!m_ViewportHovered || ImGuizmo::IsOver() && m_Context->GetSelected())
 			return;
-		if (ImGuizmo::IsOver() && m_Context->GetSelected())
-		{
-			POL_CORE_DEBUG("!");
-			return;
-		}
 		
 
 		if (event.GetMouseButton() == Mouse::LeftButton)

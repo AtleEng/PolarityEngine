@@ -215,7 +215,7 @@ namespace Polarity {
 											   ::Polarity::InstrumentationTimer timer##line(fixedName##line.Data)
 #define POLARITY_PROFILE_SCOPE_LINE(name, line) POLARITY_PROFILE_SCOPE_LINE2(name, line)
 #define POLARITY_PROFILE_SCOPE(name) POLARITY_PROFILE_SCOPE_LINE(name, __LINE__)
-#define POLARITY_PROFILE_FUNCTION() POLARITY_PROFILE_SCOPE(POLARITY_FUNC_SIG)
+#define POL_PROFILE_FUNCTION() POLARITY_PROFILE_SCOPE(POLARITY_FUNC_SIG)
 #else
 #define POLARITY_PROFILE_BEGIN_SESSION(name, filepath)
 #define POLARITY_PROFILE_END_SESSION()

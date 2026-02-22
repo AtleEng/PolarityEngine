@@ -26,7 +26,7 @@ project "PolarityEditor"
     {
         "%{wks.location}/Polarity/src",
         "%{wks.location}/Polarity/thirdparty",
-        "%{includedir.glm}"
+        "%{IncludeDir.glm}"
     }
 
     links

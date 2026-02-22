@@ -73,7 +73,7 @@ namespace Polarity {
 
 	void Logger::Log(const char* prefix, TextColor textColor, const char* msg, ...)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		// ---- format message ----
 		va_list args;

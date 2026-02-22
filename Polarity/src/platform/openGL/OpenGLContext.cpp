@@ -14,7 +14,7 @@ namespace Polarity
 	}
 	void OpenGLContext::Init()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		POL_CORE_INFO("OpenGL: initializing...");
 		glfwMakeContextCurrent(m_WindowHandle);
@@ -24,7 +24,7 @@ namespace Polarity
 	}
 	void OpenGLContext::SwapBuffers()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		glfwSwapBuffers(m_WindowHandle);
 	}

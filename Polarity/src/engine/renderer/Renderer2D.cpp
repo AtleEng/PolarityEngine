@@ -4,10 +4,9 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommand.h"
+#include "UniformBuffer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "platform/openGL/OpenGLShader.h" //temp
 
 namespace Polarity
 {
@@ -26,7 +25,7 @@ namespace Polarity
 	struct Renderer2DStorage
 	{
 		//Maximum amount of quads for a single Draw call
-		const uint32_t MaxQuads = 10000;
+		const uint32_t MaxQuads = 20000;
 		//Maximum amount of vertices for a single Draw call
 		const uint32_t MaxVertices = MaxQuads * 4;
 		//Maximum amount of indices for a single Draw call
@@ -38,7 +37,7 @@ namespace Polarity
 		Ref<VertexBuffer> QuadVertexBuffer;
 
 		Ref<Shader> TextureShader;
-		Ref<Texture2D> whiteTexture;
+		Ref<Texture2D> WhiteTexture;
 
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
@@ -52,6 +51,13 @@ namespace Polarity
 
 
 		Renderer2D::Statistics Stats;
+
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+		CameraData CameraBuffer;
+		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
 	static Renderer2DStorage s_Data;
@@ -59,7 +65,7 @@ namespace Polarity
 
 	void Renderer2D::Init()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		// Vertex Array
 		s_Data.QuadVertexArray = VertexArray::Create();
@@ -100,9 +106,9 @@ namespace Polarity
 		delete[] quadIndices;
 
 		// Generate whiteTexture
-		s_Data.whiteTexture = Texture2D::Create(1, 1);
+		s_Data.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t textureData = 0xffffffff;
-		s_Data.whiteTexture->SetData(&textureData, sizeof(uint32_t));
+		s_Data.WhiteTexture->SetData(&textureData, sizeof(uint32_t));
 
 		// Texture
 		int32_t samplers[s_Data.MaxTextureSlots];
@@ -111,71 +117,61 @@ namespace Polarity
 			samplers[i] = i;
 		}
 		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
-		s_Data.TextureSlots[0] = s_Data.whiteTexture;
+
+		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
 
 		s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
 		s_Data.QuadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
 		s_Data.QuadVertexPositions[2] = { 0.5f,  0.5f, 0.0f, 1.0f };
 		s_Data.QuadVertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+
+		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DStorage::CameraData), 0);
 	}
 
 	void Renderer2D::Shutdown()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		delete[] s_Data.QuadVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
-
-		s_Data.whiteTexture->Bind();
-		s_Data.TextureSlotIndex = 1;
+		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DStorage::CameraData));
 
 		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const EditorCamera& camera)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
-		glm::mat4 viewProj = camera.GetViewProjection();
-
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
-
-		s_Data.whiteTexture->Bind();
-		s_Data.TextureSlotIndex = 1;
+		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DStorage::CameraData));
 
 		StartBatch();
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-
-		s_Data.whiteTexture->Bind();
-		s_Data.TextureSlotIndex = 1;
+		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjectionMatrix();
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DStorage::CameraData));
 
 		StartBatch();
 	}
 
 	void Renderer2D::EndScene()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		Flush();
 		StartBatch();
@@ -184,7 +180,7 @@ namespace Polarity
 	//Draw batch
 	void Renderer2D::Flush()
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (s_Data.QuadIndexCount == 0)
 			return;
@@ -198,6 +194,7 @@ namespace Polarity
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 			s_Data.TextureSlots[i]->Bind(i);
 
+		s_Data.TextureShader->Bind();
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 
 		s_Data.Stats.DrawCalls++;
@@ -207,6 +204,7 @@ namespace Polarity
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
 		s_Data.TextureSlotIndex = 1;
 	}
 
@@ -224,7 +222,7 @@ namespace Polarity
 	//Render Quads
 	void Renderer2D::DrawQuad(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint, const float textureScale, const glm::vec2* texCoords)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
 			NextBatch();
@@ -356,7 +354,7 @@ namespace Polarity
 	// Flat Color
 	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& tint)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
 			NextBatch();
@@ -418,7 +416,7 @@ namespace Polarity
 	}
 	void Renderer2D::DrawQuadID(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint, const float textureScale, int entityID)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
 			NextBatch();
@@ -460,7 +458,7 @@ namespace Polarity
 	}
 	void Renderer2D::DrawQuadID(const glm::mat4& transform, const glm::vec4& tint, int entityID)
 	{
-		POLARITY_PROFILE_FUNCTION();
+		POL_PROFILE_FUNCTION();
 
 		if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
 			NextBatch();

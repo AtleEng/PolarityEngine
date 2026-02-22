@@ -1,4 +1,6 @@
 
+include "Dependencies.lua"
+
 workspace "Polarity"
     architecture "x64"
     startproject "PolarityEditor"
@@ -9,18 +11,13 @@ workspace "Polarity"
         "Release",
         "Dist"
     }
+    flags
+	{
+		"MultiProcessorCompile"
+	}
 
 -- Output directory format
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-
-includedir = {}
-includedir["GLFW"]      = "%{wks.location}/Polarity/thirdparty/GLFW/include"
-includedir["Glad"]      = "%{wks.location}/Polarity/thirdparty/Glad/include"
-includedir["ImGui"]     = "%{wks.location}/Polarity/thirdparty/imgui"
-includedir["glm"]       = "%{wks.location}/Polarity/thirdparty/glm"
-includedir["stb_image"] = "%{wks.location}/Polarity/thirdparty/stb_image"
-includedir["yaml_cpp"]  = "%{wks.location}/Polarity/thirdparty/yaml-cpp/include"
-includedir["ImGuizmo"]  = "%{wks.location}/Polarity/thirdparty/ImGuizmo"
 
 
 group "Dependencies"
@@ -28,6 +25,8 @@ group "Dependencies"
     include "Polarity/thirdparty/Glad"
     include "Polarity/thirdparty/imgui"
     include "Polarity/thirdparty/yaml-cpp"
+
+    include "Polarity/thirdparty/SPIRV-Cross"
 group ""
 
 
