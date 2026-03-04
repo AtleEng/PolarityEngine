@@ -88,6 +88,12 @@ project "Polarity"
             "POLARITY_DEBUG",
             "POLARITY_ENABLE_ASSERTS"
         }
+        links
+		{
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+		}
 
     filter "configurations:Release"
         runtime "Release"
@@ -96,6 +102,12 @@ project "Polarity"
         {
             "POLARITY_RELEASE"
         }
+        links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
 
     filter "configurations:Dist"
         runtime "Release"
@@ -104,3 +116,9 @@ project "Polarity"
         {
             "POLARITY_DIST"
         }
+        links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
