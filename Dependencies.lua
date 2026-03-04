@@ -16,11 +16,11 @@ IncludeDir["SPIRV_Cross"] = "%{wks.location}/Polarity/thirdparty/SPIRV-Cross"
 IncludeDir["VulkanSDK"] =   "%{VULKAN_SDK}/Include"
 
 LibraryDir = {}
-LibraryDir["VulkanSDK"] =				"%{VULKAN_SDK}/Lib"
+LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
 
 Library = {}
-Library["Vulkan"] =						"%{LibraryDir.VulkanSDK}/vulkan-1.lib"
-Library["VulkanUtils"] =				"%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
+Library["Vulkan"] =	"%{LibraryDir.VulkanSDK}/vulkan-1.lib"
+Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
 
 Library["ShaderC_Debug"] = "%{LibraryDir.VulkanSDK}/shaderc_sharedd.lib"
 Library["SPIRV_Cross_Debug"] = "%{LibraryDir.VulkanSDK}/spirv-cross-cored.lib"
