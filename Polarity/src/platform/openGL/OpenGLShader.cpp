@@ -70,7 +70,7 @@ namespace Polarity {
 			case GL_VERTEX_SHADER:    return ".cached_opengl.vert";
 			case GL_FRAGMENT_SHADER:  return ".cached_opengl.frag";
 			}
-			POL_CORE_FATAL("OpenGL: OpenGL shader has wrong stage: %d", stage);
+			POL_CORE_FATAL("OpenGL: OpenGL shader has wrong stage: %d!", stage);
 			return "";
 		}
 
@@ -81,7 +81,7 @@ namespace Polarity {
 			case GL_VERTEX_SHADER:    return ".cached_vulkan.vert";
 			case GL_FRAGMENT_SHADER:  return ".cached_vulkan.frag";
 			}
-			POL_CORE_FATAL("OpenGL: Vulkan shader has wrong stage: %d", stage);
+			POL_CORE_FATAL("OpenGL: Vulkan shader has wrong stage: %d!", stage);
 			return "";
 		}
 
@@ -102,7 +102,7 @@ namespace Polarity {
 			CompileOrGetVulkanBinaries(shaderSources);
 			CompileOrGetOpenGLBinaries();
 			CreateProgram();
-			POL_CORE_WARN("Shader creation took {0} ms", timer.ElapsedMillis());
+			POL_CORE_WARN("OpenGL: Shader creation took %f ms", timer.ElapsedMillis());
 		}
 
 		// Extract name from filepath
@@ -139,7 +139,7 @@ namespace Polarity {
 		POL_PROFILE_FUNCTION();
 
 		std::string result;
-		std::ifstream in(filepath, std::ios::in | std::ios::binary); // ifstream closes itself due to RAII
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -152,12 +152,12 @@ namespace Polarity {
 			}
 			else
 			{
-				POL_CORE_ERROR("Could not read from file '{0}'", filepath);
+				POL_CORE_ERROR("OpenGL: Could not read from file '%s'!", filepath.c_str());
 			}
 		}
 		else
 		{
-			POL_CORE_ERROR("Could not open file '{0}'", filepath);
+			POL_CORE_ERROR("OpenGL: Could not open file '%s'!", filepath.c_str());
 		}
 
 		return result;
@@ -175,13 +175,13 @@ namespace Polarity {
 		while (pos != std::string::npos)
 		{
 			size_t eol = source.find_first_of("\r\n", pos); //End of shader type declaration line
-			POL_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+			POL_CORE_ASSERT(eol != std::string::npos, "OpenGL: Syntax error!");
 			size_t begin = pos + typeTokenLength + 1; //Start of shader type name (after "#type " keyword)
 			std::string type = source.substr(begin, eol - begin);
-			POL_CORE_ASSERT(Utils::ShaderTypeFromString(type), "Invalid shader type specified");
+			POL_CORE_ASSERT(Utils::ShaderTypeFromString(type), "OpenGL: Invalid shader type specified!");
 
 			size_t nextLinePos = source.find_first_not_of("\r\n", eol); //Start of shader code after shader type declaration line
-			POL_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error");
+			POL_CORE_ASSERT(nextLinePos != std::string::npos, "OpenGL: Syntax error!");
 			pos = source.find(typeToken, nextLinePos); //Start of next shader type declaration line
 
 			shaderSources[Utils::ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
@@ -327,7 +327,7 @@ namespace Polarity {
 
 			std::vector<GLchar> infoLog(maxLength);
 			glGetProgramInfoLog(program, maxLength, &maxLength, infoLog.data());
-			POL_CORE_ERROR("Shader linking failed (%s):\n{1}", m_FilePath.c_str(), infoLog.data());
+			POL_CORE_ERROR("OpenGL: Shader linking failed '%s':\n{1}", m_FilePath.c_str(), infoLog.data());
 
 			glDeleteProgram(program);
 
@@ -349,11 +349,11 @@ namespace Polarity {
 		spirv_cross::Compiler compiler(shaderData);
 		spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
-		POL_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", Utils::GLShaderStageToString(stage), m_FilePath);
-		POL_CORE_TRACE("    {0} uniform buffers", resources.uniform_buffers.size());
-		POL_CORE_TRACE("    {0} resources", resources.sampled_images.size());
+		POL_CORE_TRACE("OpenGL: Reflect Shader %s from '%s'", Utils::GLShaderStageToString(stage), m_FilePath.c_str());
+		POL_CORE_TRACE("    %i uniform buffers", resources.uniform_buffers.size());
+		POL_CORE_TRACE("    %i resources", resources.sampled_images.size());
 
-		POL_CORE_TRACE("Uniform buffers:");
+		POL_CORE_TRACE("  Uniform buffers:");
 		for (const auto& resource : resources.uniform_buffers)
 		{
 			const auto& bufferType = compiler.get_type(resource.base_type_id);
@@ -361,10 +361,10 @@ namespace Polarity {
 			uint32_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
 			int memberCount = bufferType.member_types.size();
 
-			POL_CORE_TRACE("  {0}", resource.name);
-			POL_CORE_TRACE("    Size = {0}", bufferSize);
-			POL_CORE_TRACE("    Binding = {0}", binding);
-			POL_CORE_TRACE("    Members = {0}", memberCount);
+			POL_CORE_TRACE("    %s", resource.name.c_str());
+			POL_CORE_TRACE("      Size = %i", bufferSize);
+			POL_CORE_TRACE("      Binding = %i", binding);
+			POL_CORE_TRACE("      Members = %i", memberCount);
 		}
 	}
 

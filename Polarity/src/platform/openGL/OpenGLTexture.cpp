@@ -31,7 +31,7 @@ namespace Polarity
 			POLARITY_PROFILE_SCOPE("stbi_load - OpenGLTexture2D");
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
-		POL_CORE_ASSERT(data, "OpenGL: Failed to load image at: %s!", path.c_str());
+		POL_CORE_ASSERT(data, "OpenGL: Failed to load texture from: '%s'!", path.c_str());
 		
 		//to make them unsigned
 		m_Width = width;
