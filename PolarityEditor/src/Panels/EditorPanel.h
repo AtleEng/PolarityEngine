@@ -27,10 +27,10 @@ namespace Polarity
 	public:
 		Ref<Scene> ActiveScene;
 		Ref<Framebuffer> ViewportFramebuffer;
-		Ref<Framebuffer> PreviewFramebuffer;
 		glm::vec2 ViewportSize = { 1280, 720 };
 
 		EditorCamera EditorCamera;
+		std::function<void(Event&)> EventCallback;
 	private:
 		Entity SelectedEntity;
 

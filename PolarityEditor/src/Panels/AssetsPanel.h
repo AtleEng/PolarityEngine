@@ -1,6 +1,8 @@
 #pragma once
 #include "EditorPanel.h"
 
+#include <filesystem>
+
 namespace Polarity
 {
     class AssetsPanel : public EditorPanel
@@ -8,12 +10,11 @@ namespace Polarity
     public:
         static constexpr PanelType StaticPanelID = PanelType::Assets;
 
-        AssetsPanel()
-            : EditorPanel(StaticPanelID, 0, "Assets") {}
+        AssetsPanel();
 
         void OnDraw() override;
 
     private:
-        
+        std::filesystem::path m_CurrentDirectory;
     };
 }

@@ -1,5 +1,6 @@
 #include "polpch.h"
 #include "ViewportPanel.h"
+#include "../EditorEvents.h"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -33,6 +34,17 @@ namespace Polarity
 			{ 1,0 }
 		);
 
+		// Drag Drop
+		if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					OpenSceneEditorEvent e(path);
+					m_Context->EventCallback(e);
+				}
+				ImGui::EndDragDropTarget();
+		}
 		
 
 		// Gizmos (orthographic translate arrows is broken, maybe update thirdparty)

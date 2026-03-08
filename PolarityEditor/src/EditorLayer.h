@@ -1,10 +1,12 @@
 #pragma once
 #include <Polarity.h>
 #include <array>
+#include <filesystem>
 
 #include "engine/renderer/EditorCamera.h"
 
 #include "Panels/PanelManager.h"
+
 
 namespace Polarity 
 {
@@ -28,6 +30,7 @@ namespace Polarity
 
 		void NewScene();
 		void OpenScene();
+		void OpenScene(const std::filesystem::path& path);
 		void SaveScene();
 		void SaveAsScene();
 
@@ -59,6 +62,6 @@ namespace Polarity
 		EditorContext m_Context;
 		PanelManager m_PanelManager;
 
-		std::string m_CurrentFilepath = "";
+		std::filesystem::path m_CurrentFilepath = "";
 	};
 }

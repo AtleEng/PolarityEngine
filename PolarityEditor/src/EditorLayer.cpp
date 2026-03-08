@@ -12,6 +12,8 @@
 #include "Panels/HierarcyPanel.h"
 #include "Panels/ViewportPanel.h"
 
+#include "EditorEvents.h"
+
 #include "engine/scene/SceneSerializer.h"
 #include "engine/utils/PlatformUtils.h"
 
@@ -31,23 +33,17 @@ namespace Polarity
 		UIIcons::Init();
 
 		ImGuiIO& io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Bold.ttf", 18.0f);
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf", 18.0f);
 
 		FramebufferSpecification viewportFbSpec;
 		viewportFbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
 		viewportFbSpec.Width = 1280;
 		viewportFbSpec.Height = 720;
+
 		m_Context.ViewportFramebuffer = Framebuffer::Create(viewportFbSpec);
-
-		FramebufferSpecification previewFbSpec;
-		previewFbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
-		previewFbSpec.Width = 320;
-		previewFbSpec.Height = 180;
-		m_Context.PreviewFramebuffer = Framebuffer::Create(previewFbSpec);
-
 		m_Context.ActiveScene = CreateRef<Scene>();
 		m_Context.EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
+		m_Context.EventCallback = POLARITY_BIND_EVENT_FN(OnEvent);
 
 		// --------------------------------------------------- Panels
 
@@ -249,6 +245,11 @@ namespace Polarity
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>(POLARITY_BIND_EVENT_FN(OnKeyPressedEvent));
 		dispatcher.Dispatch<MouseButtonPressedEvent>(POLARITY_BIND_EVENT_FN(OnMousePressedEvent));
+		dispatcher.Dispatch<OpenSceneEditorEvent>([this](OpenSceneEditorEvent& e)
+		{
+			OpenScene(e.GetPath());
+			return true;
+		});
 	}
 
 	//Handle all key commands
@@ -293,10 +294,7 @@ namespace Polarity
 		}
 		case Key::Delete:
 		{
-			if (m_Context.GetSelected().IsAlive())
-			{
-				m_Context.ActiveScene->DestroyEntity(m_Context.GetSelected().GetID());
-			}
+			Delete();
 			break;
 		}
 		case Key::Q:
@@ -359,15 +357,27 @@ namespace Polarity
 		std::string filepath = FileDialogs::OpenFile("Polarity Scene (*.pol)\0*.pol\0");
 		if (!filepath.empty())
 		{
-			NewScene();
-
-			SceneSerializer serializer(m_Context.ActiveScene);
-			serializer.DeSerialize(filepath);
-
-			m_CurrentFilepath = filepath;
-
-			POL_CORE_INFO("Scene opened!");
+			OpenScene(filepath);
 		}
+	}
+
+	void EditorLayer::OpenScene(const std::filesystem::path& path)
+	{
+		std::string filename = path.filename().string();
+		if (path.extension().string() != ".pol")
+		{
+			POL_CORE_WARN("Could not load %s - not a scene file '.pol'", filename.c_str());
+			return;
+		}
+
+		NewScene();
+
+		SceneSerializer serializer(m_Context.ActiveScene);
+		serializer.DeSerialize(path.string());
+
+		m_CurrentFilepath = path;
+
+		POL_CORE_INFO("Scene: %s opened!", filename.c_str());
 	}
 
 	void EditorLayer::SaveScene()
@@ -375,9 +385,9 @@ namespace Polarity
 		if (!m_CurrentFilepath.empty())
 		{
 			SceneSerializer serializer(m_Context.ActiveScene);
-			serializer.Serialize(m_CurrentFilepath);
+			serializer.Serialize(m_CurrentFilepath.string());
 
-			POL_CORE_INFO("Scene saved!");
+			POL_CORE_INFO("Scene: %s saved!", m_CurrentFilepath.filename().string().c_str());
 		}
 		else
 		{
@@ -390,11 +400,12 @@ namespace Polarity
 		std::string filepath = FileDialogs::SaveFile("Polarity Scene (*.pol)\0*.pol\0");
 		if (!filepath.empty())
 		{
-			SceneSerializer serializer(m_Context.ActiveScene);
-			serializer.Serialize(filepath);
-
 			m_CurrentFilepath = filepath;
-			POL_CORE_INFO("Scene saved!");
+			SaveScene();
+		}
+		else
+		{
+			POL_CORE_WARN("Scene not saved, has no filepath!");
 		}
 	}
 
@@ -424,6 +435,10 @@ namespace Polarity
 
 	void EditorLayer::Delete()
 	{
+		if (m_Context.GetSelected().IsAlive())
+		{
+			m_Context.ActiveScene->DestroyEntity(m_Context.GetSelected().GetID());
+		}
 	}
 
 

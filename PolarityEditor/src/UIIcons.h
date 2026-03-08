@@ -12,6 +12,8 @@ namespace Polarity {
 		Unlock,
 		Plus,
 		Minus,
+		Folder,
+		File,
 
 		Count
 	};

@@ -58,7 +58,7 @@ Entities:
     SpriteComponent:
       Color: [0, 1, 1, 1]
       Scale: 1
-  - Entity: 7
+  - Entity: 5
     NameComponent:
       Name: New Entity
     TransformComponent:

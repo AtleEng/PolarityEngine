@@ -39,6 +39,7 @@
     <ClInclude Include="src\UIIcons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\EditorEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CamController.cpp">
