@@ -31,36 +31,38 @@ namespace Polarity
 			POLARITY_PROFILE_SCOPE("stbi_load - OpenGLTexture2D");
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 		}
-		POL_CORE_ASSERT(data, "OpenGL: Failed to load texture from: '%s'!", path.c_str());
-		
-		//to make them unsigned
-		m_Width = width;
-		m_Height = height;
-
-		if (channels == 4)
+		if (data)
 		{
-			m_InternalFormat = GL_RGBA8;
-			m_DataFormat = GL_RGBA;
+			m_IsLoaded = true;
+			//to make them unsigned
+			m_Width = width;
+			m_Height = height;
+
+			if (channels == 4)
+			{
+				m_InternalFormat = GL_RGBA8;
+				m_DataFormat = GL_RGBA;
+			}
+			else if (channels == 3)
+			{
+				m_InternalFormat = GL_RGB8;
+				m_DataFormat = GL_RGB;
+			}
+
+			POL_CORE_ASSERT(m_InternalFormat && m_DataFormat, "OpengGL: Texture format not supported!");
+
+
+			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+			glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+
+
+			stbi_image_free(data);
 		}
-		else if (channels == 3)
-		{
-			m_InternalFormat = GL_RGB8;
-			m_DataFormat = GL_RGB;
-		}
-
-		POL_CORE_ASSERT(m_InternalFormat && m_DataFormat, "OpengGL: Texture format not supported!");
-
-
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
-
-
-		stbi_image_free(data);
 	}
 
 	OpenGLTexture2D:: ~OpenGLTexture2D()

@@ -60,14 +60,14 @@ Entities:
       Scale: 1
   - Entity: 5
     NameComponent:
-      Name: New Entity
+      Name: Floor
     TransformComponent:
       Position: [0, -0.5, 0]
       Rotation: [-1.57079637, 0, 0]
       Scale: [5, 4.9999752, 4.9999752]
     SpriteComponent:
-      Color: [0.0347490311, 0.0347490311, 0.0347490311, 1]
-      Scale: 1
+      Color: [0.0784313753, 0.0784313753, 0.0784313753, 1]
+      Scale: 10
   - Entity: 6
     NameComponent:
       Name: New Entity

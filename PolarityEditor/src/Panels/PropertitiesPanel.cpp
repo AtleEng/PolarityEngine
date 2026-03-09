@@ -4,6 +4,7 @@
 #include <imgui/imgui_internal.h>
 
 #include <glm/gtc/type_ptr.hpp>
+#include <filesystem>
 
 namespace Polarity
 {
@@ -398,7 +399,22 @@ namespace Polarity
 
 		DrawComponent<SpriteComponent>("Sprite", entity, [](auto& component)
 		{
-			ImGui::Text("Texture");
+			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path texPath = std::filesystem::path(path);
+					Ref<Texture2D> tex = Texture2D::Create(texPath.string());
+					if (tex->IsLoaded())
+						component.Texture = tex;
+					else
+						POL_CORE_WARN("Could not load texture '%s'", texPath.filename().string().c_str());
+				}
+				ImGui::EndDragDropTarget();
+			}
+
 			ImGui::DragFloat("Scale", &component.Scale, 0.1f);
 			ImGui::ColorEdit4("Tint", glm::value_ptr(component.Color));
 		});
