@@ -318,9 +318,14 @@ namespace Polarity
 				entity.AddComponent<CameraComponent>();
 				ImGui::CloseCurrentPopup();
 			}
-			if (ImGui::MenuItem("Sprite"))
+			if (ImGui::MenuItem("Sprite Renderer"))
 			{
 				entity.AddComponent<SpriteComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (ImGui::MenuItem("Audio Source"))
+			{
+				entity.AddComponent<AudioSourceComponent>();
 				ImGui::CloseCurrentPopup();
 			}
 			if (ImGui::MenuItem("Script"))
@@ -417,6 +422,33 @@ namespace Polarity
 
 			ImGui::DragFloat("Scale", &component.Scale, 0.1f);
 			ImGui::ColorEdit4("Tint", glm::value_ptr(component.Color));
+		});
+		DrawComponent<AudioSourceComponent>("Audio Source", entity, [](auto& component)
+		{
+			ImGui::Button("Audio", ImVec2(100.0f, 0.0f));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
+				{
+					const wchar_t* path = (const wchar_t*)payload->Data;
+					std::filesystem::path texPath = std::filesystem::path(path);
+					Ref<AudioSource> audio = Audio::Create(texPath.string());
+					if (audio->IsLoaded())
+						component.Audio = audio;
+					else
+						POL_CORE_WARN("Could not load audio '%s'", texPath.filename().string().c_str());
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Play", ImVec2(100.0f, 0.0f)))
+			{
+				Audio::Play(component.Audio, component.Gain, component.Pitch, component.Loop);
+			}
+
+			ImGui::DragFloat("Gain", &component.Gain, 0.1f);
+			ImGui::DragFloat("Pitch", &component.Pitch, 0.1f);
+			ImGui::Checkbox("Is Looping", &component.Loop);
 		});
 
 		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)

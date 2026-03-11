@@ -172,8 +172,24 @@ namespace Polarity
             out << YAML::BeginMap;  // Component
 
             auto& sprite = entity.GetComponent<SpriteComponent>();
+            if (sprite.Texture)
+                out << YAML::Key << "TexturePath" << YAML::Value << sprite.Texture->GetPath();
             out << YAML::Key << "Color" << YAML::Value << sprite.Color;
             out << YAML::Key << "Scale" << YAML::Value << sprite.Scale;
+
+            out << YAML::EndMap;    // Component
+        }
+        if (entity.HasComponent<AudioSourceComponent>())
+        {
+            out << YAML::Key << "AudioSourceComponent";
+            out << YAML::BeginMap;  // Component
+
+            auto& audioSource = entity.GetComponent<AudioSourceComponent>();
+            if (audioSource.Audio)
+                out << YAML::Key << "AudioPath" << YAML::Value << audioSource.Audio->GetPath();
+            out << YAML::Key << "Gain" << YAML::Value << audioSource.Gain;
+            out << YAML::Key << "Pitch" << YAML::Value << audioSource.Pitch;
+            out << YAML::Key << "Loop" << YAML::Value << audioSource.Loop;
 
             out << YAML::EndMap;    // Component
         }
@@ -272,11 +288,35 @@ namespace Polarity
                 auto spriteComponent = entity["SpriteComponent"];
                 if (spriteComponent)
                 {
-                    auto& src = newEntity.AddComponent<SpriteComponent>();
-                    src.Color = spriteComponent["Color"].as<glm::vec4>();
+                    auto& sprite = newEntity.AddComponent<SpriteComponent>();
+
+                    if (spriteComponent["TexturePath"])
+                    {
+                        std::string texturePath = spriteComponent["TexturePath"].as<std::string>();
+                        auto path = texturePath;
+                        sprite.Texture = Texture2D::Create(path);
+                    }
+
+                    sprite.Color = spriteComponent["Color"].as<glm::vec4>();
 
                     if (spriteComponent["Scale"])
-                        src.Scale = spriteComponent["Scale"].as<float>();
+                        sprite.Scale = spriteComponent["Scale"].as<float>();
+                }
+
+                auto audioSourceComponent = entity["AudioSourceComponent"];
+                if (audioSourceComponent)
+                {
+                    auto& audioSource = newEntity.AddComponent<AudioSourceComponent>();
+                    if (audioSourceComponent["AudioPath"])
+                    {
+                        std::string audioPath = audioSourceComponent["AudioPath"].as<std::string>();
+                        auto path = audioPath;
+                        audioSource.Audio = Audio::Create(path);
+                    }
+
+                    audioSource.Gain = audioSourceComponent["Gain"].as<float>();
+                    audioSource.Pitch = audioSourceComponent["Pitch"].as<float>();
+                    audioSource.Loop = audioSourceComponent["Loop"].as<bool>();
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace Polarity {
 	bool s_initialized = false;
 
 	void UIIcons::Init() {
-		assert(!s_initialized && "UIIcons already initialized");
+		POL_CORE_ASSERT(!s_initialized, "UIIcons already initialized");
 
 		s_IconAtlas = Texture2D::Create("assets/textures/icons.png");
 
@@ -40,11 +40,23 @@ namespace Polarity {
 		s_icons[static_cast<size_t>(UIIcon::File)] =
 			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 7, 1 }, 18);
 
+		s_icons[static_cast<size_t>(UIIcon::Play)] =
+			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 2, 0 }, 18);
+
+		s_icons[static_cast<size_t>(UIIcon::Pause)] =
+			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 3, 0 }, 18);
+
+		s_icons[static_cast<size_t>(UIIcon::Warn)] =
+			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 5, 0 }, 18);
+
+		s_icons[static_cast<size_t>(UIIcon::Music)] =
+			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 6, 1 }, 18);
+
 		s_initialized = true;
 	}
 
 	Ref<SubTexture2D> UIIcons::Get(UIIcon icon) {
-		assert(s_initialized && "UIIcons used before Init");
+		POL_CORE_ASSERT(s_initialized, "UIIcons used before Init");
 
 		return s_icons[static_cast<size_t>(icon)];
 	}

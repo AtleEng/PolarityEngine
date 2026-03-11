@@ -17,29 +17,22 @@ namespace Polarity
 	void AssetsPanel::OnDraw()
 	{
 		auto& folderIcon = UIIcons::Get(UIIcon::Folder);
-		auto& fileIcon = UIIcons::Get(UIIcon::File);	
+		auto& fileIcon = UIIcons::Get(UIIcon::File);
+		auto& musicIcon = UIIcons::Get(UIIcon::Music);
 
 		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
 
 
-		if (m_CurrentDirectory != std::filesystem::path(s_AssetsPath))
+		if (ImGui::Button("<"))
 		{
-			if (ImGui::Button("<"))
+			if (m_CurrentDirectory != std::filesystem::path(s_AssetsPath))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
-			}
+			}		
 		}
-
-		static float padding = 16.0f;
-		static float thumbnailSize = 128.0f;
-		float cellSize = thumbnailSize + padding;
-
-		float panelWidth = ImGui::GetContentRegionAvail().x;
-		int columnCount = (int)(panelWidth / cellSize);
-		if (columnCount < 1)
-			columnCount = 1;
-
-		ImGui::Columns(columnCount, 0, false);
+		ImGui::SameLine();
+		ImGui::Text(m_CurrentDirectory.string().c_str());
+		ImGui::Separator();
 
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
@@ -48,15 +41,31 @@ namespace Polarity
 			ImGui::PushID(path.filename().string().c_str());
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
-			Ref<SubTexture2D> icon = directoryEntry.is_directory() ? folderIcon : fileIcon;
+			Ref<SubTexture2D> icon = fileIcon;
+			if (directoryEntry.is_directory())
+			{
+				icon = folderIcon;
+			}
+			else if (directoryEntry.path().extension() == ".wav")
+			{
+				icon = musicIcon;
+			}
 			uint32_t texID = icon->GetTexture()->GetRendererID();
 			const glm::vec2* uvs = icon->GetTexCoords();
 
-			ImGui::ImageButton((void*)texID,
-				{ thumbnailSize, thumbnailSize },
-				ImVec2(uvs[0].x, uvs[2].y),
-				ImVec2(uvs[2].x, uvs[0].y));
+			float rowHeight = 22.0f;
+			float fullWidth = ImGui::GetContentRegionAvail().x;
 
+			ImGui::Button("##row", { fullWidth, rowHeight });
+			ImGui::PopStyleColor();
+			// Double click handling
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			{
+				if (directoryEntry.is_directory())
+					m_CurrentDirectory /= path.filename();
+			}
+
+			// Drag drop
 			if (!directoryEntry.is_directory() && ImGui::BeginDragDropSource())
 			{
 				std::filesystem::path relativePath(path);
@@ -65,23 +74,23 @@ namespace Polarity
 				ImGui::EndDragDropSource();
 			}
 
-			ImGui::PopStyleColor();
+			// Draw contents on top of the button
+			ImVec2 min = ImGui::GetItemRectMin();
+			ImVec2 max = ImGui::GetItemRectMax();
 
-			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
-			{
-				if (directoryEntry.is_directory())
-					m_CurrentDirectory /= path.filename();
-			}
+			ImGui::SetCursorScreenPos({ min.x + 2, min.y + 2 });
+			ImGui::Image((void*)texID,
+				{ 18,18 },
+				ImVec2(uvs[0].x, uvs[2].y),
+				ImVec2(uvs[2].x, uvs[0].y));
 
-			ImGui::TextWrapped(path.filename().string().c_str());
-			ImGui::NextColumn();
+			ImGui::SetCursorScreenPos({ min.x + 24, min.y + 3 });
+			ImGui::TextUnformatted(path.filename().string().c_str());
+
+
 
 			ImGui::PopID();
 		}
-		ImGui::Columns(1);
-
-		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 512);
-		ImGui::SliderFloat("Padding", &padding, 0, 32);
 
 		ImGui::End();
 	}

@@ -14,6 +14,10 @@ namespace Polarity {
 		Minus,
 		Folder,
 		File,
+		Play,
+		Pause,
+		Warn,
+		Music,
 
 		Count
 	};

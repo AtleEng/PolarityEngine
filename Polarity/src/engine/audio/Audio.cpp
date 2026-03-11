@@ -17,10 +17,13 @@ namespace Polarity
 
 		if (ma_sound_init_from_file(pEngine, filePath.c_str(), 0, nullptr, nullptr, &m_sound) != MA_SUCCESS)
 		{
-			POL_CORE_ERROR("Audio: Failed to load AudioSource: %s!", filePath.c_str());
+			POL_CORE_ERROR("Audio: Failed to load AudioSource '%s'!", filePath.c_str());
+			m_loaded = false;
+			return;
 		}
-
+		m_Path = filePath;
 		m_loaded = true;
+
 		ma_sound_get_length_in_seconds(&m_sound, &m_totalDuration);
 	}
 	AudioSource::~AudioSource()
@@ -29,21 +32,6 @@ namespace Polarity
 
 		if (m_loaded)
 			ma_sound_uninit(&m_sound);
-	}
-	void AudioSource::SetGain(float gain)
-	{
-		m_gain = gain;
-		ma_sound_set_volume(&m_sound, gain);
-	}
-	void AudioSource::SetPitch(float pitch)
-	{
-		m_pitch = pitch;
-		ma_sound_set_pitch(&m_sound, pitch);
-	}
-	void AudioSource::SetLoop(bool loop)
-	{
-		m_loop = loop;
-		ma_sound_set_looping(&m_sound, loop);
 	}
 	
 	//=== Audio =================================================================================//
@@ -84,15 +72,20 @@ namespace Polarity
 		ma_engine_set_volume(&s_engine, enable ? 0.0f : s_MasterVolume);
 	}
 
-	void Audio::Play(const Ref<AudioSource>& source)
+	void Audio::Play(const Ref<AudioSource>& source, float gain, float pitch, bool loop)
 	{
 		POL_PROFILE_FUNCTION();
 
 		if (!source || !source->m_loaded)
 		{
-			POL_CORE_WARN("Audio: null AudioSource reference");
+			POL_CORE_WARN("Audio: AudioSource is null");
 			return;
 		}
+		ma_sound_set_volume(&source->m_sound, gain);
+		ma_sound_set_pitch(&source->m_sound, pitch);
+		ma_sound_set_looping(&source->m_sound, loop);
+
+		ma_sound_seek_to_pcm_frame(&source->m_sound, 0);
 		ma_sound_start(&source->m_sound);
 	}
 

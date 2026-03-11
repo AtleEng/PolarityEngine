@@ -2,6 +2,7 @@
 
 #include "SceneCamera.h"
 #include "engine/renderer/Texture.h"
+#include "engine/audio/Audio.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -49,6 +50,16 @@ namespace Polarity
 		SpriteComponent(const SpriteComponent&) = default;
 		SpriteComponent(const glm::vec4& color)
 			: Color(color) {}
+	};
+	struct AudioSourceComponent
+	{
+		Ref<AudioSource> Audio;
+		float Gain = 1.0f;
+		float Pitch = 1.0f;
+		bool Loop = false;
+
+		AudioSourceComponent() = default;
+		AudioSourceComponent(const AudioSourceComponent&) = default;
 	};
 
 	struct CameraComponent
