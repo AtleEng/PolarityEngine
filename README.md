@@ -39,11 +39,15 @@ Polarity
 ├───assets
 ├───src
 │   ├───engine
+│   │   ├───audio
 │   │   ├───core
+│   │   ├───debug
+│   │   ├───ECS
 │   │   ├───events
 │   │   ├───imGui
 │   │   ├───math
 │   │   ├───renderer
+│   │   ├───scene
 │   │   └───utils
 │   └───platform
 │       ├───openGL

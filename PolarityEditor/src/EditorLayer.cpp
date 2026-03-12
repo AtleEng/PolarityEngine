@@ -120,15 +120,7 @@ namespace Polarity
 	{
 		POL_PROFILE_FUNCTION();
 
-		auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
-		if (viewport)
-		{
-			viewport->UpdateViewport(m_Context.EditorCamera);
-			if (viewport->IsFocused() || viewport->IsHovered())
-			{
-				m_Context.EditorCamera.OnUpdate(ts);
-			}
-		}
+
 
 		//------------ Render ---------------------------------------
 		{
@@ -141,8 +133,32 @@ namespace Polarity
 			RenderCommand::Clear();
 
 			m_Context.ViewportFramebuffer->ClearAttachment(1, -1);
+
 			//------------ Scene -------------------------------------
-			m_Context.ActiveScene->OnUpdateEditor(ts, m_Context.EditorCamera);
+			switch (m_SceneState)
+			{
+			case Polarity::EditorLayer::SceneState::Edit:
+			{
+				auto viewport = m_PanelManager.GetPanel<ViewportPanel>();
+				if (viewport)
+				{
+					viewport->UpdateViewport(m_Context.EditorCamera);
+					if (viewport->IsFocused() || viewport->IsHovered())
+					{
+						m_Context.EditorCamera.OnUpdate(ts);
+					}
+				}
+
+				m_Context.ActiveScene->OnUpdateEditor(ts, m_Context.EditorCamera);
+				break;
+			}
+			case Polarity::EditorLayer::SceneState::Play:
+			{
+				m_Context.ActiveScene->OnUpdateRuntime(ts);
+				break;
+			}
+			}
+
 
 			m_Context.ViewportFramebuffer->Unbind();
 		}
@@ -216,7 +232,7 @@ namespace Polarity
 
 		if (ImGui::Begin("DockSpace", nullptr, window_flags))
 		{
-			DrawMenubarPanel();
+			DrawMenubar();
 
 			// Submit the DockSpace
 			float minWinSizeX = style.WindowMinSize.x;
@@ -228,6 +244,8 @@ namespace Polarity
 			//ImGui::ShowDemoWindow();
 
 			m_PanelManager.OnDraw();
+
+			DrawToolbar();
 
 			ImGui::End();
 		}
@@ -441,6 +459,18 @@ namespace Polarity
 		}
 	}
 
+	void EditorLayer::OnScenePlay()
+	{
+		POL_CORE_TRACE("Scene Playing...");
+		m_SceneState = SceneState::Play;
+	}
+
+	void EditorLayer::OnSceneStop()
+	{
+		POL_CORE_TRACE("Scene Stopped");
+		m_SceneState = SceneState::Edit;
+	}
+
 
 	void EditorLayer::ShowProfiler()
 	{
@@ -477,7 +507,7 @@ namespace Polarity
 		ImGui::End();
 	}
 
-	void EditorLayer::DrawMenubarPanel()
+	void EditorLayer::DrawMenubar()
 	{
 		if (ImGui::BeginMainMenuBar())
 		{
@@ -595,5 +625,38 @@ namespace Polarity
 
 			ImGui::EndMainMenuBar();
 		}
+	}
+
+	void EditorLayer::DrawToolbar()
+	{
+		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+
+		Ref<SubTexture2D> icon = UIIcons::Get(UIIcon::Play);
+
+		if (m_SceneState == SceneState::Play)
+		{
+			icon = UIIcons::Get(UIIcon::Pause);
+
+		}
+
+
+		uint32_t texID = icon->GetTexture()->GetRendererID();
+		const glm::vec2* uvs = icon->GetTexCoords();
+
+		if (ImGui::ImageButton((void*)texID,
+			{ 18,18 },
+			ImVec2(uvs[0].x, uvs[2].y),
+			ImVec2(uvs[2].x, uvs[0].y)))
+		{
+			if (m_SceneState == SceneState::Edit)
+			{
+				OnScenePlay();
+			}
+			else if (m_SceneState == SceneState::Play)
+			{
+				OnSceneStop();
+			}
+		}
+		ImGui::End();
 	}
 }

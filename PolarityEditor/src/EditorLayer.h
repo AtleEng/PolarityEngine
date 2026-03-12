@@ -46,8 +46,8 @@ namespace Polarity
 
 		//void Options();
 
-		//void Play();
-		//void Pause();
+		void OnScenePlay();
+		void OnSceneStop();
 		//void Step();
 
 	private:
@@ -56,12 +56,19 @@ namespace Polarity
 
 		void ShowProfiler();
 
-		void DrawMenubarPanel();
+		void DrawMenubar();
+		void DrawToolbar();
 	private:
 
 		EditorContext m_Context;
 		PanelManager m_PanelManager;
 
 		std::filesystem::path m_CurrentFilepath = "";
+
+		enum class SceneState
+		{
+			Edit = 0, Play = 1
+		};
+		SceneState m_SceneState = SceneState::Edit;
 	};
 }

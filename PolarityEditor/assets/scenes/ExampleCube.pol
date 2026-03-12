@@ -4,18 +4,18 @@ Entities:
     NameComponent:
       Name: Main Camera
     TransformComponent:
-      Position: [0, 0, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
+      Position: [3, 2, 3]
+      Rotation: [-0.436332315, 0.785398185, 0]
+      Scale: [1, 0.99999994, 1]
     CameraComponent:
       Camera:
-        ProjectionType: 1
+        ProjectionType: 0
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.100000001
         PerspectiveFar: 100
         OrthographicSize: 10
         OrthographicNear: -1
-        OrthographicFar: 1
+        OrthographicFar: 50
       Primary: true
       FixedAspectRatio: false
   - Entity: 1
