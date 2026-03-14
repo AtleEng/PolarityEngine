@@ -45,6 +45,20 @@ namespace Polarity
 		m_Context.EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 		m_Context.EventCallback = POLARITY_BIND_EVENT_FN(OnEvent);
 
+		auto commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
+		if (commandLineArgs.Count > 1)
+		{
+			auto projectFilePath = commandLineArgs[1];
+			OpenProject(projectFilePath);
+		}
+		else
+		{
+			if (!OpenProject())
+			{
+				Application::Get().Shutdown();
+			}
+		}
+
 		// --------------------------------------------------- Panels
 
 		m_PanelManager.OpenPanel<HierarcyPanel>(m_Context);
@@ -64,17 +78,8 @@ namespace Polarity
 		});
 
 		//-------------------------------------------------------- Entites
-		Entity camEntity = m_Context.ActiveScene->CreateEntity("Main Camera");
-		camEntity.AddComponent<CameraComponent>();
-
-		Entity sCamEntity = m_Context.ActiveScene->CreateEntity("PreRender Camera");
-		auto& cam = sCamEntity.AddComponent<CameraComponent>();
-		cam.FixedAspectRatio = true;
-
-		auto square = m_Context.ActiveScene->CreateEntity();
-		auto& sprite = square.AddComponent<SpriteComponent>();
-		sprite.Color = { 1, 0, 1, 1 };
-
+		
+		/*
 		class CamControll : public ScriptableEntity
 		{
 		public:
@@ -107,8 +112,8 @@ namespace Polarity
 			float test = 1.0f;
 		};
 
-		camEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
-		sCamEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
+		*/
+		//camEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -362,6 +367,38 @@ namespace Polarity
 		return false;
 	}
 
+	void EditorLayer::NewProject()
+	{
+		Project::New();
+	}
+
+	bool EditorLayer::OpenProject()
+	{
+		std::string filepath = FileDialogs::OpenFile("Polarity Project (*.proj)\0*.proj\0");
+		if (!filepath.empty())
+		{
+			return OpenProject(filepath);
+		}
+		return false;
+	}
+
+	bool EditorLayer::OpenProject(const std::filesystem::path& path)
+	{
+		if (Project::Load(path))
+		{
+			auto startScenePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().StartScene;
+			OpenScene(startScenePath);
+			return true;
+		}
+		return false;
+	}
+
+	void EditorLayer::SaveProject()
+	{
+		// Project::SaveActive();
+	}
+
+
 	void EditorLayer::NewScene()
 	{
 		m_Context.SetSelected({});
@@ -530,18 +567,30 @@ namespace Polarity
 			// Restore Y pos
 			ImGui::SetCursorPosY(cursorY);
 
-			if (ImGui::BeginMenu("Scene"))
+			if (ImGui::BeginMenu("Project"))
 			{
-				if (ImGui::MenuItem("New", "Ctrl + N"))
-					NewScene();
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-					OpenScene();
-				if (ImGui::MenuItem("Save", "Ctrl+S"))
-					SaveScene();
-				if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
-					SaveAsScene();
+				if (ImGui::MenuItem("New Project", "Ctrl+N"))
+					NewProject();
+				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+					OpenProject();
+				if (ImGui::MenuItem("Save Project", "Ctrl+S"))
+					SaveProject();
 				ImGui::Separator();
 				if (ImGui::MenuItem("Quit", "Alt+F4")) Application::Get().Shutdown();
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Scene"))
+			{
+				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
+					NewScene();
+				if (ImGui::MenuItem("Open Scene...", "Ctrl+O"))
+					OpenScene();
+				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
+					SaveScene();
+				if (ImGui::MenuItem("Save Scene as...", "Ctrl+Shift+S"))
+					SaveAsScene();
 
 				ImGui::EndMenu();
 			}

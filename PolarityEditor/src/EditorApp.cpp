@@ -8,21 +8,21 @@ namespace Polarity
 	class EditorApp : public Application
 	{
 	public:
-		EditorApp()
-			: Application(WindowProps("Polarity Editor", 1280, 720, true, true))
+		EditorApp(const ApplicationSpecification& spec)
+			: Application(spec) //WindowProps("Polarity Editor", 1280, 720, true, true)
 		{
 			POL_PROFILE_FUNCTION();
 
 			PushLayer(new EditorLayer());
 		}
-		~EditorApp()
-		{
-
-		}
 	};
 
-	Application* CreateApplication()
+	Application* CreateApplication(ApplicationCommandLineArgs args)
 	{
-		return new EditorApp();
+		ApplicationSpecification spec;
+		spec.Name = "Polarity Editor";
+		spec.CommandLineArgs = args;
+
+		return new EditorApp(spec);
 	}
 }

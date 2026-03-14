@@ -1,8 +1,10 @@
 #pragma once
 #include "Core.h"
+
 #include "Window.h"
 #include "LayerStack.h"
 #include "Timestep.h"
+#include "Log.h"
 
 #include "engine/events/Event.h"
 #include "engine/events/ApplicationEvent.h"
@@ -11,11 +13,29 @@
 
 namespace Polarity {
 
+	struct ApplicationCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			POL_CORE_ASSERT(index < Count, "?");
+			return Args[index];
+		}
+	};
+
+	struct ApplicationSpecification
+	{
+		std::string Name = "Polarity App";
+		std::string WorkingDirectory;
+		ApplicationCommandLineArgs CommandLineArgs;
+	};
 
 	class Application
 	{
 	public:
-		Application(const WindowProps props = WindowProps("App"));
+		Application(const ApplicationSpecification& specification);
 		virtual ~Application();
 
 		void Run();
@@ -31,12 +51,15 @@ namespace Polarity {
 		static Application& Get() { return *s_instance; }
 		ImGuiLayer& GetImGuiLayer() { return *m_imGuiLayer; }
 
+		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
-	private:           
-		std::unique_ptr<Window> m_window;
+	private:    
+		ApplicationSpecification m_Specification;
+		Scope<Window> m_window;
 
 		bool m_running = true;
 		bool m_minimized = false;
@@ -51,7 +74,7 @@ namespace Polarity {
 	};
 
 	//defined in client
-	Application* CreateApplication();
+	Application* CreateApplication(ApplicationCommandLineArgs args);
 }
 
 

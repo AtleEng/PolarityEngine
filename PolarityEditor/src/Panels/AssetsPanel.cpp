@@ -5,13 +5,12 @@
 
 namespace Polarity
 {
-	//temporary
-	const static std::filesystem::path s_AssetsPath = "assets";
 
 	AssetsPanel::AssetsPanel()
 		: EditorPanel(StaticPanelID, 0, "Assets")
 	{
-		m_CurrentDirectory = s_AssetsPath;
+		m_BaseDirectory = Project::GetAssetDirectory();
+		m_CurrentDirectory = m_BaseDirectory;
 	}
 
 	void AssetsPanel::OnDraw()
@@ -25,7 +24,7 @@ namespace Polarity
 
 		if (ImGui::Button("<"))
 		{
-			if (m_CurrentDirectory != std::filesystem::path(s_AssetsPath))
+			if (m_CurrentDirectory != std::filesystem::path(m_BaseDirectory))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path();
 			}		

@@ -1,0 +1,86 @@
+Scene: Untitled
+Entities:
+  - Entity: 0
+    NameComponent:
+      Name: Main Camera
+    TransformComponent:
+      Position: [3, 2, 3]
+      Rotation: [-0.436332315, 0.785398185, 0]
+      Scale: [1, 0.99999994, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 100
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 50
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 1
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0, 0, 0.5]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      TexturePath: assets\textures\grid.png
+      Color: [1, 0, 1, 1]
+      Scale: 1
+  - Entity: 2
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0, 0, -0.5]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      TexturePath: assets\textures\grid.png
+      Color: [1, 0, 1, 1]
+      Scale: 1
+  - Entity: 3
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [-0.5, 0, 0]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [0.999997079, 1, 0.999997079]
+    SpriteComponent:
+      TexturePath: assets\textures\grid.png
+      Color: [0, 1, 1, 1]
+      Scale: 1
+  - Entity: 4
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0.5, 0, 0]
+      Rotation: [0, 1.57079637, 0]
+      Scale: [0.999997258, 1, 0.999997258]
+    SpriteComponent:
+      TexturePath: assets\textures\grid.png
+      Color: [0, 1, 1, 1]
+      Scale: 1
+  - Entity: 5
+    NameComponent:
+      Name: Floor
+    TransformComponent:
+      Position: [0, -0.5, 0]
+      Rotation: [-1.57079637, 0, 0]
+      Scale: [20, 19.9998989, 19.9998989]
+    SpriteComponent:
+      TexturePath: assets\textures\grid.png
+      Color: [0.0784313753, 0.0784313753, 0.0784313753, 1]
+      Scale: 20
+  - Entity: 6
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0, 0.5, 0]
+      Rotation: [-1.57079637, 0, 0]
+      Scale: [1, 0.999994993, 0.999994993]
+    SpriteComponent:
+      TexturePath: assets\textures\grid.png
+      Color: [1, 1, 0, 1]
+      Scale: 1

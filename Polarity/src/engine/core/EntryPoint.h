@@ -2,12 +2,12 @@
 
 #ifdef POLARITY_PLATFORM_WINDOWS
 
-extern Polarity::Application* Polarity::CreateApplication();
+extern Polarity::Application* Polarity::CreateApplication(ApplicationCommandLineArgs args);
 
 int main(int argc, char** argv)
 {
 	POLARITY_PROFILE_BEGIN_SESSION("Startup", "profile/Startup.json");
-	auto app = Polarity::CreateApplication();
+	auto app = Polarity::CreateApplication({ argc, argv });
 	POLARITY_PROFILE_END_SESSION();
 
 	POLARITY_PROFILE_BEGIN_SESSION("Runtime", "profile/Runtime.json");

@@ -37,6 +37,9 @@
 #include "engine/imGui/ImGuiLayer.h"
 
 // ----- Scene ------------------------------------
+#include "engine/Project/Project.h"
+
+// ----- Scene ------------------------------------
 #include "engine/scene/Scene.h"
 #include "engine/scene/Entity.h"
 #include "engine/scene/ScriptableEntity.h"

@@ -15,6 +15,7 @@ namespace Polarity
         void OnDraw() override;
 
     private:
+        std::filesystem::path m_BaseDirectory;
         std::filesystem::path m_CurrentDirectory;
     };
 }

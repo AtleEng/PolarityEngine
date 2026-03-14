@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "Components.h"
 
+#include "engine/Project/Project.h"
+
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 
@@ -293,8 +295,8 @@ namespace Polarity
                     if (spriteComponent["TexturePath"])
                     {
                         std::string texturePath = spriteComponent["TexturePath"].as<std::string>();
-                        auto path = texturePath;
-                        sprite.Texture = Texture2D::Create(path);
+                        auto path = Project::GetAssetDirectory() / texturePath;
+                        sprite.Texture = Texture2D::Create(path.string());
                     }
 
                     sprite.Color = spriteComponent["Color"].as<glm::vec4>();
@@ -310,8 +312,8 @@ namespace Polarity
                     if (audioSourceComponent["AudioPath"])
                     {
                         std::string audioPath = audioSourceComponent["AudioPath"].as<std::string>();
-                        auto path = audioPath;
-                        audioSource.Audio = Audio::Create(path);
+                        auto path = Project::GetAssetDirectory() / audioPath;
+                        audioSource.Audio = Audio::Create(path.string());
                     }
 
                     audioSource.Gain = audioSourceComponent["Gain"].as<float>();

@@ -1,0 +1,61 @@
+Scene: Untitled
+Entities:
+  - Entity: 0
+    NameComponent:
+      Name: Main Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 100
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 1
+    NameComponent:
+      Name: PreRender Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 100
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: true
+  - Entity: 2
+    NameComponent:
+      Name: Sprite1
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      TexturePath: assets\textures\grid.png
+      Color: [1, 1, 1, 1]
+      Scale: 1
+  - Entity: 3
+    NameComponent:
+      Name: AudioPlayer
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    AudioSourceComponent:
+      AudioPath: assets\audio\click.wav
+      Gain: 2.79999995
+      Pitch: 0.5
+      Loop: false

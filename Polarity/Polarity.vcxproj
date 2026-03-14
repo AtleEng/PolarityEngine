@@ -147,6 +147,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
+    <ClInclude Include="src\engine\Project\Project.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\ECS\ComponentManager.h" />
     <ClInclude Include="src\engine\ECS\EntityManager.h" />
@@ -650,6 +652,8 @@
     <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\engine\math\Math.cpp" />
+    <ClCompile Include="src\engine\Project\Project.cpp" />
+    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp" />
     <ClCompile Include="src\engine\renderer\Buffer.cpp" />
     <ClCompile Include="src\engine\renderer\EditorCamera.cpp" />
     <ClCompile Include="src\engine\renderer\Framebuffer.cpp" />

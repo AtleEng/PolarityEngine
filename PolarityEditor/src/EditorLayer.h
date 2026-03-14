@@ -26,7 +26,13 @@ namespace Polarity
 
 		// Menu
 
-		// File
+		// Project
+		void NewProject();
+		bool OpenProject();
+		bool OpenProject(const std::filesystem::path& path);
+		void SaveProject();
+
+		// Scene
 
 		void NewScene();
 		void OpenScene();
