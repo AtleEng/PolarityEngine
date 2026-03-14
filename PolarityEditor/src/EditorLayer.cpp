@@ -492,7 +492,7 @@ namespace Polarity
 	{
 		if (m_Context.GetSelected().IsAlive())
 		{
-			m_Context.ActiveScene->DestroyEntity(m_Context.GetSelected().GetID());
+			m_Context.ActiveScene->DestroyEntity(m_Context.GetSelected().GetHandle());
 		}
 	}
 

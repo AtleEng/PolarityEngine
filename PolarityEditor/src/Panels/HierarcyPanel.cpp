@@ -50,7 +50,7 @@ namespace Polarity
 				if (ImGui::MenuItem("Duplicate TODO")) {}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Delete"))
-					m_Context->ActiveScene->DestroyEntity(m_HoveredEntity.GetID());
+					m_Context->ActiveScene->DestroyEntity(m_HoveredEntity.GetHandle());
 			}
 
 			ImGui::EndPopup();
@@ -75,7 +75,7 @@ namespace Polarity
 		std::string name = entity.GetComponent<NameComponent>().Name;
 
 		ImGuiTreeNodeFlags flags = ((m_Context->GetSelected() == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
-		bool opened = ImGui::TreeNodeEx((void*)entity.GetID(), flags, name.c_str());
+		bool opened = ImGui::TreeNodeEx((void*)entity.GetHandle(), flags, name.c_str());
 		if (ImGui::IsItemHovered())
 		{
 			m_HoveredEntity = entity;

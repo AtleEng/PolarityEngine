@@ -16,6 +16,7 @@ namespace Polarity
 	Scene::Scene()
 		:m_Registry()
 	{
+		m_Registry.RegisterComponent<IDComponent>();
 		m_Registry.RegisterComponent<NameComponent>();
 		m_Registry.RegisterComponent<TransformComponent>();
 
@@ -126,11 +127,19 @@ namespace Polarity
 
 	Entity Scene::CreateEntity(std::string name)
 	{
+		return CreateEntityWithUUID(UUID(), name);
+	}
+
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string name)
+	{
 		Entity entity = { m_Registry.CreateEntity(), this };
-		if (entity.GetID() == ECS::INVALID_ENTITY)
+		if (entity.GetHandle() == ECS::INVALID_ENTITY)
 		{
 			return entity;
 		}
+
+		auto& idComp = entity.AddComponent<IDComponent>();
+		idComp.ID = uuid;
 
 		auto& nameComp = NameComponent();
 		nameComp.Name = name;
@@ -139,7 +148,7 @@ namespace Polarity
 		auto& transform = TransformComponent();
 		entity.AddComponent<TransformComponent>(transform);
 
-		POL_CORE_INFO("Scene: Created %s", name.c_str());
+		POL_CORE_INFO("Scene: Created %s [%i]", name.c_str(), idComp.ID);
 		return entity;
 	}
 
@@ -163,7 +172,7 @@ namespace Polarity
 		}
 		else
 		{
-			POL_CORE_INFO("Destroyed failed for entity: %s", name.c_str());
+			POL_CORE_INFO("Destroy failed for entity: %s", name.c_str());
 		}
 	}
 

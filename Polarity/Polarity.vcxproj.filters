@@ -1628,6 +1628,7 @@
     </ClInclude>
     <ClInclude Include="src\engine\Project\Project.h" />
     <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
+    <ClInclude Include="src\engine\core\UUID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
@@ -1782,5 +1783,6 @@
     </ClCompile>
     <ClCompile Include="src\engine\Project\Project.cpp" />
     <ClCompile Include="src\engine\Project\ProjectSerializer.cpp" />
+    <ClCompile Include="src\engine\core\UUID.cpp" />
   </ItemGroup>
 </Project>

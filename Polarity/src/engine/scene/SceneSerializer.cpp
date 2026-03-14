@@ -118,7 +118,7 @@ namespace Polarity
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
     {
         out << YAML::BeginMap;  // Entity
-        out << YAML::Key << "Entity" << YAML::Value << entity.GetID();
+        out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 
         if (entity.HasComponent<NameComponent>())
         {
@@ -206,7 +206,7 @@ namespace Polarity
         out << YAML::Key << "Scene"     << YAML::Value << "Untitled";
         out << YAML::Key << "Entities"  << YAML::Value << YAML::BeginSeq;
         
-        m_Scene->m_Registry.Each([&](auto entityHandle) // TODO Bug when saving scenes changed entities
+        m_Scene->m_Registry.Each([&](auto entityHandle)
         {
             Entity entity = { entityHandle, m_Scene.get() };
             if (!m_Scene->m_Registry.IsAlive(entityHandle))
@@ -255,7 +255,7 @@ namespace Polarity
 
                 POL_CORE_TRACE("Scene: Deserialized %s: %d", name.c_str(), uuid);
 
-                Entity newEntity = m_Scene->CreateEntity(name);
+                Entity newEntity = m_Scene->CreateEntityWithUUID(uuid, name);
 
                 auto transformComponent = entity["TransformComponent"];
                 if (transformComponent)

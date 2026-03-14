@@ -51,7 +51,7 @@ namespace Polarity
 		Entity selectedEntity = m_Context->GetSelected();
 		if (selectedEntity)
 		{
-			ImGuizmo::SetID((int)selectedEntity.GetID());
+			ImGuizmo::SetID((int)selectedEntity.GetHandle());
 			// camera
 			auto& camera = m_Context->EditorCamera;
 			const glm::mat4& cameraProjection = camera.GetProjection();

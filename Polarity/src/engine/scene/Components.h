@@ -1,6 +1,8 @@
 #pragma once
 
 #include "SceneCamera.h"
+
+#include "engine/core/UUID.h"
 #include "engine/renderer/Texture.h"
 #include "engine/audio/Audio.h"
 
@@ -11,6 +13,13 @@
 
 namespace Polarity
 {
+	struct IDComponent
+	{
+		UUID ID;
+
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
+	};
 	struct NameComponent
 	{
 		std::string Name = "EntityName";
@@ -72,7 +81,7 @@ namespace Polarity
 		CameraComponent(const CameraComponent&) = default;
 	};
 
-	class ScriptableEntity; // forward declaration, see 'ScriptableEntity.h'
+	class ScriptableEntity; // forward declaration, see 'ScriptableEntity.h' (It includes Entity which we dont want Components.h to know about)
 
 	struct ScriptComponent
 	{

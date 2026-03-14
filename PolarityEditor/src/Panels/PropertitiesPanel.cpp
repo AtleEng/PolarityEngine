@@ -203,7 +203,7 @@ namespace Polarity
 			ImVec2 avilibleRegion = ImGui::GetContentRegionAvail();
 			//ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 5);
 
-			bool open = ImGui::TreeNodeEx((void*)(name.c_str() + entity.GetID()), treeNodeFlags, name.c_str());
+			bool open = ImGui::TreeNodeEx((void*)(name.c_str() + entity.GetHandle()), treeNodeFlags, name.c_str());
 			float lineHeight = ImGui::GetTextLineHeightWithSpacing();
 
 

@@ -147,6 +147,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\core\UUID.h" />
     <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
     <ClInclude Include="src\engine\Project\Project.h" />
     <ClInclude Include="src\Polarity.h" />
@@ -641,6 +642,7 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\core\UUID.cpp" />
     <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\audio\Audio.cpp" />

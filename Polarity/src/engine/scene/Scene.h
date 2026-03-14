@@ -3,6 +3,7 @@
 #include "engine/core/Timestep.h"
 #include "engine/ecs/Registry.h"
 #include "engine/renderer/EditorCamera.h"
+#include "engine/core/UUID.h"
 
 namespace Polarity
 {
@@ -19,7 +20,8 @@ namespace Polarity
 		void OnViewportResize(uint32_t width, uint32_t height);
 		
 
-		Entity CreateEntity(std::string name = "New Entity");
+		Entity CreateEntity(const std::string name = "Entity");
+		Entity CreateEntityWithUUID(UUID uuid, const std::string name = "Entity");
 
 		void DestroyEntity(std::string name);
 		void DestroyEntity(ECS::Entity handle);
