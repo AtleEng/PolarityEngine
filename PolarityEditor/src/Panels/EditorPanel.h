@@ -26,6 +26,7 @@ namespace Polarity
 
 	public:
 		Ref<Scene> ActiveScene;
+		Ref<Scene> EditorScene, RuntimeScene;
 		Ref<Framebuffer> ViewportFramebuffer;
 		glm::vec2 ViewportSize = { 1280, 720 };
 

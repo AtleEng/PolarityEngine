@@ -148,6 +148,18 @@ namespace Polarity::ECS
 			return m_ComponentManager.HasComponent<T>(entity);
 		}
 
+		template<typename T>
+		T& AddOrReplaceComponent(Entity entity, T component)
+		{
+			if (HasComponent<T>(entity))
+			{
+				RemoveComponent<T>(entity);
+			}
+
+			T& c = AddComponent<T>(entity, component);
+			return c;
+		}
+
 		template<typename Func>
 		void Each(Func&& func)
 		{
@@ -156,7 +168,7 @@ namespace Polarity::ECS
 				func(entity);
 			}
 		}
-
+		
 		template<typename First, typename... Rest>
 		View<First, Rest...> GetView()
 		{
@@ -167,7 +179,17 @@ namespace Polarity::ECS
 				storage->Size()
 				);
 		}
-
+		
+		
+		template<typename... Components>
+		View<Components...> GetBigView()
+		{
+			return View<Components...>(
+				this,
+				m_ComponentManager.GetComponentArray<Components>()...
+			);
+		}
+		
 		template<typename Owned, typename... Observed>
 		Group<Owned, Observed...> GetGroup()
 		{

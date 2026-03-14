@@ -41,7 +41,11 @@ namespace Polarity
 		viewportFbSpec.Height = 720;
 
 		m_Context.ViewportFramebuffer = Framebuffer::Create(viewportFbSpec);
+
 		m_Context.ActiveScene = CreateRef<Scene>();
+		m_Context.EditorScene = CreateRef<Scene>();
+		m_Context.RuntimeScene = CreateRef<Scene>();
+
 		m_Context.EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
 		m_Context.EventCallback = POLARITY_BIND_EVENT_FN(OnEvent);
 
@@ -126,7 +130,7 @@ namespace Polarity
 		POL_PROFILE_FUNCTION();
 
 
-
+		
 		//------------ Render ---------------------------------------
 		{
 			POLARITY_PROFILE_SCOPE("Render Draw");
@@ -405,6 +409,8 @@ namespace Polarity
 		m_Context.ActiveScene = CreateRef<Scene>();
 		m_Context.ViewportFramebuffer->Resize((uint32_t)m_Context.ViewportSize.x, (uint32_t)m_Context.ViewportSize.y);
 		m_Context.ActiveScene->OnViewportResize((uint32_t)m_Context.ViewportSize.x, (uint32_t)m_Context.ViewportSize.y);
+
+		m_CurrentFilepath = "";
 	}
 
 	void EditorLayer::OpenScene()
@@ -414,6 +420,7 @@ namespace Polarity
 		{
 			OpenScene(filepath);
 		}
+		POL_CORE_ERROR("Scene: %s failed to deserialize!", filepath.c_str());
 	}
 
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
@@ -425,14 +432,24 @@ namespace Polarity
 			return;
 		}
 
-		NewScene();
+		Ref<Scene> scene = CreateRef<Scene>();
+		scene->OnViewportResize((uint32_t)m_Context.ViewportSize.x, (uint32_t)m_Context.ViewportSize.y);
 
-		SceneSerializer serializer(m_Context.ActiveScene);
-		serializer.DeSerialize(path.string());
+		SceneSerializer serializer(scene);
+		if (serializer.DeSerialize(path.string()))
+		{
+			m_Context.EditorScene = scene;
+			m_Context.ActiveScene = m_Context.EditorScene;
+		
+			m_CurrentFilepath = path;
 
-		m_CurrentFilepath = path;
+			POL_CORE_INFO("Scene: %s opened!", filename.c_str());
+		}
+		else
+		{
+			POL_CORE_ERROR("Scene: %s failed to deserialize!", filename.c_str());
+		}
 
-		POL_CORE_INFO("Scene: %s opened!", filename.c_str());
 	}
 
 	void EditorLayer::SaveScene()
@@ -500,12 +517,21 @@ namespace Polarity
 	{
 		POL_CORE_TRACE("Scene Playing...");
 		m_SceneState = SceneState::Play;
+
+		m_Context.SetSelected({});
+		m_Context.ActiveScene = Scene::Copy(m_Context.EditorScene);
+		m_Context.ActiveScene->OnRuntimeStart();
 	}
 
 	void EditorLayer::OnSceneStop()
 	{
-		POL_CORE_TRACE("Scene Stopped");
+		m_Context.ActiveScene->OnRuntimeStop();
 		m_SceneState = SceneState::Edit;
+
+		m_Context.SetSelected({});
+		m_Context.ActiveScene = m_Context.EditorScene;
+
+		POL_CORE_TRACE("Scene Stopped");
 	}
 
 

@@ -29,7 +29,78 @@ namespace Polarity
 
 	Scene::~Scene()
 	{
+		
+	}
+	
+	template<typename... Component>
+	static void CopyComponent(ECS::Registry& dst, ECS::Registry& src, const std::unordered_map<UUID, ECS::Entity>& entityMap)
+	{
+		([&]() { 
+			for (auto srcEntity : src.GetView<Component>()) 
+			{ 
+				ECS::Entity dstEntity = entityMap.at(src.GetComponent<IDComponent>(srcEntity).ID); 
+				auto& srcComponent = src.GetComponent<Component>(srcEntity); 
+				dst.AddOrReplaceComponent<Component>(dstEntity, srcComponent); 
+			} 
+		}(), ...);
+	}
 
+	template<typename... Component>
+	static void CopyComponent(ComponentGroup<Component...>, ECS::Registry& dst, ECS::Registry& src, const std::unordered_map<UUID, ECS::Entity>& entityMap)
+	{
+		CopyComponent<Component...>(dst, src, entityMap);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(Entity dst, Entity src)
+	{
+		([&]()
+		{
+			if (src.HasComponent<Component>())
+				dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+		}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
+	{
+		CopyComponentIfExists<Component...>(dst, src);
+	}
+	
+
+	Ref<Scene> Scene::Copy(Ref<Scene> other)
+	{
+		Ref<Scene> newScene = CreateRef<Scene>();
+
+		newScene->m_ViewportWidth = other->m_ViewportWidth;
+		newScene->m_ViewportHeight = other->m_ViewportHeight;
+
+		auto& srcSceneRegistry = other->m_Registry;
+		auto& dstSceneRegistry = newScene->m_Registry;
+		std::unordered_map<UUID, ECS::Entity> entityMap;
+
+		// Create entities in new scene
+		auto idView = srcSceneRegistry.GetView<IDComponent, NameComponent>();
+		for (auto e : idView)
+		{
+			UUID uuid = srcSceneRegistry.GetComponent<IDComponent>(e).ID;
+			const auto& name = srcSceneRegistry.GetComponent<NameComponent>(e).Name;
+			Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
+			entityMap[uuid] = (ECS::Entity)newEntity;
+		}
+
+		// Copy components (except IDComponent and NameComponent)
+		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, entityMap);
+
+		return newScene;
+	}
+
+	void Scene::OnRuntimeStart()
+	{
+	}
+
+	void Scene::OnRuntimeStop()
+	{
 	}
 
 	void Scene::OnUpdateRuntime(Timestep tS)

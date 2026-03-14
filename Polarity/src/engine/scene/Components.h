@@ -97,4 +97,14 @@ namespace Polarity
 			DestroyScript = [](ScriptComponent* sc) { delete sc->Instance; sc->Instance = nullptr; };
 		}
 	};
+
+	template<typename... Component>
+	struct ComponentGroup
+	{
+	};
+
+	using AllComponents =
+		ComponentGroup<TransformComponent, SpriteComponent,
+		CameraComponent, ScriptComponent,
+		ScriptComponent, AudioSourceComponent>;
 }
