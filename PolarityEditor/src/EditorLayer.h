@@ -23,7 +23,6 @@ namespace Polarity
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 
-
 		// Menu
 
 		// Project
@@ -60,6 +59,8 @@ namespace Polarity
 		bool OnKeyPressedEvent(KeyPressedEvent& e);
 		bool OnMousePressedEvent(MouseButtonPressedEvent& e);
 
+		void OnOverlayRender();
+
 		void ShowProfiler();
 
 		void DrawMenubar();
@@ -69,7 +70,7 @@ namespace Polarity
 		EditorContext m_Context;
 		PanelManager m_PanelManager;
 
-		std::filesystem::path m_CurrentFilepath = "";
+		std::filesystem::path m_EditorSceneFilepath = "";
 
 		enum class SceneState
 		{

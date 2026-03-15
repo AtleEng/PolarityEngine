@@ -151,6 +151,10 @@ namespace Polarity
 
 			Renderer2D::EndScene();
 		}
+		else
+		{
+			POL_CORE_ERROR("No camera in scene!")
+		}
 		// ----------------------------------------------------------------------------
 
 		for (auto e : m_DestroyQueue)

@@ -37,8 +37,8 @@ namespace Polarity
 
 		FramebufferSpecification viewportFbSpec;
 		viewportFbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
-		viewportFbSpec.Width = 1280;
-		viewportFbSpec.Height = 720;
+		viewportFbSpec.Width = 1;
+		viewportFbSpec.Height = 1;
 
 		m_Context.ViewportFramebuffer = Framebuffer::Create(viewportFbSpec);
 
@@ -168,6 +168,7 @@ namespace Polarity
 			}
 			}
 
+			OnOverlayRender();
 
 			m_Context.ViewportFramebuffer->Unbind();
 		}
@@ -300,7 +301,14 @@ namespace Polarity
 		{
 			if (ctrl)
 			{
-				OpenScene();
+				if (shift)
+				{
+					OpenProject();
+				}
+				else
+				{
+					OpenScene();
+				}
 			}
 			break;
 		}
@@ -360,6 +368,23 @@ namespace Polarity
 			}
 			break;
 		}
+		case Key::F2:
+		{
+			POL_CORE_WARN("Settings not added");
+			break;
+		}
+		case Key::F5:
+		{
+			if (m_SceneState == SceneState::Edit)
+			{
+				OnScenePlay();
+			}
+			else
+			{
+				OnSceneStop();
+			}
+			break;
+		}
 		}
 
 		return false;
@@ -369,6 +394,32 @@ namespace Polarity
 	{
 		m_PanelManager.OnMousePressedEvent(e);
 		return false;
+	}
+
+	void EditorLayer::OnOverlayRender()
+	{
+		if (m_SceneState == SceneState::Play)
+		{
+			Entity camera = m_Context.ActiveScene->GetPrimaryCameraEntity();
+			if (!camera)
+				return;
+
+			Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().Camera, camera.GetComponent<TransformComponent>().GetTransform());
+		}
+		else
+		{
+			Renderer2D::BeginScene(m_Context.EditorCamera);
+		}
+
+		// Draw selected entity outline TODO Change to line renderer
+		
+		if (Entity selectedEntity = m_Context.GetSelected())
+		{
+			const TransformComponent& transform = selectedEntity.GetComponent<TransformComponent>();
+			Renderer2D::DrawQuad(transform.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
+		}
+		
+		Renderer2D::EndScene();
 	}
 
 	void EditorLayer::NewProject()
@@ -409,8 +460,10 @@ namespace Polarity
 		m_Context.ActiveScene = CreateRef<Scene>();
 		m_Context.ViewportFramebuffer->Resize((uint32_t)m_Context.ViewportSize.x, (uint32_t)m_Context.ViewportSize.y);
 		m_Context.ActiveScene->OnViewportResize((uint32_t)m_Context.ViewportSize.x, (uint32_t)m_Context.ViewportSize.y);
+		m_Context.EditorScene = m_Context.ActiveScene;
 
-		m_CurrentFilepath = "";
+
+		m_EditorSceneFilepath = std::filesystem::path();
 	}
 
 	void EditorLayer::OpenScene()
@@ -441,7 +494,7 @@ namespace Polarity
 			m_Context.EditorScene = scene;
 			m_Context.ActiveScene = m_Context.EditorScene;
 		
-			m_CurrentFilepath = path;
+			m_EditorSceneFilepath = path;
 
 			POL_CORE_INFO("Scene: %s opened!", filename.c_str());
 		}
@@ -454,12 +507,12 @@ namespace Polarity
 
 	void EditorLayer::SaveScene()
 	{
-		if (!m_CurrentFilepath.empty())
+		if (!m_EditorSceneFilepath.empty())
 		{
-			SceneSerializer serializer(m_Context.ActiveScene);
-			serializer.Serialize(m_CurrentFilepath.string());
+			SceneSerializer serializer(m_Context.EditorScene);
+			serializer.Serialize(m_EditorSceneFilepath.string());
 
-			POL_CORE_INFO("Scene: %s saved!", m_CurrentFilepath.filename().string().c_str());
+			POL_CORE_INFO("Scene: %s saved!", m_EditorSceneFilepath.filename().string().c_str());
 		}
 		else
 		{
@@ -472,7 +525,7 @@ namespace Polarity
 		std::string filepath = FileDialogs::SaveFile("Polarity Scene (*.pol)\0*.pol\0");
 		if (!filepath.empty())
 		{
-			m_CurrentFilepath = filepath;
+			m_EditorSceneFilepath = filepath;
 			SaveScene();
 		}
 		else
@@ -593,21 +646,7 @@ namespace Polarity
 			// Restore Y pos
 			ImGui::SetCursorPosY(cursorY);
 
-			if (ImGui::BeginMenu("Project"))
-			{
-				if (ImGui::MenuItem("New Project", "Ctrl+N"))
-					NewProject();
-				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
-					OpenProject();
-				if (ImGui::MenuItem("Save Project", "Ctrl+S"))
-					SaveProject();
-				ImGui::Separator();
-				if (ImGui::MenuItem("Quit", "Alt+F4")) Application::Get().Shutdown();
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Scene"))
+			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
 					NewScene();
@@ -617,28 +656,45 @@ namespace Polarity
 					SaveScene();
 				if (ImGui::MenuItem("Save Scene as...", "Ctrl+Shift+S"))
 					SaveAsScene();
+				ImGui::Separator();
+				if (ImGui::MenuItem("Open Project...", "Ctrl+Shift+O"))
+					OpenProject();
+				ImGui::Separator();
+				if (ImGui::MenuItem("Quit", "Alt+F4")) Application::Get().Shutdown();
 
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("Editor")) // all commands to edit project
+			if (ImGui::BeginMenu("Edit"))
 			{
-				if (ImGui::MenuItem("Undo", "Ctrl+Z"));
-				if (ImGui::MenuItem("Redo", "Ctrl+Y"));
+				if (ImGui::MenuItem("Undo TODO", "Ctrl+Z"));
+				if (ImGui::MenuItem("Redo TODO", "Ctrl+Y"));
 				ImGui::Separator();
-				if (ImGui::MenuItem("Cut", "Ctrl+X"));
-				if (ImGui::MenuItem("Copy", "Ctrl+C"));
-				if (ImGui::MenuItem("Paste", "Ctrl+V"));
-				if (ImGui::MenuItem("Duplicate", "Ctrl+D"));
-				if (ImGui::MenuItem("Delete", "Del"));
+				if (ImGui::MenuItem("Cut TODO", "Ctrl+X"));
+				if (ImGui::MenuItem("Copy TODO", "Ctrl+C"));
+				if (ImGui::MenuItem("Paste TODO", "Ctrl+V"));
+				if (ImGui::MenuItem("Duplicate TODO", "Ctrl+D"));
+				if (ImGui::MenuItem("Delete TODO", "Del"));
 				ImGui::Separator();
-				if (ImGui::MenuItem("Options TODO"));
+				if (ImGui::MenuItem("Options TODO", "F2"));
 
 				ImGui::Separator();
-				ImGui::MenuItem("Play", "F5");
-				ImGui::MenuItem("Simulate", "Shift+F5");
+				
+				if (ImGui::MenuItem("Play/Stop", "F5"))
+				{
+					if (m_SceneState == SceneState::Edit)
+					{
+						OnScenePlay();
+					}
+					else
+					{
+						OnSceneStop();
+					}
+				}
+				
 
 				ImGui::EndMenu();
 			}
+
 			if (ImGui::BeginMenu("View"))
 			{
 				if (ImGui::BeginMenu("Show"))
