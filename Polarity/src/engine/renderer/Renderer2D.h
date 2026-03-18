@@ -17,11 +17,9 @@ namespace Polarity
 
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void BeginScene(const EditorCamera& camera);
-		static void BeginScene(const OrthographicCamera& camera); //TODO remove
+		//static void BeginScene(const OrthographicCamera& camera); //TODO remove
 		static void EndScene();
 		static void Flush();
-
-		static void OnWindowResize(uint32_t width, uint32_t height);
 
 		//Draw quads
 		static void DrawQuad(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint, const float textureScale, const glm::vec2* texCoords);
@@ -44,8 +42,10 @@ namespace Polarity
 		static void DrawQuadID(const Ref<Texture2D>& texture, const glm::mat4& transform, const glm::vec4& tint = glm::vec4(1.0f), const float textureScale = 1.0f, int entityID = -1);
 		static void DrawQuadID(const glm::mat4& transform, const glm::vec4& tint = glm::vec4(1.0f), int entityID = -1);
 
-		//Draw Sprite
-		static void DrawSprite(const glm::mat4& transform, SpriteComponent& sc, int entityID);
+		//Draw texured quad from SpriteRendererComponent
+		static void DrawSprite(const glm::mat4& transform, SpriteComponent& sc, int entityID = -1);
+
+		static void DrawLine(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, int entityID = -1);
 
 		// Stats
 		struct Statistics

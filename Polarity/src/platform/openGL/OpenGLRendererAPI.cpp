@@ -5,6 +5,26 @@
 
 namespace Polarity {
 	
+	void OpenGLMessageCallback(
+		unsigned source,
+		unsigned type,
+		unsigned id,
+		unsigned severity,
+		int length,
+		const char* message,
+		const void* userParam)
+	{
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_HIGH:         POL_CORE_FATAL(message); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:       POL_CORE_ERROR(message); return;
+		case GL_DEBUG_SEVERITY_LOW:          POL_CORE_WARN(message); return;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: POL_CORE_TRACE(message); return;
+		}
+
+		POL_CORE_FATAL("OpenGL: Unknown severity level!");
+	}
+
 	void OpenGLRendererAPI::Init()
 	{
 		glEnable(GL_BLEND);
@@ -33,5 +53,16 @@ namespace Polarity {
 		vertexArray->Bind();
 		uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+	}
+
+	void OpenGLRendererAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+	{
+		vertexArray->Bind();
+		glDrawArrays(GL_LINES, 0, vertexCount);
+	}
+
+	void OpenGLRendererAPI::SetLineWidth(float width)
+	{
+		glLineWidth(width);
 	}
 }

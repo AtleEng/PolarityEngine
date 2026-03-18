@@ -21,6 +21,14 @@ namespace Polarity
 		//Editor
 		int EntityID;
 	};
+	struct LineVertex
+	{
+		glm::vec3 Position;
+		glm::vec4 Color;
+
+		//Editor
+		int EntityID;
+	};
 
 	struct Renderer2DStorage
 	{
@@ -33,15 +41,28 @@ namespace Polarity
 		//Maximum amount of diffrent textures per Draw call
 		static const uint32_t MaxTextureSlots = 32; //TODO RenderCaps
 
+		// Vertieces
+
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
-
 		Ref<Shader> TextureShader;
 		Ref<Texture2D> WhiteTexture;
+
+		Ref<VertexArray> LineVertexArray;
+		Ref<VertexBuffer> LineVertexBuffer;
+		Ref<Shader> LineShader;
+
+		// buffers
 
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+		
+		uint32_t LineIndexCount = 0;
+		LineVertex* LineVertexBufferBase = nullptr;
+		LineVertex* LineVertexBufferPtr = nullptr;
+
+		float LineWidth = 2.0f;
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		// Index of the texture slot array starts on 1 (0 = blank texture)
@@ -67,6 +88,8 @@ namespace Polarity
 	{
 		POL_PROFILE_FUNCTION();
 
+		/// Quad
+		
 		// Vertex Array
 		s_Data.QuadVertexArray = VertexArray::Create();
 
@@ -105,6 +128,26 @@ namespace Polarity
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
 
+		/// Line
+		
+		s_Data.LineVertexArray = VertexArray::Create();
+
+		s_Data.LineVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
+		s_Data.LineVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "a_Position" },
+			{ ShaderDataType::Float4, "a_Color"    },
+			{ ShaderDataType::Int,    "a_EntityID" }
+			});
+		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
+		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
+
+		/// Shaders
+
+		s_Data.TextureShader = Shader::Create("assets/shaders/2D_Quad.glsl");
+		s_Data.LineShader = Shader::Create("assets/shaders/2D_Line.glsl");
+		
+		/// Textures
+		
 		// Generate whiteTexture
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
 		uint32_t textureData = 0xffffffff;
@@ -116,8 +159,6 @@ namespace Polarity
 		{
 			samplers[i] = i;
 		}
-		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
-
 
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
@@ -158,7 +199,7 @@ namespace Polarity
 
 		StartBatch();
 	}
-
+	/*
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		POL_PROFILE_FUNCTION();
@@ -168,13 +209,26 @@ namespace Polarity
 
 		StartBatch();
 	}
+	*/
 
 	void Renderer2D::EndScene()
 	{
 		POL_PROFILE_FUNCTION();
 
 		Flush();
-		StartBatch();
+		//StartBatch(); // om problem med clean up dyker upp, ta bort efter mass render test
+	}
+
+	//reset batch
+	void Renderer2D::StartBatch()
+	{
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.LineIndexCount = 0;
+		s_Data.LineVertexBufferPtr = s_Data.LineVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
 	}
 
 	//Draw batch
@@ -182,41 +236,41 @@ namespace Polarity
 	{
 		POL_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount == 0)
-			return;
+		if (s_Data.QuadIndexCount)
+		{
+			if (s_Data.QuadIndexCount == 0)
+				return;
 
-		uint32_t dataSize =
-			(uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr -
-				(uint8_t*)s_Data.QuadVertexBufferBase);
+			uint32_t dataSize =
+				(uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr -
+					(uint8_t*)s_Data.QuadVertexBufferBase);
 
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+			s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
-		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
-			s_Data.TextureSlots[i]->Bind(i);
+			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
+				s_Data.TextureSlots[i]->Bind(i);
 
-		s_Data.TextureShader->Bind();
-		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+			s_Data.TextureShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 
-		s_Data.Stats.DrawCalls++;
-	}
+			s_Data.Stats.DrawCalls++;
+		}
+		if (s_Data.LineIndexCount)
+		{
+			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.LineVertexBufferPtr - (uint8_t*)s_Data.LineVertexBufferBase);
+			s_Data.LineVertexBuffer->SetData(s_Data.LineVertexBufferBase, dataSize);
 
-	void Renderer2D::StartBatch()
-	{
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-		s_Data.TextureSlotIndex = 1;
+			s_Data.LineShader->Bind();
+			RenderCommand::SetLineWidth(s_Data.LineWidth);
+			RenderCommand::DrawLines(s_Data.LineVertexArray, s_Data.LineIndexCount);
+			s_Data.Stats.DrawCalls++;
+		}
 	}
 
 	void Renderer2D::NextBatch()
 	{
 		Flush();
 		StartBatch();
-	}
-
-	void Renderer2D::OnWindowResize(uint32_t width, uint32_t height)
-	{
-
 	}
 
 	//Render Quads
@@ -488,6 +542,21 @@ namespace Polarity
 			DrawQuadID(sc.Texture, transform, sc.Color, sc.Scale, entityID);
 		else
 			DrawQuadID(transform, sc.Color, entityID);
+	}
+
+	void Renderer2D::DrawLine(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, int entityID)
+	{
+		s_Data.LineVertexBufferPtr->Position = p0;
+		s_Data.LineVertexBufferPtr->Color = color;
+		s_Data.LineVertexBufferPtr->EntityID = entityID;
+		s_Data.LineVertexBufferPtr++;
+
+		s_Data.LineVertexBufferPtr->Position = p1;
+		s_Data.LineVertexBufferPtr->Color = color;
+		s_Data.LineVertexBufferPtr->EntityID = entityID;
+		s_Data.LineVertexBufferPtr++;
+
+		s_Data.LineIndexCount += 2;
 	}
 
 

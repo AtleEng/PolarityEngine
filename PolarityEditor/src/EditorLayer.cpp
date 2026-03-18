@@ -409,12 +409,128 @@ namespace Polarity
 			Renderer2D::BeginScene(m_Context.EditorCamera);
 		}
 
-		// Draw selected entity outline TODO Change to line renderer
+		// Draw selected entity outline
 		
 		if (Entity selectedEntity = m_Context.GetSelected())
 		{
+			glm::vec4 color = glm::vec4(1.0f, 0.5f, 0.0f, 1.0f);
+
 			const TransformComponent& transform = selectedEntity.GetComponent<TransformComponent>();
-			Renderer2D::DrawQuad(transform.GetTransform(), glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
+
+			glm::mat4 transformMat = transform.GetTransform();
+
+			// Local space square (centered at origin)
+			glm::vec4 p0 = transformMat * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
+			glm::vec4 p1 = transformMat * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
+			glm::vec4 p2 = transformMat * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
+			glm::vec4 p3 = transformMat * glm::vec4(-0.5f, 0.5f, 0.0f, 1.0f);
+
+			// Draw
+			Renderer2D::DrawLine(glm::vec3(p0), glm::vec3(p1), color, selectedEntity);
+			Renderer2D::DrawLine(glm::vec3(p1), glm::vec3(p2), color, selectedEntity);
+			Renderer2D::DrawLine(glm::vec3(p2), glm::vec3(p3), color, selectedEntity);
+			Renderer2D::DrawLine(glm::vec3(p3), glm::vec3(p0), color, selectedEntity);
+
+			if (selectedEntity.HasComponent<CameraComponent>())
+			{
+				CameraComponent& camera = selectedEntity.GetComponent<CameraComponent>();
+
+				glm::mat4 camTransform = transformMat;
+
+				float aspect = camera.Camera.GetAspectRatio();
+
+				if (camera.Camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
+				{
+					float size = camera.Camera.GetOrthographicSize();
+					float halfH = size * 0.5f;
+					float halfW = halfH * aspect;
+
+					float nearZ = -camera.Camera.GetOrthographicNearClip();
+					float farZ = -camera.Camera.GetOrthographicFarClip();
+
+					// Near
+					glm::vec3 n0 = camTransform * glm::vec4(-halfW, -halfH, nearZ, 1.0f);
+					glm::vec3 n1 = camTransform * glm::vec4(halfW, -halfH, nearZ, 1.0f);
+					glm::vec3 n2 = camTransform * glm::vec4(halfW, halfH, nearZ, 1.0f);
+					glm::vec3 n3 = camTransform * glm::vec4(-halfW, halfH, nearZ, 1.0f);
+
+					// Far
+					glm::vec3 f0 = camTransform * glm::vec4(-halfW, -halfH, farZ, 1.0f);
+					glm::vec3 f1 = camTransform * glm::vec4(halfW, -halfH, farZ, 1.0f);
+					glm::vec3 f2 = camTransform * glm::vec4(halfW, halfH, farZ, 1.0f);
+					glm::vec3 f3 = camTransform * glm::vec4(-halfW, halfH, farZ, 1.0f);
+
+					// Draw near
+					Renderer2D::DrawLine(n0, n1, color, selectedEntity);
+					Renderer2D::DrawLine(n1, n2, color, selectedEntity);
+					Renderer2D::DrawLine(n2, n3, color, selectedEntity);
+					Renderer2D::DrawLine(n3, n0, color, selectedEntity);
+
+					// Draw far
+					Renderer2D::DrawLine(f0, f1, color, selectedEntity);
+					Renderer2D::DrawLine(f1, f2, color, selectedEntity);
+					Renderer2D::DrawLine(f2, f3, color, selectedEntity);
+					Renderer2D::DrawLine(f3, f0, color, selectedEntity);
+
+					// Connect
+					Renderer2D::DrawLine(n0, f0, color, selectedEntity);
+					Renderer2D::DrawLine(n1, f1, color, selectedEntity);
+					Renderer2D::DrawLine(n2, f2, color, selectedEntity);
+					Renderer2D::DrawLine(n3, f3, color, selectedEntity);
+				}
+				else if (camera.Camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
+				{
+					glm::mat4 camTransform = transformMat;
+
+					float aspect = camera.Camera.GetAspectRatio();
+					float fov = camera.Camera.GetPerspectiveVerticalFOV();
+
+					float nearZ = camera.Camera.GetPerspectiveNearClip();
+					float farZ = camera.Camera.GetPerspectiveFarClip();
+
+					// OpenGL convention camera looks along -Z
+					nearZ = -nearZ;
+					farZ = -farZ;
+
+					float tanFov = tan(fov * 0.5f);
+
+					float nearH = tanFov * abs(nearZ);
+					float nearW = nearH * aspect;
+
+					float farH = tanFov * abs(farZ);
+					float farW = farH * aspect;
+
+					// Near plane
+					glm::vec3 n0 = camTransform * glm::vec4(-nearW, -nearH, nearZ, 1.0f);
+					glm::vec3 n1 = camTransform * glm::vec4(nearW, -nearH, nearZ, 1.0f);
+					glm::vec3 n2 = camTransform * glm::vec4(nearW, nearH, nearZ, 1.0f);
+					glm::vec3 n3 = camTransform * glm::vec4(-nearW, nearH, nearZ, 1.0f);
+
+					// Far plane
+					glm::vec3 f0 = camTransform * glm::vec4(-farW, -farH, farZ, 1.0f);
+					glm::vec3 f1 = camTransform * glm::vec4(farW, -farH, farZ, 1.0f);
+					glm::vec3 f2 = camTransform * glm::vec4(farW, farH, farZ, 1.0f);
+					glm::vec3 f3 = camTransform * glm::vec4(-farW, farH, farZ, 1.0f);
+
+					// Draw near
+					Renderer2D::DrawLine(n0, n1, color, selectedEntity);
+					Renderer2D::DrawLine(n1, n2, color, selectedEntity);
+					Renderer2D::DrawLine(n2, n3, color, selectedEntity);
+					Renderer2D::DrawLine(n3, n0, color, selectedEntity);
+
+					// Draw far
+					Renderer2D::DrawLine(f0, f1, color, selectedEntity);
+					Renderer2D::DrawLine(f1, f2, color, selectedEntity);
+					Renderer2D::DrawLine(f2, f3, color, selectedEntity);
+					Renderer2D::DrawLine(f3, f0, color, selectedEntity);
+
+					// Connect
+					Renderer2D::DrawLine(n0, f0, color, selectedEntity);
+					Renderer2D::DrawLine(n1, f1, color, selectedEntity);
+					Renderer2D::DrawLine(n2, f2, color, selectedEntity);
+					Renderer2D::DrawLine(n3, f3, color, selectedEntity);
+				}
+			}
 		}
 		
 		Renderer2D::EndScene();
