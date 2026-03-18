@@ -9,7 +9,11 @@ namespace Polarity {
 	bool s_initialized = false;
 
 	void UIIcons::Init() {
-		POL_CORE_ASSERT(!s_initialized, "UIIcons already initialized");
+		if (s_initialized)
+		{
+			POL_ERROR("UIIcons already initialized");
+			return;
+		}
 
 		s_IconAtlas = Texture2D::Create("assets/textures/icons.png");
 
@@ -55,9 +59,12 @@ namespace Polarity {
 		s_initialized = true;
 	}
 
-	Ref<SubTexture2D> UIIcons::Get(UIIcon icon) {
-		POL_CORE_ASSERT(s_initialized, "UIIcons used before Init");
+	Ref<SubTexture2D> UIIcons::Get(UIIcon icon) 
+	{
+		if(s_initialized)
+			return s_icons[static_cast<size_t>(icon)];
 
-		return s_icons[static_cast<size_t>(icon)];
+		POL_ERROR("UIIcons used before Init");
+		return nullptr;
 	}
 }

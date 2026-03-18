@@ -44,12 +44,18 @@ namespace Polarity
 	};
 }
 
-#define POL_CORE_TRACE(msg, ...)                 Polarity::Logger::Log("TRACE ", Polarity::Logger::TextColor::Green,  msg, ##__VA_ARGS__);
-#define POL_CORE_DEBUG(msg, ...)                 Polarity::Logger::Log("DEBUG ", Polarity::Logger::TextColor::Yellow, msg, ##__VA_ARGS__);
-#define POL_CORE_INFO(msg, ...)                  Polarity::Logger::Log("INFO  ", Polarity::Logger::TextColor::Cyan,   msg, ##__VA_ARGS__);                                                      
-#define POL_CORE_WARN(msg, ...)                  Polarity::Logger::Log("WARN  ", Polarity::Logger::TextColor::Orange, msg, ##__VA_ARGS__);
-#define POL_CORE_ERROR(msg, ...)                 Polarity::Logger::Log("ERROR ", Polarity::Logger::TextColor::Red,    msg, ##__VA_ARGS__);
-#define POL_CORE_FATAL(msg, ...)                 POL_CORE_ERROR(msg, ##__VA_ARGS__);  DEBUG_BREAK();
+#define POL_TRACE(msg, ...)      Polarity::Logger::Log("[APP]  TRACE ", Polarity::Logger::TextColor::Green,  msg, ##__VA_ARGS__);
+#define POL_DEBUG(msg, ...)      Polarity::Logger::Log("[APP]  DEBUG ", Polarity::Logger::TextColor::Yellow, msg, ##__VA_ARGS__);
+#define POL_INFO(msg, ...)       Polarity::Logger::Log("[APP]  INFO  ", Polarity::Logger::TextColor::Cyan,   msg, ##__VA_ARGS__);                                                      
+#define POL_WARN(msg, ...)       Polarity::Logger::Log("[APP]  WARN  ", Polarity::Logger::TextColor::Orange, msg, ##__VA_ARGS__);
+#define POL_ERROR(msg, ...)		 Polarity::Logger::Log("[APP]  ERROR ", Polarity::Logger::TextColor::Red,    msg, ##__VA_ARGS__);
+
+#define POL_CORE_TRACE(msg, ...) Polarity::Logger::Log("[CORE] TRACE ", Polarity::Logger::TextColor::Green,  msg, ##__VA_ARGS__);
+#define POL_CORE_DEBUG(msg, ...) Polarity::Logger::Log("[CORE] DEBUG ", Polarity::Logger::TextColor::Yellow, msg, ##__VA_ARGS__);
+#define POL_CORE_INFO(msg, ...)  Polarity::Logger::Log("[CORE] INFO  ", Polarity::Logger::TextColor::Cyan,   msg, ##__VA_ARGS__);                                                      
+#define POL_CORE_WARN(msg, ...)  Polarity::Logger::Log("[CORE] WARN  ", Polarity::Logger::TextColor::Orange, msg, ##__VA_ARGS__);
+#define POL_CORE_ERROR(msg, ...) Polarity::Logger::Log("[CORE] ERROR ", Polarity::Logger::TextColor::Red,    msg, ##__VA_ARGS__);
+#define POL_CORE_FATAL(msg, ...) POL_CORE_ERROR(msg, ##__VA_ARGS__);  DEBUG_BREAK();
 
 #ifdef POLARITY_ENABLE_ASSERTS
 #define POL_CORE_ASSERT(x, msg, ...)            \

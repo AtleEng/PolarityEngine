@@ -16,10 +16,10 @@ BEGIN
 		BLOCK "040904B0"
 		BEGIN
 			VALUE "CompanyName", "Polarity Studios"
-			VALUE "FileDescription", "Official editor for the Polarity engine"
-			VALUE "FileVersion", "1.0.0.0"
+			VALUE "FileDescription", "Polarity Editor"
+			VALUE "FileVersion", "0.2.0-beta"
 			VALUE "ProductName", "Polarity Editor"
-			VALUE "ProductVersion", "1.0.0.0"
+			VALUE "ProductVersion", "0.2.0-beta"
 			VALUE "Comments", "Dev build"
 		END
 	END

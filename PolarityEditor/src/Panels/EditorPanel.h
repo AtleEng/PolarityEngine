@@ -18,7 +18,7 @@ namespace Polarity
 			if (entity)
 			{
 				std::string name = entity.GetComponent<NameComponent>().Name;
-				POL_CORE_INFO("Selected %s", name.c_str());
+				POL_INFO("Selected %s", name.c_str());
 			}
 			SelectedEntity = entity;
 		}

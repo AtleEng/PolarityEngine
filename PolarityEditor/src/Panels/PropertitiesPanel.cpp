@@ -415,7 +415,7 @@ namespace Polarity
 					if (tex->IsLoaded())
 						component.Texture = tex;
 					else
-						POL_CORE_WARN("Could not load texture '%s'", texPath.filename().string().c_str());
+						POL_WARN("Could not load texture '%s'", texPath.filename().string().c_str());
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -436,7 +436,7 @@ namespace Polarity
 					if (audio->IsLoaded())
 						component.Audio = audio;
 					else
-						POL_CORE_WARN("Could not load audio '%s'", texPath.filename().string().c_str());
+						POL_WARN("Could not load audio '%s'", texPath.filename().string().c_str());
 				}
 				ImGui::EndDragDropTarget();
 			}

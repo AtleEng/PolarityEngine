@@ -70,6 +70,8 @@ namespace Polarity
 
 	Ref<Scene> Scene::Copy(Ref<Scene> other)
 	{
+		POL_PROFILE_FUNCTION();
+
 		Ref<Scene> newScene = CreateRef<Scene>();
 
 		newScene->m_ViewportWidth = other->m_ViewportWidth;
@@ -97,14 +99,17 @@ namespace Polarity
 
 	void Scene::OnRuntimeStart()
 	{
+		POL_PROFILE_FUNCTION();
 	}
 
 	void Scene::OnRuntimeStop()
 	{
+		POL_PROFILE_FUNCTION();
 	}
 
 	void Scene::OnUpdateRuntime(Timestep tS)
 	{
+		POL_PROFILE_FUNCTION();
 		// ---------------------------------------------------------- Update Scripts --
 		{
 			for (auto entity : m_Registry.GetView<ScriptComponent>())
@@ -165,6 +170,7 @@ namespace Polarity
 
 	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
 	{
+		POL_PROFILE_FUNCTION();
 		// ---------------------------------------------------------- Render Sprites --
 		Renderer2D::BeginScene(camera);
 
@@ -207,6 +213,7 @@ namespace Polarity
 
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string name)
 	{
+		POL_PROFILE_FUNCTION();
 		Entity entity = { m_Registry.CreateEntity(), this };
 		if (entity.GetHandle() == ECS::INVALID_ENTITY)
 		{
@@ -269,6 +276,7 @@ namespace Polarity
 
 	Entity Scene::GetPrimaryCameraEntity()
 	{
+		POL_PROFILE_FUNCTION();
 		auto view = m_Registry.GetView<CameraComponent>();
 		for (auto entity : view)
 		{

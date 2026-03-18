@@ -33,7 +33,7 @@ namespace Polarity
         {
             if (!m_Context || !m_Context->ViewportFramebuffer)
             {
-                POL_CORE_FATAL("Viewports Framebuffer is null!");
+                POL_ERROR("Viewports Framebuffer is null!");
                 return;
             }
             glm::vec2 viewportSize = m_Context->ViewportSize;

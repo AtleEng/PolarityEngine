@@ -22,7 +22,7 @@
 namespace Polarity
 {
 	EditorLayer::EditorLayer()
-		: Layer("DemoLayer"), m_PanelManager()
+		: Layer("EditorLayer"), m_PanelManager()
 	{
 	}
 
@@ -128,8 +128,6 @@ namespace Polarity
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		POL_PROFILE_FUNCTION();
-
-
 		
 		//------------ Render ---------------------------------------
 		{
@@ -370,7 +368,7 @@ namespace Polarity
 		}
 		case Key::F2:
 		{
-			POL_CORE_WARN("Settings not added");
+			POL_WARN("Settings not added");
 			break;
 		}
 		case Key::F5:
@@ -473,7 +471,7 @@ namespace Polarity
 		{
 			OpenScene(filepath);
 		}
-		POL_CORE_ERROR("Scene: %s failed to deserialize!", filepath.c_str());
+		POL_ERROR("Scene: %s failed to deserialize!", filepath.c_str());
 	}
 
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
@@ -481,7 +479,7 @@ namespace Polarity
 		std::string filename = path.filename().string();
 		if (path.extension().string() != ".pol")
 		{
-			POL_CORE_WARN("Could not load %s - not a scene file '.pol'", filename.c_str());
+			POL_WARN("Could not load %s - not a scene file '.pol'", filename.c_str());
 			return;
 		}
 
@@ -496,11 +494,11 @@ namespace Polarity
 		
 			m_EditorSceneFilepath = path;
 
-			POL_CORE_INFO("Scene: %s opened!", filename.c_str());
+			POL_INFO("Scene: %s opened!", filename.c_str());
 		}
 		else
 		{
-			POL_CORE_ERROR("Scene: %s failed to deserialize!", filename.c_str());
+			POL_ERROR("Scene: %s failed to deserialize!", filename.c_str());
 		}
 
 	}
@@ -512,7 +510,7 @@ namespace Polarity
 			SceneSerializer serializer(m_Context.EditorScene);
 			serializer.Serialize(m_EditorSceneFilepath.string());
 
-			POL_CORE_INFO("Scene: %s saved!", m_EditorSceneFilepath.filename().string().c_str());
+			POL_INFO("Scene: %s saved!", m_EditorSceneFilepath.filename().string().c_str());
 		}
 		else
 		{
@@ -530,7 +528,7 @@ namespace Polarity
 		}
 		else
 		{
-			POL_CORE_WARN("Scene not saved, has no filepath!");
+			POL_WARN("Scene not saved, has no filepath!");
 		}
 	}
 
@@ -568,7 +566,7 @@ namespace Polarity
 
 	void EditorLayer::OnScenePlay()
 	{
-		POL_CORE_TRACE("Scene Playing...");
+		POL_TRACE("Scene Playing...");
 		m_SceneState = SceneState::Play;
 
 		m_Context.SetSelected({});
@@ -584,7 +582,7 @@ namespace Polarity
 		m_Context.SetSelected({});
 		m_Context.ActiveScene = m_Context.EditorScene;
 
-		POL_CORE_TRACE("Scene Stopped");
+		POL_TRACE("Scene Stopped");
 	}
 
 
@@ -666,7 +664,8 @@ namespace Polarity
 			}
 			if (ImGui::BeginMenu("Edit"))
 			{
-				if (ImGui::MenuItem("Undo TODO", "Ctrl+Z"));
+				if (ImGui::MenuItem("Undo TODO", "Ctrl+Z"))
+					Undo();
 				if (ImGui::MenuItem("Redo TODO", "Ctrl+Y"));
 				ImGui::Separator();
 				if (ImGui::MenuItem("Cut TODO", "Ctrl+X"));
