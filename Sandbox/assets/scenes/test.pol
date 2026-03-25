@@ -1,0 +1,31 @@
+Scene: Untitled
+Entities:
+  - Entity: 4679469289275689593
+    NameComponent:
+      Name: Entity
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      TexturePath: C:\Dev\TestGame\Assets\textures\Test.png
+      Color: [1, 1, 0.639215708, 1]
+      Scale: 1
+  - Entity: 10051601647111121538
+    NameComponent:
+      Name: Cam
+    TransformComponent:
+      Position: [0, 0, 8.78569412]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 100
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false

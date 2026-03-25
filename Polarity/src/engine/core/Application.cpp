@@ -23,23 +23,25 @@ namespace Polarity {
 		POL_CORE_ASSERT(!s_instance, "Core: Application already exist!");
 		s_instance = this;
 
-		std::string info = "Core: PolarityEngine v0.01 ";
+		POL_CORE_INFO("PolarityEngine");
 
-		info += "- ";
+		std::string info = "Config: ";
 		info += POLARITY_CONFIG;
 		info += " - ";
 		info += POLARITY_PLATFORM;
 		info += " ";
 		info += POLARITY_ARCH;
 
+		POL_CORE_INFO(info.c_str());
+
+		std::string info2 = "RendererAPI: ";
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		info += " - None"; break;
-		case RendererAPI::API::OpenGL:		info += " - OpenGL"; break;
-		default:							info += " - Unknown"; break;
+		case RendererAPI::API::None:		info2 += "None"; break;
+		case RendererAPI::API::OpenGL:		info2 += "OpenGL"; break;
+		default:							info2 += "Unknown"; break;
 		}
-		info += "\n";
-		POL_CORE_INFO(info.c_str());
+		POL_CORE_INFO(info2.c_str());
 
 
 		if (!m_Specification.WorkingDirectory.empty())

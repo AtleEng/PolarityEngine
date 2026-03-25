@@ -1,8 +1,16 @@
 
-.vs/
+# binaries
 bin/
 bin-int/
 
-#files
-*.user
-imgui.ini
+# vs files
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+**.csproj
+
+# directories
+PolarityEditor/assets/cache
+PolarityEditor/profile

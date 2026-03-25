@@ -77,5 +77,7 @@ namespace Polarity
 			Edit = 0, Play = 1
 		};
 		SceneState m_SceneState = SceneState::Edit;
+
+		bool m_DrawGrid = true;
 	};
 }

@@ -53,4 +53,28 @@ namespace Polarity
 	{
 		return glfwGetTime();
 	}
+
+	void* DynamicLib::LoadDynamicLib(const char* dll)
+	{
+		HMODULE result = LoadLibraryA(dll);
+		POL_CORE_ASSERT(result, "Windows Utils: Failed to load dll: %s!", dll)
+		return result;
+	}
+
+	void* DynamicLib::LoadDynamicFunction(void* dll, const char* funName)
+	{
+		FARPROC proc = GetProcAddress((HMODULE)dll, funName);
+		POL_CORE_ASSERT(proc, "Windows Utils: Failed to load function: %s from DLL!", funName);
+
+		return (void*)proc;
+	}
+
+	bool DynamicLib::FreeDynimicLib(void* dll)
+	{
+		BOOL freeResult = FreeLibrary((HMODULE)dll);
+		POL_CORE_ASSERT(freeResult, "Windows Utils: Failed to free lib!");
+
+		return (bool)freeResult;
+	}
+
 }

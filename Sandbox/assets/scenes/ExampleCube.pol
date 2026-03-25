@@ -1,0 +1,86 @@
+Scene: Untitled
+Entities:
+  - Entity: 8728952186883375980
+    NameComponent:
+      Name: Main Camera
+    TransformComponent:
+      Position: [3, 1.99999905, 3]
+      Rotation: [-0.436332345, 0.785398185, -1.05367135e-07]
+      Scale: [0.999999881, 0.999999881, 0.999999702]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 1.04719758
+        PerspectiveNear: 0.100000001
+        PerspectiveFar: 100
+        OrthographicSize: 5.0999999
+        OrthographicNear: 0
+        OrthographicFar: 25
+      Primary: true
+      FixedAspectRatio: false
+  - Entity: 716225168464169547
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0, 0.5, 0.5]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      TexturePath: C:\Dev\TestGame\Assets\textures\Test.png
+      Color: [1, 0, 1, 1]
+      Scale: 1
+  - Entity: 15374684723428024754
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0, 0.49999997, -0.5]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteComponent:
+      TexturePath: C:\Dev\TestGame\Assets\textures\Test.png
+      Color: [1, 0, 1, 1]
+      Scale: 1
+  - Entity: 16091624186218240236
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [-0.5, 0.5, 0]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [0.99999404, 1, 0.99999404]
+    SpriteComponent:
+      TexturePath: C:\Dev\TestGame\Assets\textures\Test.png
+      Color: [0, 1, 1, 1]
+      Scale: 1
+  - Entity: 8611831645632509786
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0.5, 0.5, 0]
+      Rotation: [0, 1.57079637, 0]
+      Scale: [0.999994993, 1, 0.999994993]
+    SpriteComponent:
+      TexturePath: C:\Dev\TestGame\Assets\textures\Test.png
+      Color: [0, 1, 1, 1]
+      Scale: 1
+  - Entity: 13909222449007406021
+    NameComponent:
+      Name: Floor
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [-1.57079637, 0, 0]
+      Scale: [20, 19.9998989, 19.9998989]
+    SpriteComponent:
+      TexturePath: C:\Dev\TestGame\Assets\textures\grid.png
+      Color: [0.0784313753, 0.0784313753, 0.0784313753, 1]
+      Scale: 20
+  - Entity: 16776222229022315816
+    NameComponent:
+      Name: New Entity
+    TransformComponent:
+      Position: [0, 1, 0]
+      Rotation: [-1.57079637, 0, 0]
+      Scale: [1, 0.999991894, 0.999991894]
+    SpriteComponent:
+      TexturePath: C:\Dev\TestGame\Assets\textures\Test.png
+      Color: [1, 1, 0, 1]
+      Scale: 1

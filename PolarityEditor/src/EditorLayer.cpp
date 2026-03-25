@@ -25,6 +25,19 @@ namespace Polarity
 		: Layer("EditorLayer"), m_PanelManager()
 	{
 	}
+	void Update(Timestep ts);
+
+	using OnUpdateFn = void(*)(Polarity::Timestep);
+
+	static OnUpdateFn onUpdatePtr = nullptr;
+
+	void Update(Timestep ts)
+	{
+		POL_CORE_ASSERT(onUpdatePtr, "NO OnUpdate pointer!");
+		onUpdatePtr(ts);
+		
+
+	}
 
 	void EditorLayer::OnAttach()
 	{
@@ -81,6 +94,12 @@ namespace Polarity
 			}
 		});
 
+		static void *gameDLL = DynamicLib::LoadDynamicLib("Sandbox.dll");
+		POL_CORE_ASSERT(gameDLL, "Failed to load game_load.dll");
+
+		onUpdatePtr = (OnUpdateFn)DynamicLib::LoadDynamicFunction(gameDLL, "OnUpdate");
+		POL_CORE_ASSERT(onUpdatePtr, "Failed to load OnUpdate");
+		
 		//-------------------------------------------------------- Entites
 		
 		/*
@@ -129,6 +148,8 @@ namespace Polarity
 	{
 		POL_PROFILE_FUNCTION();
 		
+		Update(ts);
+
 		//------------ Render ---------------------------------------
 		{
 			POLARITY_PROFILE_SCOPE("Render Draw");
@@ -409,6 +430,32 @@ namespace Polarity
 			Renderer2D::BeginScene(m_Context.EditorCamera);
 		}
 
+		if (m_DrawGrid)
+		{
+			float axisLength = 10.0f;
+
+			// X axis (red)
+			Renderer2D::DrawLine(
+				glm::vec3(-axisLength, 0.0f, 0.0f),
+				glm::vec3(axisLength, 0.0f, 0.0f),
+				glm::vec4(1, 0, 0, 0.1f)
+			);
+
+			// Y axis (Blue)
+			Renderer2D::DrawLine(
+				glm::vec3(0.0f, -axisLength, 0.0f),
+				glm::vec3(0.0f, axisLength, 0.0f),
+				glm::vec4(0, 0, 1, 0.1f)
+			);
+
+			// Z axis (green)
+			Renderer2D::DrawLine(
+				glm::vec3(0.0f, 0.0f, -axisLength),
+				glm::vec3(0.0f, 0.0f, axisLength),
+				glm::vec4(0, 1, 0, 0.1f)
+			);
+		}
+
 		// Draw selected entity outline
 		
 		if (Entity selectedEntity = m_Context.GetSelected())
@@ -419,7 +466,7 @@ namespace Polarity
 
 			glm::mat4 transformMat = transform.GetTransform();
 
-			// Local space square (centered at origin)
+			// Local space square
 			glm::vec4 p0 = transformMat * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
 			glm::vec4 p1 = transformMat * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
 			glm::vec4 p2 = transformMat * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);

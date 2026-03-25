@@ -1,1 +1,0 @@
-{"otherData": {},"traceEvents":[{},{"cat":"function","dur":33,"name":"Polarity::AudioSource::~AudioSource(void)","ph":"X","pid":0,"tid":27780,"ts":4153134353.600},{"cat":"function","dur":37058,"name":"void Polarity::WindowsWindow::Shutdown(void)","ph":"X","pid":0,"tid":27780,"ts":4153134570.400}]}

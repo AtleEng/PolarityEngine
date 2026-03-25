@@ -6,13 +6,15 @@
 	#define DEBUG_BREAK() __debugbreak()
 	#define WIN32_LEAN_AND_MEAN
 	#define NOMINMAX
-
+	#define POL_EXPORT_FN __declspec(dllexport)
 #elif POLARITY_PLATFORM_LINUX
 	#define DEBUG_BREAK() __builtin_debugtrap()
-	#error Polarity doesn't support linux!
+	#define POL_EXPORT_FN
+#error Polarity doesn't support linux!
 
 #elif POLARITY_PLATFORM_MAC
 	#define DEBUG_BREAK() __builtin_trap()
+	#define POL_EXPORT_FN
 	#error Polarity doesn't support mac!
 #else
 	#error Unknown platform!

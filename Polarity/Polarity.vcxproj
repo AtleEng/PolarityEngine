@@ -147,9 +147,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\core\UUID.h" />
-    <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
-    <ClInclude Include="src\engine\Project\Project.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\ECS\ComponentManager.h" />
     <ClInclude Include="src\engine\ECS\EntityManager.h" />
@@ -167,6 +164,7 @@
     <ClInclude Include="src\engine\core\Log.h" />
     <ClInclude Include="src\engine\core\Timer.h" />
     <ClInclude Include="src\engine\core\Timestep.h" />
+    <ClInclude Include="src\engine\core\UUID.h" />
     <ClInclude Include="src\engine\core\Window.h" />
     <ClInclude Include="src\engine\debug\Instrumentor.h" />
     <ClInclude Include="src\engine\events\ApplicationEvent.h" />
@@ -175,6 +173,8 @@
     <ClInclude Include="src\engine\events\MouseEvent.h" />
     <ClInclude Include="src\engine\imGui\ImGuiLayer.h" />
     <ClInclude Include="src\engine\math\Math.h" />
+    <ClInclude Include="src\engine\project\Project.h" />
+    <ClInclude Include="src\engine\project\ProjectSerializer.h" />
     <ClInclude Include="src\engine\renderer\Buffer.h" />
     <ClInclude Include="src\engine\renderer\Camera.h" />
     <ClInclude Include="src\engine\renderer\EditorCamera.h" />
@@ -195,6 +195,7 @@
     <ClInclude Include="src\engine\scene\SceneCamera.h" />
     <ClInclude Include="src\engine\scene\SceneSerializer.h" />
     <ClInclude Include="src\engine\scene\ScriptableEntity.h" />
+    <ClInclude Include="src\engine\scripting\ScriptAPI.h" />
     <ClInclude Include="src\engine\utils\PlatformUtils.h" />
     <ClInclude Include="src\engine\utils\Random.h" />
     <ClInclude Include="src\platform\openGL\OpenGLBuffer.h" />
@@ -642,7 +643,6 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\core\UUID.cpp" />
     <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\audio\Audio.cpp" />
@@ -650,12 +650,13 @@
     <ClCompile Include="src\engine\core\Layer.cpp" />
     <ClCompile Include="src\engine\core\LayerStack.cpp" />
     <ClCompile Include="src\engine\core\Log.cpp" />
+    <ClCompile Include="src\engine\core\UUID.cpp" />
     <ClCompile Include="src\engine\core\Window.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\engine\math\Math.cpp" />
-    <ClCompile Include="src\engine\Project\Project.cpp" />
-    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp" />
+    <ClCompile Include="src\engine\project\Project.cpp" />
+    <ClCompile Include="src\engine\project\ProjectSerializer.cpp" />
     <ClCompile Include="src\engine\renderer\Buffer.cpp" />
     <ClCompile Include="src\engine\renderer\EditorCamera.cpp" />
     <ClCompile Include="src\engine\renderer\Framebuffer.cpp" />

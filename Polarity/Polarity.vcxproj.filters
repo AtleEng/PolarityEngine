@@ -25,6 +25,9 @@
     <Filter Include="Source Files\src\engine\math">
       <UniqueIdentifier>{3EF1B9F9-2AAC-A9A5-D363-22F0BFFDF335}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\project">
+      <UniqueIdentifier>{8B12A15D-F7F5-AF9D-00F9-DDD96C5B76EE}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\renderer">
       <UniqueIdentifier>{8B7AD0FE-77CB-BB40-A02F-AA028CDF4EAA}</UniqueIdentifier>
     </Filter>
@@ -85,11 +88,17 @@
     <Filter Include="Header Files\src\engine\math">
       <UniqueIdentifier>{7684CC4A-623F-BCF6-0BF7-3441F7900687}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\src\engine\project">
+      <UniqueIdentifier>{C37A2D3E-2F5E-3C7E-3861-6ABAA4C302CF}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\src\engine\renderer">
       <UniqueIdentifier>{C3E9E9F0-AF3A-D532-D89E-C3F4C44E689C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\scene">
       <UniqueIdentifier>{5A80CAA4-C698-B1CE-8F45-4168FB1C4668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\scripting">
+      <UniqueIdentifier>{BFDE7AEA-2B4D-D069-7436-8B69E0E3C505}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\utils">
       <UniqueIdentifier>{9D14F8A4-092D-DFCE-D2D9-6E683EB17368}</UniqueIdentifier>
@@ -207,6 +216,9 @@
     <ClInclude Include="src\engine\core\Timestep.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\core\UUID.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\core\Window.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
@@ -230,6 +242,12 @@
     </ClInclude>
     <ClInclude Include="src\engine\math\Math.h">
       <Filter>Header Files\src\engine\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\project\Project.h">
+      <Filter>Header Files\src\engine\project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\project\ProjectSerializer.h">
+      <Filter>Header Files\src\engine\project</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\renderer\Buffer.h">
       <Filter>Header Files\src\engine\renderer</Filter>
@@ -290,6 +308,9 @@
     </ClInclude>
     <ClInclude Include="src\engine\scene\ScriptableEntity.h">
       <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\ScriptAPI.h">
+      <Filter>Header Files\src\engine\scripting</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\utils\PlatformUtils.h">
       <Filter>Header Files\src\engine\utils</Filter>
@@ -1626,9 +1647,6 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Project\Project.h" />
-    <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
-    <ClInclude Include="src\engine\core\UUID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
@@ -1652,6 +1670,9 @@
     <ClCompile Include="src\engine\core\Log.cpp">
       <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\core\UUID.cpp">
+      <Filter>Source Files\src\engine\core</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\core\Window.cpp">
       <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
@@ -1663,6 +1684,12 @@
     </ClCompile>
     <ClCompile Include="src\engine\math\Math.cpp">
       <Filter>Source Files\src\engine\math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\project\Project.cpp">
+      <Filter>Source Files\src\engine\project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\project\ProjectSerializer.cpp">
+      <Filter>Source Files\src\engine\project</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\Buffer.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>
@@ -1781,8 +1808,5 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Project\Project.cpp" />
-    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp" />
-    <ClCompile Include="src\engine\core\UUID.cpp" />
   </ItemGroup>
 </Project>

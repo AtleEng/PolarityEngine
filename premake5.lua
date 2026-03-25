@@ -1,5 +1,5 @@
 
-include "Dependencies.lua"
+dofile("Dependencies.lua")
 
 workspace "Polarity"
     architecture "x64"
