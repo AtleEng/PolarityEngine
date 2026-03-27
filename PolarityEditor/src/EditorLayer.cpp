@@ -94,12 +94,16 @@ namespace Polarity
 			}
 		});
 
-		static void *gameDLL = DynamicLib::LoadDynamicLib("Sandbox.dll");
+		std::filesystem::path projectPath = Project::GetProjectDirectory();
+		projectPath /= "Binaries";
+		projectPath /= "Sandbox.dll";
+
+		static void* gameDLL = DynamicLib::LoadDynamicLib(projectPath.string().c_str());
 		POL_CORE_ASSERT(gameDLL, "Failed to load game_load.dll");
 
 		onUpdatePtr = (OnUpdateFn)DynamicLib::LoadDynamicFunction(gameDLL, "OnUpdate");
 		POL_CORE_ASSERT(onUpdatePtr, "Failed to load OnUpdate");
-		
+
 		//-------------------------------------------------------- Entites
 		
 		/*

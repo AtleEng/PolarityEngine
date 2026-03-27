@@ -54,23 +54,6 @@ namespace Polarity {
 		//g_Listeners.erase(std::remove(g_Listeners.begin(), g_Listeners.end(), listener));
 	}
 
-	void StdoutLogListener(const LogEvent& event)
-	{
-		printf("%s%s %s%s%s %s\033[0m\n",
-			Logger::TextColorTable[(int)Logger::TextColor::White],
-			event.time.c_str(),
-			Logger::TextColorTable[event.color],
-			event.prefix.c_str(),
-			Logger::TextColorTable[(int)Logger::TextColor::White],
-			event.message.c_str()
-		);
-	}
-
-	void Logger::Init()
-	{
-		AddLogListener(StdoutLogListener);
-	}
-
 	void Logger::Log(const char* prefix, TextColor textColor, const char* msg, ...)
 	{
 		POL_PROFILE_FUNCTION();
@@ -93,6 +76,15 @@ namespace Polarity {
 		event.prefix = prefix;
 		event.message = std::move(message);
 		event.time = GetTimeString();
+
+		printf("%s%s %s%s%s %s\033[0m\n",
+			Logger::TextColorTable[(int)Logger::TextColor::White],
+			event.time.c_str(),
+			Logger::TextColorTable[event.color],
+			event.prefix.c_str(),
+			Logger::TextColorTable[(int)Logger::TextColor::White],
+			event.message.c_str()
+		);
 
 		// ---- dispatch ----
 		for (auto& listener : g_Listeners)

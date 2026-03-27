@@ -32,7 +32,6 @@ namespace Polarity
 		};
 		static const char* TextColorTable[(int)TextColor::Count];
 
-		static void Init();
 
 		static void Log(const char* prefix, TextColor textColor, const char* msg, ...);
 		

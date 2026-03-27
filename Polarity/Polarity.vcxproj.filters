@@ -13,6 +13,9 @@
     <Filter Include="Source Files\src\engine\ECS">
       <UniqueIdentifier>{EF7F3393-5B8D-6179-E473-5D6450802D30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\Project">
+      <UniqueIdentifier>{6B7A59BE-D75D-68FE-E060-963A4CC32E4F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\audio">
       <UniqueIdentifier>{06A72930-72BF-105A-3B6C-A0F3A743A5F3}</UniqueIdentifier>
     </Filter>
@@ -24,9 +27,6 @@
     </Filter>
     <Filter Include="Source Files\src\engine\math">
       <UniqueIdentifier>{3EF1B9F9-2AAC-A9A5-D363-22F0BFFDF335}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\src\engine\project">
-      <UniqueIdentifier>{8B12A15D-F7F5-AF9D-00F9-DDD96C5B76EE}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\engine\renderer">
       <UniqueIdentifier>{8B7AD0FE-77CB-BB40-A02F-AA028CDF4EAA}</UniqueIdentifier>
@@ -70,6 +70,9 @@
     <Filter Include="Header Files\src\engine\ECS">
       <UniqueIdentifier>{278C2486-9399-526C-1C80-4E57888C1E23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\src\engine\Project">
+      <UniqueIdentifier>{A3E2E59E-0FC6-F4DE-18C9-221B842BBB2F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\src\engine\audio">
       <UniqueIdentifier>{3EA18EA3-AAB9-75CD-7366-0567DF3D0A67}</UniqueIdentifier>
     </Filter>
@@ -87,9 +90,6 @@
     </Filter>
     <Filter Include="Header Files\src\engine\math">
       <UniqueIdentifier>{7684CC4A-623F-BCF6-0BF7-3441F7900687}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\src\engine\project">
-      <UniqueIdentifier>{C37A2D3E-2F5E-3C7E-3861-6ABAA4C302CF}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\renderer">
       <UniqueIdentifier>{C3E9E9F0-AF3A-D532-D89E-C3F4C44E689C}</UniqueIdentifier>
@@ -183,6 +183,12 @@
     <ClInclude Include="src\engine\ECS\Types.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Project\Project.h">
+      <Filter>Header Files\src\engine\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Project\ProjectSerializer.h">
+      <Filter>Header Files\src\engine\Project</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\audio\Audio.h">
       <Filter>Header Files\src\engine\audio</Filter>
     </ClInclude>
@@ -242,12 +248,6 @@
     </ClInclude>
     <ClInclude Include="src\engine\math\Math.h">
       <Filter>Header Files\src\engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\project\Project.h">
-      <Filter>Header Files\src\engine\project</Filter>
-    </ClInclude>
-    <ClInclude Include="src\engine\project\ProjectSerializer.h">
-      <Filter>Header Files\src\engine\project</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\renderer\Buffer.h">
       <Filter>Header Files\src\engine\renderer</Filter>
@@ -1655,6 +1655,12 @@
     <ClCompile Include="src\engine\ECS\Registry.cpp">
       <Filter>Source Files\src\engine\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Project\Project.cpp">
+      <Filter>Source Files\src\engine\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp">
+      <Filter>Source Files\src\engine\Project</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\audio\Audio.cpp">
       <Filter>Source Files\src\engine\audio</Filter>
     </ClCompile>
@@ -1684,12 +1690,6 @@
     </ClCompile>
     <ClCompile Include="src\engine\math\Math.cpp">
       <Filter>Source Files\src\engine\math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\project\Project.cpp">
-      <Filter>Source Files\src\engine\project</Filter>
-    </ClCompile>
-    <ClCompile Include="src\engine\project\ProjectSerializer.cpp">
-      <Filter>Source Files\src\engine\project</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\renderer\Buffer.cpp">
       <Filter>Source Files\src\engine\renderer</Filter>

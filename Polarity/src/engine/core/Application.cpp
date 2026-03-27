@@ -19,7 +19,6 @@ namespace Polarity {
 	{
 		POL_PROFILE_FUNCTION();
 
-		Logger::Init();
 		POL_CORE_ASSERT(!s_instance, "Core: Application already exist!");
 		s_instance = this;
 
