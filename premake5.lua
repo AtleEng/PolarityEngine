@@ -23,7 +23,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 group "Dependencies"
     include "Polarity/thirdparty/GLFW"
     include "Polarity/thirdparty/Glad"
-    include "Polarity/thirdparty/imgui"
+    --include "Polarity/thirdparty/imgui"
     include "Polarity/thirdparty/yaml-cpp"
 
     include "Polarity/thirdparty/SPIRV-Cross"

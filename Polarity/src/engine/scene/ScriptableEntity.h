@@ -23,6 +23,8 @@ namespace Polarity {
 		virtual void OnUpdate(Timestep ts) {}
 	private:
 		Entity m_Entity;
+		Ref<Scene> m_Scene;
+
 		friend class Scene;
 	};
 

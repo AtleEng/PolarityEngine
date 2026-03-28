@@ -713,6 +713,24 @@
     <ClCompile Include="thirdparty\ImGuizmo\example\main.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui.cpp">
+      <ObjectFileName>$(IntDir)\imgui1.obj</ObjectFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_demo.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_draw.cpp">
+      <ObjectFileName>$(IntDir)\imgui_draw1.obj</ObjectFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_tables.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_widgets.cpp">
+      <ObjectFileName>$(IntDir)\imgui_widgets1.obj</ObjectFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -721,9 +739,6 @@
     </ProjectReference>
     <ProjectReference Include="thirdparty\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
-    </ProjectReference>
-    <ProjectReference Include="thirdparty\imgui\ImGui.vcxproj">
-      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
     <ProjectReference Include="thirdparty\yaml-cpp\yaml-cpp.vcxproj">
       <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>

@@ -55,6 +55,9 @@
     <Filter Include="Source Files\thirdparty\ImGuizmo\example">
       <UniqueIdentifier>{DE63BADE-CAE0-AD21-F35D-AE35DF394AB5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\thirdparty\imgui">
+      <UniqueIdentifier>{ED24806C-593D-6796-22EA-F62F8EC1FB2F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\thirdparty\stb_image">
       <UniqueIdentifier>{9DD16497-0940-BA16-5229-7516BED6AFB2}</UniqueIdentifier>
     </Filter>
@@ -1804,6 +1807,21 @@
     </ClCompile>
     <ClCompile Include="thirdparty\ImGuizmo\example\main.cpp">
       <Filter>Source Files\thirdparty\ImGuizmo\example</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_demo.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_draw.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_tables.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
     </ClCompile>
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>

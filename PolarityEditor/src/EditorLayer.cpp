@@ -25,19 +25,6 @@ namespace Polarity
 		: Layer("EditorLayer"), m_PanelManager()
 	{
 	}
-	void Update(Timestep ts);
-
-	using OnUpdateFn = void(*)(Polarity::Timestep);
-
-	static OnUpdateFn onUpdatePtr = nullptr;
-
-	void Update(Timestep ts)
-	{
-		POL_CORE_ASSERT(onUpdatePtr, "NO OnUpdate pointer!");
-		onUpdatePtr(ts);
-		
-
-	}
 
 	void EditorLayer::OnAttach()
 	{
@@ -101,8 +88,17 @@ namespace Polarity
 		static void* gameDLL = DynamicLib::LoadDynamicLib(projectPath.string().c_str());
 		POL_CORE_ASSERT(gameDLL, "Failed to load game_load.dll");
 
-		onUpdatePtr = (OnUpdateFn)DynamicLib::LoadDynamicFunction(gameDLL, "OnUpdate");
-		POL_CORE_ASSERT(onUpdatePtr, "Failed to load OnUpdate");
+		//onUpdatePtr = (OnUpdateFn)DynamicLib::LoadDynamicFunction(gameDLL, "OnUpdate");
+		//POL_CORE_ASSERT(onUpdatePtr, "Failed to load OnUpdate");
+
+		auto createScript = (ScriptableEntity * (*)())DynamicLib::LoadDynamicFunction(gameDLL, "CreateScript");
+		auto destroyScript = (void(*)(ScriptableEntity*))DynamicLib::LoadDynamicFunction(gameDLL, "DestroyScript");
+
+		Entity camEntity = m_Context.EditorScene->CreateEntity("Test");
+
+		auto& sc = camEntity.AddComponent<ScriptComponent>();
+		sc.InstantiateScript = createScript;
+		sc.DestroyScript = destroyScript;
 
 		//-------------------------------------------------------- Entites
 		
@@ -151,8 +147,6 @@ namespace Polarity
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		POL_PROFILE_FUNCTION();
-		
-		Update(ts);
 
 		//------------ Render ---------------------------------------
 		{

@@ -87,8 +87,8 @@ namespace Polarity
 	{
 		ScriptableEntity* Instance = nullptr;
 
-		ScriptableEntity*( *InstantiateScript)();
-		void (*DestroyScript)(ScriptComponent*);
+		ScriptableEntity* (*InstantiateScript)() = nullptr;
+		void (*DestroyScript)(ScriptableEntity*) = nullptr;
 
 		template<typename T>
 		void Bind()

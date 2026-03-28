@@ -1,34 +1,46 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
-#include <functional>
+// ----- Core -----------------------------------
+#include "engine/core/Application.h"
+#include "engine/core/Layer.h"
+#include "engine/core/Log.h"
+#include "engine/core/Input.h"
+#include "engine/core/Timestep.h"
+#include "engine/audio/Audio.h"
 
-namespace Polarity {
+// ----- Debug ------------------------------------
+#include "engine/debug/Instrumentor.h"
 
-    class ScriptableEntity;
+// ----- Math -------------------------------------
+#include "engine/math/Math.h"
 
-    // Factory function type
-    using ScriptFactory = std::function<ScriptableEntity* ()>;
+// ----- Event ------------------------------------
+#include "engine/events/Event.h"
+#include "engine/events/KeyEvent.h"
+#include "engine/events/MouseEvent.h"
+#include "engine/events/ApplicationEvent.h"
 
-    class ScriptRegistry
-    {
-    public:
-        void Register(const std::string& name, ScriptFactory factory)
-        {
-            m_Factories[name] = factory;
-        }
+// ----- Renderer ---------------------------------
+#include "engine/renderer/Renderer.h"
+#include "engine/renderer/Renderer2D.h"
+#include "engine/renderer/RenderCommand.h"
 
-        ScriptableEntity* Create(const std::string& name)
-        {
-            if (m_Factories.find(name) == m_Factories.end())
-                return nullptr;
+#include "engine/renderer/VertexArray.h"
+#include "engine/renderer/Buffer.h"
+#include "engine/renderer/Shader.h"
+#include "engine/renderer/Framebuffer.h"
+#include "engine/renderer/Texture.h"
 
-            return m_Factories[name]();
-        }
+#include "engine/renderer/OrthographicCamera.h"
 
-    private:
-        std::unordered_map<std::string, ScriptFactory> m_Factories;
-    };
+// ----- Scene ------------------------------------
+#include "engine/Project/Project.h"
 
-}
+// ----- Scene ------------------------------------
+#include "engine/scene/Scene.h"
+#include "engine/scene/Entity.h"
+#include "engine/scene/ScriptableEntity.h"
+#include "engine/scene/Components.h"
+
+// ----- Utility ----------------------------------
+#include "engine/utils/Random.h"

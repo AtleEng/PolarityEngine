@@ -221,7 +221,7 @@ namespace Polarity::ECS
 
 	private:
 		std::unordered_map<const char*, ComponentType> m_ComponentTypes{};
-		std::unordered_map<const char*, std::shared_ptr<IComponentArray>> m_ComponentArrays{};
+		std::unordered_map<const char*, Ref<IComponentArray>> m_ComponentArrays{};
 		ComponentType m_NextComponentType{};	
 	};
 }
