@@ -23,7 +23,6 @@ namespace Polarity
 		void OnUpdateRuntime(Timestep ts);
 		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
-		
 
 		Entity CreateEntity(const std::string name = "Entity");
 		Entity CreateEntityWithUUID(UUID uuid, const std::string name = "Entity");
@@ -34,6 +33,7 @@ namespace Polarity
 
 		bool IsAlive(ECS::Entity handle);
 		Entity GetPrimaryCameraEntity();
+
 
 		template<typename First, typename... Rest>
 		std::vector<Entity> GetView()

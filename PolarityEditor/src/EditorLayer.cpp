@@ -81,12 +81,15 @@ namespace Polarity
 			}
 		});
 
+		POL_TRACE("Loading DLL..");
 		std::filesystem::path projectPath = Project::GetProjectDirectory();
 		projectPath /= "Binaries";
 		projectPath /= "Sandbox.dll";
 
 		static void* gameDLL = DynamicLib::LoadDynamicLib(projectPath.string().c_str());
 		POL_CORE_ASSERT(gameDLL, "Failed to load game_load.dll");
+
+		POL_TRACE("DLL Loaded");
 
 		//onUpdatePtr = (OnUpdateFn)DynamicLib::LoadDynamicFunction(gameDLL, "OnUpdate");
 		//POL_CORE_ASSERT(onUpdatePtr, "Failed to load OnUpdate");
@@ -95,6 +98,8 @@ namespace Polarity
 		auto destroyScript = (void(*)(ScriptableEntity*))DynamicLib::LoadDynamicFunction(gameDLL, "DestroyScript");
 
 		Entity camEntity = m_Context.EditorScene->CreateEntity("Test");
+
+		//ScriptableEntity* instance = createScript();
 
 		auto& sc = camEntity.AddComponent<ScriptComponent>();
 		sc.InstantiateScript = createScript;

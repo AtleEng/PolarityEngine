@@ -1,2 +1,8 @@
 ﻿  Cam.cpp
+Polarity.lib(spirv_cross.obj) : warning LNK4099: PDB 'spirv-cross-cored.pdb' was not found with 'Polarity.lib(spirv_cross.obj)' or at 'C:\Dev\Ny mapp\PolarityEngine\Sandbox\Binaries\spirv-cross-cored.pdb'; linking object as if no debug info
+Polarity.lib(spirv_glsl.obj) : warning LNK4099: PDB 'spirv-cross-glsld.pdb' was not found with 'Polarity.lib(spirv_glsl.obj)' or at 'C:\Dev\Ny mapp\PolarityEngine\Sandbox\Binaries\spirv-cross-glsld.pdb'; linking object as if no debug info
+Polarity.lib(spirv_cfg.obj) : warning LNK4099: PDB 'spirv-cross-cored.pdb' was not found with 'Polarity.lib(spirv_cfg.obj)' or at 'C:\Dev\Ny mapp\PolarityEngine\Sandbox\Binaries\spirv-cross-cored.pdb'; linking object as if no debug info
+Polarity.lib(spirv_cross_parsed_ir.obj) : warning LNK4099: PDB 'spirv-cross-cored.pdb' was not found with 'Polarity.lib(spirv_cross_parsed_ir.obj)' or at 'C:\Dev\Ny mapp\PolarityEngine\Sandbox\Binaries\spirv-cross-cored.pdb'; linking object as if no debug info
+Polarity.lib(spirv_parser.obj) : warning LNK4099: PDB 'spirv-cross-cored.pdb' was not found with 'Polarity.lib(spirv_parser.obj)' or at 'C:\Dev\Ny mapp\PolarityEngine\Sandbox\Binaries\spirv-cross-cored.pdb'; linking object as if no debug info
+     Creating library Binaries\Sandbox.lib and object Binaries\Sandbox.exp
   Sandbox.vcxproj -> C:\Dev\Ny mapp\PolarityEngine\Sandbox\Binaries\Sandbox.dll

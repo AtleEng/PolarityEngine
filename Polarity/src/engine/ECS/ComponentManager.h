@@ -1,5 +1,6 @@
 #pragma once
 #include "Types.h"
+#include <typeindex>
 
 namespace Polarity::ECS
 {
@@ -152,24 +153,24 @@ namespace Polarity::ECS
 		template<typename T>
 		void RegisterComponent()
 		{
-			const char* typeName = typeid(T).name();
+			std::type_index type = typeid(T);
 
-			if (m_ComponentTypes.find(typeName) != m_ComponentTypes.end())
+			if (m_ComponentTypes.find(type) != m_ComponentTypes.end())
 			{
-				POL_CORE_ERROR("ECS: RegisterComponent() failed, registering type more than once typeName: %s.", typeName);
+				POL_CORE_ERROR("ECS: RegisterComponent() failed, registering type more than once typeName: %i!", type);
 				return;
 			}
 
-			m_ComponentTypes[typeName] = m_NextComponentType;
-			m_ComponentArrays[typeName] = std::make_shared<ComponentArray<T>>();
+			m_ComponentTypes[type] = m_NextComponentType;
+			m_ComponentArrays[type] = std::make_shared<ComponentArray<T>>();
 			++m_NextComponentType;
 		}
 
 		template<typename T>
 		ComponentType GetComponentType()
 		{
-			const char* typeName = typeid(T).name();
-			return m_ComponentTypes[typeName];
+			std::type_index type = typeid(T);
+			return m_ComponentTypes[type];
 		}
 
 		template<typename T>
@@ -208,20 +209,20 @@ namespace Polarity::ECS
 		template<typename T>
 		std::shared_ptr<ComponentArray<T>> GetComponentArray()
 		{
-			const char* typeName = typeid(T).name();
+			std::type_index type = typeid(T);
 
-			if (m_ComponentTypes.find(typeName) == m_ComponentTypes.end()) //TODO maybe use typeIndex for preformance
+			if (m_ComponentTypes.find(type) == m_ComponentTypes.end()) //TODO maybe use typeIndex for preformance
 			{
-				POL_CORE_ERROR("ECS: GetComponentArray() failed, component not registered before use typeName: %s!", typeName);
+				POL_CORE_ERROR("ECS: GetComponentArray() failed, component not registered before use type: %i!", type);
 				return nullptr;
 			}
 
-			return std::static_pointer_cast<ComponentArray<T>>(m_ComponentArrays[typeName]);
+			return std::static_pointer_cast<ComponentArray<T>>(m_ComponentArrays[type]);
 		}
 
 	private:
-		std::unordered_map<const char*, ComponentType> m_ComponentTypes{};
-		std::unordered_map<const char*, Ref<IComponentArray>> m_ComponentArrays{};
+		std::unordered_map<std::type_index, ComponentType> m_ComponentTypes{};
+		std::unordered_map<std::type_index, Ref<IComponentArray>> m_ComponentArrays{};
 		ComponentType m_NextComponentType{};	
 	};
 }

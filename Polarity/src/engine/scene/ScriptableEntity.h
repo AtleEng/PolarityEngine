@@ -13,7 +13,9 @@ namespace Polarity {
 		T& GetComponent()
 		{
 			return m_Entity.GetComponent<T>();
+			//return m_Scene->GetRegistry().GetComponent(m_Entity.GetHandle());
 		}
+
 	protected:
 		// Runs once at creation
 		virtual void OnCreate() {}
