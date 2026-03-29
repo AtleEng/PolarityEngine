@@ -49,6 +49,7 @@ namespace Polarity {
 		m_window = Window::Create(WindowProps(m_Specification.Name));
 		m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(Application::OnEvent));
 
+		m_Input = CreateScope<ScriptingInput>();
 		
 		Renderer::Init();
 		Audio::Init();
@@ -67,6 +68,8 @@ namespace Polarity {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowResize));
+
+		m_Input->OnEvent(e);
 
 		for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
 		{
@@ -100,8 +103,12 @@ namespace Polarity {
 			Timestep timeStep = time - m_lastFrameTime;
 			m_lastFrameTime = time;
 
+			m_Input->OnUpdate();
+			m_window->OnUpdate();
+
 			if (!m_minimized)
 			{
+
 				for (Layer* layer : m_layerStack)
 				{
 					POLARITY_PROFILE_SCOPE("OnUpdate");
@@ -116,7 +123,6 @@ namespace Polarity {
 				}
 				m_imGuiLayer->End();
 			}
-			m_window->OnUpdate();
 		}
 	}
 

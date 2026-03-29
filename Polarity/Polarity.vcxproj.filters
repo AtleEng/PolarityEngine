@@ -1650,6 +1650,7 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\scripting\ScriptingInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
@@ -1826,5 +1827,6 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scripting\ScriptingInput.cpp" />
   </ItemGroup>
 </Project>

@@ -14,16 +14,17 @@
 
 	void CamControll::OnUpdate(Timestep ts)
 	{
-
+		//POL_INFO("%s Update!!!", GetComponent<NameComponent>().Name.c_str());
 		auto& position = GetComponent<TransformComponent>().Position;
+		//position.x -= speed * ts;
 
-		if (Input::IsKeyPressed(Key::A))
+		if (m_Input->IsKeyDown(Key::A))
 			position.x -= speed * ts;
-		if (Input::IsKeyPressed(Key::D))
+		if (m_Input->IsKeyDown(Key::D))
 			position.x += speed * ts;
-		if (Input::IsKeyPressed(Key::W))
+		if (m_Input->IsKeyDown(Key::W))
 			position.y += speed * ts;
-		if (Input::IsKeyPressed(Key::S))
+		if (m_Input->IsKeyDown(Key::S))
 			position.y -= speed * ts;
 	}
 

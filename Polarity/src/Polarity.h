@@ -45,5 +45,8 @@
 #include "engine/scene/ScriptableEntity.h"
 #include "engine/scene/Components.h"
 
+// ----- Scripting --------------------------------
+#include "engine/scripting/ScriptingInput.h"
+
 // ----- Utility ----------------------------------
 #include "engine/utils/Random.h"

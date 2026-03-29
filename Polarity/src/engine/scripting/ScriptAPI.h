@@ -4,7 +4,6 @@
 #include "engine/core/Application.h"
 #include "engine/core/Layer.h"
 #include "engine/core/Log.h"
-#include "engine/core/Input.h"
 #include "engine/core/Timestep.h"
 #include "engine/audio/Audio.h"
 
@@ -41,6 +40,9 @@
 #include "engine/scene/Entity.h"
 #include "engine/scene/ScriptableEntity.h"
 #include "engine/scene/Components.h"
+
+// ----- Scripting --------------------------------
+#include "engine/scripting/ScriptingInput.h"
 
 // ----- Utility ----------------------------------
 #include "engine/utils/Random.h"

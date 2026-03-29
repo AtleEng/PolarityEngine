@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[{},{"cat":"function","dur":24783,"name":"void Polarity::WindowsWindow::Shutdown(void)","ph":"X","pid":0,"tid":9804,"ts":25371669279.700}]}
+{"otherData": {},"traceEvents":[{},{"cat":"function","dur":38411,"name":"void Polarity::WindowsWindow::Shutdown(void)","ph":"X","pid":0,"tid":4840,"ts":3493424026.800}]}

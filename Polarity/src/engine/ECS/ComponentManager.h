@@ -211,7 +211,7 @@ namespace Polarity::ECS
 		{
 			std::type_index type = typeid(T);
 
-			if (m_ComponentTypes.find(type) == m_ComponentTypes.end()) //TODO maybe use typeIndex for preformance
+			if (m_ComponentTypes.find(type) == m_ComponentTypes.end())
 			{
 				POL_CORE_ERROR("ECS: GetComponentArray() failed, component not registered before use type: %i!", type);
 				return nullptr;

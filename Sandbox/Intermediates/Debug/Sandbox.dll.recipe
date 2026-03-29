@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Dev\Ny mapp\PolarityEngine\Sandbox\Binaries\Sandbox.dll</FullPath>
+      <FullPath>C:\Dev\PolarityEngine\Sandbox\Binaries\Sandbox.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

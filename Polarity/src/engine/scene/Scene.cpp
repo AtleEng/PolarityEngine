@@ -1,6 +1,7 @@
 #include "polpch.h"
 #include "Scene.h"
 
+#include "engine/core/Application.h"
 #include "engine/renderer/Renderer2D.h"
 #include "engine/utils/Random.h"
 
@@ -119,6 +120,8 @@ namespace Polarity
 				{
 					script.Instance = script.InstantiateScript();
 					script.Instance->m_Entity = Entity{ entity, this };
+					script.Instance->m_Input = &Application::Get().GetInput();
+
 					script.Instance->OnCreate();
 				}
 				script.Instance->OnUpdate(tS);
