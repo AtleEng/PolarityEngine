@@ -1,1 +1,1 @@
-{"otherData": {},"traceEvents":[{},{"cat":"function","dur":38411,"name":"void Polarity::WindowsWindow::Shutdown(void)","ph":"X","pid":0,"tid":4840,"ts":3493424026.800}]}
+{"otherData": {},"traceEvents":[{},{"cat":"function","dur":16,"name":"Polarity::AudioSource::~AudioSource(void)","ph":"X","pid":0,"tid":27788,"ts":10660555278.100},{"cat":"function","dur":50084,"name":"void Polarity::WindowsWindow::Shutdown(void)","ph":"X","pid":0,"tid":27788,"ts":10660557040.800}]}

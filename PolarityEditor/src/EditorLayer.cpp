@@ -98,6 +98,8 @@ namespace Polarity
 		auto destroyScript = (void(*)(ScriptableEntity*))DynamicLib::LoadDynamicFunction(gameDLL, "DestroyScript");
 
 		Entity camEntity = m_Context.EditorScene->CreateEntity("Test");
+		camEntity.AddComponent<SpriteComponent>();
+		camEntity.AddComponent<AudioSourceComponent>();
 
 		//ScriptableEntity* instance = createScript();
 

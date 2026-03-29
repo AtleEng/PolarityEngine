@@ -60,11 +60,11 @@ namespace Polarity
 
 	bool ScriptingInput::IsMouseButtonPressed(MouseCode button) const
 	{
-		return m_CurrentMouse[button] && !m_PreviousKeys[button];
+		return m_CurrentMouse[button] && !m_PreviousMouse[button];
 	}
 
 	bool ScriptingInput::IsMouseButtonReleased(MouseCode button) const
 	{
-		return !m_CurrentMouse[button] && m_PreviousKeys[button];
+		return !m_CurrentMouse[button] && m_PreviousMouse[button];
 	}
 }
