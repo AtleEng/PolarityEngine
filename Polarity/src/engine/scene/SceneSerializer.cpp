@@ -195,6 +195,16 @@ namespace Polarity
 
             out << YAML::EndMap;    // Component
         }
+        if (entity.HasComponent<ScriptComponent>())
+        {
+            out << YAML::Key << "ScriptComponent";
+            out << YAML::BeginMap;  // Component
+
+            auto& script = entity.GetComponent<ScriptComponent>();
+            out << YAML::Key << "ScriptName" << YAML::Value << script.ScriptName;
+
+            out << YAML::EndMap;    // Component
+        }
 
         out << YAML::EndMap;    // Entity
     }
@@ -319,6 +329,13 @@ namespace Polarity
                     audioSource.Gain = audioSourceComponent["Gain"].as<float>();
                     audioSource.Pitch = audioSourceComponent["Pitch"].as<float>();
                     audioSource.Loop = audioSourceComponent["Loop"].as<bool>();
+                }
+
+                auto scriptComponent = entity["ScriptComponent"];
+                if (scriptComponent)
+                {
+                    auto& script = newEntity.AddComponent<ScriptComponent>();
+                    script.ScriptName = scriptComponent["ScriptName"].as<std::string>();
                 }
             }
         }

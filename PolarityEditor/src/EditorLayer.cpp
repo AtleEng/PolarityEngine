@@ -82,73 +82,6 @@ namespace Polarity
 			}
 		});
 
-		
-
-		
-
-		Entity camEntity = m_Context.EditorScene->CreateEntity("Test");
-		camEntity.AddComponent<SpriteComponent>();
-		camEntity.AddComponent<AudioSourceComponent>();
-
-
-		auto& sc = camEntity.AddComponent<ScriptComponent>();
-		sc.ScriptName = "Player";
-		
-
-		//onUpdatePtr = (OnUpdateFn)DynamicLib::LoadDynamicFunction(gameDLL, "OnUpdate");
-		//POL_CORE_ASSERT(onUpdatePtr, "Failed to load OnUpdate");
-		/*
-		auto createScript = (ScriptableEntity * (*)())DynamicLib::LoadDynamicFunction(gameDLL, "CreateScript");
-		auto destroyScript = (void(*)(ScriptableEntity*))DynamicLib::LoadDynamicFunction(gameDLL, "DestroyScript");
-
-		Entity camEntity = m_Context.EditorScene->CreateEntity("Test");
-		camEntity.AddComponent<SpriteComponent>();
-		camEntity.AddComponent<AudioSourceComponent>();
-
-		//ScriptableEntity* instance = createScript();
-
-		auto& sc = camEntity.AddComponent<ScriptComponent>();
-		sc.InstantiateScript = createScript;
-		sc.DestroyScript = destroyScript;
-		*/
-
-		//-------------------------------------------------------- Entites
-		
-		/*
-		class CamControll : public ScriptableEntity
-		{
-		public:
-			float speed = 5.0f;
-
-			void OnCreate()
-			{
-
-			}
-
-			void OnDestroy()
-			{
-
-			}
-
-			void OnUpdate(Timestep ts)
-			{
-				auto& position = GetComponent<TransformComponent>().Position;
-
-				if (Input::IsKeyPressed(Key::A))
-					position.x -= speed * ts;
-				if (Input::IsKeyPressed(Key::D))
-					position.x += speed * ts;
-				if (Input::IsKeyPressed(Key::W))
-					position.y += speed * ts;
-				if (Input::IsKeyPressed(Key::S))
-					position.y -= speed * ts;
-			}
-		private:
-			float test = 1.0f;
-		};
-
-		*/
-		//camEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -649,11 +582,12 @@ namespace Polarity
 		{
 			OpenScene(filepath);
 		}
-		POL_ERROR("Scene: %s failed to deserialize!", filepath.c_str());
 	}
 
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
 	{
+		m_Context.SetSelected({});
+
 		std::string filename = path.filename().string();
 		if (path.extension().string() != ".pol")
 		{

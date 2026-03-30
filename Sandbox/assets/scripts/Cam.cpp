@@ -15,10 +15,6 @@
 	void Cam::OnUpdate(Timestep ts)
 	{
 		auto& position = GetComponent<TransformComponent>().Position;
-		auto& audio = GetComponent<AudioSourceComponent>();
-
-		if (m_Input->IsMouseButtonPressed(Mouse::ButtonLeft))
-			Audio::Play(audio.Audio);
 
 		if (m_Input->IsKeyDown(Key::A))
 			position.x -= speed * ts;
