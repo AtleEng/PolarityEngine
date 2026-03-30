@@ -12,10 +12,14 @@
     <ClInclude Include="assets\scripts\Cam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="assets\scripts\Player.h" />
+    <ClInclude Include="assets\scripts\ScriptRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="assets\scripts\Cam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="assets\scripts\Player.cpp" />
+    <ClCompile Include="assets\scripts\ScriptRegistry.cpp" />
   </ItemGroup>
 </Project>

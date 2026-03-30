@@ -9,6 +9,11 @@
 #include "ScriptableEntity.h"
 #include "Entity.h"
 
+#include "engine/utils/PlatformUtils.h"
+#include "engine/Project/Project.h"
+
+#include "engine/scripting/ScriptingEngine.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Polarity
@@ -30,19 +35,19 @@ namespace Polarity
 
 	Scene::~Scene()
 	{
-		
+
 	}
-	
+
 	template<typename... Component>
 	static void CopyComponent(ECS::Registry& dst, ECS::Registry& src, const std::unordered_map<UUID, ECS::Entity>& entityMap)
 	{
-		([&]() { 
-			for (auto srcEntity : src.GetView<Component>()) 
-			{ 
-				ECS::Entity dstEntity = entityMap.at(src.GetComponent<IDComponent>(srcEntity).ID); 
-				auto& srcComponent = src.GetComponent<Component>(srcEntity); 
-				dst.AddOrReplaceComponent<Component>(dstEntity, srcComponent); 
-			} 
+		([&]() {
+			for (auto srcEntity : src.GetView<Component>())
+			{
+				ECS::Entity dstEntity = entityMap.at(src.GetComponent<IDComponent>(srcEntity).ID);
+				auto& srcComponent = src.GetComponent<Component>(srcEntity);
+				dst.AddOrReplaceComponent<Component>(dstEntity, srcComponent);
+			}
 		}(), ...);
 	}
 
@@ -67,7 +72,7 @@ namespace Polarity
 	{
 		CopyComponentIfExists<Component...>(dst, src);
 	}
-	
+
 
 	Ref<Scene> Scene::Copy(Ref<Scene> other)
 	{
@@ -118,13 +123,17 @@ namespace Polarity
 				auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
 				if (!script.Instance)
 				{
-					script.Instance = script.InstantiateScript();
-					script.Instance->m_Entity = Entity{ entity, this };
-					script.Instance->m_Input = &Application::Get().GetInput();
+					script.Instance = ScriptEngine::Create(script.ScriptName);
+					if (script.Instance)
+					{
+						script.Instance->m_Entity = Entity{ entity, this };
+						script.Instance->m_Input = &Application::Get().GetInput();
 
-					script.Instance->OnCreate();
+						script.Instance->OnCreate();
+					}
 				}
-				script.Instance->OnUpdate(tS);
+				if (script.Instance)
+					script.Instance->OnUpdate(tS);
 			}
 		}
 		// ----------------------------------------------- Find Main Camera in Scene --

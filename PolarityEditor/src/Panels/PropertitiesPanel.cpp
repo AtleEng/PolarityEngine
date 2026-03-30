@@ -1,6 +1,8 @@
 #include "polpch.h"
 #include "PropertitiesPanel.h"
 
+#include "engine/scripting/ScriptingEngine.h"
+
 #include <imgui/imgui_internal.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -453,7 +455,30 @@ namespace Polarity
 
 		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
 		{
-			ImGui::Text("Script");
+			std::vector<std::string> scriptNames = ScriptEngine::GetScriptNames();
+
+			const char* current = component.ScriptName.empty()
+				? "None"
+				: component.ScriptName.c_str();
+
+			if (ImGui::BeginCombo("Script", current))
+			{
+				for (const auto& name : scriptNames)
+				{
+					bool isSelected = (component.ScriptName == name);
+
+					if (ImGui::Selectable(name.c_str(), isSelected))
+					{
+						component.ScriptName = name;
+						component.Instance = nullptr;
+					}
+
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
 		});
 
 		ImGui::End();

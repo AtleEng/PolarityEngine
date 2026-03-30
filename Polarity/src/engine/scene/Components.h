@@ -85,6 +85,7 @@ namespace Polarity
 
 	struct ScriptComponent
 	{
+		std::string ScriptName;
 		ScriptableEntity* Instance = nullptr;
 
 		ScriptableEntity* (*InstantiateScript)() = nullptr;
@@ -93,8 +94,15 @@ namespace Polarity
 		template<typename T>
 		void Bind()
 		{
-			InstantiateScript = []() { return static_cast<ScriptableEntity*>( new T()); };
-			DestroyScript = [](ScriptComponent* sc) { delete sc->Instance; sc->Instance = nullptr; };
+			InstantiateScript = []() -> ScriptableEntity*
+			{
+				return new T();
+			};
+
+			DestroyScript = [](ScriptableEntity* instance)
+			{
+				delete instance;
+			};
 		}
 	};
 

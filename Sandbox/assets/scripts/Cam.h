@@ -6,7 +6,7 @@
 using namespace Polarity;
 
 
-class CamControll : public ScriptableEntity
+class Cam : public ScriptableEntity
 {
 public:
 	float speed = 5.0f;
@@ -16,7 +16,4 @@ public:
 	void OnDestroy();
 
 	void OnUpdate(Timestep ts);
-
-private:
-	float test = 1.0f;
 };

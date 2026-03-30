@@ -15,6 +15,7 @@
 #include "EditorEvents.h"
 
 #include "engine/scene/SceneSerializer.h"
+#include "engine/scripting/ScriptingEngine.h"
 #include "engine/utils/PlatformUtils.h"
 
 #include "UIIcons.h"
@@ -81,19 +82,22 @@ namespace Polarity
 			}
 		});
 
-		POL_TRACE("Loading DLL..");
-		std::filesystem::path projectPath = Project::GetProjectDirectory();
-		projectPath /= "Binaries";
-		projectPath /= "Sandbox.dll";
+		
 
-		static void* gameDLL = DynamicLib::LoadDynamicLib(projectPath.string().c_str());
-		POL_CORE_ASSERT(gameDLL, "Failed to load game_load.dll");
+		
 
-		POL_TRACE("DLL Loaded");
+		Entity camEntity = m_Context.EditorScene->CreateEntity("Test");
+		camEntity.AddComponent<SpriteComponent>();
+		camEntity.AddComponent<AudioSourceComponent>();
+
+
+		auto& sc = camEntity.AddComponent<ScriptComponent>();
+		sc.ScriptName = "Player";
+		
 
 		//onUpdatePtr = (OnUpdateFn)DynamicLib::LoadDynamicFunction(gameDLL, "OnUpdate");
 		//POL_CORE_ASSERT(onUpdatePtr, "Failed to load OnUpdate");
-
+		/*
 		auto createScript = (ScriptableEntity * (*)())DynamicLib::LoadDynamicFunction(gameDLL, "CreateScript");
 		auto destroyScript = (void(*)(ScriptableEntity*))DynamicLib::LoadDynamicFunction(gameDLL, "DestroyScript");
 
@@ -106,6 +110,7 @@ namespace Polarity
 		auto& sc = camEntity.AddComponent<ScriptComponent>();
 		sc.InstantiateScript = createScript;
 		sc.DestroyScript = destroyScript;
+		*/
 
 		//-------------------------------------------------------- Entites
 		
@@ -155,6 +160,11 @@ namespace Polarity
 	{
 		POL_PROFILE_FUNCTION();
 
+		std::filesystem::path dllPath = Project::GetProjectDirectory();
+		dllPath /= "Binaries";
+		dllPath /= "Sandbox.dll";
+
+		ScriptEngine::Update(dllPath);
 		//------------ Render ---------------------------------------
 		{
 			POLARITY_PROFILE_SCOPE("Render Draw");
