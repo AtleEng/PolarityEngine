@@ -312,9 +312,6 @@
     <ClInclude Include="src\engine\scene\ScriptableEntity.h">
       <Filter>Header Files\src\engine\scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scripting\ScriptAPI.h">
-      <Filter>Header Files\src\engine\scripting</Filter>
-    </ClInclude>
     <ClInclude Include="src\engine\utils\PlatformUtils.h">
       <Filter>Header Files\src\engine\utils</Filter>
     </ClInclude>

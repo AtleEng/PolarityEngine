@@ -8,14 +8,30 @@ namespace Polarity
 {
 	void* ScriptEngine::s_DLL;
 	long long ScriptEngine::m_LastEditTimestamp;
-	std::vector<std::string> ScriptEngine::s_ScriptNames;
+	std::unordered_map<std::string, ScriptClass> ScriptEngine::s_Scripts;
 
 	void ScriptEngine::Init()
 	{
 
 	}
 
-	void ScriptEngine::Update(const std::filesystem::path& dllPath)
+	void ScriptEngine::Shutdown()
+	{
+
+	}
+
+	void ScriptEngine::Load(const std::filesystem::path& dllPath)
+	{
+		POL_TRACE("Loading DLL..");
+		s_DLL = DynamicLib::LoadDynamicLib(dllPath.string().c_str());
+		POL_CORE_ASSERT(s_DLL, "Failed to load dll");
+
+		auto registerScripts = (void(*)())DynamicLib::LoadDynamicFunction(s_DLL, "RegisterAllScripts");
+		registerScripts();
+		POL_TRACE("DLL Loaded");
+	}
+
+	void ScriptEngine::Reload(const std::filesystem::path& dllPath)
 	{
 		long long currentTimestamp = GetTimestamp(dllPath.string().c_str());
 		if (currentTimestamp > m_LastEditTimestamp)
@@ -29,31 +45,27 @@ namespace Polarity
 				POL_CORE_TRACE("Freed DLL");
 			}
 
-			POL_TRACE("Loading DLL..");
-			s_DLL = DynamicLib::LoadDynamicLib(dllPath.string().c_str());
-			POL_CORE_ASSERT(s_DLL, "Failed to load dll");
+			Load(dllPath);
 
-			POL_TRACE("DLL Loaded");
-			auto registerScripts = (void(*)())DynamicLib::LoadDynamicFunction(s_DLL, "RegisterAllScripts");
-			registerScripts();
-
-			std::vector<const char*> outNames = {};
-			auto getScriptsNames = (void(*)(std::vector<const char*>&))DynamicLib::LoadDynamicFunction(s_DLL, "GetScriptNames");
+			std::vector<ScriptClass> outNames = {};
+			auto getScriptsNames = (void(*)(std::vector<ScriptClass>&))DynamicLib::LoadDynamicFunction(s_DLL, "GetScripts");
 			getScriptsNames(outNames);
 
-			s_ScriptNames.clear();
+			s_Scripts.clear();
 			for (int i = 0; i < outNames.size(); i++)
 			{
-				s_ScriptNames.push_back(outNames[i]);
-				POL_CORE_TRACE(s_ScriptNames[i].c_str());
-			}
-
-			
+				s_Scripts.emplace(outNames[i].Name, outNames[i]);
+				POL_CORE_TRACE(outNames[i].Name.c_str());
+			}	
 		}
 	}
-	void ScriptEngine::Shutdown()
-	{
 
+	void ScriptEngine::OnRuntimeStart(Scene* scene)
+	{
+	}
+
+	void ScriptEngine::OnRuntimeStop()
+	{
 	}
 
 	ScriptableEntity* ScriptEngine::Create(const std::string& name)
@@ -66,9 +78,29 @@ namespace Polarity
 	{
 	}
 
-	const std::vector<std::string>& ScriptEngine::GetScriptNames()
+	const ScriptClass* ScriptEngine::GetScript(std::string& name)
 	{
-		return s_ScriptNames;
+		auto it = s_Scripts.find(name);
+		if (it == s_Scripts.end())
+		{
+			POL_ERROR("Script: %s not found!", name.c_str());
+			return nullptr;
+		}
+
+		return &it->second;
+	}
+
+	const std::vector<std::string> ScriptEngine::GetScriptsID()
+	{
+		std::vector<std::string> ids;
+		ids.reserve(s_Scripts.size());
+
+		for (const auto& [key, value] : s_Scripts)
+		{
+			ids.push_back(key);
+		}
+
+		return ids;
 	}
 
 }

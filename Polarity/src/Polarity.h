@@ -46,6 +46,7 @@
 #include "engine/scene/Components.h"
 
 // ----- Scripting --------------------------------
+#include "engine/scripting/ScriptingEngine.h"
 #include "engine/scripting/ScriptingInput.h"
 
 // ----- Utility ----------------------------------

@@ -17,12 +17,23 @@ namespace Polarity
 
 		static Ref<Scene> Copy(Ref<Scene> other);
 
+		// ------------------ Scene -
 		void OnRuntimeStart();
 		void OnRuntimeStop();
 
 		void OnUpdateRuntime(Timestep ts);
 		void OnUpdateEditor(Timestep ts, EditorCamera& camera);
+		void Step(int frames = 1);
+		void SetPaused(bool paused) { m_IsPaused = paused; }
+
+		bool IsRunning() const { return m_IsRunning; }
+		bool IsPaused() const { return m_IsPaused; }
+
 		void OnViewportResize(uint32_t width, uint32_t height);
+
+		// ------------------ Entities -
+		Entity FindEntityByName(std::string name);
+		Entity GetEntityByUUID(UUID uuid);
 
 		Entity CreateEntity(const std::string name = "Entity");
 		Entity CreateEntityWithUUID(UUID uuid, const std::string name = "Entity");
@@ -34,7 +45,7 @@ namespace Polarity
 		bool IsAlive(ECS::Entity handle);
 		Entity GetPrimaryCameraEntity();
 
-
+		// ------------------ Registry -
 		template<typename First, typename... Rest>
 		std::vector<Entity> GetView()
 		{
@@ -57,11 +68,15 @@ namespace Polarity
 				entity.GetComponent<CameraComponent>().Camera.SetViewPortSize(m_ViewportWidth, m_ViewportHeight);
 			}
 		}
+
 	private:
 		ECS::Registry m_Registry;
-		std::vector<ECS::Entity> m_DestroyQueue;
 
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+
+		bool m_IsRunning = false;
+		bool m_IsPaused = false;
+		int m_StepFrames = 0;
 
 		friend class Entity;
 		friend class SceneSerializer;

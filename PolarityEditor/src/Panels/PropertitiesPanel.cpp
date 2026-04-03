@@ -453,9 +453,9 @@ namespace Polarity
 			ImGui::Checkbox("Is Looping", &component.Loop);
 		});
 
-		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+		DrawComponent<ScriptComponent>("Script", entity, [this](auto& component)
 		{
-			std::vector<std::string> scriptNames = ScriptEngine::GetScriptNames();
+			std::vector<std::string> scripts = ScriptEngine::GetScriptsID();
 
 			const char* current = component.ScriptName.empty()
 				? "None"
@@ -463,13 +463,26 @@ namespace Polarity
 
 			if (ImGui::BeginCombo("Script", current))
 			{
-				for (const auto& name : scriptNames)
 				{
-					bool isSelected = (component.ScriptName == name);
+					bool isSelected = (component.ScriptName == "");
 
-					if (ImGui::Selectable(name.c_str(), isSelected))
+					if (ImGui::Selectable("None", isSelected))
 					{
-						component.ScriptName = name;
+						component.ScriptName = "";
+						component.Instance = nullptr;
+					}
+
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				for (const auto& script : scripts)
+				{
+					bool isSelected = (component.ScriptName == script);
+
+					if (ImGui::Selectable(script.c_str(), isSelected))
+					{
+						component.ScriptName = script;
 						component.Instance = nullptr;
 					}
 
@@ -478,6 +491,38 @@ namespace Polarity
 				}
 
 				ImGui::EndCombo();
+			}
+			if (component.ScriptName != "" && component.Instance)
+			{
+				auto scriptClass = ScriptEngine::GetScript(std::string(current));
+				if (scriptClass)
+				{
+					bool sceneRunning = m_Context->ActiveScene->IsRunning();
+
+					if (sceneRunning)
+					{
+						
+						for (auto& field : scriptClass->Fields)
+						{
+							POL_WARN("Field count: %zu", scriptClass->Fields.size());
+							char* base = (char*)component.Instance;
+							void* data = base + field.Offset;
+
+							switch (field.Type)
+							{
+							case FieldType::Float:
+								ImGui::DragFloat(field.Name.c_str(), (float*)data); break;
+							case FieldType::Int:
+								ImGui::DragInt(field.Name.c_str(), (int*)data); break;
+							case FieldType::Bool:
+								ImGui::Checkbox(field.Name.c_str(), (bool*)data); break;
+							default:
+								ImGui::Text("Unknown field type: %s", field.Name.c_str());
+								break;
+							}
+						}
+					}
+				}
 			}
 		});
 

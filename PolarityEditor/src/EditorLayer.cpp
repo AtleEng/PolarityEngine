@@ -97,11 +97,9 @@ namespace Polarity
 		dllPath /= "Binaries";
 		dllPath /= "Sandbox.dll";
 
-		ScriptEngine::Update(dllPath);
+		ScriptEngine::Reload(dllPath);
 		//------------ Render ---------------------------------------
 		{
-			POLARITY_PROFILE_SCOPE("Render Draw");
-
 			Renderer2D::ResetStats();
 
 			m_Context.ViewportFramebuffer->Bind();
@@ -252,8 +250,10 @@ namespace Polarity
 	{
 		if (e.GetRepeatCount() > 0)
 			return false;
+
 		bool ctrl = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
 		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+
 		switch (e.GetKeyCode())
 		{
 		case Key::N:
@@ -681,7 +681,7 @@ namespace Polarity
 		POL_TRACE("Scene Playing...");
 		m_SceneState = SceneState::Play;
 
-		m_Context.SetSelected({});
+		m_Context.SetSelected({}); //TODO remember selected between play-edit
 		m_Context.ActiveScene = Scene::Copy(m_Context.EditorScene);
 		m_Context.ActiveScene->OnRuntimeStart();
 	}

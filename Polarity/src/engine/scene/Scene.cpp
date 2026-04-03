@@ -105,41 +105,52 @@ namespace Polarity
 
 	void Scene::OnRuntimeStart()
 	{
-		POL_PROFILE_FUNCTION();
+		m_IsRunning = true;
 	}
 
 	void Scene::OnRuntimeStop()
 	{
-		POL_PROFILE_FUNCTION();
+		m_IsRunning = false;
 	}
 
 	void Scene::OnUpdateRuntime(Timestep tS)
 	{
 		POL_PROFILE_FUNCTION();
-		// ---------------------------------------------------------- Update Scripts --
-		{
-			for (auto entity : m_Registry.GetView<ScriptComponent>())
-			{
-				auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
-				if (!script.Instance)
-				{
-					script.Instance = ScriptEngine::Create(script.ScriptName);
-					if (script.Instance)
-					{
-						script.Instance->m_Entity = Entity{ entity, this };
-						script.Instance->m_Input = &Application::Get().GetInput();
 
-						script.Instance->OnCreate();
+		if (!m_IsPaused || m_StepFrames-- > 0)
+		{
+			// ---------------------------------------------------------- Update Scripts --
+			{
+				POLARITY_PROFILE_SCOPE("Polarity::SceneRuntime::Scripts");
+
+				for (auto entity : m_Registry.GetView<ScriptComponent>())
+				{
+					auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
+					if (!script.Instance)
+					{
+						script.Instance = ScriptEngine::Create(script.ScriptName);
+						if (script.Instance)
+						{
+							script.Instance->m_Entity = Entity{ entity, this };
+							script.Instance->m_Input = &Application::Get().GetInput();
+
+							script.Instance->OnCreate();
+						}
 					}
+					if (script.Instance)
+						script.Instance->OnUpdate(tS);
 				}
-				if (script.Instance)
-					script.Instance->OnUpdate(tS);
 			}
+
+			// Add other system here in the future
+			// Physics
 		}
 		// ----------------------------------------------- Find Main Camera in Scene --
 		Camera* mainCamera = nullptr;
 		glm::mat4 cameraTransform;
 		{
+			POLARITY_PROFILE_SCOPE("Polarity::SceneRuntime::FindMainCamera");
+
 			for (auto entity : m_Registry.GetView<CameraComponent, TransformComponent>())
 			{
 				auto& camera = m_Registry.GetComponent<CameraComponent>(entity);
@@ -153,9 +164,12 @@ namespace Polarity
 				}
 			}
 		}
+
 		// ---------------------------------------------------------- Render Sprites --
 		if (mainCamera)
 		{
+			POLARITY_PROFILE_SCOPE("Polarity::SceneRuntime::Render");
+
 			Renderer2D::BeginScene(mainCamera->GetProjection(), cameraTransform);
 
 			for (auto entity : m_Registry.GetView<TransformComponent, SpriteComponent>())
@@ -173,16 +187,12 @@ namespace Polarity
 			POL_CORE_ERROR("No camera in scene!")
 		}
 		// ----------------------------------------------------------------------------
-
-		for (auto e : m_DestroyQueue)
-		{
-			m_DestroyQueue.push_back(e);
-		}
 	}
 
 	void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
 	{
 		POL_PROFILE_FUNCTION();
+
 		// ---------------------------------------------------------- Render Sprites --
 		Renderer2D::BeginScene(camera);
 
@@ -196,11 +206,11 @@ namespace Polarity
 
 		Renderer2D::EndScene();
 		// ----------------------------------------------------------------------------
+	}
 
-		for (auto e : m_DestroyQueue)
-		{
-			m_DestroyQueue.push_back(e);
-		}
+	void Scene::Step(int frames)
+	{
+		m_StepFrames = frames;
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)
@@ -216,6 +226,34 @@ namespace Polarity
 				camera.Camera.SetViewPortSize(width, height);
 			}
 		}
+	}
+
+	Entity Scene::FindEntityByName(std::string name)
+	{
+		POL_PROFILE_FUNCTION();
+		ECS::Entity target = ECS::INVALID_ENTITY;
+
+		for (auto entity : m_Registry.GetView<NameComponent>())
+		{
+			if (m_Registry.GetComponent<NameComponent>(entity).Name == name)
+			{
+				return { entity, this };
+			}
+		}
+		POL_WARN("No entity called %s in Scene", name.c_str());
+		return {};
+	}
+
+	Entity Scene::GetEntityByUUID(UUID uuid)
+	{
+		POL_PROFILE_FUNCTION();
+		/*
+		if (m_EntityMap.find(uuid) != m_EntityMap.end())
+			return { m_EntityMap.at(uuid), this };
+
+		*/
+		POL_WARN("No entity with UUID: %i", uuid);
+		return {};
 	}
 
 	Entity Scene::CreateEntity(std::string name)
@@ -248,18 +286,11 @@ namespace Polarity
 
 	void Scene::DestroyEntity(std::string name)
 	{
-		ECS::Entity target = ECS::INVALID_ENTITY;
+		POL_PROFILE_FUNCTION();
+		
+		auto& target = FindEntityByName(name);
 
-		for (auto entity : m_Registry.GetView<NameComponent>())
-		{
-			if (m_Registry.GetComponent<NameComponent>(entity).Name == name)
-			{
-				target = entity;
-				break;
-			}
-		}
-
-		if (target != ECS::INVALID_ENTITY)
+		if (target)
 		{
 			DestroyEntity(target);
 			POL_CORE_INFO("Scene: Destroyed entity: %s", name.c_str());
@@ -272,8 +303,15 @@ namespace Polarity
 
 	void Scene::DestroyEntity(ECS::Entity handle)
 	{
-		POL_CORE_INFO("Scene: Destroyed entity id: %d", handle);
+		POL_PROFILE_FUNCTION();
+		if (m_Registry.HasComponent<ScriptComponent>(handle))
+		{
+			auto script = m_Registry.GetComponent<ScriptComponent>(handle);
+			script.Instance->OnDestroy();
+		}
+
 		m_Registry.DestroyEntity(handle);
+		POL_CORE_INFO("Scene: Destroyed entity id: %d", handle);
 	}
 
 	void Scene::ClearEntities()
@@ -283,6 +321,7 @@ namespace Polarity
 
 	bool Scene::IsAlive(ECS::Entity handle)
 	{
+		POL_PROFILE_FUNCTION();
 		return m_Registry.IsAlive(handle);
 	}
 
