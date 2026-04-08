@@ -126,19 +126,23 @@ namespace Polarity
 				for (auto entity : m_Registry.GetView<ScriptComponent>())
 				{
 					auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
-					if (!script.Instance)
-					{
-						script.Instance = ScriptEngine::Create(script.ScriptName);
-						if (script.Instance)
-						{
-							script.Instance->m_Entity = Entity{ entity, this };
-							script.Instance->m_Input = &Application::Get().GetInput();
 
-							script.Instance->OnCreate();
+					if (!script.ScriptAsset)
+						continue;
+
+					if (!script.ScriptAsset->m_Instance)
+					{
+						auto* scriptableEntity = ScriptEngine::Create(script.ScriptName);
+						if (scriptableEntity)
+						{
+							scriptableEntity->m_Entity = Entity{ entity, this };
+							scriptableEntity->m_Input = &Application::Get().GetInput();
+							script.ScriptAsset->m_Instance = scriptableEntity;
+							scriptableEntity->OnCreate();
 						}
 					}
-					if (script.Instance)
-						script.Instance->OnUpdate(tS);
+					if (script.ScriptAsset->m_Instance)
+						script.ScriptAsset->m_Instance->OnUpdate(tS);
 				}
 			}
 
@@ -307,7 +311,7 @@ namespace Polarity
 		if (m_Registry.HasComponent<ScriptComponent>(handle))
 		{
 			auto script = m_Registry.GetComponent<ScriptComponent>(handle);
-			script.Instance->OnDestroy();
+			script.ScriptAsset->m_Instance->OnDestroy();
 		}
 
 		m_Registry.DestroyEntity(handle);

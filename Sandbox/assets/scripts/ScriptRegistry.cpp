@@ -13,7 +13,7 @@ ScriptableEntity* CreateInstance()
 template<typename T>
 void RegisterScript(const std::string& name, std::initializer_list<ScriptField> fields)
 {
-    ScriptClass sc;
+    ScriptTemplate sc;
     sc.Name = name;
     sc.Factory = &CreateInstance<T>;
     sc.Fields = fields;
@@ -49,7 +49,7 @@ extern "C"
         delete ptr;
     }
 
-    POL_EXPORT_FN void GetScripts(std::vector<ScriptClass>& outScripts)
+    POL_EXPORT_FN void GetScripts(std::vector<ScriptTemplate>& outScripts)
     {
         for (auto& [_, it] : s_Registry.Scripts)
             outScripts.push_back(it);

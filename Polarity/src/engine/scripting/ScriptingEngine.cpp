@@ -8,7 +8,27 @@ namespace Polarity
 {
 	void* ScriptEngine::s_DLL;
 	long long ScriptEngine::m_LastEditTimestamp;
-	std::unordered_map<std::string, ScriptClass> ScriptEngine::s_Scripts;
+	std::unordered_map<std::string, ScriptTemplate> ScriptEngine::s_Scripts;
+
+
+	ScriptAsset::ScriptAsset(const ScriptTemplate& scriptTemplate)
+		: m_Template(scriptTemplate), m_Instance(nullptr), m_Fields(std::vector<ScriptField>())
+	{
+
+	}
+
+	ScriptAsset::~ScriptAsset()
+	{
+	}
+
+	Ref<ScriptAsset> ScriptAsset::Create(const ScriptTemplate& scriptTemplate)
+	{
+		auto& scA = CreateRef<ScriptAsset>(scriptTemplate);
+		scA->m_Fields = scriptTemplate.Fields;
+		return scA;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////
 
 	void ScriptEngine::Init()
 	{
@@ -47,8 +67,8 @@ namespace Polarity
 
 			Load(dllPath);
 
-			std::vector<ScriptClass> outNames = {};
-			auto getScriptsNames = (void(*)(std::vector<ScriptClass>&))DynamicLib::LoadDynamicFunction(s_DLL, "GetScripts");
+			std::vector<ScriptTemplate> outNames = {};
+			auto getScriptsNames = (void(*)(std::vector<ScriptTemplate>&))DynamicLib::LoadDynamicFunction(s_DLL, "GetScripts");
 			getScriptsNames(outNames);
 
 			s_Scripts.clear();
@@ -78,7 +98,7 @@ namespace Polarity
 	{
 	}
 
-	const ScriptClass* ScriptEngine::GetScript(std::string& name)
+	const ScriptTemplate* ScriptEngine::GetScript(std::string& name)
 	{
 		auto it = s_Scripts.find(name);
 		if (it == s_Scripts.end())
@@ -90,17 +110,16 @@ namespace Polarity
 		return &it->second;
 	}
 
-	const std::vector<std::string> ScriptEngine::GetScriptsID()
+	const std::vector<ScriptTemplate> ScriptEngine::GetScripts()
 	{
-		std::vector<std::string> ids;
+		std::vector<ScriptTemplate> ids;
 		ids.reserve(s_Scripts.size());
 
 		for (const auto& [key, value] : s_Scripts)
 		{
-			ids.push_back(key);
+			ids.push_back(value);
 		}
 
 		return ids;
 	}
-
 }

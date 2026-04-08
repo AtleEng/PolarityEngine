@@ -5,6 +5,7 @@
 #include "engine/core/UUID.h"
 #include "engine/renderer/Texture.h"
 #include "engine/audio/Audio.h"
+#include "engine/scripting/ScriptingTypes.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -81,29 +82,12 @@ namespace Polarity
 		CameraComponent(const CameraComponent&) = default;
 	};
 
-	class ScriptableEntity; // forward declaration, see 'ScriptableEntity.h' (It includes Entity which we dont want Components.h to know about)
-
 	struct ScriptComponent
 	{
+		Ref<ScriptAsset> ScriptAsset = nullptr;
 		std::string ScriptName;
-		ScriptableEntity* Instance = nullptr;
 
-		ScriptableEntity* (*InstantiateScript)() = nullptr;
-		void (*DestroyScript)(ScriptableEntity*) = nullptr;
-
-		template<typename T>
-		void Bind()
-		{
-			InstantiateScript = []() -> ScriptableEntity*
-			{
-				return new T();
-			};
-
-			DestroyScript = [](ScriptableEntity* instance)
-			{
-				delete instance;
-			};
-		}
+		std::vector<ScriptFieldInstance> StoredFields;
 	};
 
 	template<typename... Component>
@@ -113,6 +97,5 @@ namespace Polarity
 
 	using AllComponents =
 		ComponentGroup<TransformComponent, SpriteComponent,
-		CameraComponent, ScriptComponent,
-		ScriptComponent, AudioSourceComponent>;
+		CameraComponent, ScriptComponent, AudioSourceComponent>;
 }

@@ -4,5 +4,5 @@ using namespace Polarity;
 
 struct ScriptRegistry
 {
-	std::unordered_map<std::string, ScriptClass> Scripts;
+	std::unordered_map<std::string, ScriptTemplate> Scripts;
 };

@@ -34,6 +34,9 @@
     <Filter Include="Source Files\src\engine\scene">
       <UniqueIdentifier>{22866531-8E9E-4C5B-574B-DCF4C322E1F4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\scripting">
+      <UniqueIdentifier>{878833B5-F3F6-8834-3CE0-4334A88D7ED0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\utils">
       <UniqueIdentifier>{651A9331-D132-7A5B-9ADF-09F506B70EF5}</UniqueIdentifier>
     </Filter>
@@ -311,6 +314,15 @@
     </ClInclude>
     <ClInclude Include="src\engine\scene\ScriptableEntity.h">
       <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\ScriptingEngine.h">
+      <Filter>Header Files\src\engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\ScriptingInput.h">
+      <Filter>Header Files\src\engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\utils\FileUtils.h">
+      <Filter>Header Files\src\engine\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\utils\PlatformUtils.h">
       <Filter>Header Files\src\engine\utils</Filter>
@@ -1647,9 +1659,7 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\scripting\ScriptingInput.h" />
-    <ClInclude Include="src\engine\utils\FileUtils.h" />
-    <ClInclude Include="src\engine\scripting\ScriptingEngine.h" />
+    <ClInclude Include="src\engine\scripting\ScriptingTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
@@ -1745,6 +1755,12 @@
     <ClCompile Include="src\engine\scene\SceneSerializer.cpp">
       <Filter>Source Files\src\engine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scripting\ScriptingEngine.cpp">
+      <Filter>Source Files\src\engine\scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\scripting\ScriptingInput.cpp">
+      <Filter>Source Files\src\engine\scripting</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\utils\Random.cpp">
       <Filter>Source Files\src\engine\utils</Filter>
     </ClCompile>
@@ -1826,7 +1842,5 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\scripting\ScriptingInput.cpp" />
-    <ClCompile Include="src\engine\scripting\ScriptingEngine.cpp" />
   </ItemGroup>
 </Project>

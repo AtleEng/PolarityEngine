@@ -455,7 +455,7 @@ namespace Polarity
 
 		DrawComponent<ScriptComponent>("Script", entity, [this](auto& component)
 		{
-			std::vector<std::string> scripts = ScriptEngine::GetScriptsID();
+			auto& scriptTemplates = ScriptEngine::GetScripts();
 
 			const char* current = component.ScriptName.empty()
 				? "None"
@@ -469,21 +469,34 @@ namespace Polarity
 					if (ImGui::Selectable("None", isSelected))
 					{
 						component.ScriptName = "";
-						component.Instance = nullptr;
+						component.ScriptAsset = nullptr;
 					}
 
 					if (isSelected)
 						ImGui::SetItemDefaultFocus();
 				}
 
-				for (const auto& script : scripts)
+				for (auto& scriptTemplate : scriptTemplates)
 				{
-					bool isSelected = (component.ScriptName == script);
+					bool isSelected = (component.ScriptName == scriptTemplate.Name);
 
-					if (ImGui::Selectable(script.c_str(), isSelected))
+					if (ImGui::Selectable(scriptTemplate.Name.c_str(), isSelected))
 					{
-						component.ScriptName = script;
-						component.Instance = nullptr;
+						component.ScriptName = scriptTemplate.Name;
+						Ref<ScriptAsset> scriptAsset = ScriptAsset::Create(scriptTemplate);
+						component.ScriptAsset = scriptAsset;
+
+						component.StoredFields.clear();
+						component.StoredFields.reserve(component.ScriptAsset->m_Fields.size());
+
+						POL_INFO("Fields for script");
+						for (const auto& field : component.ScriptAsset->m_Fields)
+						{
+							POL_INFO("%s", field.Name.c_str());
+							ScriptFieldInstance instance;
+							instance.Field = field;
+							component.StoredFields.emplace_back(std::move(instance));
+						}
 					}
 
 					if (isSelected)
@@ -492,35 +505,29 @@ namespace Polarity
 
 				ImGui::EndCombo();
 			}
-			if (component.ScriptName != "" && component.Instance)
+			
+			if (component.ScriptAsset)
 			{
-				auto scriptClass = ScriptEngine::GetScript(std::string(current));
-				if (scriptClass)
+				for (auto& storedField : component.StoredFields)
 				{
-					bool sceneRunning = m_Context->ActiveScene->IsRunning();
+					
+					std::string name = storedField.Field.Name.c_str();
+					//TODO Fix sometimes get violation :|
+					//void* data = storedField.GetData();
 
-					if (sceneRunning)
+					switch (storedField.Field.Type)
 					{
-						
-						for (auto& field : scriptClass->Fields)
-						{
-							POL_WARN("Field count: %zu", scriptClass->Fields.size());
-							char* base = (char*)component.Instance;
-							void* data = base + field.Offset;
-
-							switch (field.Type)
-							{
-							case FieldType::Float:
-								ImGui::DragFloat(field.Name.c_str(), (float*)data); break;
-							case FieldType::Int:
-								ImGui::DragInt(field.Name.c_str(), (int*)data); break;
-							case FieldType::Bool:
-								ImGui::Checkbox(field.Name.c_str(), (bool*)data); break;
-							default:
-								ImGui::Text("Unknown field type: %s", field.Name.c_str());
-								break;
-							}
-						}
+					/* 
+					case FieldType::Float:
+						ImGui::DragFloat(name.c_str(), (float*)data); break;
+					case FieldType::Int:
+						ImGui::DragInt(name.c_str(), (int*)data); break;
+					case FieldType::Bool:
+						ImGui::Checkbox(name.c_str(), (bool*)data); break;
+					*/
+					default:
+						ImGui::Text("Unknown field type: %s", name.c_str());
+						break;
 					}
 				}
 			}
