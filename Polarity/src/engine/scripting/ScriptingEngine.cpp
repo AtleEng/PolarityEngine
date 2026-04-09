@@ -12,7 +12,7 @@ namespace Polarity
 
 
 	ScriptAsset::ScriptAsset(const ScriptTemplate& scriptTemplate)
-		: m_Template(scriptTemplate), m_Instance(nullptr), m_Fields(std::vector<ScriptField>())
+		: m_Template(scriptTemplate), m_Fields(std::vector<ScriptField>())
 	{
 
 	}
@@ -90,8 +90,13 @@ namespace Polarity
 
 	ScriptableEntity* ScriptEngine::Create(const std::string& name)
 	{
+		POL_CORE_INFO("ScriptableEntity %s created!", name.c_str());
+
 		auto createScript = (ScriptableEntity * (*)(const char*))DynamicLib::LoadDynamicFunction(s_DLL, "CreateScript");
-		return createScript(name.c_str());
+		auto scriptableEntity = createScript(name.c_str());
+		
+
+		return scriptableEntity;
 	}
 
 	void ScriptEngine::Destroy(ScriptableEntity* instance)

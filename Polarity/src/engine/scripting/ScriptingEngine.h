@@ -18,7 +18,6 @@ namespace Polarity
         static Ref<ScriptAsset> Create(const ScriptTemplate& scriptTemplate);
 
         const ScriptTemplate& m_Template;
-        ScriptableEntity* m_Instance;
 
         std::vector<ScriptField> m_Fields;
     };

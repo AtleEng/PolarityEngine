@@ -120,30 +120,29 @@ namespace Polarity
 		if (!m_IsPaused || m_StepFrames-- > 0)
 		{
 			// ---------------------------------------------------------- Update Scripts --
+			POLARITY_PROFILE_SCOPE("Polarity::SceneRuntime::Scripts");
+
+			for (auto entity : m_Registry.GetView<ScriptComponent>())
 			{
-				POLARITY_PROFILE_SCOPE("Polarity::SceneRuntime::Scripts");
+				auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
 
-				for (auto entity : m_Registry.GetView<ScriptComponent>())
+				if (!script.ScriptAsset)
+					continue;
+
+				if (!script.Instance)
 				{
-					auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
-
-					if (!script.ScriptAsset)
-						continue;
-
-					if (!script.ScriptAsset->m_Instance)
+					auto instance = std::unique_ptr<ScriptableEntity>(ScriptEngine::Create(script.ScriptName));
+					if (instance)
 					{
-						auto* scriptableEntity = ScriptEngine::Create(script.ScriptName);
-						if (scriptableEntity)
-						{
-							scriptableEntity->m_Entity = Entity{ entity, this };
-							scriptableEntity->m_Input = &Application::Get().GetInput();
-							script.ScriptAsset->m_Instance = scriptableEntity;
-							scriptableEntity->OnCreate();
-						}
+						instance->m_Entity = Entity{ entity, this };
+						instance->m_Input = &Application::Get().GetInput();
+						script.Instance = std::move(instance);
+
+						script.Instance->OnCreate();
 					}
-					if (script.ScriptAsset->m_Instance)
-						script.ScriptAsset->m_Instance->OnUpdate(tS);
 				}
+				if (script.Instance)
+					script.Instance->OnUpdate(tS);
 			}
 
 			// Add other system here in the future
@@ -291,7 +290,7 @@ namespace Polarity
 	void Scene::DestroyEntity(std::string name)
 	{
 		POL_PROFILE_FUNCTION();
-		
+
 		auto& target = FindEntityByName(name);
 
 		if (target)
@@ -310,8 +309,13 @@ namespace Polarity
 		POL_PROFILE_FUNCTION();
 		if (m_Registry.HasComponent<ScriptComponent>(handle))
 		{
-			auto script = m_Registry.GetComponent<ScriptComponent>(handle);
-			script.ScriptAsset->m_Instance->OnDestroy();
+			auto& script = m_Registry.GetComponent<ScriptComponent>(handle);
+
+			if (script.Instance)
+			{
+				script.Instance->OnDestroy();
+				script.Instance.reset();
+			}
 		}
 
 		m_Registry.DestroyEntity(handle);

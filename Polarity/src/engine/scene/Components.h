@@ -84,6 +84,7 @@ namespace Polarity
 
 	struct ScriptComponent
 	{
+		Ref<ScriptableEntity> Instance = nullptr;
 		Ref<ScriptAsset> ScriptAsset = nullptr;
 		std::string ScriptName;
 
