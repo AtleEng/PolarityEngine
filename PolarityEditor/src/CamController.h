@@ -35,5 +35,4 @@ namespace Polarity {
 
 		bool isPaning = false;
 	};
-
 }

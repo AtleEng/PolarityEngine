@@ -457,19 +457,20 @@ namespace Polarity
 		{
 			auto& scriptTemplates = ScriptEngine::GetScripts();
 
-			const char* current = component.ScriptName.empty()
+			const char* current = component.Name.empty()
 				? "None"
-				: component.ScriptName.c_str();
+				: component.Name.c_str();
 
 			if (ImGui::BeginCombo("Script", current))
 			{
 				{
-					bool isSelected = (component.ScriptName == "");
+					bool isSelected = (component.Name == "");
 
 					if (ImGui::Selectable("None", isSelected))
 					{
-						component.ScriptName = "";
-						component.ScriptAsset = nullptr;
+						component.Name = "";
+						component.Template = nullptr;
+						component.Instance = nullptr;
 					}
 
 					if (isSelected)
@@ -478,21 +479,18 @@ namespace Polarity
 
 				for (auto& scriptTemplate : scriptTemplates)
 				{
-					bool isSelected = (component.ScriptName == scriptTemplate.Name);
+					bool isSelected = (component.Name == scriptTemplate.Name);
 
 					if (ImGui::Selectable(scriptTemplate.Name.c_str(), isSelected))
 					{
-						component.ScriptName = scriptTemplate.Name;
-						Ref<ScriptAsset> scriptAsset = ScriptAsset::Create(scriptTemplate);
-						component.ScriptAsset = scriptAsset;
+						component.Name = scriptTemplate.Name;
+						component.Template = CreateRef<ScriptTemplate>(scriptTemplate);
+						component.Instance = nullptr;
 
 						component.StoredFields.clear();
-						component.StoredFields.reserve(component.ScriptAsset->m_Fields.size());
-
-						POL_INFO("Fields for script");
-						for (const auto& field : component.ScriptAsset->m_Fields)
+						component.StoredFields.reserve(component.Template->Fields.size());
+						for (const auto& field : component.Template->Fields)
 						{
-							POL_INFO("%s", field.Name.c_str());
 							ScriptFieldInstance instance;
 							instance.Field = field;
 							component.StoredFields.emplace_back(std::move(instance));
@@ -505,26 +503,23 @@ namespace Polarity
 
 				ImGui::EndCombo();
 			}
-			
-			if (component.ScriptAsset)
+
+			if (component.Template)
 			{
 				for (auto& storedField : component.StoredFields)
-				{
-					
+				{				
 					std::string name = storedField.Field.Name.c_str();
-					//TODO Fix sometimes get violation :|
-					//void* data = storedField.GetData();
+					
+					void* data = storedField.GetData();
 
 					switch (storedField.Field.Type)
-					{
-					/* 
+					{ 
 					case FieldType::Float:
 						ImGui::DragFloat(name.c_str(), (float*)data); break;
 					case FieldType::Int:
 						ImGui::DragInt(name.c_str(), (int*)data); break;
 					case FieldType::Bool:
 						ImGui::Checkbox(name.c_str(), (bool*)data); break;
-					*/
 					default:
 						ImGui::Text("Unknown field type: %s", name.c_str());
 						break;

@@ -126,12 +126,12 @@ namespace Polarity
 			{
 				auto& script = m_Registry.GetComponent<ScriptComponent>(entity);
 
-				if (!script.ScriptAsset)
+				if (!script.Template)
 					continue;
 
 				if (!script.Instance)
 				{
-					auto instance = std::unique_ptr<ScriptableEntity>(ScriptEngine::Create(script.ScriptName));
+					auto instance = std::unique_ptr<ScriptableEntity>(ScriptEngine::Create(script.Name));
 					if (instance)
 					{
 						instance->m_Entity = Entity{ entity, this };
@@ -141,8 +141,10 @@ namespace Polarity
 						script.Instance->OnCreate();
 					}
 				}
-				if (script.Instance)
+				else 
+				{
 					script.Instance->OnUpdate(tS);
+				}
 			}
 
 			// Add other system here in the future
@@ -283,7 +285,7 @@ namespace Polarity
 		auto& transform = TransformComponent();
 		entity.AddComponent<TransformComponent>(transform);
 
-		POL_CORE_INFO("Scene: Created %s [%i]", name.c_str(), idComp.ID);
+		//POL_CORE_INFO("Scene: Created %s [%i]", name.c_str(), idComp.ID);
 		return entity;
 	}
 
@@ -296,7 +298,7 @@ namespace Polarity
 		if (target)
 		{
 			DestroyEntity(target);
-			POL_CORE_INFO("Scene: Destroyed entity: %s", name.c_str());
+			//POL_CORE_INFO("Scene: Destroyed entity: %s", name.c_str());
 		}
 		else
 		{

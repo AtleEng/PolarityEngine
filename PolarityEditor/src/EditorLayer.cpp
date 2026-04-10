@@ -54,6 +54,7 @@ namespace Polarity
 		if (commandLineArgs.Count > 1)
 		{
 			auto projectFilePath = commandLineArgs[1];
+
 			OpenProject(projectFilePath);
 		}
 		else
@@ -97,7 +98,10 @@ namespace Polarity
 		dllPath /= "Binaries";
 		dllPath /= "Sandbox.dll";
 
-		ScriptEngine::Reload(dllPath);
+		if (ScriptEngine::Reload(dllPath))
+		{
+			OpenScene(m_EditorSceneFilepath.string());
+		}
 		//------------ Render ---------------------------------------
 		{
 			Renderer2D::ResetStats();
@@ -550,6 +554,10 @@ namespace Polarity
 	{
 		if (Project::Load(path))
 		{
+			std::filesystem::path dllPath = Project::GetProjectDirectory();
+			dllPath /= "Binaries";
+			dllPath /= "Sandbox.dll";
+			ScriptEngine::Reload(dllPath);
 			auto startScenePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().StartScene;
 			OpenScene(startScenePath);
 			return true;
