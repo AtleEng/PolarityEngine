@@ -137,6 +137,7 @@ namespace Polarity
 						instance->m_Entity = Entity{ entity, this };
 						instance->m_Input = &Application::Get().GetInput();
 						script.Instance = std::move(instance);
+						ScriptEngine::ApplyFieldsToInstance(script);
 
 						script.Instance->OnCreate();
 					}

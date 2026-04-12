@@ -525,6 +525,10 @@ namespace Polarity
 						break;
 					}
 				}
+				if (component.Instance)
+				{
+					ScriptEngine::ApplyFieldsToInstance(component);
+				}
 			}
 		});
 

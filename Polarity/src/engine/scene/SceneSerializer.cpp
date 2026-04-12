@@ -203,7 +203,41 @@ namespace Polarity
 
 			auto& script = entity.GetComponent<ScriptComponent>();
 			out << YAML::Key << "ScriptName" << YAML::Value << script.Name;
-			//TODO save field data
+			out << YAML::Key << "Fields";
+			out << YAML::BeginSeq;
+
+			for (auto& fieldInstance : script.StoredFields)
+			{
+				const ScriptField& field = fieldInstance.Field;
+				const void* data = fieldInstance.GetData();
+
+				out << YAML::BeginMap;
+
+				out << YAML::Key << "Name" << YAML::Value << field.Name;
+				out << YAML::Key << "Type" << YAML::Value << (int)field.Type;
+
+				out << YAML::Key << "Value";
+
+				switch (field.Type)
+				{
+				case FieldType::Float:
+					out << *(float*)data;
+					break;
+				case FieldType::Int:
+					out << *(int*)data;
+					break;
+				case FieldType::Bool:
+					out << *(bool*)data;
+					break;
+				default:
+					out << 0;
+					break;
+				}
+
+				out << YAML::EndMap;
+			}
+
+			out << YAML::EndSeq;
 
 			out << YAML::EndMap;    // Component
 		}
@@ -341,12 +375,40 @@ namespace Polarity
 					script.Template = ScriptEngine::GetScript(script.Name);
 					if (script.Template)
 					{
-						script.StoredFields.reserve(script.Template->Fields.size());
-						for (const auto& field : script.Template->Fields)
+						auto fields = scriptComponent["Fields"];
+
+						for (auto fieldNode : fields)
 						{
-							ScriptFieldInstance instance;
-							instance.Field = field;
-							script.StoredFields.emplace_back(std::move(instance));
+							std::string name = fieldNode["Name"].as<std::string>();
+							FieldType type = (FieldType)fieldNode["Type"].as<int>();
+
+							// Find matching field in template
+							for (auto& templateField : script.Template->Fields)
+							{
+								if (templateField.Name == name)
+								{
+									ScriptFieldInstance instance;
+									instance.Field = templateField;
+
+									void* data = instance.GetData();
+
+									switch (type)
+									{
+									case FieldType::Float:
+										*(float*)data = fieldNode["Value"].as<float>();
+										break;
+									case FieldType::Int:
+										*(int*)data = fieldNode["Value"].as<int>();
+										break;
+									case FieldType::Bool:
+										*(bool*)data = fieldNode["Value"].as<bool>();
+										break;
+									}
+
+									script.StoredFields.push_back(instance);
+									break;
+								}
+							}
 						}
 					}
 					else

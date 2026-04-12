@@ -91,4 +91,36 @@ namespace Polarity
 	{
 		return s_Scripts;
 	}
+
+	void ScriptEngine::ApplyFieldsToInstance(ScriptComponent& component)
+	{
+		if (!component.Instance)
+		{
+			POL_CORE_WARN("ScriptEngine: ApplyFieldsToInstance failed, ScriptComponent doesn't have a instance!");
+			return;
+		}
+
+		for (auto& fieldInstance : component.StoredFields)
+		{
+			const ScriptField& field = fieldInstance.Field;
+
+			ScriptableEntity* instance = component.Instance.get();
+			uint8_t* instancePtr = reinterpret_cast<uint8_t*>(instance);
+			void* destination = instancePtr + field.Offset;
+			const void* source = fieldInstance.GetData();
+
+			switch (field.Type)
+			{
+			case FieldType::Float:
+				*(float*)destination = *(float*)source;
+				break;
+			case FieldType::Int:
+				*(int*)destination = *(int*)source;
+				break;
+			case FieldType::Bool:
+				*(bool*)destination = *(bool*)source;
+				break;
+			}
+		}
+	}
 }

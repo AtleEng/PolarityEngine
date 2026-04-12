@@ -20,6 +20,19 @@ Entities:
       FixedAspectRatio: false
     ScriptComponent:
       ScriptName: Cam
+      Fields:
+        - Name: speed
+          Type: 1
+          Value: 8
+        - Name: testFloat
+          Type: 1
+          Value: -1.5
+        - Name: testInt
+          Type: 2
+          Value: 2
+        - Name: testBool
+          Type: 3
+          Value: true
   - Entity: 716225168464169547
     NameComponent:
       Name: Pink Quad

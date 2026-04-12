@@ -84,7 +84,9 @@ namespace Polarity
 
 	struct ScriptComponent
 	{
+		// Script instance created in scene runtime
 		Ref<ScriptableEntity> Instance = nullptr;
+		// A Script template loaded from DLL
 		Ref<ScriptTemplate> Template = nullptr;
 
 		std::string Name;

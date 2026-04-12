@@ -26,6 +26,8 @@ namespace Polarity
         static const Ref<ScriptTemplate> GetScript(std::string& name);
         static const std::vector<ScriptTemplate> GetScripts();
 
+        static void ApplyFieldsToInstance(ScriptComponent& component);
+
     private:
         static void* s_DLL;
         static long long m_LastEditTimestamp;
