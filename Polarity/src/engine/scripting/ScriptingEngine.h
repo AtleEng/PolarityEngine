@@ -8,6 +8,8 @@
 
 namespace Polarity
 {
+    using CreateFn = ScriptableEntity * (*)(const char*);
+
     class ScriptEngine
     {
     public:
@@ -32,5 +34,6 @@ namespace Polarity
         static void* s_DLL;
         static long long m_LastEditTimestamp;
         static std::vector<ScriptTemplate> s_Scripts;
+        static CreateFn s_CreateScript;
     };
 }

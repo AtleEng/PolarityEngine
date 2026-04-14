@@ -23,7 +23,7 @@ Entities:
       Fields:
         - Name: speed
           Type: 1
-          Value: 8
+          Value: 4
         - Name: testFloat
           Type: 1
           Value: -1.5

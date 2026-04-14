@@ -342,7 +342,11 @@ namespace Polarity
 					{
 						std::string texturePath = spriteComponent["TexturePath"].as<std::string>();
 						auto path = Project::GetAssetDirectory() / texturePath;
-						sprite.Texture = Texture2D::Create(path.string());
+						Ref<Texture2D> tex = Texture2D::Create(path.string());
+						if (tex->IsLoaded())
+							sprite.Texture = tex;
+						else
+							POL_CORE_WARN("Could not load texture '%s'", path.filename().string().c_str());
 					}
 
 					sprite.Color = spriteComponent["Color"].as<glm::vec4>();

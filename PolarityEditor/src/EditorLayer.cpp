@@ -95,8 +95,8 @@ namespace Polarity
 		POL_PROFILE_FUNCTION();
 
 		std::filesystem::path dllPath = Project::GetProjectDirectory();
-		dllPath /= "Binaries";
-		dllPath /= "Sandbox.dll";
+		dllPath /= "bin";
+		dllPath /= "Game.dll";
 
 		if (ScriptEngine::Reload(dllPath))
 		{
@@ -555,8 +555,8 @@ namespace Polarity
 		if (Project::Load(path))
 		{
 			std::filesystem::path dllPath = Project::GetProjectDirectory();
-			dllPath /= "Binaries";
-			dllPath /= "Sandbox.dll";
+			dllPath /= "bin";
+			dllPath /= "Game.dll";
 			ScriptEngine::Reload(dllPath);
 			auto startScenePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().StartScene;
 			OpenScene(startScenePath);
@@ -595,6 +595,7 @@ namespace Polarity
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
 	{
 		m_Context.SetSelected({});
+		OnSceneStop();
 
 		std::string filename = path.filename().string();
 		if (path.extension().string() != ".pol")
