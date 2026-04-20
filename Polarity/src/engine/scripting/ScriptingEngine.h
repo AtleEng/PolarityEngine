@@ -13,23 +13,22 @@ namespace Polarity
     class ScriptEngine
     {
     public:
-        static void Init();
-        static void Shutdown();
+        // Check if the DLL should reload, reload and return true if it does
+        static bool Update(const std::filesystem::path& dllPath);
 
-        static void Load(const std::filesystem::path& dllPath);
-        static bool Reload(const std::filesystem::path& dllPath);
-
-        static void OnRuntimeStart(Scene* scene);
-        static void OnRuntimeStop();
-
-        static ScriptableEntity* Create(const std::string& name);
-        static void Destroy(ScriptableEntity* instance);
-
+        // Create a ScriptableEntity from the DLL from name
+        static ScriptableEntity* CreateInstance(const std::string& name);
+        // Get a loaded ScriptTemplate from DLL from name
         static const Ref<ScriptTemplate> GetScript(std::string& name);
+        // Get all loaded ScriptTemplates
         static const std::vector<ScriptTemplate> GetScripts();
-
+        // Apply all Fields in a ScriptComponent to its Instance (ScriptableEntity)
         static void ApplyFieldsToInstance(ScriptComponent& component);
-
+    private:
+        // Load the DLL from path and regester all scripts in it
+        static void Load(const std::filesystem::path& dllPath);
+        // Copy file and waits for it to be copied (~1 sec)
+        static bool TryCopyWithRetry(const std::filesystem::path& src, const std::filesystem::path& dst);
     private:
         static void* s_DLL;
         static long long m_LastEditTimestamp;

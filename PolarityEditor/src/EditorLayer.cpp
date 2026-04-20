@@ -98,7 +98,7 @@ namespace Polarity
 		dllPath /= "bin";
 		dllPath /= "Game.dll";
 
-		if (ScriptEngine::Reload(dllPath))
+		if (ScriptEngine::Update(dllPath))
 		{
 			OpenScene(m_EditorSceneFilepath.string());
 		}
@@ -557,7 +557,7 @@ namespace Polarity
 			std::filesystem::path dllPath = Project::GetProjectDirectory();
 			dllPath /= "bin";
 			dllPath /= "Game.dll";
-			ScriptEngine::Reload(dllPath);
+			ScriptEngine::Update(dllPath);
 			auto startScenePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().StartScene;
 			OpenScene(startScenePath);
 			return true;

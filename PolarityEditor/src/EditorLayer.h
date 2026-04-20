@@ -26,6 +26,7 @@ namespace Polarity
 		// Menu
 
 		// Project
+
 		void NewProject();
 		bool OpenProject();
 		bool OpenProject(const std::filesystem::path& path);
@@ -53,6 +54,7 @@ namespace Polarity
 
 		void OnScenePlay();
 		void OnSceneStop();
+
 		//void Step();
 
 	private:

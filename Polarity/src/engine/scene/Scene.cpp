@@ -131,7 +131,7 @@ namespace Polarity
 
 				if (!script.Instance)
 				{
-					auto instance = std::unique_ptr<ScriptableEntity>(ScriptEngine::Create(script.Name));
+					auto instance = std::unique_ptr<ScriptableEntity>(ScriptEngine::CreateInstance(script.Name));
 					if (instance)
 					{
 						instance->m_Entity = Entity{ entity, this };
