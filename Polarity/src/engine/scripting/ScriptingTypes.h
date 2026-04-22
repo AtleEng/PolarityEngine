@@ -2,8 +2,6 @@
 
 namespace Polarity
 {
-    #define POL_EXPOSE_VAR(...)
-    
     class ScriptableEntity;
     class ScriptAsset;
 

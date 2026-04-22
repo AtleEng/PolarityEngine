@@ -379,45 +379,56 @@ namespace Polarity
 					script.Template = ScriptEngine::GetScript(script.Name);
 					if (script.Template)
 					{
-						auto fields = scriptComponent["Fields"];
-
-						for (auto fieldNode : fields)
+						// Create default instances from template
+						for (auto& templateField : script.Template->Fields)
 						{
-							std::string name = fieldNode["Name"].as<std::string>();
-							FieldType type = (FieldType)fieldNode["Type"].as<int>();
+							ScriptFieldInstance instance;
+							instance.Field = templateField;
 
-							// Find matching field in template
-							for (auto& templateField : script.Template->Fields)
+							// TODO init default values
+
+							script.StoredFields.push_back(instance);
+						}
+
+						auto fields = scriptComponent["Fields"];
+						if (fields)
+						{
+							for (auto fieldNode : fields)
 							{
-								if (templateField.Name == name)
+								std::string name = fieldNode["Name"].as<std::string>();
+								FieldType type = (FieldType)fieldNode["Type"].as<int>();
+
+								// Find matching stored field created from template
+								for (auto& instance : script.StoredFields)
 								{
-									ScriptFieldInstance instance;
-									instance.Field = templateField;
-
-									void* data = instance.GetData();
-
-									switch (type)
+									if (instance.Field.Name == name)
 									{
-									case FieldType::Float:
-										*(float*)data = fieldNode["Value"].as<float>();
-										break;
-									case FieldType::Int:
-										*(int*)data = fieldNode["Value"].as<int>();
-										break;
-									case FieldType::Bool:
-										*(bool*)data = fieldNode["Value"].as<bool>();
+										void* data = instance.GetData();
+
+										switch (type)
+										{
+										case FieldType::Float:
+											*(float*)data = fieldNode["Value"].as<float>();
+											break;
+										case FieldType::Int:
+											*(int*)data = fieldNode["Value"].as<int>();
+											break;
+										case FieldType::Bool:
+											*(bool*)data = fieldNode["Value"].as<bool>();
+											break;
+										default:
+											POL_WARN("SceneSeralizer: Unknown data type in saved scene!");
+										}
+
 										break;
 									}
-
-									script.StoredFields.push_back(instance);
-									break;
 								}
 							}
 						}
 					}
 					else
 					{
-						POL_CORE_ERROR("Scene: No template: %s found", script.Name.c_str());
+						POL_CORE_ERROR("SceneSeralizer: No template: %s found", script.Name.c_str());
 					}
 				}
 			}

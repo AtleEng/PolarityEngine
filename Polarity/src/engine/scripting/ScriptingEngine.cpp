@@ -62,14 +62,10 @@ namespace Polarity
 		s_DLL = DynamicLib::LoadDynamicLib(dllPath.string().c_str());
 		POL_CORE_ASSERT(s_DLL, "Failed to load dll");
 
-		auto registerScripts = (void(*)())DynamicLib::LoadDynamicFunction(s_DLL, "RegisterAllScripts");
-		registerScripts();
-
 		auto getScripts = (void(*)(std::vector<ScriptTemplate>&))DynamicLib::LoadDynamicFunction(s_DLL, "GetScripts");
 		getScripts(s_Scripts);
 
-		s_CreateScript = (CreateFn)
-			DynamicLib::LoadDynamicFunction(s_DLL, "CreateScript");
+		s_CreateScript = (CreateFn)DynamicLib::LoadDynamicFunction(s_DLL, "CreateScript");
 
 		POL_CORE_TRACE("DLL %s Loaded", dllPath.stem().string().c_str());
 	}
