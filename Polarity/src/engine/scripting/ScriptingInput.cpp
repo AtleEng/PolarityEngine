@@ -30,12 +30,20 @@ namespace Polarity
 			m_CurrentMouse[e.GetMouseButton()] = false;
 			return false;
 		});
+
+		dispatcher.Dispatch<MouseMovedEvent>([this](auto& e)
+		{
+			m_CurrentMousePos = { e.GetX(), e.GetY() };
+			return false;
+		});
 	}
 
 	void ScriptingInput::OnUpdate()
 	{
 		m_PreviousKeys = m_CurrentKeys;
 		m_PreviousMouse = m_CurrentMouse;
+
+		m_PreviousMousePos = m_CurrentMousePos;
 	}
 
 	bool ScriptingInput::IsKeyDown(KeyCode key) const
@@ -66,5 +74,25 @@ namespace Polarity
 	bool ScriptingInput::IsMouseButtonReleased(MouseCode button) const
 	{
 		return !m_CurrentMouse[button] && m_PreviousMouse[button];
+	}
+
+	glm::vec2 ScriptingInput::GetMouse() const
+	{
+		return m_CurrentMousePos;
+	}
+
+	glm::vec2 ScriptingInput::GetMouseDelta() const
+	{
+		return m_CurrentMousePos - m_PreviousMousePos;
+	}
+
+	float ScriptingInput::GetMouseX() const
+	{
+		return m_CurrentMousePos.x;
+	}
+
+	float ScriptingInput::GetMouseY() const
+	{
+		return m_CurrentMousePos.y;
 	}
 }

@@ -27,9 +27,10 @@ namespace Polarity {
 		bool IsMouseButtonReleased(MouseCode button) const;
 
 		// get mouse screen position
-		glm::vec2 GetMousePosition();
-		float GetMouseX();
-		float GetMouseY();
+		glm::vec2 GetMouse() const;
+		glm::vec2 GetMouseDelta() const;
+		float GetMouseX() const;
+		float GetMouseY() const;
 
 	private:
 		std::array<bool, 512> m_CurrentKeys{};
@@ -37,5 +38,8 @@ namespace Polarity {
 
 		std::array<bool, 16> m_CurrentMouse{};
 		std::array<bool, 16> m_PreviousMouse{};
+
+		glm::vec2 m_CurrentMousePos{};
+		glm::vec2 m_PreviousMousePos{};
 	};
 }
