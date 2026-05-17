@@ -30,7 +30,13 @@ project "Polarity"
         "thirdparty/glm/glm/**.inl",
 
         "thirdparty/ImGuizmo/**.h",
-        "thirdparty/ImGuizmo/**.cpp"
+        "thirdparty/ImGuizmo/**.cpp",
+
+        "thirdparty/imgui/imgui.cpp",
+        "thirdparty/imgui/imgui_draw.cpp",
+        "thirdparty/imgui/imgui_tables.cpp",
+        "thirdparty/imgui/imgui_widgets.cpp",
+        "thirdparty/imgui/imgui_demo.cpp"
     }
 
     defines
@@ -64,12 +70,14 @@ project "Polarity"
     {
         "GLFW",
         "Glad",
-        "ImGui",
+        --"ImGui",
         "opengl32.lib",
         "yaml-cpp"
     }
 
     filter "files:thirdparty/ImGuizmo/**.cpp"
+    flags { "NoPCH" }
+    filter "files:thirdparty/ImGui/**.cpp"
     flags { "NoPCH" }
 
     filter "system:windows"

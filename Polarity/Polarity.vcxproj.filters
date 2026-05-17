@@ -13,6 +13,9 @@
     <Filter Include="Source Files\src\engine\ECS">
       <UniqueIdentifier>{EF7F3393-5B8D-6179-E473-5D6450802D30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\Project">
+      <UniqueIdentifier>{6B7A59BE-D75D-68FE-E060-963A4CC32E4F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\audio">
       <UniqueIdentifier>{06A72930-72BF-105A-3B6C-A0F3A743A5F3}</UniqueIdentifier>
     </Filter>
@@ -30,6 +33,9 @@
     </Filter>
     <Filter Include="Source Files\src\engine\scene">
       <UniqueIdentifier>{22866531-8E9E-4C5B-574B-DCF4C322E1F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src\engine\scripting">
+      <UniqueIdentifier>{878833B5-F3F6-8834-3CE0-4334A88D7ED0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\src\engine\utils">
       <UniqueIdentifier>{651A9331-D132-7A5B-9ADF-09F506B70EF5}</UniqueIdentifier>
@@ -52,6 +58,9 @@
     <Filter Include="Source Files\thirdparty\ImGuizmo\example">
       <UniqueIdentifier>{DE63BADE-CAE0-AD21-F35D-AE35DF394AB5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\thirdparty\imgui">
+      <UniqueIdentifier>{ED24806C-593D-6796-22EA-F62F8EC1FB2F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\thirdparty\stb_image">
       <UniqueIdentifier>{9DD16497-0940-BA16-5229-7516BED6AFB2}</UniqueIdentifier>
     </Filter>
@@ -66,6 +75,9 @@
     </Filter>
     <Filter Include="Header Files\src\engine\ECS">
       <UniqueIdentifier>{278C2486-9399-526C-1C80-4E57888C1E23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\Project">
+      <UniqueIdentifier>{A3E2E59E-0FC6-F4DE-18C9-221B842BBB2F}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\audio">
       <UniqueIdentifier>{3EA18EA3-AAB9-75CD-7366-0567DF3D0A67}</UniqueIdentifier>
@@ -90,6 +102,9 @@
     </Filter>
     <Filter Include="Header Files\src\engine\scene">
       <UniqueIdentifier>{5A80CAA4-C698-B1CE-8F45-4168FB1C4668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\scripting">
+      <UniqueIdentifier>{BFDE7AEA-2B4D-D069-7436-8B69E0E3C505}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\utils">
       <UniqueIdentifier>{9D14F8A4-092D-DFCE-D2D9-6E683EB17368}</UniqueIdentifier>
@@ -174,6 +189,12 @@
     <ClInclude Include="src\engine\ECS\Types.h">
       <Filter>Header Files\src\engine\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Project\Project.h">
+      <Filter>Header Files\src\engine\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Project\ProjectSerializer.h">
+      <Filter>Header Files\src\engine\Project</Filter>
+    </ClInclude>
     <ClInclude Include="src\engine\audio\Audio.h">
       <Filter>Header Files\src\engine\audio</Filter>
     </ClInclude>
@@ -205,6 +226,9 @@
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\core\Timestep.h">
+      <Filter>Header Files\src\engine\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\core\UUID.h">
       <Filter>Header Files\src\engine\core</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\core\Window.h">
@@ -290,6 +314,18 @@
     </ClInclude>
     <ClInclude Include="src\engine\scene\ScriptableEntity.h">
       <Filter>Header Files\src\engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\ScriptingEngine.h">
+      <Filter>Header Files\src\engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\ScriptingInput.h">
+      <Filter>Header Files\src\engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\scripting\ScriptingTypes.h">
+      <Filter>Header Files\src\engine\scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\utils\FileUtils.h">
+      <Filter>Header Files\src\engine\utils</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\utils\PlatformUtils.h">
       <Filter>Header Files\src\engine\utils</Filter>
@@ -1626,9 +1662,6 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine\Project\Project.h" />
-    <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
-    <ClInclude Include="src\engine\core\UUID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
@@ -1636,6 +1669,12 @@
     </ClCompile>
     <ClCompile Include="src\engine\ECS\Registry.cpp">
       <Filter>Source Files\src\engine\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Project\Project.cpp">
+      <Filter>Source Files\src\engine\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp">
+      <Filter>Source Files\src\engine\Project</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\audio\Audio.cpp">
       <Filter>Source Files\src\engine\audio</Filter>
@@ -1650,6 +1689,9 @@
       <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\core\Log.cpp">
+      <Filter>Source Files\src\engine\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\core\UUID.cpp">
       <Filter>Source Files\src\engine\core</Filter>
     </ClCompile>
     <ClCompile Include="src\engine\core\Window.cpp">
@@ -1715,6 +1757,12 @@
     <ClCompile Include="src\engine\scene\SceneSerializer.cpp">
       <Filter>Source Files\src\engine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\scripting\ScriptingEngine.cpp">
+      <Filter>Source Files\src\engine\scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\scripting\ScriptingInput.cpp">
+      <Filter>Source Files\src\engine\scripting</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\utils\Random.cpp">
       <Filter>Source Files\src\engine\utils</Filter>
     </ClCompile>
@@ -1778,11 +1826,23 @@
     <ClCompile Include="thirdparty\ImGuizmo\example\main.cpp">
       <Filter>Source Files\thirdparty\ImGuizmo\example</Filter>
     </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_demo.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_draw.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_tables.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_widgets.cpp">
+      <Filter>Source Files\thirdparty\imgui</Filter>
+    </ClCompile>
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine\Project\Project.cpp" />
-    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp" />
-    <ClCompile Include="src\engine\core\UUID.cpp" />
   </ItemGroup>
 </Project>

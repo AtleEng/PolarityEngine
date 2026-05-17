@@ -147,15 +147,14 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\engine\core\UUID.h" />
-    <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
-    <ClInclude Include="src\engine\Project\Project.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\ECS\ComponentManager.h" />
     <ClInclude Include="src\engine\ECS\EntityManager.h" />
     <ClInclude Include="src\engine\ECS\Registry.h" />
     <ClInclude Include="src\engine\ECS\SystemManager.h" />
     <ClInclude Include="src\engine\ECS\Types.h" />
+    <ClInclude Include="src\engine\Project\Project.h" />
+    <ClInclude Include="src\engine\Project\ProjectSerializer.h" />
     <ClInclude Include="src\engine\audio\Audio.h" />
     <ClInclude Include="src\engine\core\Application.h" />
     <ClInclude Include="src\engine\core\Core.h" />
@@ -167,6 +166,7 @@
     <ClInclude Include="src\engine\core\Log.h" />
     <ClInclude Include="src\engine\core\Timer.h" />
     <ClInclude Include="src\engine\core\Timestep.h" />
+    <ClInclude Include="src\engine\core\UUID.h" />
     <ClInclude Include="src\engine\core\Window.h" />
     <ClInclude Include="src\engine\debug\Instrumentor.h" />
     <ClInclude Include="src\engine\events\ApplicationEvent.h" />
@@ -195,6 +195,10 @@
     <ClInclude Include="src\engine\scene\SceneCamera.h" />
     <ClInclude Include="src\engine\scene\SceneSerializer.h" />
     <ClInclude Include="src\engine\scene\ScriptableEntity.h" />
+    <ClInclude Include="src\engine\scripting\ScriptingEngine.h" />
+    <ClInclude Include="src\engine\scripting\ScriptingInput.h" />
+    <ClInclude Include="src\engine\scripting\ScriptingTypes.h" />
+    <ClInclude Include="src\engine\utils\FileUtils.h" />
     <ClInclude Include="src\engine\utils\PlatformUtils.h" />
     <ClInclude Include="src\engine\utils\Random.h" />
     <ClInclude Include="src\platform\openGL\OpenGLBuffer.h" />
@@ -642,20 +646,20 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\core\UUID.cpp" />
     <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
+    <ClCompile Include="src\engine\Project\Project.cpp" />
+    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp" />
     <ClCompile Include="src\engine\audio\Audio.cpp" />
     <ClCompile Include="src\engine\core\Application.cpp" />
     <ClCompile Include="src\engine\core\Layer.cpp" />
     <ClCompile Include="src\engine\core\LayerStack.cpp" />
     <ClCompile Include="src\engine\core\Log.cpp" />
+    <ClCompile Include="src\engine\core\UUID.cpp" />
     <ClCompile Include="src\engine\core\Window.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\engine\imGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\engine\math\Math.cpp" />
-    <ClCompile Include="src\engine\Project\Project.cpp" />
-    <ClCompile Include="src\engine\Project\ProjectSerializer.cpp" />
     <ClCompile Include="src\engine\renderer\Buffer.cpp" />
     <ClCompile Include="src\engine\renderer\EditorCamera.cpp" />
     <ClCompile Include="src\engine\renderer\Framebuffer.cpp" />
@@ -673,6 +677,8 @@
     <ClCompile Include="src\engine\scene\Scene.cpp" />
     <ClCompile Include="src\engine\scene\SceneCamera.cpp" />
     <ClCompile Include="src\engine\scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\engine\scripting\ScriptingEngine.cpp" />
+    <ClCompile Include="src\engine\scripting\ScriptingInput.cpp" />
     <ClCompile Include="src\engine\utils\Random.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\platform\openGL\OpenGLContext.cpp" />
@@ -712,6 +718,24 @@
     <ClCompile Include="thirdparty\ImGuizmo\example\main.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui.cpp">
+      <ObjectFileName>$(IntDir)\imgui1.obj</ObjectFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_demo.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_draw.cpp">
+      <ObjectFileName>$(IntDir)\imgui_draw1.obj</ObjectFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_tables.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="thirdparty\imgui\imgui_widgets.cpp">
+      <ObjectFileName>$(IntDir)\imgui_widgets1.obj</ObjectFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -720,9 +744,6 @@
     </ProjectReference>
     <ProjectReference Include="thirdparty\Glad\Glad.vcxproj">
       <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
-    </ProjectReference>
-    <ProjectReference Include="thirdparty\imgui\ImGui.vcxproj">
-      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
     </ProjectReference>
     <ProjectReference Include="thirdparty\yaml-cpp\yaml-cpp.vcxproj">
       <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>

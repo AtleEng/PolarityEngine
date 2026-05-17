@@ -15,6 +15,7 @@
 #include "EditorEvents.h"
 
 #include "engine/scene/SceneSerializer.h"
+#include "engine/scripting/ScriptingEngine.h"
 #include "engine/utils/PlatformUtils.h"
 
 #include "UIIcons.h"
@@ -53,6 +54,7 @@ namespace Polarity
 		if (commandLineArgs.Count > 1)
 		{
 			auto projectFilePath = commandLineArgs[1];
+
 			OpenProject(projectFilePath);
 		}
 		else
@@ -81,43 +83,6 @@ namespace Polarity
 			}
 		});
 
-		//-------------------------------------------------------- Entites
-		
-		/*
-		class CamControll : public ScriptableEntity
-		{
-		public:
-			float speed = 5.0f;
-
-			void OnCreate()
-			{
-
-			}
-
-			void OnDestroy()
-			{
-
-			}
-
-			void OnUpdate(Timestep ts)
-			{
-				auto& position = GetComponent<TransformComponent>().Position;
-
-				if (Input::IsKeyPressed(Key::A))
-					position.x -= speed * ts;
-				if (Input::IsKeyPressed(Key::D))
-					position.x += speed * ts;
-				if (Input::IsKeyPressed(Key::W))
-					position.y += speed * ts;
-				if (Input::IsKeyPressed(Key::S))
-					position.y -= speed * ts;
-			}
-		private:
-			float test = 1.0f;
-		};
-
-		*/
-		//camEntity.AddComponent<ScriptComponent>().Bind<CamControll>();
 	}
 
 	void EditorLayer::OnDetach()
@@ -128,11 +93,17 @@ namespace Polarity
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		POL_PROFILE_FUNCTION();
-		
+
+		std::filesystem::path dllPath = Project::GetProjectDirectory();
+		dllPath /= "bin";
+		dllPath /= "Game.dll";
+
+		if (ScriptEngine::Update(dllPath))
+		{
+			OpenScene(m_EditorSceneFilepath.string());
+		}
 		//------------ Render ---------------------------------------
 		{
-			POLARITY_PROFILE_SCOPE("Render Draw");
-
 			Renderer2D::ResetStats();
 
 			m_Context.ViewportFramebuffer->Bind();
@@ -283,8 +254,10 @@ namespace Polarity
 	{
 		if (e.GetRepeatCount() > 0)
 			return false;
+
 		bool ctrl = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
 		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+
 		switch (e.GetKeyCode())
 		{
 		case Key::N:
@@ -409,6 +382,32 @@ namespace Polarity
 			Renderer2D::BeginScene(m_Context.EditorCamera);
 		}
 
+		if (m_DrawGrid)
+		{
+			float axisLength = 10.0f;
+
+			// X axis (red)
+			Renderer2D::DrawLine(
+				glm::vec3(-axisLength, 0.0f, 0.0f),
+				glm::vec3(axisLength, 0.0f, 0.0f),
+				glm::vec4(1, 0, 0, 0.1f)
+			);
+
+			// Y axis (Blue)
+			Renderer2D::DrawLine(
+				glm::vec3(0.0f, -axisLength, 0.0f),
+				glm::vec3(0.0f, axisLength, 0.0f),
+				glm::vec4(0, 0, 1, 0.1f)
+			);
+
+			// Z axis (green)
+			Renderer2D::DrawLine(
+				glm::vec3(0.0f, 0.0f, -axisLength),
+				glm::vec3(0.0f, 0.0f, axisLength),
+				glm::vec4(0, 1, 0, 0.1f)
+			);
+		}
+
 		// Draw selected entity outline
 		
 		if (Entity selectedEntity = m_Context.GetSelected())
@@ -419,7 +418,7 @@ namespace Polarity
 
 			glm::mat4 transformMat = transform.GetTransform();
 
-			// Local space square (centered at origin)
+			// Local space square
 			glm::vec4 p0 = transformMat * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
 			glm::vec4 p1 = transformMat * glm::vec4(0.5f, -0.5f, 0.0f, 1.0f);
 			glm::vec4 p2 = transformMat * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
@@ -555,6 +554,10 @@ namespace Polarity
 	{
 		if (Project::Load(path))
 		{
+			std::filesystem::path dllPath = Project::GetProjectDirectory();
+			dllPath /= "bin";
+			dllPath /= "Game.dll";
+			ScriptEngine::Update(dllPath);
 			auto startScenePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().StartScene;
 			OpenScene(startScenePath);
 			return true;
@@ -587,11 +590,13 @@ namespace Polarity
 		{
 			OpenScene(filepath);
 		}
-		POL_ERROR("Scene: %s failed to deserialize!", filepath.c_str());
 	}
 
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
 	{
+		m_Context.SetSelected({});
+		OnSceneStop();
+
 		std::string filename = path.filename().string();
 		if (path.extension().string() != ".pol")
 		{
@@ -685,7 +690,7 @@ namespace Polarity
 		POL_TRACE("Scene Playing...");
 		m_SceneState = SceneState::Play;
 
-		m_Context.SetSelected({});
+		m_Context.SetSelected({}); //TODO remember selected between play-edit
 		m_Context.ActiveScene = Scene::Copy(m_Context.EditorScene);
 		m_Context.ActiveScene->OnRuntimeStart();
 	}

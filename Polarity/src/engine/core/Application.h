@@ -10,6 +10,7 @@
 #include "engine/events/ApplicationEvent.h"
 
 #include "engine/imGui/ImGuiLayer.h"
+#include "engine/scripting/ScriptingInput.h"
 
 namespace Polarity {
 
@@ -47,6 +48,7 @@ namespace Polarity {
 		void PushOverlay(Layer* layer);
 
 		Window& GetWindow() { return *m_window; }
+		ScriptingInput& GetInput() { return *m_Input; }
 
 		static Application& Get() { return *s_instance; }
 		ImGuiLayer& GetImGuiLayer() { return *m_imGuiLayer; }
@@ -60,6 +62,7 @@ namespace Polarity {
 	private:    
 		ApplicationSpecification m_Specification;
 		Scope<Window> m_window;
+		Scope<ScriptingInput> m_Input;
 
 		bool m_running = true;
 		bool m_minimized = false;

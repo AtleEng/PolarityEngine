@@ -1,6 +1,8 @@
 #include "polpch.h"
 #include "PropertitiesPanel.h"
 
+#include "engine/scripting/ScriptingEngine.h"
+
 #include <imgui/imgui_internal.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -451,9 +453,83 @@ namespace Polarity
 			ImGui::Checkbox("Is Looping", &component.Loop);
 		});
 
-		DrawComponent<ScriptComponent>("Script", entity, [](auto& component)
+		DrawComponent<ScriptComponent>("Script", entity, [this](auto& component)
 		{
-			ImGui::Text("Script");
+			auto& scriptTemplates = ScriptEngine::GetScripts();
+
+			const char* current = component.Name.empty()
+				? "None"
+				: component.Name.c_str();
+
+			if (ImGui::BeginCombo("Script", current))
+			{
+				{
+					bool isSelected = (component.Name == "");
+
+					if (ImGui::Selectable("None", isSelected))
+					{
+						component.Name = "";
+						component.Template = nullptr;
+						component.Instance = nullptr;
+					}
+
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				for (auto& scriptTemplate : scriptTemplates)
+				{
+					bool isSelected = (component.Name == scriptTemplate.Name);
+
+					if (ImGui::Selectable(scriptTemplate.Name.c_str(), isSelected))
+					{
+						component.Name = scriptTemplate.Name;
+						component.Template = CreateRef<ScriptTemplate>(scriptTemplate);
+						component.Instance = nullptr;
+
+						component.StoredFields.clear();
+						component.StoredFields.reserve(component.Template->Fields.size());
+						for (const auto& field : component.Template->Fields)
+						{
+							ScriptFieldInstance instance;
+							instance.Field = field;
+							component.StoredFields.emplace_back(std::move(instance));
+						}
+					}
+
+					if (isSelected)
+						ImGui::SetItemDefaultFocus();
+				}
+
+				ImGui::EndCombo();
+			}
+
+			if (component.Template)
+			{
+				for (auto& storedField : component.StoredFields)
+				{				
+					std::string name = storedField.Field.Name.c_str();
+					
+					void* data = storedField.GetData();
+
+					switch (storedField.Field.Type)
+					{ 
+					case FieldType::Float:
+						ImGui::DragFloat(name.c_str(), (float*)data); break;
+					case FieldType::Int:
+						ImGui::DragInt(name.c_str(), (int*)data); break;
+					case FieldType::Bool:
+						ImGui::Checkbox(name.c_str(), (bool*)data); break;
+					default:
+						ImGui::Text("Unknown field type: %s", name.c_str());
+						break;
+					}
+				}
+				if (component.Instance)
+				{
+					ScriptEngine::ApplyFieldsToInstance(component);
+				}
+			}
 		});
 
 		ImGui::End();

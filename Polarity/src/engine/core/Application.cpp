@@ -19,27 +19,28 @@ namespace Polarity {
 	{
 		POL_PROFILE_FUNCTION();
 
-		Logger::Init();
 		POL_CORE_ASSERT(!s_instance, "Core: Application already exist!");
 		s_instance = this;
 
-		std::string info = "Core: PolarityEngine v0.01 ";
+		POL_CORE_INFO("PolarityEngine");
 
-		info += "- ";
+		std::string info = "Config: ";
 		info += POLARITY_CONFIG;
 		info += " - ";
 		info += POLARITY_PLATFORM;
 		info += " ";
 		info += POLARITY_ARCH;
 
+		POL_CORE_INFO(info.c_str());
+
+		std::string info2 = "RendererAPI: ";
 		switch (Renderer::GetAPI())
 		{
-		case RendererAPI::API::None:		info += " - None"; break;
-		case RendererAPI::API::OpenGL:		info += " - OpenGL"; break;
-		default:							info += " - Unknown"; break;
+		case RendererAPI::API::None:		info2 += "None"; break;
+		case RendererAPI::API::OpenGL:		info2 += "OpenGL"; break;
+		default:							info2 += "Unknown"; break;
 		}
-		info += "\n";
-		POL_CORE_INFO(info.c_str());
+		POL_CORE_INFO(info2.c_str());
 
 
 		if (!m_Specification.WorkingDirectory.empty())
@@ -48,6 +49,7 @@ namespace Polarity {
 		m_window = Window::Create(WindowProps(m_Specification.Name));
 		m_window->SetEventCallback(POLARITY_BIND_EVENT_FN(Application::OnEvent));
 
+		m_Input = CreateScope<ScriptingInput>();
 		
 		Renderer::Init();
 		Audio::Init();
@@ -66,6 +68,8 @@ namespace Polarity {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(POLARITY_BIND_EVENT_FN(Application::OnWindowResize));
+
+		m_Input->OnEvent(e);
 
 		for (auto i = m_layerStack.end(); i != m_layerStack.begin();)
 		{
@@ -99,8 +103,12 @@ namespace Polarity {
 			Timestep timeStep = time - m_lastFrameTime;
 			m_lastFrameTime = time;
 
+			m_Input->OnUpdate();
+			m_window->OnUpdate();
+
 			if (!m_minimized)
 			{
+
 				for (Layer* layer : m_layerStack)
 				{
 					POLARITY_PROFILE_SCOPE("OnUpdate");
@@ -115,7 +123,6 @@ namespace Polarity {
 				}
 				m_imGuiLayer->End();
 			}
-			m_window->OnUpdate();
 		}
 	}
 

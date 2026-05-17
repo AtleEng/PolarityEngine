@@ -150,7 +150,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\CamController.h" />
     <ClInclude Include="src\EditorEvents.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\Panels\AssetsPanel.h" />
@@ -163,7 +162,6 @@
     <ClInclude Include="src\UIIcons.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\CamController.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\Panels\AssetsPanel.cpp" />

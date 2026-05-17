@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "engine/scripting/ScriptingInput.h"
 
 namespace Polarity {
 
@@ -14,6 +15,7 @@ namespace Polarity {
 		{
 			return m_Entity.GetComponent<T>();
 		}
+
 	protected:
 		// Runs once at creation
 		virtual void OnCreate() {}
@@ -21,8 +23,11 @@ namespace Polarity {
 		virtual void OnDestroy() {}
 		// Runs every frame
 		virtual void OnUpdate(Timestep ts) {}
+
+		ScriptingInput* m_Input = nullptr;
 	private:
 		Entity m_Entity;
+
 		friend class Scene;
 	};
 

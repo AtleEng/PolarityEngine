@@ -2,6 +2,7 @@
 -- Polarity Dependencies
 
 VULKAN_SDK = os.getenv("VULKAN_SDK")
+assert(VULKAN_SDK, "VULKAN_SDK environment variable not set!")
 
 IncludeDir = {}
 IncludeDir["stb_image"] =   "%{wks.location}/Polarity/thirdparty/stb_image"
