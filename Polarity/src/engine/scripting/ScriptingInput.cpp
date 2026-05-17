@@ -36,6 +36,13 @@ namespace Polarity
 			m_CurrentMousePos = { e.GetX(), e.GetY() };
 			return false;
 		});
+
+		dispatcher.Dispatch<MouseScrolledEvent>([this](auto& e)
+		{
+			m_Scrolled.x += e.GetXOffset();
+			m_Scrolled.y += e.GetYOffset();
+			return false;
+		});
 	}
 
 	void ScriptingInput::OnUpdate()
@@ -44,6 +51,8 @@ namespace Polarity
 		m_PreviousMouse = m_CurrentMouse;
 
 		m_PreviousMousePos = m_CurrentMousePos;
+
+		m_Scrolled = { 0.0f, 0.0f };
 	}
 
 	bool ScriptingInput::IsKeyDown(KeyCode key) const
@@ -94,5 +103,15 @@ namespace Polarity
 	float ScriptingInput::GetMouseY() const
 	{
 		return m_CurrentMousePos.y;
+	}
+
+	float ScriptingInput::GetMouseScrolledX() const
+	{
+		return m_Scrolled.x;
+	}
+
+	float ScriptingInput::GetMouseScrolledY() const
+	{
+		return m_Scrolled.y;
 	}
 }

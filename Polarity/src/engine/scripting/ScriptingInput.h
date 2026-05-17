@@ -32,6 +32,9 @@ namespace Polarity {
 		float GetMouseX() const;
 		float GetMouseY() const;
 
+		float GetMouseScrolledX() const;
+		float GetMouseScrolledY() const;
+
 	private:
 		std::array<bool, 512> m_CurrentKeys{};
 		std::array<bool, 512> m_PreviousKeys{};
@@ -41,5 +44,7 @@ namespace Polarity {
 
 		glm::vec2 m_CurrentMousePos{};
 		glm::vec2 m_PreviousMousePos{};
+
+		glm::vec2 m_Scrolled{};
 	};
 }
