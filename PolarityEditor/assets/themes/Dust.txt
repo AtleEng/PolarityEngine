@@ -1,0 +1,112 @@
+# ==========================================================
+# Dust - Polarity theme
+# ==========================================================
+
+# ---------- TEXT ----------
+
+Text 0.92 0.90 0.85 1
+TextDisabled 0.55 0.53 0.50 1
+
+# ---------- WINDOWS ----------
+
+WindowBg 0.12 0.11 0.10 1
+ChildBg 0.14 0.13 0.12 1
+PopupBg 0.16 0.15 0.14 1
+
+Border 0.28 0.26 0.24 1
+BorderShadow 0 0 0 0
+
+# ---------- FRAME / INPUT ----------
+
+FrameBg 0.20 0.18 0.16 1
+FrameBgHovered 0.28 0.25 0.22 1
+FrameBgActive 0.35 0.30 0.26 1
+
+# ---------- TITLES ----------
+
+TitleBg 0.10 0.09 0.08 1
+TitleBgActive 0.14 0.12 0.10 1
+TitleBgCollapsed 0.08 0.07 0.06 1
+
+MenuBarBg 0.10 0.09 0.08 1
+
+# ---------- SCROLLBARS ----------
+
+ScrollbarBg 0.08 0.07 0.06 1
+ScrollbarGrab 0.60 0.40 0.25 1
+ScrollbarGrabHovered 0.85 0.20 0.20 1
+ScrollbarGrabActive 1.00 0.15 0.15 1
+
+# ---------- CHECK / SLIDER ----------
+
+# NASA SIGNAL RED ACCENT (changed from orange)
+CheckMark 0.95 0.18 0.18 1
+
+SliderGrab 0.75 0.20 0.20 1
+SliderGrabActive 1.00 0.15 0.15 1
+
+# ---------- BUTTONS ----------
+
+Button 0.18 0.16 0.14 1
+ButtonHovered 0.85 0.20 0.20 1
+ButtonActive 1.00 0.15 0.15 1
+
+# ---------- HEADERS ----------
+
+Header 0.18 0.16 0.14 1
+HeaderHovered 0.85 0.20 0.20 1
+HeaderActive 1.00 0.15 0.15 1
+
+# ---------- SEPARATORS ----------
+
+Separator 0.30 0.28 0.25 1
+SeparatorHovered 0.85 0.20 0.20 1
+SeparatorActive 1.00 0.15 0.15 1
+
+# ---------- RESIZE ----------
+
+ResizeGrip 0.30 0.28 0.25 1
+ResizeGripHovered 0.85 0.20 0.20 1
+ResizeGripActive 1.00 0.15 0.15 1
+
+# ---------- TABS ----------
+
+Tab 0.14 0.13 0.12 1
+TabHovered 0.85 0.20 0.20 1
+TabActive 0.20 0.18 0.16 1
+TabUnfocused 0.10 0.09 0.08 1
+TabUnfocusedActive 0.16 0.15 0.14 1
+
+# ---------- DOCKING ----------
+
+DockingPreview 1.00 0.15 0.15 0.25
+DockingEmptyBg 0.08 0.07 0.06 1
+
+# ---------- PLOTS ----------
+
+PlotLines 0.90 0.80 0.70 1
+PlotLinesHovered 1.00 0.15 0.15 1
+
+PlotHistogram 0.85 0.20 0.20 1
+PlotHistogramHovered 1.00 0.25 0.25 1
+
+# ---------- TABLES ----------
+
+TableHeaderBg 0.15 0.14 0.13 1
+TableBorderStrong 0.28 0.26 0.24 1
+TableBorderLight 0.20 0.19 0.18 1
+
+TableRowBg 0 0 0 0
+TableRowBgAlt 1 1 1 0.03
+
+# ---------- SELECTION ----------
+
+TextSelectedBg 1.00 0.15 0.15 0.25
+DragDropTarget 1.00 0.25 0.25 1
+
+# ---------- NAV ----------
+
+NavHighlight 1.00 0.15 0.15 1
+NavWindowingHighlight 1 1 1 0.75
+NavWindowingDimBg 0 0 0 0.20
+ModalWindowDimBg 0 0 0 0.55

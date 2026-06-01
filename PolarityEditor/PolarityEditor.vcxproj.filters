@@ -39,6 +39,7 @@
     <ClInclude Include="src\UIIcons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\EditorTheme.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorApp.cpp">
@@ -68,6 +69,7 @@
     <ClCompile Include="src\UIIcons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\EditorTheme.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />
