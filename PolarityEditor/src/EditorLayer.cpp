@@ -19,6 +19,7 @@
 #include "engine/utils/PlatformUtils.h"
 
 #include "UIIcons.h"
+#include "EditorTheme.h"
 
 namespace Polarity
 {
@@ -32,6 +33,7 @@ namespace Polarity
 		POL_PROFILE_FUNCTION();
 
 		UIIcons::Init();
+		EditorTheme::Load("assets/themes/Default.txt");
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf", 18.0f);
@@ -157,53 +159,14 @@ namespace Polarity
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
 			ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
-
-		style.WindowMenuButtonPosition = -1; // cant find ImGui enum (none)
+		/*
+		style.WindowMenuButtonPosition = 0; // cant find ImGui enum (none)
 		style.TabRounding = 0;
 		style.ScrollbarRounding = 0;
 		style.ScrollbarSize = 6;
+		*/
 
-		ImVec4* colors = ImGui::GetStyle().Colors;
-		{
-			ImVec4 backgroundColor = ImVec4(0.15f, 0.15f, 0.16f, 1.00f);
-			colors[ImGuiCol_WindowBg] = backgroundColor;
-			colors[ImGuiCol_ChildBg] = backgroundColor;
-			colors[ImGuiCol_PopupBg] = backgroundColor;
-			colors[ImGuiCol_TitleBg] = backgroundColor;
-			colors[ImGuiCol_TitleBgActive] = backgroundColor;
-			colors[ImGuiCol_TitleBgCollapsed] = backgroundColor;
-			colors[ImGuiCol_MenuBarBg] = backgroundColor;
-			colors[ImGuiCol_Tab] = backgroundColor;
-			colors[ImGuiCol_TabActive] = backgroundColor;
-			colors[ImGuiCol_TabUnfocused] = backgroundColor;
-			colors[ImGuiCol_TabUnfocusedActive] = backgroundColor;
-			colors[ImGuiCol_ScrollbarBg] = backgroundColor;
-
-			ImVec4 iteamBaseColor = ImVec4(0.20f, 0.19f, 0.18f, 1.00f);
-			colors[ImGuiCol_FrameBg] = iteamBaseColor;
-			colors[ImGuiCol_Button] = iteamBaseColor;
-			colors[ImGuiCol_Header] = iteamBaseColor;
-			colors[ImGuiCol_TabHovered] = iteamBaseColor;
-			colors[ImGuiCol_ScrollbarGrab] = iteamBaseColor;
-			colors[ImGuiCol_SliderGrab] = iteamBaseColor;
-			colors[ImGuiCol_ResizeGrip] = iteamBaseColor;
-
-			ImVec4 iteamHoveredColor = ImVec4(0.31f, 0.29f, 0.27f, 1.00f);
-			colors[ImGuiCol_FrameBgHovered] = iteamHoveredColor;
-			colors[ImGuiCol_FrameBgActive] = iteamHoveredColor;
-			colors[ImGuiCol_ScrollbarGrabHovered] = iteamHoveredColor;
-			colors[ImGuiCol_ScrollbarGrabActive] = iteamHoveredColor;
-			colors[ImGuiCol_SliderGrabActive] = iteamHoveredColor;
-			colors[ImGuiCol_ButtonHovered] = iteamHoveredColor;
-			colors[ImGuiCol_ButtonActive] = iteamHoveredColor;
-			colors[ImGuiCol_HeaderHovered] = iteamHoveredColor;
-			colors[ImGuiCol_HeaderActive] = iteamHoveredColor;
-			colors[ImGuiCol_Separator] = iteamHoveredColor;
-			colors[ImGuiCol_SeparatorHovered] = iteamHoveredColor;
-			colors[ImGuiCol_SeparatorActive] = iteamHoveredColor;
-			colors[ImGuiCol_ResizeGripHovered] = iteamHoveredColor;
-			colors[ImGuiCol_ResizeGripActive] = iteamHoveredColor;
-		}
+		EditorTheme::Apply();
 
 		ImGui::SetNextWindowPos({ viewport->WorkPos.x,  viewport->WorkPos.y });
 		ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -220,7 +183,7 @@ namespace Polarity
 			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 
-			//ImGui::ShowDemoWindow();
+			ImGui::ShowDemoWindow();
 
 			m_PanelManager.OnDraw();
 
@@ -409,7 +372,7 @@ namespace Polarity
 		}
 
 		// Draw selected entity outline
-		
+
 		if (Entity selectedEntity = m_Context.GetSelected())
 		{
 			glm::vec4 color = glm::vec4(1.0f, 0.5f, 0.0f, 1.0f);
@@ -531,7 +494,7 @@ namespace Polarity
 				}
 			}
 		}
-		
+
 		Renderer2D::EndScene();
 	}
 
@@ -612,7 +575,7 @@ namespace Polarity
 		{
 			m_Context.EditorScene = scene;
 			m_Context.ActiveScene = m_Context.EditorScene;
-		
+
 			m_EditorSceneFilepath = path;
 
 			POL_INFO("Scene: %s opened!", filename.c_str());
@@ -771,6 +734,7 @@ namespace Polarity
 					NewScene();
 				if (ImGui::MenuItem("Open Scene...", "Ctrl+O"))
 					OpenScene();
+				ImGui::Separator();
 				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 					SaveScene();
 				if (ImGui::MenuItem("Save Scene as...", "Ctrl+Shift+S"))
@@ -798,7 +762,7 @@ namespace Polarity
 				if (ImGui::MenuItem("Options TODO", "F2"));
 
 				ImGui::Separator();
-				
+
 				if (ImGui::MenuItem("Play/Stop", "F5"))
 				{
 					if (m_SceneState == SceneState::Edit)
@@ -810,59 +774,118 @@ namespace Polarity
 						OnSceneStop();
 					}
 				}
-				
+
 
 				ImGui::EndMenu();
 			}
 
 			if (ImGui::BeginMenu("View"))
 			{
+				if (ImGui::MenuItem("Reset Layout TODO"));
+				if (ImGui::MenuItem("Save Layout TODO"));
+				ImGui::Separator();
+
+				bool editViewportOpen = m_PanelManager.GetPanel<ViewportPanel>() != nullptr;
+				bool hierarchyOpen = m_PanelManager.GetPanel<HierarcyPanel>() != nullptr;
+				bool assetsOpen = m_PanelManager.GetPanel<AssetsPanel>() != nullptr;
+				bool consoleOpen = m_PanelManager.GetPanel<ConsolePanel>() != nullptr;
+
+				if (ImGui::MenuItem("Edit Viewport", nullptr, editViewportOpen))
+				{
+					if (auto p = m_PanelManager.GetPanel<ViewportPanel>())
+						p->Close();
+					else
+						m_PanelManager.OpenPanel<ViewportPanel>(m_Context);
+				}
 				if (ImGui::BeginMenu("Show"))
 				{
-					if (ImGui::MenuItem("Grid"));
+					if (ImGui::MenuItem("Grid"))
+					{
+
+					}
 
 					ImGui::Separator();
-					if (ImGui::MenuItem("Gizmos"));
+					if (ImGui::MenuItem("Gizmos"))
+					{
+
+					}
 
 					ImGui::EndMenu();
 				}
 				ImGui::Separator();
 
-				if (ImGui::MenuItem("Hierarcy"))
-					m_PanelManager.OpenPanel<HierarcyPanel>(m_Context);
+				if (ImGui::MenuItem("Game Viewport TODO"));
+				ImGui::Separator();
 
-				if (ImGui::MenuItem("Viewport"))
-					m_PanelManager.OpenPanel<ViewportPanel>(m_Context);
+				if (ImGui::MenuItem("Hierarchy", nullptr, hierarchyOpen))
+				{
+					if (auto p = m_PanelManager.GetPanel<HierarcyPanel>())
+						p->Close();
+					else
+						m_PanelManager.OpenPanel<HierarcyPanel>(m_Context);
+				}
+				ImGui::Separator();
 
 				if (ImGui::MenuItem("Properties"))
 					m_PanelManager.OpenPanel<PropertitiesPanel>(m_Context);
 
-				if (ImGui::MenuItem("Assets"))
-					m_PanelManager.OpenPanel<AssetsPanel>(m_Context);
-
-				if (ImGui::MenuItem("Console"))
-				{
-
-					auto& consolePanel = m_PanelManager.OpenPanel<ConsolePanel>(m_Context);
-					auto panelId = consolePanel.GetInstanceID();
-
-					Logger::AddLogListener([this, panelId](const LogEvent& e)
-					{
-						if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
-						{
-							panel->BindLog(e);
-						}
-					});
-				}
 				ImGui::Separator();
-				if (ImGui::MenuItem("Reset Layout"))
+
+				if (ImGui::MenuItem("Assets", nullptr, assetsOpen))
 				{
-					m_PanelManager.Clear();
-					m_PanelManager.OpenPanel<HierarcyPanel>(m_Context);
-					m_PanelManager.OpenPanel<ViewportPanel>(m_Context);
-					m_PanelManager.OpenPanel<PropertitiesPanel>(m_Context);
-					m_PanelManager.OpenPanel<AssetsPanel>(m_Context);
+					if (auto p = m_PanelManager.GetPanel<AssetsPanel>())
+						p->Close();
+					else
+						m_PanelManager.OpenPanel<AssetsPanel>(m_Context);
 				}
+
+				ImGui::Separator();
+
+				if (ImGui::MenuItem("Console", nullptr, consoleOpen))
+				{
+					if (auto p = m_PanelManager.GetPanel<ConsolePanel>())
+					{
+						p->Close();
+					}
+					else
+					{
+						m_PanelManager.OpenPanel<ConsolePanel>(m_Context);
+
+						Logger::AddLogListener([this](const LogEvent& e)
+						{
+							if (auto* panel = m_PanelManager.GetPanel<ConsolePanel>())
+								panel->BindLog(e);
+						});
+					}
+				}
+
+				ImGui::Separator();
+				if (ImGui::BeginMenu("Themes"))
+				{
+					std::filesystem::path themePath = "assets/themes";
+					if (std::filesystem::exists(themePath))
+					{
+						for (const auto& entry : std::filesystem::directory_iterator(themePath))
+						{
+							if (!entry.is_regular_file())
+								continue;
+
+							if (entry.path().extension() != ".txt")
+								continue;
+
+							std::string filename = entry.path().stem().string();
+
+							if (ImGui::MenuItem(filename.c_str()))
+							{
+								EditorTheme::Load(entry.path());
+							}
+						}
+					}
+					ImGui::Separator();
+					if (ImGui::MenuItem("Open folder TODO"));
+					ImGui::EndMenu();
+				}
+
 
 				ImGui::EndMenu();
 			}
@@ -909,5 +932,34 @@ namespace Polarity
 			}
 		}
 		ImGui::End();
+	}
+
+	// WIP
+	bool EditorLayer::IconMenuItem(const char* label, Ref<SubTexture2D> icon, bool selected)
+	{
+		float iconSize = 16.0f;
+
+		uint32_t texID = icon ? icon->GetTexture()->GetRendererID() : 0;
+		const glm::vec2* uvs = icon ? icon->GetTexCoords() : nullptr;
+
+		ImGui::BeginGroup();
+
+		if (icon)
+		{
+			ImGui::Image(
+				(void*)texID,
+				ImVec2(iconSize, iconSize),
+				ImVec2(uvs[0].x, uvs[0].y),
+				ImVec2(uvs[2].x, uvs[2].y)
+			);
+			ImGui::SameLine();
+		}
+
+		// text
+		bool clicked = ImGui::Selectable(label, false, ImGuiSelectableFlags_SpanAllColumns);
+
+		ImGui::EndGroup();
+
+		return clicked;
 	}
 }

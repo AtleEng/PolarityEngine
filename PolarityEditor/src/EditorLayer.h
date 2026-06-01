@@ -67,6 +67,8 @@ namespace Polarity
 
 		void DrawMenubar();
 		void DrawToolbar();
+
+		bool IconMenuItem(const char* label, Ref<SubTexture2D> icon, bool selected);
 	private:
 
 		EditorContext m_Context;
