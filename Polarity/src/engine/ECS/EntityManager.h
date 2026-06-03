@@ -18,6 +18,8 @@ namespace Polarity::ECS
 
 		int GetEntityAmount();
 
+		EntityMeta& GetMeta(Entity entity);
+
 	private:
 		// Queue of unused entity IDs
 		std::queue<Entity> m_AvailableEntities{};
@@ -28,8 +30,11 @@ namespace Polarity::ECS
 		// Array of all entities that tracks if théy are alive or not
 		std::array<bool, MAX_ENTITIES> m_Alive{};
 
-		// Array of only alive entities
+		// Vector of only alive entities
 		std::vector<Entity> m_AliveEntities {};
+
+		// Vector of entities metadata
+		std::vector<EntityMeta> m_Meta{};
 
 		friend class Registry;
 	};

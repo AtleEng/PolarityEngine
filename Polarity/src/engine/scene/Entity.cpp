@@ -19,4 +19,8 @@ namespace Polarity
 	{
 		return m_Scene->IsAlive(m_EntityHandle);
 	}
+	ECS::EntityMeta& Entity::GetMeta()
+	{
+		return m_Scene->GetRegistry().GetMeta(m_EntityHandle);
+	}
 }

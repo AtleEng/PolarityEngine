@@ -3,7 +3,6 @@
 
 namespace Polarity::ECS
 {
-
 	Registry::Registry()
 	{
 		m_EntityManager = EntityManager();
@@ -37,11 +36,16 @@ namespace Polarity::ECS
 	{
 		return m_EntityManager.GetEntityAmount();
 	}
+
 	void Registry::Clear()
 	{
 		for (Entity ent : m_EntityManager.m_AliveEntities)
 		{
 			DestroyEntity(ent);
 		}		
+	}
+	EntityMeta& Registry::GetMeta(Entity entity)
+	{
+		return m_EntityManager.GetMeta(entity);
 	}
 }

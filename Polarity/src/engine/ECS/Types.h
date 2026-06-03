@@ -16,4 +16,11 @@ namespace Polarity::ECS
 	using Signature = std::bitset<MAX_COMPONENTS>;
 
 	static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
+
+	struct EntityMeta {
+		bool enabled;
+		uint32_t layerMask;
+		uint8_t mobility;   // Static/Dynamic/Kinematic
+		uint8_t flags;      // bitmask (not in use atm)
+	};
 }
