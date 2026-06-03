@@ -278,11 +278,10 @@ namespace Polarity
 			m_lastSelected = entity;
 		}
 
-		bool isActive = true;
-		if (ImGui::Checkbox("##isActive", &isActive))
-		{
+		ECS::EntityMeta& metadata = entity.GetMeta();
 
-		}
+		if (ImGui::Checkbox("##isActive", &metadata.enabled)){}
+
 		ImGui::SameLine();
 		if (ImGui::InputText("##NameOfEntity", m_NameBuf, IM_ARRAYSIZE(m_NameBuf)))
 		{
@@ -310,6 +309,7 @@ namespace Polarity
 		if (ImGui::BeginPopup("AddComponent"))
 		{
 			ImGui::TextDisabled("Add Component");
+			ImGui::Separator();
 			if (ImGui::MenuItem("Transform"))
 			{
 				entity.AddComponent<TransformComponent>();

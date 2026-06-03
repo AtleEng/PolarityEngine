@@ -64,9 +64,8 @@ namespace Polarity
 		const std::string& GetName();
 		const uint32_t GetHandle() { return m_EntityHandle; }
 		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
-		
 		bool IsAlive();
-
+		ECS::EntityMeta& GetMeta();
 
 		operator bool() const { return m_Scene->IsAlive(m_EntityHandle); }
 

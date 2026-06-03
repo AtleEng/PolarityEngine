@@ -58,31 +58,6 @@ namespace Polarity::ECS
 		size_t m_Size;
 	};
 
-	template<typename Owned, typename... Observed>
-	class Group
-	{
-	public:
-		Group(Registry* registry, ComponentArray<Owned>* ownedArray)
-			: m_Registry(registry), m_OwnedArray(ownedArray) {}
-
-		// Iterate owning component's entity list
-		const Entity* begin() const { return m_OwnedArray->Entities(); }
-		const Entity* end()   const { return m_OwnedArray->Entities() + m_OwnedArray->Size(); }
-
-		std::tuple<Owned&, Observed&...> Get(Entity entity)
-		{
-			// Owning component is guaranteed to exist
-			return {
-				m_OwnedArray->GetData(entity),
-				m_Registry->GetComponent<Observed>(entity)...
-			};
-		}
-
-	private:
-		Registry* m_Registry;
-		ComponentArray<Owned>* m_OwnedArray;
-	};
-
 	class Registry
 	{
 	public:
@@ -178,35 +153,9 @@ namespace Polarity::ECS
 				storage->Entities(),
 				storage->Size()
 				);
-		}
-		
-		
-		template<typename... Components>
-		View<Components...> GetBigView()
-		{
-			return View<Components...>(
-				this,
-				m_ComponentManager.GetComponentArray<Components>()...
-			);
-		}
-		
-		template<typename Owned, typename... Observed>
-		Group<Owned, Observed...> GetGroup()
-		{
-			auto ownedArray = m_ComponentManager.GetComponentArray<Owned>();
+		}	
 
-			for (size_t i = 0; i < ownedArray->Size(); )
-			{
-				Entity e = ownedArray->Entities()[i];
-
-				if ((HasComponent<Observed>(e) && ...))
-					++i;
-				else
-					ownedArray->RemoveData(e);
-			}
-
-			return Group<Owned, Observed...>(this, ownedArray.get());
-		}
+		EntityMeta& GetMeta(Entity entity);
 
 	private:
 		ComponentManager m_ComponentManager;
