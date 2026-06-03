@@ -44,6 +44,7 @@ namespace Polarity::ECS
 			DestroyEntity(ent);
 		}		
 	}
+
 	EntityMeta& Registry::GetMeta(Entity entity)
 	{
 		return m_EntityManager.GetMeta(entity);
