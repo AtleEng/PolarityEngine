@@ -4,6 +4,8 @@
 
 #include "engine/scripting/ScriptingEngine.h"
 
+#include "engine/scripting/ScriptingEngine.h"
+
 #include <imgui/imgui_internal.h>
 
 #include <glm/gtc/type_ptr.hpp>
