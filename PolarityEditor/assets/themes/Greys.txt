@@ -1,0 +1,120 @@
+# ==========================================================
+# Polarity Theme - Unity Dark Inspired
+# ==========================================================
+
+# ---------- TEXT ----------
+
+Text 0.76 0.76 0.76 1
+TextDisabled 0.45 0.45 0.45 1
+
+# ---------- WINDOWS ----------
+
+WindowBg 0.22 0.22 0.22 1
+ChildBg 0.24 0.24 0.24 1
+PopupBg 0.25 0.25 0.25 1
+Border 0.32 0.32 0.32 1
+BorderShadow 0 0 0 0
+
+# ---------- FRAME / INPUT ----------
+
+FrameBg 0.30 0.30 0.30 1
+FrameBgHovered 0.36 0.36 0.36 1
+FrameBgActive 0.40 0.40 0.40 1
+
+# ---------- TITLES / MENUBAR ----------
+
+TitleBg 0.18 0.18 0.18 1
+TitleBgActive 0.20 0.20 0.20 1
+TitleBgCollapsed 0.18 0.18 0.18 1
+MenuBarBg 0.18 0.18 0.18 1
+
+# ---------- SCROLLBARS ----------
+
+ScrollbarBg 0.18 0.18 0.18 1
+ScrollbarGrab 0.45 0.45 0.45 1
+ScrollbarGrabHovered 0.30 0.52 0.80 1
+ScrollbarGrabActive 0.24 0.48 0.78 1
+
+# ---------- CHECK / SLIDER ----------
+
+CheckMark 0.24 0.48 0.78 1
+SliderGrab 0.50 0.50 0.50 1
+SliderGrabActive 0.24 0.48 0.78 1
+
+# ---------- BUTTONS ----------
+
+Button 0.30 0.30 0.30 1
+ButtonHovered 0.36 0.36 0.36 1
+ButtonActive 0.24 0.48 0.78 1
+
+# ---------- HEADERS ----------
+
+Header 0.28 0.28 0.28 1
+HeaderHovered 0.34 0.34 0.34 1
+HeaderActive 0.24 0.48 0.78 1
+
+# ---------- SEPARATORS ----------
+
+Separator 0.35 0.35 0.35 1
+SeparatorHovered 0.24 0.48 0.78 1
+SeparatorActive 0.24 0.48 0.78 1
+
+# ---------- RESIZE ----------
+
+ResizeGrip 0.40 0.40 0.40 1
+ResizeGripHovered 0.24 0.48 0.78 1
+ResizeGripActive 0.24 0.48 0.78 1
+
+# ---------- TABS ----------
+
+Tab 0.24 0.24 0.24 1
+TabHovered 0.30 0.30 0.30 1
+TabActive 0.30 0.30 0.30 1
+TabUnfocused 0.22 0.22 0.22 1
+TabUnfocusedActive 0.28 0.28 0.28 1
+
+# ---------- DOCKING ----------
+
+DockingPreview 0.24 0.48 0.78 0.35
+DockingEmptyBg 0.20 0.20 0.20 1
+
+# ---------- PLOTS ----------
+
+PlotLines 0.70 0.70 0.70 1
+PlotLinesHovered 0.24 0.48 0.78 1
+
+PlotHistogram 0.70 0.70 0.70 1
+PlotHistogramHovered 0.24 0.48 0.78 1
+
+# ---------- TABLES ----------
+
+TableHeaderBg 0.28 0.28 0.28 1
+TableBorderStrong 0.38 0.38 0.38 1
+TableBorderLight 0.32 0.32 0.32 1
+TableRowBg 0 0 0 0
+TableRowBgAlt 1 1 1 0.02
+
+# ---------- SELECTION ----------
+
+TextSelectedBg 0.24 0.48 0.78 0.35
+DragDropTarget 0.24 0.48 0.78 1
+
+# ---------- NAV ----------
+
+NavHighlight 0.24 0.48 0.78 1
+NavWindowingHighlight 1 1 1 0.70
+NavWindowingDimBg 0 0 0 0.20
+ModalWindowDimBg 0 0 0 0.60
+
+# ---------- Other ----------
+
+ScrollbarSize 14
+GrabMinSize 10
+
+WindowRounding 0
+ChildRounding 0
+FrameRounding 0
+PopupRounding 0
+ScrollbarRounding 0
+GrabRounding 0
+TabRounding 0

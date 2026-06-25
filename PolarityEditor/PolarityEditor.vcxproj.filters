@@ -40,6 +40,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\EditorTheme.h" />
+    <ClInclude Include="src\Panels\ImGuiEx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorApp.cpp">
@@ -70,6 +71,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\EditorTheme.cpp" />
+    <ClCompile Include="src\Panels\ImGuiEx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\polarity.rc" />

@@ -1,5 +1,6 @@
 #include "polpch.h"
 #include "PropertitiesPanel.h"
+#include "ImGuiEx.h"
 
 #include "engine/scripting/ScriptingEngine.h"
 
@@ -10,194 +11,54 @@
 
 namespace Polarity
 {
-	static bool DrawButtonImage(Ref<SubTexture2D> tex, const std::string& label)
+	static bool BeginPropertyGrid()
 	{
-		bool isKlicked = false;
-
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(1, 1));
-		ImGui::PushID(label.c_str());
-
-		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
-		ImVec2 btnSize(lineHeight, lineHeight);
-
-		uint32_t texID = tex->GetTexture()->GetRendererID();
-		const glm::vec2* uvs = tex->GetTexCoords();
-		if (ImGui::ImageButton((void*)texID,
-			btnSize,
-			ImVec2(uvs[0].x, uvs[2].y),
-			ImVec2(uvs[2].x, uvs[0].y)))
+		if (ImGui::BeginTable(
+			"##PropertyGrid",
+			2,
+			ImGuiTableFlags_SizingStretchProp |
+			ImGuiTableFlags_BordersInnerV))
 		{
-			isKlicked = true;
+			ImGui::TableSetupColumn(
+				"Label",
+				ImGuiTableColumnFlags_WidthFixed,
+				120.0f);
+
+			ImGui::TableSetupColumn(
+				"Value",
+				ImGuiTableColumnFlags_WidthStretch);
+
+			return true;
 		}
 
-		ImGui::PopID();
-		ImGui::PopStyleVar();
-		return isKlicked;
+		return false;
 	}
 
-	static bool DrawAxisValue(
-		const char* axis,
-		float& value,
-		float speed,
-		float resetValue,
-		bool* out_committed = nullptr)
+	static void EndPropertyGrid()
 	{
-		ImGui::PushID(axis);
-
-		bool changed = false;
-		bool committed = false;
-
-		float width = ImGui::CalcItemWidth();
-		ImVec2 pos = ImGui::GetCursorScreenPos();
-
-		// Submit the drag FIRST
-		changed |= ImGui::DragFloat(
-			"##v",
-			&value,
-			speed,
-			0.0f,
-			0.0f,
-			""
-		);
-
-		ImGuiID id = ImGui::GetItemID();
-		bool temp_input = ImGui::TempInputIsActive(id);
-
-		// Draw prefix manually when not text-editing
-		if (!temp_input)
-		{
-			char buf[32];
-			snprintf(buf, sizeof(buf), "%s%g", axis, value);
-			ImGuiStyle& style = ImGui::GetStyle();
-			ImVec2 text_pos = pos;
-			text_pos.x += style.FramePadding.x;
-
-			ImGui::GetWindowDrawList()->AddText(
-				text_pos,
-				ImGui::GetColorU32(ImGuiCol_Text),
-				buf
-			);
-		}
-
-		if (ImGui::IsItemDeactivatedAfterEdit())
-			committed = true;
-
-		// Right-click reset
-		if (ImGui::IsItemHovered() &&
-			ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-		{
-			value = resetValue;
-			changed = true;
-			committed = true;
-		}
-
-		if (out_committed)
-			*out_committed = committed;
-
-		ImGui::PopID();
-		return changed;
+		ImGui::EndTable();
 	}
 
-	static bool DrawVec3(
-		const std::string& label,
-		glm::vec3& values,
-		float resetValue = 0.0f,
-		float labelWidth = 100.0f)
+	static void PropertyRow(const char* label)
 	{
-		ImGuiIO& io = ImGui::GetIO();
+		ImGui::TableNextRow();
 
-		float speed = 0.1f;
-		if (io.KeyShift) speed = 0.001f;
-		if (io.KeyCtrl)  speed = 1.0f;
+		ImGui::TableSetColumnIndex(0);
+		ImGui::AlignTextToFramePadding();
+		ImGui::TextUnformatted(label);
 
-		glm::vec3 temp = values;
-		bool value_changed = false;
-		bool value_committed = false;
-
-		ImGui::PushID(label.c_str());
-
-		if (ImGui::BeginTable("##vec3", 2, ImGuiTableFlags_SizingStretchProp))
-		{
-			ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, labelWidth);
-			ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch, 0);
-
-			ImGui::TableNextRow();
-
-			// Label
-			ImGui::TableNextColumn();
-			ImGui::AlignTextToFramePadding();
-			ImGui::TextUnformatted(label.c_str());
-
-			// Values
-			ImGui::TableNextColumn();
-
-			float fullWidth = ImGui::GetContentRegionAvail().x;
-			float spacing = ImGui::GetStyle().ItemSpacing.x;
-			float axisWidth = 18.0f;
-			float fieldWidth = (fullWidth - spacing * 2) / 3.0f;
-
-			ImGui::PushItemWidth(fieldWidth);
-
-			value_changed |= DrawAxisValue("X:", temp.x, speed, resetValue);
-			value_committed |= ImGui::IsItemDeactivatedAfterEdit();
-			ImGui::SameLine();
-
-			value_changed |= DrawAxisValue("Y:", temp.y, speed, resetValue);
-			value_committed |= ImGui::IsItemDeactivatedAfterEdit();
-			ImGui::SameLine();
-
-			value_changed |= DrawAxisValue("Z:", temp.z, speed, resetValue);
-			value_committed |= ImGui::IsItemDeactivatedAfterEdit();
-
-			ImGui::PopItemWidth();
-			ImGui::EndTable();
-		}
-
-		// Commit like ColorEdit4
-		if (value_changed)
-		{
-			values = temp;
-
-			if (value_committed)
-				ImGui::MarkItemEdited(ImGui::GetID(label.c_str()));
-		}
-
-		ImGui::PopID();
-		return value_changed;
-	}
-
-	static void DrawFloat(const std::string& lable, float& value, float resetValue = 0.0f, float columWidth = 100.0f)
-	{
-		ImGui::PushID(lable.c_str());
-
-		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columWidth);
-		ImGui::Text(lable.c_str());
-		ImGui::NextColumn();
-
-		ImGui::PushMultiItemsWidths(1, ImGui::CalcItemWidth());
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
-
-		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-		ImVec2 buttonSize = { lineHeight + 3, lineHeight };
-
-		if (ImGui::Button("*", buttonSize))
-			value = resetValue;
-
-		ImGui::SameLine();
-		ImGui::DragFloat("##value", &value, 0.1f);
-		ImGui::PopItemWidth();
-
-		ImGui::PopStyleVar();
-		ImGui::Columns(1);
-
-		ImGui::PopID();
+		ImGui::TableSetColumnIndex(1);
 	}
 
 	template<typename T, typename UIFunction>
 	static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
 	{
-		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+		const ImGuiTreeNodeFlags treeNodeFlags =
+			ImGuiTreeNodeFlags_DefaultOpen |
+			ImGuiTreeNodeFlags_Framed |
+			ImGuiTreeNodeFlags_SpanAvailWidth |
+			ImGuiTreeNodeFlags_AllowItemOverlap |
+			ImGuiTreeNodeFlags_FramePadding;
 
 		if (entity.HasComponent<T>())
 		{
@@ -208,11 +69,8 @@ namespace Polarity
 			bool open = ImGui::TreeNodeEx((void*)(name.c_str() + entity.GetHandle()), treeNodeFlags, name.c_str());
 			float lineHeight = ImGui::GetTextLineHeightWithSpacing();
 
-
-			ImVec2 btnSize(lineHeight, lineHeight);
-
 			ImGui::SameLine(avilibleRegion.x - lineHeight * 0.5f);
-			if (DrawButtonImage(UIIcons::Get(UIIcon::Settings), "##settings"))
+			if (ImGuiEx::DrawButtonImage(UIIcons::Get(UIIcon::Settings), "##settings"))
 			{
 				ImGui::OpenPopup("ComponentSettings");
 			}
@@ -234,7 +92,11 @@ namespace Polarity
 
 			if (open)
 			{
-				uiFunction(component);
+				if (BeginPropertyGrid())
+				{
+					uiFunction(component);
+					EndPropertyGrid();
+				}
 				ImGui::TreePop();
 			}
 
@@ -243,9 +105,311 @@ namespace Polarity
 		}
 	}
 
+	void PropertitiesPanel::DrawTopbar(Entity entity)
+	{
+		ECS::EntityMeta& metadata = entity.GetMeta();
+		auto& name = entity.GetComponent<NameComponent>();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 4.0f));
+
+		const float buttonSize = ImGui::GetFrameHeight();
+		const float spacing = ImGui::GetStyle().ItemSpacing.x;
+
+		// Enable checkbox
+		ImGui::Checkbox("##Enabled", &metadata.enabled);
+		ImGui::SameLine();
+
+		// Calculate width reserved on the right
+		const float rightControlsWidth = buttonSize * 2.0f + spacing;
+
+		float nameWidth =
+			ImGui::GetContentRegionAvail().x - rightControlsWidth;
+
+		if (nameWidth < 50.0f)
+			nameWidth = 50.0f;
+
+		ImGui::SetNextItemWidth(nameWidth);
+
+		char buffer[256] = {};
+		strncpy(buffer, name.Name.c_str(), sizeof(buffer) - 1);
+
+		if (ImGui::InputText("##EntityName", buffer, sizeof(buffer)))
+			name.Name = buffer;
+
+		ImGui::SameLine();
+
+		auto lockIcon = m_Locked
+			? UIIcons::Get(UIIcon::Lock)
+			: UIIcons::Get(UIIcon::Unlock);
+
+		if (ImGuiEx::DrawButtonImage(lockIcon, "##Lock")) 
+		{
+			m_Locked = !m_Locked;
+		}
+
+		ImGui::SameLine();
+
+		if (ImGuiEx::DrawButtonImage(
+			UIIcons::Get(UIIcon::Settings),
+			"##HeaderMenu"))
+		{
+			ImGui::OpenPopup("HeaderMenu");
+		}
+		if (ImGui::BeginPopup("HeaderMenu"))
+		{
+			ImGui::TextUnformatted("TODO");
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::Button("Add Component", ImVec2(-FLT_MIN, 0.0f)))
+		{
+			ImGui::OpenPopup("AddComponent");
+		}
+		if (ImGui::BeginPopup("AddComponent"))
+		{
+			ImGui::TextDisabled("Add Component");
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Transform"))
+			{
+				entity.AddComponent<TransformComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::MenuItem("Camera"))
+			{
+				entity.AddComponent<CameraComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::MenuItem("Sprite Renderer"))
+			{
+				entity.AddComponent<SpriteComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::MenuItem("Audio Source"))
+			{
+				entity.AddComponent<AudioSourceComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			if (ImGui::MenuItem("Script"))
+			{
+				entity.AddComponent<ScriptComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
+		ImGui::PopStyleVar();
+	}
+	void PropertitiesPanel::DrawProperites(Entity entity)
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f, 4.0f));
+
+		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
+			{
+				PropertitiesPanel::Property("Position", component.Position, { 0.01f, false, false, 0.0f, 0.0f, true, 0.0f, "Position" });
+
+				glm::vec3 rotation = glm::degrees(component.Rotation);
+				PropertitiesPanel::Property("Rotation", rotation, { 0.01f, false, false, 0.0f, 0.0f, true, 0.0f, "Rotation" });
+				component.Rotation = glm::radians(rotation);
+
+				PropertitiesPanel::Property("Scale", component.Scale, { 0.01f, false, false, 0.0f, 0.0f, true, 1.0f, "Scale" });
+			});
+
+		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
+			{
+				PropertitiesPanel::Property("Primary", component.Primary);
+				PropertitiesPanel::Property("Fixed Aspect", component.FixedAspectRatio);
+
+				ImGui::Separator();
+
+				const char* projectTypeStrings[] = { "Perspective", "Orthographic" };
+				int projectionType = (int)component.Camera.GetProjectionType();
+
+				if (PropertyCombo(
+					"Projection",
+					projectionType,
+					projectTypeStrings,
+					IM_ARRAYSIZE(projectTypeStrings)))
+				{
+					component.Camera.SetProjectionType((SceneCamera::ProjectionType)projectionType);
+				}
+				if (component.Camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
+				{
+					float perspectiveVerticalFov = glm::degrees(component.Camera.GetPerspectiveVerticalFOV());
+					PropertitiesPanel::Property("FOV", perspectiveVerticalFov, { 1.0f, true, true, 0.0f, 360.0f, true, 60.0f, "Field of view for the camera" });
+					component.Camera.SetPerspectiveVerticalFOV(glm::radians(perspectiveVerticalFov));
+
+					float perspectiveNear = component.Camera.GetPerspectiveNearClip();
+					PropertitiesPanel::Property("Near", perspectiveNear, { 1.0f, true, false, 0.0f, 0.0f, true, 0.1f, "How near the camera render things" });
+					component.Camera.SetPerspectiveNearClip(perspectiveNear);
+
+					float perspectiveFar = component.Camera.GetPerspectiveFarClip();
+					PropertitiesPanel::Property("Far", perspectiveFar, { 1.0f, true, false, 0.0f, 0.0f, true, 100.0f, "How far the camera render things" });
+					component.Camera.SetPerspectiveFarClip(perspectiveFar);
+				}
+
+				if (component.Camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
+				{
+					float orthoSize = component.Camera.GetOrthographicSize();
+					PropertitiesPanel::Property("Size", orthoSize, { 0.1f, false, false, 0.0f, 0.0f, true, 10.0f, "Size of cameras view" });
+					component.Camera.SetOrthographicSize(orthoSize);
+
+					float orthoNear = component.Camera.GetOrthographicNearClip();
+					PropertitiesPanel::Property("Near", orthoNear, { 0.1f, false, false, 0.0f, 0.0f, true, -1.0f, "How near the camera render things" });
+					component.Camera.SetOrthographicNearClip(orthoNear);
+
+					float orthoFar = component.Camera.GetOrthographicFarClip();
+					PropertitiesPanel::Property("Far", orthoFar, { 0.1f, false, false, 0.0f, 0.0f, true, 1.0f, "How far the camera render things" });
+					component.Camera.SetOrthographicFarClip(orthoFar);
+				}
+			});
+
+		DrawComponent<SpriteComponent>("Sprite", entity, [](auto& component)
+			{
+				ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::filesystem::path texPath = std::filesystem::path(path);
+						Ref<Texture2D> tex = Texture2D::Create(texPath.string());
+						if (tex->IsLoaded())
+							component.Texture = tex;
+						else
+							POL_WARN("Could not load texture '%s'", texPath.filename().string().c_str());
+					}
+					ImGui::EndDragDropTarget();
+				}
+				PropertitiesPanel::Property("Scale", component.Scale, { 0.1f, false, false, 0.0f, 0.0f, true, 1.0f, "The scale of the applied texture" });
+				ImGui::ColorEdit4("Tint", glm::value_ptr(component.Color));
+			});
+
+		DrawComponent<AudioSourceComponent>("Audio Source", entity, [](auto& component)
+			{
+				ImGui::Button("Audio", ImVec2(100.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+						std::filesystem::path texPath = std::filesystem::path(path);
+						Ref<AudioSource> audio = Audio::Create(texPath.string());
+						if (audio->IsLoaded())
+							component.Audio = audio;
+						else
+							POL_WARN("Could not load audio '%s'", texPath.filename().string().c_str());
+					}
+					ImGui::EndDragDropTarget();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Play", ImVec2(100.0f, 0.0f)))
+				{
+					Audio::Play(component.Audio, component.Gain, component.Pitch, component.Loop);
+				}
+
+				PropertitiesPanel::Property("Gain", component.Gain, { 0.01f, true, false, 0.0f, 0.0f, true, 1.0f, "The volume of the source" });
+				PropertitiesPanel::Property("Pitch", component.Pitch, { 0.01f, true, true, 0.0f, 10.0f, true, 1.0f, "The pitch of the sound" });
+				PropertitiesPanel::Property("Loop", component.Loop, { true, false, "If applied the sound loops until stopped" });
+			});
+
+		DrawComponent<ScriptComponent>("Script", entity, [this](auto& component)
+			{
+				auto& scriptTemplates = ScriptEngine::GetScripts();
+
+				PropertyRow("Script");
+				ImGui::SetNextItemWidth(-FLT_MIN);
+				const char* current = component.Name.empty()
+					? "None"
+					: component.Name.c_str();
+
+				if (ImGui::BeginCombo("##Script", current))
+				{
+					{
+						bool isSelected = (component.Name == "");
+
+						if (ImGui::Selectable("None", isSelected))
+						{
+							component.Name = "";
+							component.Template = nullptr;
+							component.Instance = nullptr;
+						}
+
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					for (auto& scriptTemplate : scriptTemplates)
+					{
+						bool isSelected = (component.Name == scriptTemplate.Name);
+
+						if (ImGui::Selectable(scriptTemplate.Name.c_str(), isSelected))
+						{
+							component.Name = scriptTemplate.Name;
+							component.Template = CreateRef<ScriptTemplate>(scriptTemplate);
+							component.Instance = nullptr;
+
+							component.StoredFields.clear();
+							component.StoredFields.reserve(component.Template->Fields.size());
+							for (const auto& field : component.Template->Fields)
+							{
+								ScriptFieldInstance instance;
+								instance.Field = field;
+								component.StoredFields.emplace_back(std::move(instance));
+							}
+						}
+
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+				ImGui::Separator();
+				
+				if (component.Template)
+				{
+					for (auto& storedField : component.StoredFields)
+					{
+						const char* name = storedField.Field.Name.c_str();
+
+						void* data = storedField.GetData();
+
+						switch (storedField.Field.Type)
+						{
+						case FieldType::Float:
+						{
+							float& value = *static_cast<float*>(data);
+							PropertitiesPanel::Property(name, value, { 0.1f, false, false, 0.0f, 0.0f, true, 0.0f, name });
+							break;
+						}
+						case FieldType::Int:
+							ImGui::DragInt(name, (int*)data); break;
+						case FieldType::Bool:
+							ImGui::Checkbox(name, (bool*)data); break;
+						default:
+							ImGui::Text("Unknown field type: %s", name);
+							break;
+						}
+					}
+					if (component.Instance)
+					{
+						ScriptEngine::ApplyFieldsToInstance(component);
+					}
+				}
+			});
+
+		ImGui::PopStyleVar();
+	}
 
 	void PropertitiesPanel::OnDraw()
 	{
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 		ImGui::Begin(GetImGuiWindowName().c_str(), &m_Open);
 
 		Entity entity;
@@ -256,282 +420,344 @@ namespace Polarity
 		else
 		{
 			entity = m_Context->GetSelected();
+			m_lastSelected = entity;
 		}
 
 		if (!entity || !entity.IsAlive())
 		{
 			m_Locked = false;
-			ImGui::TextDisabled("Select a entity");
+			ImGui::PopStyleVar();
 			ImGui::End();
 			return;
 		}
 
+		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
+		DrawTopbar(entity);
+		DrawProperites(entity);
+		ImGui::PopStyleVar();
 
-		auto& name = entity.GetComponent<NameComponent>();
+		ImGui::PopStyleVar();
+		ImGui::End();
+	}
 
-		// If selection changed
-		if (m_lastSelected != entity)
+	bool PropertitiesPanel::Property(const char* label, float& value, const FloatPropertySettings& settings)
+	{
+		ImGui::PushID(label);
+		PropertyRow(label);
+
+		if (settings.Tooltip && ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+			ImGui::SetTooltip("%s", settings.Tooltip);
+
+		ImGui::SetNextItemWidth(-FLT_MIN);
+
+		bool changed = false;
+
+		if (settings.HasMin || settings.HasMax)
 		{
-			memset(m_NameBuf, 0, sizeof(m_NameBuf));
-			strncpy(m_NameBuf, name.Name.c_str(), sizeof(m_NameBuf) - 1);
-
-			m_lastSelected = entity;
+			changed = ImGui::DragFloat(
+				"##Value",
+				&value,
+				settings.Speed,
+				settings.HasMin ? settings.Min : -FLT_MAX,
+				settings.HasMax ? settings.Max : FLT_MAX);
+		}
+		else
+		{
+			changed = ImGui::DragFloat(
+				"##Value",
+				&value,
+				settings.Speed);
 		}
 
-		ECS::EntityMeta& metadata = entity.GetMeta();
+		// Right click reset
+		if (settings.HasReset &&
+			ImGui::IsItemHovered() &&
+			ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+		{
+			value = settings.ResetValue;
+			changed = true;
+		}
 
-		if (ImGui::Checkbox("##isActive", &metadata.enabled)){}
+		// TODO commands
+		if (ImGui::IsItemDeactivatedAfterEdit())
+		{
+			// CommandStack::Push(...)
+		}
+
+		ImGui::PopID();
+
+		return changed;
+	}
+
+	bool PropertitiesPanel::Property(const char* label, int& value, const IntPropertySettings& settings)
+	{
+		ImGui::PushID(label);
+		PropertyRow(label);
+
+		if (settings.Tooltip && ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+			ImGui::SetTooltip("%s", settings.Tooltip);
+
+		ImGui::SetNextItemWidth(-FLT_MIN);
+
+		bool changed = false;
+
+		if (settings.HasMin || settings.HasMax)
+		{
+			changed = ImGui::DragInt(
+				"##Value",
+				&value,
+				settings.Speed,
+				settings.HasMin ? settings.Min : -FLT_MAX,
+				settings.HasMax ? settings.Max : FLT_MAX);
+		}
+		else
+		{
+			changed = ImGui::DragInt(
+				"##Value",
+				&value,
+				settings.Speed);
+		}
+
+		// Right click reset
+		if (settings.HasReset &&
+			ImGui::IsItemHovered() &&
+			ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+		{
+			value = settings.ResetValue;
+			changed = true;
+		}
+
+		// TODO commands
+		if (ImGui::IsItemDeactivatedAfterEdit())
+		{
+			// CommandStack::Push(...)
+		}
+
+		ImGui::PopID();
+
+		return changed;
+	}
+
+	bool PropertitiesPanel::Property(const char* label, bool& value, const BoolPropertySettings& settings)
+	{
+		ImGui::PushID(label);
+		PropertyRow(label);
+
+		if (settings.Tooltip && ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+			ImGui::SetTooltip("%s", settings.Tooltip);
+
+		ImGui::SetNextItemWidth(-FLT_MIN);
+
+		bool changed = false;
+
+		changed = ImGui::Checkbox("##Value", &value);
+
+		// Right click reset
+		if (settings.HasReset &&
+			ImGui::IsItemHovered() &&
+			ImGui::IsMouseClicked(ImGuiMouseButton_Right))
+		{
+			value = settings.ResetValue;
+			changed = true;
+		}
+
+		// TODO commands
+		if (ImGui::IsItemDeactivatedAfterEdit())
+		{
+			// CommandStack::Push(...)
+		}
+
+		ImGui::PopID();
+
+		return changed;
+	}
+
+	bool PropertitiesPanel::Property(const char* label, std::string& value, const StringPropertySettings& settings)
+	{
+		ImGui::PushID(label);
+		PropertyRow(label);
+
+		if (settings.Tooltip &&
+			ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+		{
+			ImGui::SetTooltip("%s", settings.Tooltip);
+		}
+
+		ImGui::SetNextItemWidth(-FLT_MIN);
+
+		bool changed = false;
+		char buffer[256];
+		memset(buffer, 0, sizeof(buffer));
+
+		strncpy(buffer,
+			value.c_str(),
+			sizeof(buffer) - 1);
+
+		if (ImGui::InputText("##Value",
+			buffer,
+			sizeof(buffer)))
+		{
+			value = buffer;
+			changed = true;
+		}
+
+		ImGui::PopID();
+		return changed;
+	}
+
+	bool PropertitiesPanel::Property(const char* label, glm::vec2& value, const FloatPropertySettings& settings)
+	{
+		ImGui::PushID(label);
+		PropertyRow(label);
+
+		if (settings.Tooltip &&
+			ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+		{
+			ImGui::SetTooltip("%s", settings.Tooltip);
+		}
+
+		bool changed = false;
+
+		float spacing = ImGui::GetStyle().ItemSpacing.x;
+		float width = (ImGui::GetContentRegionAvail().x - spacing) * 0.5f;
+
+		ImGui::PushItemWidth(width);
+
+		changed |= ImGui::DragFloat(
+			"##X",
+			&value.x,
+			settings.Speed,
+			settings.HasMin ? settings.Min : -FLT_MAX,
+			settings.HasMax ? settings.Max : FLT_MAX);
 
 		ImGui::SameLine();
-		if (ImGui::InputText("##NameOfEntity", m_NameBuf, IM_ARRAYSIZE(m_NameBuf)))
+
+		changed |= ImGui::DragFloat(
+			"##Y",
+			&value.y,
+			settings.Speed,
+			settings.HasMin ? settings.Min : -FLT_MAX,
+			settings.HasMax ? settings.Max : FLT_MAX);
+
+		ImGui::PopItemWidth();
+
+		if (settings.HasReset &&
+			ImGui::IsItemHovered() &&
+			ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 		{
-			name.Name = m_NameBuf;
+			value = glm::vec2(settings.ResetValue);
+			changed = true;
 		}
 
-		float lineHeight = ImGui::GetTextLineHeightWithSpacing();
-		ImVec2 btnSize(lineHeight, lineHeight);
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - btnSize.x * 2);
+		ImGui::PopID();
+		return changed;
+	}
 
-		auto icon = m_Locked
-			? UIIcons::Get(UIIcon::Lock)
-			: UIIcons::Get(UIIcon::Unlock);
+	bool PropertitiesPanel::Property(const char* label, glm::vec3& value, const FloatPropertySettings& settings)
+	{
+		ImGui::PushID(label);
+		PropertyRow(label);
 
-		if (DrawButtonImage(icon, "iconLock")) {
-			m_Locked = !m_Locked;
+		if (settings.Tooltip &&
+			ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+		{
+			ImGui::SetTooltip("%s", settings.Tooltip);
 		}
 
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - btnSize.x);
+		bool changed = false;
 
-		if (DrawButtonImage(UIIcons::Get(UIIcon::Plus), "iconPlus"))
+		float spacing = ImGui::GetStyle().ItemSpacing.x;
+		float width =
+			(ImGui::GetContentRegionAvail().x - spacing * 2.0f) / 3.0f;
+
+		ImGui::PushItemWidth(width);
+
+		changed |= ImGui::DragFloat(
+			"##X",
+			&value.x,
+			settings.Speed,
+			settings.HasMin ? settings.Min : -FLT_MAX,
+			settings.HasMax ? settings.Max : FLT_MAX);
+
+		ImGui::SameLine();
+
+		changed |= ImGui::DragFloat(
+			"##Y",
+			&value.y,
+			settings.Speed,
+			settings.HasMin ? settings.Min : -FLT_MAX,
+			settings.HasMax ? settings.Max : FLT_MAX);
+
+		ImGui::SameLine();
+
+		changed |= ImGui::DragFloat(
+			"##Z",
+			&value.z,
+			settings.Speed,
+			settings.HasMin ? settings.Min : -FLT_MAX,
+			settings.HasMax ? settings.Max : FLT_MAX);
+
+		ImGui::PopItemWidth();
+
+		if (settings.HasReset &&
+			ImGui::IsItemHovered() &&
+			ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 		{
-			ImGui::OpenPopup("AddComponent");
+			value = glm::vec3(settings.ResetValue);
+			changed = true;
 		}
-		if (ImGui::BeginPopup("AddComponent"))
+
+		ImGui::PopID();
+		return changed;
+	}
+
+	bool PropertitiesPanel::PropertyColor(const char* label, glm::vec4& value)
+	{
+		return false;
+	}
+	bool PropertitiesPanel::PropertyCombo(const char* label, int& currentIndex, const char* const* items, int itemCount, const char* tooltip)
+	{
+		ImGui::PushID(label);
+		PropertyRow(label);
+
+		if (tooltip && ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
 		{
-			ImGui::TextDisabled("Add Component");
-			ImGui::Separator();
-			if (ImGui::MenuItem("Transform"))
-			{
-				entity.AddComponent<TransformComponent>();
-				ImGui::CloseCurrentPopup();
-			}
-			if (ImGui::MenuItem("Camera"))
-			{
-				entity.AddComponent<CameraComponent>();
-				ImGui::CloseCurrentPopup();
-			}
-			if (ImGui::MenuItem("Sprite Renderer"))
-			{
-				entity.AddComponent<SpriteComponent>();
-				ImGui::CloseCurrentPopup();
-			}
-			if (ImGui::MenuItem("Audio Source"))
-			{
-				entity.AddComponent<AudioSourceComponent>();
-				ImGui::CloseCurrentPopup();
-			}
-			if (ImGui::MenuItem("Script"))
-			{
-				entity.AddComponent<ScriptComponent>();
-				ImGui::CloseCurrentPopup();
-			}
-			ImGui::EndPopup();
+			ImGui::SetTooltip("%s", tooltip);
 		}
 
+		ImGui::SetNextItemWidth(-FLT_MIN);
 
-		DrawComponent<TransformComponent>("Transform", entity, [](auto& component)
+		bool changed = false;
+
+		const char* preview =
+			(currentIndex >= 0 && currentIndex < itemCount)
+			? items[currentIndex]
+			: "None";
+
+		if (ImGui::BeginCombo("##Value", preview))
 		{
-			DrawVec3("Position", component.Position, 0.0f);
-			glm::vec3 rotation = glm::degrees(component.Rotation);
-			DrawVec3("Rotation", rotation, 0.0f);
-			component.Rotation = glm::radians(rotation);
-			DrawVec3("Scale", component.Scale, 1.0f);
-		});
-
-		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
-		{
-			ImGui::Checkbox("Primary", &component.Primary);
-			ImGui::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
-
-			const char* projectTypeStrings[] = { "Perspective", "Orthographic" };
-			const char* curProjectTypeString = projectTypeStrings[(int)component.Camera.GetProjectionType()];
-			if (ImGui::BeginCombo("Projection", curProjectTypeString))
+			for (int i = 0; i < itemCount; i++)
 			{
-				for (int i = 0; i < 2; i++)
+				bool selected = (currentIndex == i);
+
+				if (ImGui::Selectable(items[i], selected))
 				{
-					bool isSelected = curProjectTypeString == projectTypeStrings[i];
-
-					if (ImGui::Selectable(projectTypeStrings[i], isSelected))
-					{
-						curProjectTypeString = projectTypeStrings[i];
-						component.Camera.SetProjectionType((SceneCamera::ProjectionType)i);
-					}
-
-					if (isSelected)
-						ImGui::SetItemDefaultFocus();
+					currentIndex = i;
+					changed = true;
 				}
 
-				ImGui::EndCombo();
-			}
-			if (component.Camera.GetProjectionType() == SceneCamera::ProjectionType::Perspective)
-			{
-				float perspectiveVerticalFov = glm::degrees(component.Camera.GetPerspectiveVerticalFOV());
-				DrawFloat("FOV", perspectiveVerticalFov, 60);
-				component.Camera.SetPerspectiveVerticalFOV(glm::radians(perspectiveVerticalFov));
-
-				float perspectiveNear = component.Camera.GetPerspectiveNearClip();
-				DrawFloat("Near", perspectiveNear, 0.1f);
-				component.Camera.SetPerspectiveNearClip(perspectiveNear);
-
-				float perspectiveFar = component.Camera.GetPerspectiveFarClip();
-				DrawFloat("Far", perspectiveFar, 100.0f);
-				component.Camera.SetPerspectiveFarClip(perspectiveFar);
+				if (selected)
+					ImGui::SetItemDefaultFocus();
 			}
 
-			if (component.Camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic)
-			{
-				float orthoSize = component.Camera.GetOrthographicSize();
-				DrawFloat("Size", orthoSize, 10);
-				component.Camera.SetOrthographicSize(orthoSize);
+			ImGui::EndCombo();
+		}
 
-				float orthoNear = component.Camera.GetOrthographicNearClip();
-				DrawFloat("Near", orthoNear, -1.0f);
-				component.Camera.SetOrthographicNearClip(orthoNear);
-
-				float orthoFar = component.Camera.GetOrthographicFarClip();
-				DrawFloat("Far", orthoFar, 1.0f);
-				component.Camera.SetOrthographicFarClip(orthoFar);
-			}
-		});
-
-		DrawComponent<SpriteComponent>("Sprite", entity, [](auto& component)
-		{
-			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
-			if (ImGui::BeginDragDropTarget())
-			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
-				{
-					const wchar_t* path = (const wchar_t*)payload->Data;
-					std::filesystem::path texPath = std::filesystem::path(path);
-					Ref<Texture2D> tex = Texture2D::Create(texPath.string());
-					if (tex->IsLoaded())
-						component.Texture = tex;
-					else
-						POL_WARN("Could not load texture '%s'", texPath.filename().string().c_str());
-				}
-				ImGui::EndDragDropTarget();
-			}
-
-			ImGui::DragFloat("Scale", &component.Scale, 0.1f);
-			ImGui::ColorEdit4("Tint", glm::value_ptr(component.Color));
-		});
-		DrawComponent<AudioSourceComponent>("Audio Source", entity, [](auto& component)
-		{
-			ImGui::Button("Audio", ImVec2(100.0f, 0.0f));
-			if (ImGui::BeginDragDropTarget())
-			{
-				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
-				{
-					const wchar_t* path = (const wchar_t*)payload->Data;
-					std::filesystem::path texPath = std::filesystem::path(path);
-					Ref<AudioSource> audio = Audio::Create(texPath.string());
-					if (audio->IsLoaded())
-						component.Audio = audio;
-					else
-						POL_WARN("Could not load audio '%s'", texPath.filename().string().c_str());
-				}
-				ImGui::EndDragDropTarget();
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Play", ImVec2(100.0f, 0.0f)))
-			{
-				Audio::Play(component.Audio, component.Gain, component.Pitch, component.Loop);
-			}
-
-			ImGui::DragFloat("Gain", &component.Gain, 0.1f);
-			ImGui::DragFloat("Pitch", &component.Pitch, 0.1f);
-			ImGui::Checkbox("Is Looping", &component.Loop);
-		});
-
-		DrawComponent<ScriptComponent>("Script", entity, [this](auto& component)
-		{
-			auto& scriptTemplates = ScriptEngine::GetScripts();
-
-			const char* current = component.Name.empty()
-				? "None"
-				: component.Name.c_str();
-
-			if (ImGui::BeginCombo("Script", current))
-			{
-				{
-					bool isSelected = (component.Name == "");
-
-					if (ImGui::Selectable("None", isSelected))
-					{
-						component.Name = "";
-						component.Template = nullptr;
-						component.Instance = nullptr;
-					}
-
-					if (isSelected)
-						ImGui::SetItemDefaultFocus();
-				}
-
-				for (auto& scriptTemplate : scriptTemplates)
-				{
-					bool isSelected = (component.Name == scriptTemplate.Name);
-
-					if (ImGui::Selectable(scriptTemplate.Name.c_str(), isSelected))
-					{
-						component.Name = scriptTemplate.Name;
-						component.Template = CreateRef<ScriptTemplate>(scriptTemplate);
-						component.Instance = nullptr;
-
-						component.StoredFields.clear();
-						component.StoredFields.reserve(component.Template->Fields.size());
-						for (const auto& field : component.Template->Fields)
-						{
-							ScriptFieldInstance instance;
-							instance.Field = field;
-							component.StoredFields.emplace_back(std::move(instance));
-						}
-					}
-
-					if (isSelected)
-						ImGui::SetItemDefaultFocus();
-				}
-
-				ImGui::EndCombo();
-			}
-
-			if (component.Template)
-			{
-				for (auto& storedField : component.StoredFields)
-				{				
-					std::string name = storedField.Field.Name.c_str();
-					
-					void* data = storedField.GetData();
-
-					switch (storedField.Field.Type)
-					{ 
-					case FieldType::Float:
-						ImGui::DragFloat(name.c_str(), (float*)data); break;
-					case FieldType::Int:
-						ImGui::DragInt(name.c_str(), (int*)data); break;
-					case FieldType::Bool:
-						ImGui::Checkbox(name.c_str(), (bool*)data); break;
-					default:
-						ImGui::Text("Unknown field type: %s", name.c_str());
-						break;
-					}
-				}
-				if (component.Instance)
-				{
-					ScriptEngine::ApplyFieldsToInstance(component);
-				}
-			}
-		});
-
-		ImGui::End();
+		ImGui::PopID();
+		return changed;
+	}
+	bool PropertitiesPanel::PropertyAsset(const char* label, Ref<Texture2D>& value)
+	{
+		return false;
 	}
 }

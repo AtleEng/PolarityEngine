@@ -18,7 +18,7 @@ namespace Polarity {
 		s_IconAtlas = Texture2D::Create("assets/textures/icons.png");
 
 		s_icons[static_cast<size_t>(UIIcon::Logo)] =
-			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 0, 2 }, 18);
+			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 1, 3 }, 18);
 
 		s_icons[static_cast<size_t>(UIIcon::Settings)] =
 			SubTexture2D::CreateFromUniformGrid(s_IconAtlas, { 5, 1 }, 18);
