@@ -1,5 +1,6 @@
 #include "polpch.h"
 #include "HierarcyPanel.h"
+#include "ImGuiEx.h"
 
 #include "imgui/imgui.h"
 #include <imgui/imgui_internal.h>
@@ -22,13 +23,20 @@ namespace Polarity
 		ImVec2 btnSize(lineHeight, lineHeight);
 		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - btnSize.x);
 
-		if (ImGui::ImageButton((void*)texID,
-			btnSize,
-			ImVec2(uvs[2].x, uvs[0].y),
-			ImVec2(uvs[0].x, uvs[2].y)))
+		if (ImGuiEx::DrawButtonImage(UIIcons::Get(UIIcon::Plus), "iconPlus"))
 		{
-			auto entity = m_Context->ActiveScene->CreateEntity();
+			ImGui::OpenPopup("AddEntity");
 		}
+		if (ImGui::BeginPopup("AddEntity"))
+		{
+			ImGui::TextDisabled("Add Entity");
+			ImGui::Separator();
+
+			DrawAddEntityMenu();
+
+			ImGui::EndPopup();
+		}
+
 		ImGui::PopStyleVar();
 
 		ImGui::Separator();
@@ -61,8 +69,11 @@ namespace Polarity
 		{
 			if (ImGui::MenuItem("Paste")) {}
 			ImGui::Separator();
-			if (ImGui::MenuItem("Create empty"))
-				m_Context->ActiveScene->CreateEntity("Empty");
+			if (ImGui::BeginMenu("Add.."))
+			{
+				DrawAddEntityMenu();
+				ImGui::EndMenu();
+			}
 
 			ImGui::EndPopup();
 		}
@@ -87,6 +98,27 @@ namespace Polarity
 		if (opened)
 		{
 			ImGui::TreePop();
+		}
+	}
+
+	void HierarcyPanel::DrawAddEntityMenu()
+	{
+		if (ImGui::MenuItem("Camera"))
+		{
+			auto& entity = m_Context->ActiveScene->CreateEntity("Camera");
+			entity.AddComponent<CameraComponent>();
+		}
+		if (ImGui::MenuItem("Sprite"))
+		{
+			auto& entity = m_Context->ActiveScene->CreateEntity("Sprite");
+			entity.AddComponent<SpriteComponent>();
+		}
+
+		ImGui::Separator();
+
+		if (ImGui::MenuItem("Empty"))
+		{
+			m_Context->ActiveScene->CreateEntity("Empty");
 		}
 	}
 }

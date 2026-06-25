@@ -17,6 +17,7 @@ namespace Polarity
 
     private:
         void DrawEntityNode(Entity entity);
+        void DrawAddEntityMenu();
     private:
         Entity m_HoveredEntity;
     };

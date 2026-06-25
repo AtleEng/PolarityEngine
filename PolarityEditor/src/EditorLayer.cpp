@@ -165,6 +165,7 @@ namespace Polarity
 		style.ScrollbarRounding = 0;
 		style.ScrollbarSize = 6;
 		*/
+		style.FrameBorderSize = 1;
 
 		EditorTheme::Apply();
 
