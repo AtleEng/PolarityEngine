@@ -1,8 +1,12 @@
 #pragma once
 
+#include <filesystem>
+
 #include "engine/core/Core.h"
 #include "engine/core/Log.h"
-#include <filesystem>
+#include "engine/Asset/AssetsManagerBase.h"
+#include "engine/Asset/EditorAssetsManager.h"
+#include "engine/Asset/RuntimeAssetsManager.h"
 
 namespace Polarity
 {
@@ -40,6 +44,9 @@ namespace Polarity
 		ProjectConfig& GetConfig() { return m_Config; }
 
 		static Ref<Project> GetActive() { return s_ActiveProject; }
+		Ref<AssetsManagerBase> GetAssetManager() { return m_AssetManager; }
+		Ref<RuntimeAssetsManager> GetRuntimeAssetManager() { return std::static_pointer_cast<RuntimeAssetsManager>(m_AssetManager); }
+		Ref<EditorAssetsManager> GetEditorAssetManager() { return std::static_pointer_cast<EditorAssetsManager>(m_AssetManager);}
 
 		static Ref<Project> New();
 		static Ref<Project> Load(const std::filesystem::path& path);
@@ -47,6 +54,7 @@ namespace Polarity
 	private:
 		ProjectConfig m_Config;
 		std::filesystem::path m_ProjectDirectory;
+		Ref<AssetsManagerBase> m_AssetManager;
 
 		inline static Ref<Project> s_ActiveProject;
 	};

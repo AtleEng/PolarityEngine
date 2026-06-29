@@ -1,0 +1,32 @@
+#pragma once
+
+#include "AssetsManagerBase.h"
+#include "AssetMetadata.h"
+
+namespace Polarity
+{
+	using AssetRegistry = std::map<AssetHandle, AssetMetadata>;
+
+	// Uses assets pack insteed of registry
+	class EditorAssetsManager: public AssetsManagerBase
+	{
+	public:
+		virtual Ref<Asset> GetAsset(AssetHandle handle) override;
+
+		virtual bool IsAssetHandleValid(AssetHandle handle) const override;
+		virtual bool IsAssetLoaded(AssetHandle handle) const override;
+
+		virtual AssetType GetAssetType(AssetHandle handle) const override;
+
+		void ImportAsset(const std::filesystem::path& filepath);
+
+		const AssetMetadata& GetMetadata(AssetHandle handle) const;
+		const std::filesystem::path& GetFilePath(AssetHandle handle) const;
+
+		const AssetRegistry& GetAssetRegistry() const { return m_AssetRegistry; }
+
+	private:
+		AssetRegistry m_AssetRegistry;
+		AssetMap m_LoadedAssets;
+	};
+}

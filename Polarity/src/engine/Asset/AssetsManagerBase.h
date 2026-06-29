@@ -1,0 +1,21 @@
+#pragma once
+
+#include <map>
+
+#include "Asset.h"
+
+namespace Polarity
+{
+	using AssetMap = std::map<AssetHandle, Ref<Asset>>; // maybe use unordered map
+
+	class AssetsManagerBase
+	{
+	public:
+		virtual Ref<Asset> GetAsset(AssetHandle handle) = 0;
+
+		virtual bool IsAssetHandleValid(AssetHandle handle) const = 0;
+		virtual bool IsAssetLoaded(AssetHandle handle) const = 0;
+
+		virtual AssetType GetAssetType(AssetHandle handle) const = 0;
+	};
+}

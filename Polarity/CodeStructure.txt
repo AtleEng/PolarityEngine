@@ -1,0 +1,29 @@
+#include "std/.."
+
+#include "thirdparty/.."
+
+#include "engine/.."
+
+namespace Polarity
+{
+	class ExampleClass
+	{
+	public:
+		Type aliases
+		Constants
+		Constructors/Destructor
+		Copy/move operations
+		Public methods
+		Public data
+
+	protected:
+		Functions
+	protected:
+		Varibels
+
+	private:
+		Functions
+	private:
+		Varibels
+	}
+}

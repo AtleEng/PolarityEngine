@@ -147,7 +147,14 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\Asset\AssetImporter.h" />
+    <ClInclude Include="src\engine\Asset\Asset.h" />
+    <ClInclude Include="src\engine\Asset\AssetMetadata.h" />
     <ClInclude Include="src\Polarity.h" />
+    <ClInclude Include="src\engine\Asset\AssetsManager.h" />
+    <ClInclude Include="src\engine\Asset\AssetsManagerBase.h" />
+    <ClInclude Include="src\engine\Asset\EditorAssetsManager.h" />
+    <ClInclude Include="src\engine\Asset\RuntimeAssetsManager.h" />
     <ClInclude Include="src\engine\ECS\ComponentManager.h" />
     <ClInclude Include="src\engine\ECS\EntityManager.h" />
     <ClInclude Include="src\engine\ECS\Registry.h" />
@@ -646,6 +653,12 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\Asset\AssetImporter.cpp" />
+    <ClCompile Include="src\engine\Asset\Asset.cpp" />
+    <ClCompile Include="src\engine\Asset\AssetsManager.cpp" />
+    <ClCompile Include="src\engine\Asset\AssetsManagerBase.cpp" />
+    <ClCompile Include="src\engine\Asset\EditorAssetsManager.cpp" />
+    <ClCompile Include="src\engine\Asset\RuntimeAssetsManager.cpp" />
     <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\Project\Project.cpp" />

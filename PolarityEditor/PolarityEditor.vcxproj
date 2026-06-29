@@ -150,7 +150,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Panels\ImGuiEx.h" />
     <ClInclude Include="src\EditorEvents.h" />
     <ClInclude Include="src\EditorLayer.h" />
     <ClInclude Include="src\EditorTheme.h" />
@@ -158,19 +157,20 @@
     <ClInclude Include="src\Panels\ConsolePanel.h" />
     <ClInclude Include="src\Panels\EditorPanel.h" />
     <ClInclude Include="src\Panels\HierarcyPanel.h" />
+    <ClInclude Include="src\Panels\ImGuiEx.h" />
     <ClInclude Include="src\Panels\PanelManager.h" />
     <ClInclude Include="src\Panels\PropertitiesPanel.h" />
     <ClInclude Include="src\Panels\ViewportPanel.h" />
     <ClInclude Include="src\UIIcons.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Panels\ImGuiEx.cpp" />
     <ClCompile Include="src\EditorApp.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
     <ClCompile Include="src\EditorTheme.cpp" />
     <ClCompile Include="src\Panels\AssetsPanel.cpp" />
     <ClCompile Include="src\Panels\ConsolePanel.cpp" />
     <ClCompile Include="src\Panels\HierarcyPanel.cpp" />
+    <ClCompile Include="src\Panels\ImGuiEx.cpp" />
     <ClCompile Include="src\Panels\PanelManager.cpp" />
     <ClCompile Include="src\Panels\PropertitiesPanel.cpp" />
     <ClCompile Include="src\Panels\ViewportPanel.cpp" />

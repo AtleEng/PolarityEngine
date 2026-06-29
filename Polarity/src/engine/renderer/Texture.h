@@ -3,11 +3,12 @@
 #include <string>
 #include <glm/glm.hpp>
 
+#include "engine/Asset/Asset.h"
 #include "engine/core/Core.h"
 
 namespace Polarity
 {
-	class Texture
+	class Texture : public Asset
 	{
 	public:
 		virtual ~Texture() = default;
@@ -32,6 +33,9 @@ namespace Polarity
 	public:
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height);
 		static Ref<Texture2D> Create(const std::string& path);
+
+		static AssetType GetStaticType() { return AssetType::Texture2D; }
+		virtual AssetType GetType() const { return GetStaticType(); }
 	};
 
 	class SubTexture2D

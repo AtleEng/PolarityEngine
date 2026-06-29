@@ -10,6 +10,9 @@
     <Filter Include="Source Files\src\engine">
       <UniqueIdentifier>{258122B1-91B8-6A48-9AC2-CE6B06799141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\src\engine\AssetsManager">
+      <UniqueIdentifier>{62B9CE1D-CE7D-CD0D-97E3-FDD703676943}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\src\engine\ECS">
       <UniqueIdentifier>{EF7F3393-5B8D-6179-E473-5D6450802D30}</UniqueIdentifier>
     </Filter>
@@ -72,6 +75,9 @@
     </Filter>
     <Filter Include="Header Files\src\engine">
       <UniqueIdentifier>{5D31C695-C968-0E2D-D272-72503E293526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\src\engine\AssetsManager">
+      <UniqueIdentifier>{9A6BC6B6-0630-C5A6-CF95-F5703B1961DC}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\src\engine\ECS">
       <UniqueIdentifier>{278C2486-9399-526C-1C80-4E57888C1E23}</UniqueIdentifier>
@@ -173,6 +179,18 @@
   <ItemGroup>
     <ClInclude Include="src\Polarity.h">
       <Filter>Header Files\src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Asset\AssetsManager.h">
+      <Filter>Header Files\src\engine\AssetsManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Asset\AssetsManagerBase.h">
+      <Filter>Header Files\src\engine\AssetsManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Asset\EditorAssetsManager.h">
+      <Filter>Header Files\src\engine\AssetsManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine\Asset\RuntimeAssetsManager.h">
+      <Filter>Header Files\src\engine\AssetsManager</Filter>
     </ClInclude>
     <ClInclude Include="src\engine\ECS\ComponentManager.h">
       <Filter>Header Files\src\engine\ECS</Filter>
@@ -1662,8 +1680,23 @@
     <ClInclude Include="thirdparty\stb_image\stb_image.h">
       <Filter>Header Files\thirdparty\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\engine\Asset\Asset.h" />
+    <ClInclude Include="src\engine\Asset\AssetMetadata.h" />
+    <ClInclude Include="src\engine\Asset\AssetImporter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\Asset\AssetsManager.cpp">
+      <Filter>Source Files\src\engine\AssetsManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Asset\AssetsManagerBase.cpp">
+      <Filter>Source Files\src\engine\AssetsManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Asset\EditorAssetsManager.cpp">
+      <Filter>Source Files\src\engine\AssetsManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\Asset\RuntimeAssetsManager.cpp">
+      <Filter>Source Files\src\engine\AssetsManager</Filter>
+    </ClCompile>
     <ClCompile Include="src\engine\ECS\EntityManager.cpp">
       <Filter>Source Files\src\engine\ECS</Filter>
     </ClCompile>
@@ -1844,5 +1877,7 @@
     <ClCompile Include="thirdparty\stb_image\stb_image.cpp">
       <Filter>Source Files\thirdparty\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine\Asset\Asset.cpp" />
+    <ClCompile Include="src\engine\Asset\AssetImporter.cpp" />
   </ItemGroup>
 </Project>
