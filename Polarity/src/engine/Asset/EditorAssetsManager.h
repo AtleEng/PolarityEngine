@@ -1,5 +1,4 @@
 #pragma once
-
 #include "AssetsManagerBase.h"
 #include "AssetMetadata.h"
 
@@ -24,6 +23,9 @@ namespace Polarity
 		const std::filesystem::path& GetFilePath(AssetHandle handle) const;
 
 		const AssetRegistry& GetAssetRegistry() const { return m_AssetRegistry; }
+
+		void SerializeAssetRegistry();
+		bool DeserializeAssetRegistry();
 
 	private:
 		AssetRegistry m_AssetRegistry;

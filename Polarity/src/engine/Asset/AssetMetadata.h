@@ -1,8 +1,7 @@
 #pragma once
+#include "Asset.h"
 
 #include <filesystem>
-
-#include "Asset.h"
 
 namespace Polarity 
 {

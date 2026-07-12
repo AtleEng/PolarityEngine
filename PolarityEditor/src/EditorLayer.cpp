@@ -96,7 +96,7 @@ namespace Polarity
 	{
 		POL_PROFILE_FUNCTION();
 
-		std::filesystem::path dllPath = Project::GetProjectDirectory();
+		std::filesystem::path dllPath = Project::GetActiveProjectDirectory();
 		dllPath /= "bin";
 		dllPath /= "Game.dll";
 
@@ -518,11 +518,11 @@ namespace Polarity
 	{
 		if (Project::Load(path))
 		{
-			std::filesystem::path dllPath = Project::GetProjectDirectory();
+			std::filesystem::path dllPath = Project::GetActiveProjectDirectory();
 			dllPath /= "bin";
 			dllPath /= "Game.dll";
 			ScriptEngine::Update(dllPath);
-			auto startScenePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().StartScene;
+			auto startScenePath = Project::GetActiveAssetDirectory() / Project::GetActive()->GetConfig().StartScene;
 			OpenScene(startScenePath);
 			return true;
 		}

@@ -36,6 +36,9 @@
 // ----- ImGUI ------------------------------------
 #include "engine/imGui/ImGuiLayer.h"
 
+// ----- Asset ------------------------------------
+#include "engine/Asset/AssetsManager.h"
+
 // ----- Scene ------------------------------------
 #include "engine/Project/Project.h"
 

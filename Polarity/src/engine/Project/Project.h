@@ -15,30 +15,42 @@ namespace Polarity
 		std::string Name = "Untitled Project";
 
 		std::filesystem::path StartScene; //TODO Make this a id reference
-
+		
 		std::filesystem::path AssetDirectory;
+		std::filesystem::path AssetRegistryPath;
 	};
 
 	class Project
 	{
 	public:
-		static const std::filesystem::path& GetProjectDirectory()
+		const std::filesystem::path& GetProjectDirectory() { return m_ProjectDirectory; }
+		std::filesystem::path GetAssetDirectory() { return GetProjectDirectory() / s_ActiveProject->m_Config.AssetDirectory; }
+		std::filesystem::path GetAssetRegistryPath() { return GetAssetDirectory() / s_ActiveProject->m_Config.AssetRegistryPath; }
+		std::filesystem::path GetAssetFileSystemPath(const std::filesystem::path& path) { return GetAssetDirectory() / path; } // TODO: Move
+		std::filesystem::path GetAssetAbsolutePath(const std::filesystem::path& path);
+
+		static const std::filesystem::path& GetActiveProjectDirectory()
 		{
 			POL_CORE_ASSERT(s_ActiveProject, "Project: No active project!");
-			return s_ActiveProject->m_ProjectDirectory;
+			return s_ActiveProject->GetProjectDirectory();
 		}
 
-		static std::filesystem::path GetAssetDirectory()
+		static std::filesystem::path GetActiveAssetDirectory()
 		{
 			POL_CORE_ASSERT(s_ActiveProject, "Project: No active project!");
-			return GetProjectDirectory() / s_ActiveProject->m_Config.AssetDirectory;
+			return s_ActiveProject->GetAssetDirectory();
 		}
 
-		// TODO: move to a asset manager
-		static std::filesystem::path GetAssetFileSystemPath(const std::filesystem::path& path)
+		static std::filesystem::path GetActiveAssetRegistryPath()
 		{
 			POL_CORE_ASSERT(s_ActiveProject, "Project: No active project!");
-			return GetAssetDirectory() / path;
+			return s_ActiveProject->GetAssetRegistryPath();
+		}
+		// TODO: move to asset manager
+		static std::filesystem::path GetActiveAssetFileSystemPath(const std::filesystem::path& path)
+		{
+			POL_CORE_ASSERT(s_ActiveProject, "Project: No active project!");
+			return s_ActiveProject->GetAssetFileSystemPath(path);
 		}
 
 		ProjectConfig& GetConfig() { return m_Config; }

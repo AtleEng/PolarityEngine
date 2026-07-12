@@ -150,6 +150,8 @@
     <ClInclude Include="src\engine\Asset\AssetImporter.h" />
     <ClInclude Include="src\engine\Asset\Asset.h" />
     <ClInclude Include="src\engine\Asset\AssetMetadata.h" />
+    <ClInclude Include="src\engine\Asset\TextureImporter.h" />
+    <ClInclude Include="src\engine\core\Buffer.h" />
     <ClInclude Include="src\Polarity.h" />
     <ClInclude Include="src\engine\Asset\AssetsManager.h" />
     <ClInclude Include="src\engine\Asset\AssetsManagerBase.h" />
@@ -659,6 +661,7 @@
     <ClCompile Include="src\engine\Asset\AssetsManagerBase.cpp" />
     <ClCompile Include="src\engine\Asset\EditorAssetsManager.cpp" />
     <ClCompile Include="src\engine\Asset\RuntimeAssetsManager.cpp" />
+    <ClCompile Include="src\engine\Asset\TextureImporter.cpp" />
     <ClCompile Include="src\engine\ECS\EntityManager.cpp" />
     <ClCompile Include="src\engine\ECS\Registry.cpp" />
     <ClCompile Include="src\engine\Project\Project.cpp" />

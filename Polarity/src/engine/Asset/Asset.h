@@ -14,6 +14,9 @@ namespace Polarity
 		Audio,
 		Script
 	};
+	std::string_view AssetTypeToString(AssetType type);
+	AssetType AssetTypeFromString(std::string_view assetType);
+
 	class Asset
 	{
 	public:

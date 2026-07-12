@@ -1683,6 +1683,8 @@
     <ClInclude Include="src\engine\Asset\Asset.h" />
     <ClInclude Include="src\engine\Asset\AssetMetadata.h" />
     <ClInclude Include="src\engine\Asset\AssetImporter.h" />
+    <ClInclude Include="src\engine\Asset\TextureImporter.h" />
+    <ClInclude Include="src\engine\core\Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\Asset\AssetsManager.cpp">
@@ -1879,5 +1881,6 @@
     </ClCompile>
     <ClCompile Include="src\engine\Asset\Asset.cpp" />
     <ClCompile Include="src\engine\Asset\AssetImporter.cpp" />
+    <ClCompile Include="src\engine\Asset\TextureImporter.cpp" />
   </ItemGroup>
 </Project>

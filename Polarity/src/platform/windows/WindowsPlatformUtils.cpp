@@ -1,16 +1,34 @@
 #include "polpch.h"
 #include "engine/utils/PlatformUtils.h"
 
+#include "engine/core/Application.h"
+
+#include <filesystem>
 //Windows only
 #include <commdlg.h> 
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
-
-#include "engine/core/Application.h"
+#include <shellapi.h>
 
 namespace Polarity
 {
+	void FileDialogs::ShowFolder(const std::filesystem::path& folder)
+	{
+		if (!std::filesystem::exists(folder))
+			return;
+
+		std::string args = "/select,\"" + folder.string() + "\"";
+
+		ShellExecuteA(
+			nullptr,
+			"open",
+			"explorer.exe",
+			args.c_str(),
+			nullptr,
+			SW_SHOWNORMAL
+		);
+	}
 	std::string FileDialogs::OpenFile(const char* filter)
 	{
 		OPENFILENAMEA ofn;

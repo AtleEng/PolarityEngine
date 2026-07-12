@@ -47,6 +47,12 @@ namespace Polarity
 
         const char* Tooltip = nullptr;
     };
+    struct AssetPropertySettings
+    {
+        AssetType Type = AssetType::None;
+
+        const char* Tooltip = nullptr;
+    };
 
     class PropertitiesPanel : public EditorPanel
     {
@@ -71,7 +77,7 @@ namespace Polarity
 
         static bool PropertyColor(const char* label, glm::vec4& value);
         static bool PropertyCombo(const char* label, int& currentIndex, const char* const* items, int itemCount, const char* tooltip = nullptr);
-        static bool PropertyAsset(const char* label, Ref<Texture2D>& value);
+        static bool PropertyAsset(const char* label, AssetHandle& asset, const AssetPropertySettings& settings = {});
 
         void DrawTopbar(Entity entity);
         void DrawProperites(Entity entity);

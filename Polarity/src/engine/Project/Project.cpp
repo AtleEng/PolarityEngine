@@ -5,6 +5,11 @@
 
 namespace Polarity
 {
+	std::filesystem::path Project::GetAssetAbsolutePath(const std::filesystem::path& path)
+	{
+		return GetAssetDirectory() / path;
+	}
+
 	Ref<Project> Project::New()
 	{
 		s_ActiveProject = CreateRef<Project>();
@@ -20,6 +25,10 @@ namespace Polarity
 		{
 			project->m_ProjectDirectory = path.parent_path();
 			s_ActiveProject = project;
+			Ref<EditorAssetsManager> editorAssetManager = CreateRef<EditorAssetsManager>();
+			s_ActiveProject->m_AssetManager = editorAssetManager;
+			editorAssetManager->DeserializeAssetRegistry();
+
 			return s_ActiveProject;
 		}
 

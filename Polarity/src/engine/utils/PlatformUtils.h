@@ -7,6 +7,7 @@ namespace Polarity
 	class FileDialogs
 	{
 	public:
+		static void ShowFolder(const std::filesystem::path& folder);
 		static std::string OpenFile(const char* filter);
 		static std::string SaveFile(const char* filter);
 	};

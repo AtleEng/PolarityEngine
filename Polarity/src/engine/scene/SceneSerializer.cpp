@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Components.h"
 
+#include "engine/Asset/AssetsManager.h"
 #include "engine/Project/Project.h"
 #include "engine/scripting/ScriptingEngine.h"
 
@@ -86,6 +87,25 @@ namespace YAML {
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<Polarity::UUID>
+	{
+		static Node encode(const Polarity::UUID& uuid)
+		{
+			Node node;
+			node.push_back((uint64_t)uuid);
+			return node;
+		}
+
+		static bool decode(const Node& node, Polarity::UUID& uuid)
+		{
+			uuid = node.as<uint64_t>();
+			return true;
+		}
+	};
+
+	
 }
 namespace Polarity
 {
@@ -176,7 +196,7 @@ namespace Polarity
 
 			auto& sprite = entity.GetComponent<SpriteComponent>();
 			if (sprite.Texture)
-				out << YAML::Key << "TexturePath" << YAML::Value << sprite.Texture->GetPath();
+				out << YAML::Key << "Texture" << YAML::Value << sprite.Texture;
 			out << YAML::Key << "Color" << YAML::Value << sprite.Color;
 			out << YAML::Key << "Scale" << YAML::Value << sprite.Scale;
 
@@ -189,7 +209,7 @@ namespace Polarity
 
 			auto& audioSource = entity.GetComponent<AudioSourceComponent>();
 			if (audioSource.Audio)
-				out << YAML::Key << "AudioPath" << YAML::Value << audioSource.Audio->GetPath();
+				out << YAML::Key << "Audio" << YAML::Value << audioSource.Audio->GetPath();
 			out << YAML::Key << "Gain" << YAML::Value << audioSource.Gain;
 			out << YAML::Key << "Pitch" << YAML::Value << audioSource.Pitch;
 			out << YAML::Key << "Loop" << YAML::Value << audioSource.Loop;
@@ -338,15 +358,20 @@ namespace Polarity
 				{
 					auto& sprite = newEntity.AddComponent<SpriteComponent>();
 
-					if (spriteComponent["TexturePath"])
+					if (spriteComponent["Texture"])
 					{
+						sprite.Texture = spriteComponent["Texture"].as<AssetHandle>();
+						
+						/*
+						Ref<Texture2D> tex = AssetsManager::GetAsset<Texture2D>(handle);
 						std::string texturePath = spriteComponent["TexturePath"].as<std::string>();
-						auto path = Project::GetAssetDirectory() / texturePath;
+						auto path = Project::GetActiveAssetDirectory() / texturePath;
 						Ref<Texture2D> tex = Texture2D::Create(path.string());
 						if (tex->IsLoaded())
 							sprite.Texture = tex;
 						else
 							POL_CORE_WARN("Could not load texture '%s'", path.filename().string().c_str());
+						*/
 					}
 
 					sprite.Color = spriteComponent["Color"].as<glm::vec4>();
@@ -362,7 +387,7 @@ namespace Polarity
 					if (audioSourceComponent["AudioPath"])
 					{
 						std::string audioPath = audioSourceComponent["AudioPath"].as<std::string>();
-						auto path = Project::GetAssetDirectory() / audioPath;
+						auto path = Project::GetActiveAssetDirectory() / audioPath;
 						audioSource.Audio = Audio::Create(path.string());
 					}
 

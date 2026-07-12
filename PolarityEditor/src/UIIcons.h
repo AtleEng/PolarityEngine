@@ -7,17 +7,35 @@ namespace Polarity {
 	enum class UIIcon {
 		Logo,
 		Settings,
-		DotMenu,
-		Lock,
-		Unlock,
-		Plus,
-		Minus,
-		Folder,
-		File,
+		Select,
 		Play,
 		Pause,
+		X,
 		Warn,
+
+		Folder,
+		File,
 		Music,
+		Image,
+		Font,
+		Prefab,
+		Script,
+		Scene,
+
+		ArrowLeft,
+		ArrowRight,
+		ArrowBack,
+		Minus,
+		Plus,
+		MenuHamburger,
+		MenuDot,
+
+		Lock,
+		Unlock,
+		ViewIcon,
+		ViewList,
+		Filter,
+		Refresh,
 
 		Count
 	};

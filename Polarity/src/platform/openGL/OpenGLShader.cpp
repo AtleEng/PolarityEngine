@@ -391,6 +391,8 @@ namespace Polarity {
 
 	void OpenGLShader::SetIntArray(const std::string& name, int* values, uint32_t count)
 	{
+		POL_PROFILE_FUNCTION();
+
 		UploadUniformIntArray(name, values, count);
 	}
 

@@ -6,6 +6,8 @@
 #include "RenderCommand.h"
 #include "UniformBuffer.h"
 
+#include "engine/Asset/AssetsManager.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Polarity
@@ -149,9 +151,9 @@ namespace Polarity
 		/// Textures
 		
 		// Generate whiteTexture
-		s_Data.WhiteTexture = Texture2D::Create(1, 1);
-		uint32_t textureData = 0xffffffff;
-		s_Data.WhiteTexture->SetData(&textureData, sizeof(uint32_t));
+		s_Data.WhiteTexture = Texture2D::Create(TextureSpecification());
+		uint32_t whiteTextureData = 0xffffffff;
+		s_Data.WhiteTexture->SetData(Buffer(&whiteTextureData, sizeof(uint32_t)));
 
 		// Texture
 		int32_t samplers[s_Data.MaxTextureSlots];
@@ -537,9 +539,12 @@ namespace Polarity
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteComponent& sc, int entityID)
-	{
+	{	
 		if (sc.Texture)
-			DrawQuadID(sc.Texture, transform, sc.Color, sc.Scale, entityID);
+		{
+			auto tex = AssetsManager::GetAsset<Texture2D>(sc.Texture);
+			DrawQuadID(tex, transform, sc.Color, sc.Scale, entityID);
+		}
 		else
 			DrawQuadID(transform, sc.Color, entityID);
 	}

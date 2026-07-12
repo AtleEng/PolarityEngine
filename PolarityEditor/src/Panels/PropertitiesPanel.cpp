@@ -1,9 +1,7 @@
 #include "polpch.h"
 #include "PropertitiesPanel.h"
+
 #include "ImGuiEx.h"
-
-#include "engine/scripting/ScriptingEngine.h"
-
 #include "engine/scripting/ScriptingEngine.h"
 
 #include <imgui/imgui_internal.h>
@@ -273,23 +271,10 @@ namespace Polarity
 
 		DrawComponent<SpriteComponent>("Sprite", entity, [](auto& component)
 			{
-				ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
-				if (ImGui::BeginDragDropTarget())
-				{
-					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_ITEM"))
-					{
-						const wchar_t* path = (const wchar_t*)payload->Data;
-						std::filesystem::path texPath = std::filesystem::path(path);
-						Ref<Texture2D> tex = Texture2D::Create(texPath.string());
-						if (tex->IsLoaded())
-							component.Texture = tex;
-						else
-							POL_WARN("Could not load texture '%s'", texPath.filename().string().c_str());
-					}
-					ImGui::EndDragDropTarget();
-				}
+				PropertyAsset("Texture", component.Texture, { AssetType::Texture2D, "Texture" });
+				
 				PropertitiesPanel::Property("Scale", component.Scale, { 0.1f, false, false, 0.0f, 0.0f, true, 1.0f, "The scale of the applied texture" });
-				ImGui::ColorEdit4("Tint", glm::value_ptr(component.Color));
+				PropertitiesPanel::PropertyColor("Tint", component.Color);
 			});
 
 		DrawComponent<AudioSourceComponent>("Audio Source", entity, [](auto& component)
@@ -315,9 +300,9 @@ namespace Polarity
 					Audio::Play(component.Audio, component.Gain, component.Pitch, component.Loop);
 				}
 
-				PropertitiesPanel::Property("Gain", component.Gain, { 0.01f, true, false, 0.0f, 0.0f, true, 1.0f, "The volume of the source" });
-				PropertitiesPanel::Property("Pitch", component.Pitch, { 0.01f, true, true, 0.0f, 10.0f, true, 1.0f, "The pitch of the sound" });
-				PropertitiesPanel::Property("Loop", component.Loop, { true, false, "If applied the sound loops until stopped" });
+				Property("Gain", component.Gain, { 0.01f, true, false, 0.0f, 0.0f, true, 1.0f, "The volume of the source" });
+				Property("Pitch", component.Pitch, { 0.01f, true, true, 0.0f, 10.0f, true, 1.0f, "The pitch of the sound" });
+				Property("Loop", component.Loop, { true, false, "If applied the sound loops until stopped" });
 			});
 
 		DrawComponent<ScriptComponent>("Script", entity, [this](auto& component)
@@ -715,7 +700,21 @@ namespace Polarity
 
 	bool PropertitiesPanel::PropertyColor(const char* label, glm::vec4& value)
 	{
-		return false;
+		ImGui::PushID(label);
+		PropertyRow(label);
+		/*
+		if (settings.Tooltip &&
+			ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+		{
+			ImGui::SetTooltip("%s", settings.Tooltip);
+		}
+		*/
+		ImGui::SetNextItemWidth(-FLT_MIN);
+		bool changed = false;
+		changed |= ImGui::ColorEdit4("", glm::value_ptr(value));
+
+		ImGui::PopID();
+		return changed;
 	}
 	bool PropertitiesPanel::PropertyCombo(const char* label, int& currentIndex, const char* const* items, int itemCount, const char* tooltip)
 	{
@@ -758,8 +757,79 @@ namespace Polarity
 		ImGui::PopID();
 		return changed;
 	}
-	bool PropertitiesPanel::PropertyAsset(const char* label, Ref<Texture2D>& value)
+	bool PropertitiesPanel::PropertyAsset(const char* label, AssetHandle& asset, const AssetPropertySettings& settings)
 	{
-		return false;
+		ImGui::PushID(label);
+		PropertyRow(label);
+
+		if (settings.Tooltip && ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+			ImGui::SetTooltip("%s", settings.Tooltip);
+
+		ImGui::SetNextItemWidth(-FLT_MIN);
+
+		// Width of the picker button
+		const float pickerButtonWidth = ImGui::GetFrameHeight();
+
+		// Left picker button (future asset browser)
+		if (ImGuiEx::DrawButtonImage(UIIcons::Get(UIIcon::Select), ""))
+		{
+			asset = 0;
+			// TODO: Open asset picker popup
+		}
+		ImGui::SameLine();
+
+		bool changed = false;
+
+		std::string assetLabel = "None";
+		bool isAssetValid = false;
+		if (asset != 0)
+		{
+			if (AssetsManager::IsAssetHandleValid(asset)
+				&& AssetsManager::GetAssetType(asset) == settings.Type)
+			{
+				const AssetMetadata& metadata = Project::GetActive()->GetEditorAssetManager()->GetMetadata(asset);
+				assetLabel = metadata.FilePath.filename().string();
+				isAssetValid = true;
+			}
+			else
+			{
+				label = "Invalid";
+			}
+		}
+
+		ImGui::SetNextItemWidth(-FLT_MIN);
+		float remainingWidth = ImGui::GetContentRegionAvail().x;
+		if (ImGui::Button(assetLabel.c_str(), ImVec2(remainingWidth, 0.0f)))
+		{
+			// Optional: Ping/select asset
+		}
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSET_ITEM"))
+			{
+				AssetHandle handle = *(AssetHandle*)payload->Data;
+				AssetType type = AssetsManager::GetAssetType(handle);
+				if (type == settings.Type)
+				{
+					asset = handle;
+				}
+				else
+				{
+					POL_CORE_WARN("Wrong asset type! (Was: %s, should be: %s)", AssetTypeToString(type).data(), AssetTypeToString(settings.Type).data());
+				}
+
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		// TODO commands
+		if (ImGui::IsItemDeactivatedAfterEdit())
+		{
+			// CommandStack::Push(...)
+		}
+
+		ImGui::PopID();
+
+		return changed;
 	}
 }
